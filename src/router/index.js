@@ -17,6 +17,7 @@ Vue.use(VueRouter);
 const myTeamPageChildren = [
     createRoute('views/myTeam/MyTeamMember', 'members'),
     createRoute('views/LoginPage', 'test'),
+    createRoute(`views/myTeam/MyTeamList`,'myteamList'),
 ];
 export default new VueRouter({
     // 기본은 Hash모드지만 이경우 웹브라우저 url입력창에 #이 계속 붙음.
