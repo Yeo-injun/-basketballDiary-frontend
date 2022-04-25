@@ -6,6 +6,7 @@
 
       <v-spacer></v-spacer>
 
+      <!-- <v-btn class="ma-1" to="/myTeams/members">소속팀</v-btn> -->
       <v-btn class="ma-1" to="/myTeams/members">소속팀</v-btn>
       <v-btn class="ma-1" to="/team">농구팀</v-btn>
       <v-btn class="ma-1" to="/myProfile">내정보</v-btn>

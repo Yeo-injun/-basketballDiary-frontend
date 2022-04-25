@@ -8,11 +8,16 @@ import VueRouter from 'vue-router';
 // import SignupPage from '@/views/SignupPage.vue';
 
 Vue.use(VueRouter);
-var myTeamPageChildren = [
+/** var는 hosting 문제 때문에 최대한 안쓰는걸 추천 */
+// var myTeamPageChildren = [
+//     createRoute('views/myTeam/MyTeamMember', 'members'),
+//     createRoute('views/LoginPage', 'test'),
+// ];
+//const 나 let을 사용
+const myTeamPageChildren = [
     createRoute('views/myTeam/MyTeamMember', 'members'),
     createRoute('views/LoginPage', 'test'),
 ];
-
 export default new VueRouter({
     // 기본은 Hash모드지만 이경우 웹브라우저 url입력창에 #이 계속 붙음.
     // 이를 방지하기 위해 history 모드로 변경.
@@ -27,6 +32,7 @@ export default new VueRouter({
          * 중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeams', myTeamPageChildren),
+        // createRoute('views/myTeam/MyTeamMember', '/myTeams'),
         // {
         //     path: '',
         //     component: () => import('@/views/MyTeamPage.vue'),
