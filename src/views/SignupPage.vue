@@ -1,6 +1,8 @@
 <template>
     <div>
-        회원가입 페이지
+        회원가입
+        <v-input></v-input>
+        <v-input></v-input>
     </div>
 </template>
 
