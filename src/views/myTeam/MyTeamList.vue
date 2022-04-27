@@ -1,15 +1,16 @@
 <template>
-
     <div>
-
+        <TeamList/>
     </div>
 </template>
 
-<script>
-    
+<script>   
+
+    import TeamList from '@/components/myTeam/TeamList.vue';
 
     export default {
         components: {
+            TeamList
         }
     }
 </script>

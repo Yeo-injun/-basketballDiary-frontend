@@ -20,28 +20,38 @@
         },
         methods: {
             // 비동기 처리
-            async doLogin() {
-                const data = {
+            async doLogin()
+            {
+                const param = 
+                {
                     userId: this.userId,
                     password: this.password
                 }
-                console.log(data);
-                try {
-                    const result = await login(data);
-                    console.log(result);
-                    if (result.status == 200) {
-                        // 참고자료 : https://v3.router.vuejs.org/guide/essentials/navigation.html#router-push-location-oncomplete-onabort
-                        // 인증을 위한 쿠키 사용에 대한 추가 설정 필요 여부 확인 필요 - store 확인 https://developerjournal.tistory.com/15 (중앙 상태관리 libarary vuex)
-                        this.$router.push('/');
-                    }
-                } catch(e) {
-                    this.initInput();
-                }
+                await login(param)
+                        .then((res) => {
+                            // 참고자료 : https://v3.router.vuejs.org/guide/essentials/navigation.html#router-push-location-oncomplete-onabort
+                            // 인증을 위한 쿠키 사용에 대한 추가 설정 필요 여부 확인 필요 - store 확인 https://developerjournal.tistory.com/15 (중앙 상태관리 libarary vuex)
+                            console.log(res);
+                            this.sendLoginInfo(res);
+                            this.$router.push('/');
+                        })
+                        .catch(() => {
+                            this.initInput();
+                        })
             },
-            initInput() {
+            sendLoginInfo: (res) =>
+            {
+                console.log('진입 : sendLoginInfo...');
+                this.$emit('emitTest', res);
+                console.log('종료 : sendLoginInfo...');
+
+            },
+            initInput() 
+            {
                 this.userId = '';
                 this.password = '';
             },
+            
         }
     }
 </script>

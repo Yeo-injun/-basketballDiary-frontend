@@ -5,7 +5,9 @@
     <AppNavbar/> <!-- 라우팅을 이용해서 v-main 컴포넌트 하위의 내용 바꿔치기 하기 -->
     <v-main>
       <!-- v-main 하위의 컴포넌트는 라우팅에 따라서 다른 컴포넌트 보여주기 : Tap 영역 컴포넌트 추가 -->
-      <router-view></router-view>
+      <router-view>
+        {{ testObj }}
+      </router-view>
     </v-main>
   </v-app>
 </template>
@@ -21,8 +23,18 @@ export default {
   },
 
   data: () => ({
-    //
+    // 로그인 상태를 관리할 수 있는 변수 생성
+    testObj: {},
   }),
+
+  methods: 
+  {
+    emitTest: (data) =>
+    {
+      this.testObj = data;
+      console.log("이벤트 정상 처리 완료");
+    }
+  }
 };
 </script>
 
