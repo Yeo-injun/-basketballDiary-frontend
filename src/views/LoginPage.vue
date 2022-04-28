@@ -24,7 +24,11 @@
          */
         props: 
         {
-          userInfo: Object,
+          userInfo: {
+              isLogin: false,
+              userId: '',
+              username: '',
+          },
         },
         methods: {
             // 비동기 처리
@@ -37,24 +41,17 @@
                 }
                 await login(param)
                         .then((res) => {
+                            console.log(res);
                             // 참고자료 : https://v3.router.vuejs.org/guide/essentials/navigation.html#router-push-location-oncomplete-onabort
                             // 인증을 위한 쿠키 사용에 대한 추가 설정 필요 여부 확인 필요 - store 확인 https://developerjournal.tistory.com/15 (중앙 상태관리 libarary vuex)
-                            this.$emit('loginSuccess', res);
-                            this.loginSeccessEvent(res);
+                            this.$emit('loginSuccess');
+                            console.log('----- event emit occur');
                             this.$router.push('/');
                         })
                         .catch((e) => {
                             console.log(e);
-                            this.$emit('loginSuccess');
                             this.initInput();
                         })
-            },
-            loginSeccessEvent: (res) =>
-            {
-                console.log(res);
-                console.log('진입 : sendLoginInfo...');
-                console.log('종료 : sendLoginInfo...');
-
             },
             initInput() 
             {
