@@ -12,16 +12,24 @@
             <v-container>
                 <v-row>
                     <v-col>
-                        블라블로송 : 야호
+                        <!-- 사진 태그 -->
+                        테스트테스트
                     </v-col>
                     <v-col>
-                        블라블로송 : 야호
-                    </v-col>
-                    <v-col class="text-left">
-                        ddddd
-                        <v-btn class="float-right">
-                            버튼
-                        </v-btn>
+                        <v-row>
+                            <v-col>
+                                블라블로송 : 야호
+                            </v-col>
+                            <v-col>
+                                블라블로송 : 야호
+                            </v-col>
+                            <v-col class="text-left">
+                                ddddd
+                                <v-btn class="float-right">
+                                    버튼
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                     </v-col>
                 </v-row>
             </v-container>
