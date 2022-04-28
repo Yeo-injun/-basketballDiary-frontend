@@ -11,8 +11,6 @@
 <script>
     import { login } from '@/api/UserAPI.js';
 
-
-
     export default {
         data: ()=>{
             return {
@@ -24,8 +22,9 @@
          * props선언시 <template>영역에서는 kebab-case로 작성해야함.
          * 작성 스타일 참고자료: https://kr.vuejs.org/v2/guide/components-props.html
          */
-        props: {
-            userInfo: Object,
+        props: 
+        {
+          userInfo: Object,
         },
         methods: {
             // 비동기 처리
@@ -48,8 +47,6 @@
                             console.log(e);
                             this.$emit('loginSuccess');
                             this.initInput();
-
-
                         })
             },
             loginSeccessEvent: (res) =>
