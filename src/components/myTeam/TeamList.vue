@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <v-container>
       <h1>소속팀 목록</h1>
       <v-card class="mt-10">        
@@ -43,6 +44,9 @@
         </v-col>        
       </v-card>      
   </v-container>
+=======
+
+>>>>>>> 9908daae3b1cf48f3c1957f4bc5ddc9524dfb192
 </template>
 
 <script>

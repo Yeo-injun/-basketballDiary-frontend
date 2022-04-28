@@ -3,10 +3,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-// import AppMain from '@/components/AppMain.vue';
-// import LoginPage from '@/views/LoginPage.vue';
-// import SignupPage from '@/views/SignupPage.vue';
-
 Vue.use(VueRouter);
 /** var는 hosting 문제 때문에 최대한 안쓰는걸 추천 */
 // var myTeamPageChildren = [
@@ -33,23 +29,6 @@ export default new VueRouter({
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
         createRoute('views/myTeam/MyTeamList', '/myTeams'),
-        // createRoute('views/myTeam/MyTeamMember', '/myTeams'),
-        // {
-        //     path: '',
-        //     component: () => import('@/views/MyTeamPage.vue'),
-        //     children: [
-        //         {
-        //             path: 'members',
-        //             component: () => import('@/views/MyTeamMember.vue')
-        //         },
-        //         {
-        //             path: 'test',
-        //             component: () => import('@/views/LoginPage.vue')
-        //         }
-        //     ]
-        // }
-        // createRoute('MyTeamPage', '/myTeams'),
-        // createRoute('MyTeamMember', '/myTeams/members'),
     ]
 })
 
