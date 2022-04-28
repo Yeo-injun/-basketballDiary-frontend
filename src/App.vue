@@ -4,8 +4,9 @@
   <v-app>
     <AppNavbar v-bind:user-info="userInfo"/> <!-- 라우팅을 이용해서 v-main 컴포넌트 하위의 내용 바꿔치기 하기 -->
     <v-main>
+      {{ userInfo.userId }}
       <!-- v-main 하위의 컴포넌트는 라우팅에 따라서 다른 컴포넌트 보여주기 : Tap 영역 컴포넌트 추가 -->
-      <router-view v-bind:user-info="userInfo" v-on:loginSuccess="setLoginInfo"></router-view>
+      <router-view v-on:loginSuccess="setLoginInfo"></router-view>
     </v-main>
   </v-app>
 </template>
@@ -37,7 +38,11 @@ export default {
   {
     setLoginInfo: (data) =>
     {
-      this.userInfo = data;
+      // TODO이벤트 감지해서 Vue인스턴스의 데이터 변환처리
+      console.log("#####App.vue 진입");
+      console.log(data);
+      this.userInfo.isLogin = true;
+      // this.userInfo.userId = data.userId;
       console.log("이벤트 정상 처리 완료");
     }
   }
