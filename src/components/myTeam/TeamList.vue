@@ -1,13 +1,5 @@
 <template>
-  <v-container>
-      <h1>소속팀 목록</h1>
-      <v-data-table
-        :headers="headers"
-        :items="contents"
-        class="elevation-1"
-      ></v-data-table>
-      <v-btn class="ma-1" to="myTeam">상세보기</v-btn>
-  </v-container>
+
 </template>
 
 <script>
