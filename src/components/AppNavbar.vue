@@ -11,7 +11,7 @@
       <v-btn class="ma-1" to="/team">농구팀</v-btn>
       <v-btn class="ma-1" to="/myProfile">내정보</v-btn>
       <!-- v-if사용 tips : 하나의 엘리먼트에 적용해야함. 래퍼 엘리먼트 <template>을 사용하여 하나의 엘리먼트로 묶어주기 https://kr.vuejs.org/v2/guide/conditional.html -->
-      <template v-if="!userInfo.isLogin">
+      <template v-if="!sessionUserInfo.isLogin">
         <v-btn class="ma-1" to="/login">로그인</v-btn>
         <v-btn class="ma-1" to="/signup">회원가입</v-btn>
       </template>
@@ -22,9 +22,13 @@
     export default {
         methods: {
         },
+        /**상위컴포넌트에서 데이터 받기 : props 사용하기
+         * props선언시 <template>영역에서는 kebab-case로 작성해야함.
+         * 작성 스타일 참고자료: https://kr.vuejs.org/v2/guide/components-props.html
+         */
         props: 
         {
-          userInfo: Object,
+          sessionUserInfo: Object,
         }
     }
 </script>

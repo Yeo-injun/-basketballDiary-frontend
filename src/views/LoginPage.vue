@@ -18,18 +18,6 @@
                 password: '',
             }
         },
-        /**상위컴포넌트에서 데이터 받기 : props 사용하기
-         * props선언시 <template>영역에서는 kebab-case로 작성해야함.
-         * 작성 스타일 참고자료: https://kr.vuejs.org/v2/guide/components-props.html
-         */
-        props: 
-        {
-          userInfo: {
-              isLogin: false,
-              userId: '',
-              username: '',
-          },
-        },
         methods: {
             // 비동기 처리
             async doLogin()
@@ -44,12 +32,13 @@
                             console.log(res);
                             // 참고자료 : https://v3.router.vuejs.org/guide/essentials/navigation.html#router-push-location-oncomplete-onabort
                             // 인증을 위한 쿠키 사용에 대한 추가 설정 필요 여부 확인 필요 - store 확인 https://developerjournal.tistory.com/15 (중앙 상태관리 libarary vuex)
-                            this.$emit('loginSuccess');
-                            console.log('----- event emit occur');
+                            // 'login-success'라는 이름의 커스텀 이벤트를 res 데이터와 함께 상위 컴포넌트로 올려보냄
+                            this.$emit('login-success', res); // loginSuccess라는 이름의 이벤트를 발생시켜서 상위 컴포넌트로 올린다.
                             this.$router.push('/');
                         })
                         .catch((e) => {
-                            console.log(e);
+                            // 함수로 감싸기 - 오류코드에 따라 에러 메세지 처리
+                            alert(e.response.data.message);
                             this.initInput();
                         })
             },

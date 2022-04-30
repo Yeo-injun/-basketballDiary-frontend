@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-container>
         회원가입
         <v-text-field label="아이디" v-model="userId"></v-text-field>
         <v-text-field label="비밀번호" type="password" v-model="password"></v-text-field>
@@ -35,7 +35,7 @@
             </v-container>
         </v-card>
 
-    </div>
+    </v-container>
 </template>
 
 <script>
