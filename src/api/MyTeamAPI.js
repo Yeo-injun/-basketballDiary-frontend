@@ -10,13 +10,9 @@ const axiosService = axios.create({
     }
 })
 
-// export function tempApi(data) {
-//     // 구현하기
-    
-//     return axoisService;
-// }
-
-export const getMyTeams = (data) =>{
-    // console.log(data);
-    return axiosService.get(`/${data.userSeq}`);
+// 객체로 api모듈을 관리한다.
+export const myTeamApi = {
+    getMyTeams(data) {
+        return axiosService.get(`/${data.userSeq}`); 
+    },
 }
