@@ -42,7 +42,7 @@
           <v-btn class="float-right" to="myTeam">상세보기</v-btn>
         </v-col>        
       </v-card>      
-      <v-btn v-on:click="getTest">버튼</v-btn>
+      <v-btn v-on:click="load">버튼</v-btn>
   </v-container>
 </template>
 
@@ -56,7 +56,7 @@ export default {
     }
   },
   methods:{
-    async getTest(){
+    async load(){
       const param={
         userSeq: 3,
       }
