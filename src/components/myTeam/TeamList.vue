@@ -42,12 +42,29 @@
           <v-btn class="float-right" to="myTeam">상세보기</v-btn>
         </v-col>        
       </v-card>      
+      <v-btn v-on:click="getTest">버튼</v-btn>
   </v-container>
 </template>
 
 <script>
+import { getMyTeams } from '@/api/MyTeamAPI'
+
 export default {
-  
+  data: ()=>{
+    return {
+      teamList:[],
+    }
+  },
+  methods:{
+    async getTest(){
+      const param={
+        userSeq: 3,
+      }
+      await getMyTeams(param)
+              .then(res=>console.log(res))
+              .catch(error=>console.log(error));
+      }
+  },
 }
 </script>
 
