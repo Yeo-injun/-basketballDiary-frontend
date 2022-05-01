@@ -1,13 +1,20 @@
 <template>
     <div>
-        <h4>운영진 목록</h4>
-        <div>운영진 목록 컴포넌트</div>
+        <v-chip label color="green" text-color="white">운영진</v-chip>
+         <v-container>
+            <MyManager/>
+            <MyManager/>
+            <MyManager/>
+        </v-container>
     </div>
 </template>
 
 <script>
+    import MyManager from '@/components/myTeam/MyManager.vue';
     export default {
-        
+        components: {
+            MyManager
+        }
     }
 </script>
 
