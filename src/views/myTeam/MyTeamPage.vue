@@ -14,7 +14,14 @@
 
 <script>
     export default {
-        
+        mounted (){
+            this.onClick();
+        },
+        methods: {
+            onClick () {
+                console.log(123);
+            }
+        }
     }
 </script>
 
