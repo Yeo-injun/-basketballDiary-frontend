@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { tempApi } from '@/api/MyTeamAPI'
+import { myTeamApi } from '@/api/MyTeamAPI'
 
 export default {
   data: ()=>{
@@ -57,13 +57,16 @@ export default {
   },
   methods:{
     async load(){
-      const param={
+      const param = {
         userSeq: 3,
       }
-      await tempApi.getMyTeams(param)
-              .then(res=>console.log(res))
-              .catch(error=>console.log(error));
-      }
+      try{
+        const retData = await myTeamApi.getMyTeams(param);
+        console.log(retData);
+      }catch(error){
+        console.log(error);
+      }      
+    }
   },
 }
 </script>
