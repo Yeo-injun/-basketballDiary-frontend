@@ -4,7 +4,12 @@ import { SERVER_URL } from './const';
 // API설정 공통화
 const axiosService = axios.createDefault('/user', SERVER_URL.AWS);
 
-export function login(data) {
-    return axiosService.post('/login', data);
-}
+export default {
+    login(data) {
+        return axiosService.post('/login', data);
+    },
+    logout() {
+        return axiosService.post('/logout');
+    },
+} 
 
