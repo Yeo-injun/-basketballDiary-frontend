@@ -39,7 +39,7 @@
         <v-divider></v-divider>
         <v-col>
           <span>Ratels는 벌꿀오소리 처럼 상대를 가리지 않고 모든 경기에 열정을 다합니다.20대 초반부터 30대 중반까지로 선수층이 이뤄져 있습니다.</span>
-          <v-btn class="float-right" to="myTeam">상세보기</v-btn>
+          <v-btn class="float-right" to="myTeam/members">상세보기</v-btn>
         </v-col>        
       </v-card>      
       <v-btn v-on:click="load">버튼</v-btn>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getMyTeams } from '@/api/MyTeamAPI'
+import { myTeamApi } from '@/api/MyTeamAPI'
 
 export default {
   data: ()=>{
@@ -57,13 +57,16 @@ export default {
   },
   methods:{
     async load(){
-      const param={
+      const param = {
         userSeq: 3,
       }
-      await getMyTeams(param)
-              .then(res=>console.log(res))
-              .catch(error=>console.log(error));
-      }
+      try{
+        const retData = await myTeamApi.getMyTeams(param);
+        console.log(retData);
+      }catch(error){
+        console.log(error);
+      }      
+    }
   },
 }
 </script>

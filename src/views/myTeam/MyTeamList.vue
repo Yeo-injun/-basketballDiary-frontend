@@ -1,16 +1,16 @@
 <template>
     <div>
-        <TeamList/>
+        <MyTeamList/>
     </div>
 </template>
 
 <script>   
 
-    import TeamList from '@/components/myTeam/TeamList.vue';
+    import MyTeamList from '@/components/myTeam/MyTeamList.vue';
 
     export default {
         components: {
-            TeamList
+            MyTeamList
         }
     }
 </script>

@@ -14,13 +14,13 @@
 <script>
     //import { API } from '@/api/MyTeamAPI.js';
     export default {
-        methods: {
-            initTab() {
-                
-            }
+        mounted (){
+            this.onClick();
         },
-        mounted: {
-            //this.initTab();
+        methods: {
+            onClick () {
+                console.log(123);
+            }
         }
     }
 </script>
