@@ -19,7 +19,6 @@ const HOST = 'http://localhost:8080/api/myTeams';
  */
 export const myTeamApi = {
     getMyTeams(params) {
-        console.log(params.userSeq);
         return axios.get(`${HOST}`,{params}); 
     },
 }

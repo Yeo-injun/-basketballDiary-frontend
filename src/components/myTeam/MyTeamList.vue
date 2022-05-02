@@ -49,6 +49,7 @@
 <script>
 import { myTeamApi } from '@/api/MyTeamAPI'
 
+
 export default {
   data: ()=>{
     return {
@@ -61,8 +62,9 @@ export default {
         userSeq: 3,
       }
       try{
-        const retData = await myTeamApi.getMyTeams(param);
-        console.log(retData);
+        const list = await myTeamApi.getMyTeams(param);
+        console.log(list.data[0]);
+        console.log(list.data[0].teamSeq);
       }catch(error){
         console.log(error);
       }      
