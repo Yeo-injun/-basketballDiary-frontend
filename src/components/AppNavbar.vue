@@ -15,12 +15,34 @@
         <v-btn class="ma-1" to="/login">로그인</v-btn>
         <v-btn class="ma-1" to="/signup">회원가입</v-btn>
       </template>
+      <template v-else>
+        <v-btn class="ma-1" v-on:click="doLogout">로그아웃</v-btn>
+      </template>
     </v-app-bar>
 </template>
 
 <script>
+import userApi from '../api/UserAPI.js';
+
     export default {
         methods: {
+          doLogout() {
+            if (!confirm("로그아웃 하시겠습니까?")) {
+               return;              
+            }
+            let vueInstance = this;
+            userApi.logout()
+              .then(function(){
+                // 로그아웃 처리  TODO 데이터 변경에 따라 바로 컴포넌트 변경시키기 
+                vueInstance.$emit('logout-success');
+                console.log(vueInstance);
+                console.log(`로그아웃 처리 됐습니다.`);
+              })
+              .catch(function(e){
+                console.log(e);
+              })
+
+          }
         },
         /**상위컴포넌트에서 데이터 받기 : props 사용하기
          * props선언시 <template>영역에서는 kebab-case로 작성해야함.

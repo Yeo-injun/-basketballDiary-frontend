@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import { login } from '@/api/UserAPI.js';
+    import userApi from '@/api/UserAPI.js';
 
     export default {
         data: ()=>{
@@ -27,9 +27,9 @@
                     userId: this.userId,
                     password: this.password
                 }
-                await login(param)
+                await userApi.login(param)
                         .then((res) => {
-                            console.log(res);
+                            console.log(res.headers);
                             // 참고자료 : https://v3.router.vuejs.org/guide/essentials/navigation.html#router-push-location-oncomplete-onabort
                             // 인증을 위한 쿠키 사용에 대한 추가 설정 필요 여부 확인 필요 - store 확인 https://developerjournal.tistory.com/15 (중앙 상태관리 libarary vuex)
                             // 'login-success'라는 이름의 커스텀 이벤트를 res 데이터와 함께 상위 컴포넌트로 올려보냄
