@@ -47,6 +47,8 @@
 </template>
 
 <script>
+// Vue lifeCycle 에 관하여
+// https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
 import { myTeamApi } from '@/api/MyTeamAPI'
 
 
@@ -63,13 +65,16 @@ export default {
       }
       try{
         const list = await myTeamApi.getMyTeams(param);
-        console.log(list.data[0]);
-        console.log(list.data[0].teamSeq);
+        this.teamList = list.data.data;
+        console.log(this.teamList);
       }catch(error){
         console.log(error);
       }      
     }
   },
+  mounted () {
+    this.$nextTick(this.load());
+  }
 }
 </script>
 
