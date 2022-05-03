@@ -1,8 +1,7 @@
-import axios from './defaultAxios';
-import { SERVER_URL } from './const';
+import axios from '../common/customAxios';
 
 // API설정 공통화
-const axiosService = axios.createDefault('/user', SERVER_URL.AWS);
+const axiosService = axios.createClientForAws('/user');
 
 export default {
     login(data) {
