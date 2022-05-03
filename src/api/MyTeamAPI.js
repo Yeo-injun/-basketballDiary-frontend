@@ -4,7 +4,8 @@
 
 import axios from 'axios';
 
-const HOST = 'http://localhost:8080/api/myTeams';
+const LOCAL_HOST = 'http://localhost:8080/api/myTeams';
+//const AWS_HOST = 'http://54.180.147.129/api/myTeams';
 
 // 객체로 api모듈을 관리한다.
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config
@@ -13,6 +14,6 @@ const HOST = 'http://localhost:8080/api/myTeams';
  */
 export const myTeamApi = {
     getMyTeams(params) {
-        return axios.get(`${HOST}`,{params}); 
+        return axios.get(`${LOCAL_HOST}`,{params}); 
     },
 }
