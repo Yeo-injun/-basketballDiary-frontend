@@ -1,7 +1,9 @@
 <template>
     <div>
-        <h4>팀원 목록</h4>
-        <div>팀원 목록 컴포넌트</div>
+        <v-chip label color="green" text-color="white">팀원 목록</v-chip>
+        <v-container class="pa-0">
+            
+        </v-container>
     </div>
 </template>
 
