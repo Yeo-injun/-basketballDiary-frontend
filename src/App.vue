@@ -2,15 +2,18 @@
 <!-- https://vuetifyjs.com/en/components/application/#default-application-markup -->
 <!-- v-app태그가 vuetify의 기본 골격됨. 도화지 역할 -->
   <v-app>
-    <AppNavbar v-bind:session-user-info="sessionUserInfo"/> <!-- 라우팅을 이용해서 v-main 컴포넌트 하위의 내용 바꿔치기 하기 -->
+    <AppNavbar 
+      v-bind:session-user-info="sessionUserInfo"
+      v-on:logout-success="deleteAuthUserInfo"
+    /> <!-- 라우팅을 이용해서 v-main 컴포넌트 하위의 내용 바꿔치기 하기 -->
     <v-main>
       <!-- v-main 하위의 컴포넌트는 라우팅에 따라서 다른 컴포넌트 보여주기 : Tap 영역 컴포넌트 추가 -->
       <!-- 'v-on:커스텀 이벤트명="이벤트에 매핑할 함수명"' >> 커스텀 이벤트명이 발생하게 되면 해당 이벤트에 매핑된 함수가 실행된다. -->
       <!-- v-on 속성을 이용해서 login-success이라는 이름의 이벤트 리스너를 설정해줌.-->
       <!-- 하위 컴포넌트에서 login-success라는 이벤트가 발생하면 setAuthUserInfo함수가 호출됨 -->
-      <router-view 
-        v-on:login-success="setAuthUserInfo"
+      <router-view
         v-bind:session-user-info="sessionUserInfo"
+        v-on:login-success="setAuthUserInfo"
       />
     </v-main>
   </v-app>
@@ -49,7 +52,7 @@ export default {
    * 이렇게 하면 메서드가 이벤트 리스너나 콜백으로 사용될 때, 올바른 this 값을 유지하게 됩니다. 
    * 화살표 함수를 사용해서 methods를 정의하면 Vue가 적절한 this 값을 바인딩하지 못합니다. 따라서 methods를 정의할 때, 화살표 함수를 사용하지 않도록 합니다.
    */
-      setAuthUserInfo: function (data)
+      setAuthUserInfo(data)
       {
         // 로그인 결과에 따른 session값을 App.vue인스턴스의 data로 관리해야함.
         // 이를 통해 세션값을 전체 App에서 사용할 수 있게 함.
@@ -59,9 +62,19 @@ export default {
         Object.assign(this.sessionUserInfo, data);
         let jsonAuth = JSON.stringify(this.sessionUserInfo);
         sessionStorage.setItem('AuthUser', jsonAuth);
+        this.$router.go();  // 파라미터가 없으면 현재 위치 새로고침 - 숫자형 인수가 있으면 해당 숫자만큼 히스토리 스택으로 이동
+      },
+      deleteAuthUserInfo() 
+      {
+        sessionStorage.clear();
+        this.sessionUserInfo.isLogin = false;
+        this.$router.go();
       },
       setSessionInfo: function () 
       {
+        // TODO 세션 스토리지와 로컬 스토리지, 쿠키 차이 공부하기 
+        // : https://ko.javascript.info/localstorage 
+        // : https://nsinc.tistory.com/121 (쿠키 생성시 보안성 강화)
         let authUser = sessionStorage.getItem('AuthUser');
         if (authUser != null) {
             return JSON.parse(authUser);

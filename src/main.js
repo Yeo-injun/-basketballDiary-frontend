@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
+// import vueCookies from 'vue-cookies'
+
 /** @ 표시는 경로 alias. 
  * jsconfig.json파일에서 설정 가능.
  * 기본갑은 ../src/*
