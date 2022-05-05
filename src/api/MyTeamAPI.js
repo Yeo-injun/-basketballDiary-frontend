@@ -12,6 +12,6 @@ const axiosService = axios.createDefault('/myTeams', SERVER_URL.LOCAL);
  */
 export const myTeamApi = {
     getMyTeams(params) {
-        return axiosService.get(`${LOCAL_HOST}`,{params}); 
+        return axiosService.get("", {params}); 
     },
 }
