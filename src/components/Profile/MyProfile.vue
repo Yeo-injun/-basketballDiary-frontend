@@ -1,13 +1,13 @@
 <template>
   <v-container>
       <h1>개인 프로필</h1>
-      <v-card class="mt-10">
+      <v-card class="mt-10" v-model="myinfo">
           <v-row class="mb-5">
             <v-col>              
               <span>이름:</span>                   
             </v-col>
             <v-col>
-              <v-input readonly>여인준</v-input>
+              <v-input readonly>{{myinfo.userName}}</v-input>
             </v-col>
           </v-row>
           <v-row class="mb-5">
@@ -49,14 +49,25 @@
 </template>
 
 <script>
+import {profileApi} from '@/api/MyProfile';
+
 export default {
   data: ()=>{
     return {
-      description: '93',
+      myinfo: ""
     }
   },
   methods: {
-
+    async load () {
+      const params ={
+        userSeq: 3,
+      }
+      try{
+        this.myinfo = await profileApi.getMyProfile(params);
+      }catch(error){
+        console.log(error);
+      }
+    }
   }
 }
 </script>
