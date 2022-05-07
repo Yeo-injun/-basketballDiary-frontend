@@ -6,10 +6,8 @@
 // const axiosService = axios.createDefault('/myTeams', SERVER_URL.LOCAL);
 
 import axios from '@/common/customAxios';
-
 const axiosService = axios.createClientForLocal('/myTeams');
 
-// 객체로 api모듈을 관리한다.
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config
 /**
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
@@ -18,4 +16,5 @@ export const myTeamApi = {
     getMyTeams(params) {
         return axiosService.get('', {params}); 
     },
+
 }
