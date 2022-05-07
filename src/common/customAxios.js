@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API설정 공통화
-const SERVER_URL = {
+const API_SERVER = {
     AWS : 'http://54.180.147.129/api',
     LOCAL : 'http://127.0.0.1:8080/api',
 }
@@ -9,7 +9,7 @@ const SERVER_URL = {
 export default {
     createClientForAws(apiUrl) {
         return axios.create({
-            baseURL: `${SERVER_URL.AWS}${apiUrl}`,
+            baseURL: `${API_SERVER.AWS}${apiUrl}`,
             headers:{
                 "Content-Type": "application/json"
             }
@@ -17,7 +17,7 @@ export default {
     },
     createClientForLocal(apiUrl) {
         return axios.create({
-            baseURL: `${SERVER_URL.LOCAL}${apiUrl}`,
+            baseURL: `${API_SERVER.LOCAL}${apiUrl}`,
             headers:{
                 "Content-Type": "application/json"
             }
