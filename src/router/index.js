@@ -25,6 +25,8 @@ export default new VueRouter({
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
         createRoute('views/myTeam/MyTeamList', '/myTeams'),
+
+        createRoute('views/Profile/MyProfile','/myProfile'),
     ]
 })
 
