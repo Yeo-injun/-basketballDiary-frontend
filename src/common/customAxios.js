@@ -21,9 +21,9 @@ export default {
     createClientForLocal(apiUrl) {
         const createdAxios = axios.create({
             baseURL: `${API_SERVER.LOCAL}${apiUrl}`,
+            withCredentials: true,
             headers:{
                 "Content-Type": "application/json",
-                "testHeader" : "isThisJustTest.",
             }
         })
         return createdAxios;
