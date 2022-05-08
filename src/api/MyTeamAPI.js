@@ -16,5 +16,13 @@ export const myTeamApi = {
     getMyTeams(params) {
         return axiosService.get('', {params}); 
     },
-
+    findMyTeamsProfile(params) {
+        return axiosService.get('/${params.teamId}/profile', {params});
+    },
+    searchManagers(params) {
+        return axiosService.get('/${params.teamId}/managers', {params});
+    },
+    searchMembers(params) {
+        return axiosService.get('/${params.teamId}/members', {params});
+    },
 }
