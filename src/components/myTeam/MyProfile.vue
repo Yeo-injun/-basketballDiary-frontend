@@ -11,7 +11,7 @@
                     <v-col cols="10">
                         <v-row justify="space-between">
                             <v-col><v-card>포지션: {{data.positionCode}}</v-card></v-col>
-                            <v-col><v-card>직책: {{data.temp}}</v-card></v-col>
+                            <v-col><v-card>직책: {{data.teamAuthCode}}</v-card></v-col>
                             <v-col><v-card>가입일: {{data.joinYmd}}</v-card></v-col>
                             <v-col>
                                 <v-btn

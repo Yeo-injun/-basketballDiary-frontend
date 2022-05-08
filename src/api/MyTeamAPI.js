@@ -10,12 +10,12 @@ export const myTeamApi = {
         return axiosService.get('', {params}); 
     },
     findMyTeamsProfile(params) {
-        return axiosService.get('/${params.teamId}/profile', {params});
+        return axiosService.get(`/${params.teamId}/profile`);
     },
     searchManagers(params) {
-        return axiosService.get('/${params.teamId}/managers', {params});
+        return axiosService.get(`/${params.teamId}/managers`);
     },
     searchMembers(params) {
-        return axiosService.get('/${params.teamId}/members', {params});
+        return axiosService.get(`/${params.teamId}/members`);
     },
 }
