@@ -10,9 +10,9 @@
                     </v-col>
                     <v-col cols="10">
                         <v-row justify="space-between">
-                            <v-col><v-card>포지션: </v-card></v-col>
-                            <v-col><v-card>직책: </v-card></v-col>
-                            <v-col><v-card>가입일: </v-card></v-col>
+                            <v-col><v-card>포지션: {{data.positionCode}}</v-card></v-col>
+                            <v-col><v-card>직책: {{data.temp}}</v-card></v-col>
+                            <v-col><v-card>가입일: {{data.joinYmd}}</v-card></v-col>
                             <v-col>
                                 <v-btn
                                     elevation="2"
@@ -25,10 +25,10 @@
                             </v-col>
                         </v-row>
                         <v-row justify="space-between">
-                            <v-col><v-card>신장:  </v-card></v-col>
-                            <v-col><v-card>체중:  </v-card></v-col>
-                            <v-col><v-card>등번호: </v-card></v-col>
-                            <v-col><v-card>경기참여: </v-card></v-col>
+                            <v-col><v-card>신장:  {{data.height}}</v-card></v-col>
+                            <v-col><v-card>체중:  {{data.weight}}</v-card></v-col>
+                            <v-col><v-card>등번호:  {{data.backNumber}}</v-card></v-col>
+                            <v-col><v-card>경기참여:  {{data.totGame}}</v-card></v-col>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -40,7 +40,9 @@
 
 <script>
     export default {
-
+        props: {
+            data:{}
+        }
     }
 </script>
 
