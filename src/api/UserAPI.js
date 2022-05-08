@@ -6,8 +6,8 @@ const axiosService = axios.createClientForLocal('/user');
 
 
 export default {
-    login(data) {
-        return axiosService.post('/login', data);
+    login(params) {
+        return axiosService.post('/login', params);
     },
     logout() {
         return axiosService.post('/logout');

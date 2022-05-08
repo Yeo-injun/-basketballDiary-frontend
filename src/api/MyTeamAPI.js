@@ -1,10 +1,3 @@
-// // Axois공통 모듈 적용 필요 
-// import axios from './defaultAxios';
-// import { SERVER_URL } from './const';
-
-// // API설정 공통화
-// const axiosService = axios.createDefault('/myTeams', SERVER_URL.LOCAL);
-
 import axios from '@/common/customAxios';
 const axiosService = axios.createClientForLocal('/myTeams');
 

@@ -1,5 +1,3 @@
-// import axios from './defaultAxios';
-// import { SERVER_URL } from './const';
 import axios from '@/common/customAxios';
 
 const axiosService = axios.createClientForAws('/loginUser');
