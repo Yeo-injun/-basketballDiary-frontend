@@ -3,48 +3,41 @@
         회원가입
         <v-text-field label="아이디" v-model="userId"></v-text-field>
         <v-text-field label="비밀번호" type="password" v-model="password"></v-text-field>
-        <v-text-field label="이름" v-model="username"></v-text-field>
-         
-        <v-card>
-            <v-card-title>이것은 타이틀 : {{ userId }}</v-card-title>
-            <v-card-subtitle>소제목을 작성</v-card-subtitle>
-            <v-card-text>블라블라</v-card-text>
-            <v-container>
-                <v-row>
-                    <v-col>
-                        <!-- 사진 태그 -->
-                        테스트테스트
-                    </v-col>
-                    <v-col>
-                        <v-row>
-                            <v-col>
-                                블라블로송 : 야호
-                            </v-col>
-                            <v-col>
-                                블라블로송 : 야호
-                            </v-col>
-                            <v-col class="text-left">
-                                ddddd
-                                <v-btn class="float-right">
-                                    버튼
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-card>
-
+        <v-text-field label="비밀번호 확인" type="password" v-model="passwordCheck"></v-text-field>
+        
+        <v-text-field label="이름" v-model="name"></v-text-field>
+        <v-radio-group v-model="gender" row>
+            <v-radio label="남성" value="01"/>
+            <v-radio label="여성" value="02"/>
+        </v-radio-group>
+        <!-- https://vuetifyjs.com/en/components/date-pickers/#date-events -->
+        <v-date-picker
+            v-model="date"
+            no-title
+            @input="menu1 = false"
+        ></v-date-picker>
+        <v-text-field label="이메일" v-model="email"></v-text-field>
+        <v-text-field label="신장" v-model="height"></v-text-field>
+        <v-text-field label="몸무게" v-model="weight"></v-text-field>
+        포지션
+        생년월일
+        신장
+        몸무게
+        시도, 시군구 코드
     </v-container>
 </template>
 
 <script>
+// 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
     export default {
         data: ()=>{
             return {
-                userId: 'dddddddd',
+                userId: '',
                 password: '',
-                username: '',
+                passwordCheck: '',
+                name: '',
+                gender: '',
+
             }
         },
         

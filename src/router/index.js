@@ -17,6 +17,7 @@ export default new VueRouter({
     mode: "history",
     // routes: Vue router에 의해서 컨트롤되는 페이지 정보를 담는 array객체
     routes: [
+        createRoute('views/Profile/MyTeamManagePage', '/cookieTest'),
         createRoute('views/AppMain', '/'),
         createRoute('views/LoginPage', '/login'),
         createRoute('views/SignupPage', '/signup'),

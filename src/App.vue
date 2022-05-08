@@ -62,7 +62,10 @@ export default {
         Object.assign(this.sessionUserInfo, data);
         let jsonAuth = JSON.stringify(this.sessionUserInfo);
         sessionStorage.setItem('AuthUser', jsonAuth);
-        this.$router.go();  // 파라미터가 없으면 현재 위치 새로고침 - 숫자형 인수가 있으면 해당 숫자만큼 히스토리 스택으로 이동
+
+        console.log(data);
+        console.log(`로그인 완료 : ${document.cookie}`);
+        // this.$router.go();  // 파라미터가 없으면 현재 위치 새로고침 - 숫자형 인수가 있으면 해당 숫자만큼 히스토리 스택으로 이동
       },
       deleteAuthUserInfo() 
       {

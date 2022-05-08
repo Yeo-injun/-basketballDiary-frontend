@@ -1,8 +1,6 @@
-import axios from './defaultAxios';
-import { SERVER_URL } from './const';
+import axios from '../common/customAxios';
 
-const axiosService = axios.createDefault('/teams', SERVER_URL.AWS);
-
+const axiosService = axios.createClientForAws('/teams');
 
 export function tempApi(data) {
     // 구현하기

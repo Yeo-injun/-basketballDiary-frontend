@@ -1,7 +1,6 @@
-import axios from './defaultAxios';
-import { SERVER_URL } from './const';
+import axios from '@/common/customAxios';
 
-const axiosService = axios.createDefault('/loginUser', SERVER_URL.LOCAL);
+const axiosService = axios.createClientForAws('/loginUser');
 
 
 export const profileApi = {

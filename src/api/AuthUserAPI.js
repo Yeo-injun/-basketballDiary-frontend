@@ -1,10 +1,11 @@
-import axios from './defaultAxios';
-import { SERVER_URL } from './const';
+import axios from '../common/customAxios';
 
-const axiosService = axios.createDefault('/authUser', SERVER_URL.AWS);
+const axiosService = axios.createClientForLocal('/loginUser');
 
-export function tempApi(data) {
-    // 구현하기
-    return axiosService;
+export default {
+    getJoinRequestsTo() {
+        return axiosService.get('/joinRequestsTo');
+    },
+
 }
 
