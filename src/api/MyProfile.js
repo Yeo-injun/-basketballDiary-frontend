@@ -1,7 +1,6 @@
 import axios from '@/common/customAxios';
 
-const axiosService = axios.createClientForAws('/loginUser');
-
+const axiosService = axios.createClientForLocal('/loginUser');
 
 export const profileApi = {
     // 구현하기
