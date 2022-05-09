@@ -25,9 +25,9 @@ export default new VueRouter({
          * 중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
-        createRoute('views/myTeam/MyTeamList', '/myTeams'),
+        createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
 
-        createRoute('views/Profile/MyProfile','/myProfile'),
+        createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
     ]
 })
 

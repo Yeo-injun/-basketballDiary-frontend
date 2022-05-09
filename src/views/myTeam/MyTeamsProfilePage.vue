@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MyProfile from '@/components/Profile/MyProfile.vue';
+import MyProfile from '@/components/myTeam/MyTeamsProfile.vue';
 export default {
     components: {
         MyProfile
