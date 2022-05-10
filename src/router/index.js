@@ -1,5 +1,10 @@
 // 해당 방식은 Vue2.x와 Vue3.x 지원
 // Vue4.x에서는 VueRouter, Vue 지원 안되고, {}안에 필요한 모듈을 import 시켜야 함
+
+/**
+ * REFERENCE
+ * -중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
+ */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -21,13 +26,18 @@ export default new VueRouter({
         createRoute('views/AppMain', '/'),
         createRoute('views/LoginPage', '/login'),
         createRoute('views/SignupPage', '/signup'),
+        
         /**
-         * 중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
+         * myTeam
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
-
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
+
+        /**
+         * loginUser
+         */
+        createRoute('views/loginUser/MyProfilePage','/myProfile'),
     ]
 })
 

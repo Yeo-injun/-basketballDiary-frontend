@@ -6,6 +6,11 @@ export default {
     getJoinRequestsTo() {
         return axiosService.get('/joinRequestsTo');
     },
-
+    /**
+     * seongju
+     */
+    getMyInfo(){
+        return axiosService.get(`/profile`);
+    }
 }
 
