@@ -6,10 +6,21 @@ const axiosService = axios.createClientForLocal('/myTeams');
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
  */
 export const myTeamApi = {
-    getMyTeams(params) {
-        return axiosService.get('', {params}); 
+    /**
+     * seongju 
+     */
+    searchTeams(params){
+        return axiosService.get('',{params});
     },
+    modifyMyTeamsProfile(params){
+        console.log(params);
+        return axiosService.post(`/${params.teamSeq}/profile`,{params});
+    },
+    /**
+     * changgi 
+     */
     findMyTeamsProfile(params) {
+        console.log(params);
         return axiosService.get(`/${params.teamId}/profile`);
     },
     searchManagers(params) {
@@ -17,5 +28,5 @@ export const myTeamApi = {
     },
     searchMembers(params) {
         return axiosService.get(`/${params.teamId}/members`);
-    },
+    },    
 }
