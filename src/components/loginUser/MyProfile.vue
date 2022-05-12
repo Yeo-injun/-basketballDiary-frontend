@@ -27,10 +27,8 @@
                 <v-col>활동지역 : </v-col>
                 <v-col></v-col>
             </v-row>
-            <v-row>
-                <v-btn>수정</v-btn>
-            </v-row>
         </v-card>
+        <v-btn class="float-right">수정</v-btn>
     </v-container>
 </div>
         
