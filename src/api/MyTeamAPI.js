@@ -9,8 +9,8 @@ export const myTeamApi = {
     /**
      * seongju 
      */
-    searchTeams(params){
-        return axiosService.get('',{params});
+    searchTeams(){
+        return axiosService.get();
     },
     modifyMyTeamsProfile(params){
         console.log(params);

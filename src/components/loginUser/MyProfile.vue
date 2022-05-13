@@ -15,11 +15,11 @@
                 <v-col>포지션 : </v-col>
                 <v-col>
                     <v-row>
-                        <v-checkbox v-model="selected" label="포인트가드" value="포인트가드"></v-checkbox>
-                        <v-checkbox v-model="selected" label="슈팅가드" value="슈팅가드"></v-checkbox>                
-                        <v-checkbox v-model="selected" label="스몰포워드" value="스몰포워드"></v-checkbox>                
-                        <v-checkbox v-model="selected" label="파워포워드" value="파워포워드"></v-checkbox>                
-                        <v-checkbox v-model="selected" label="센터" value="센터"></v-checkbox>
+                        <v-checkbox v-model="selected" label="포인트가드" value="10"></v-checkbox>
+                        <v-checkbox v-model="selected" label="슈팅가드" value="20"></v-checkbox>                
+                        <v-checkbox v-model="selected" label="스몰포워드" value="30"></v-checkbox>                
+                        <v-checkbox v-model="selected" label="파워포워드" value="40"></v-checkbox>                
+                        <v-checkbox v-model="selected" label="센터" value="50"></v-checkbox>
                     </v-row>                 
                 </v-col>                
             </v-row>
@@ -38,7 +38,7 @@
                 </v-col>
             </v-row>
         </v-card>
-        <v-btn class="float-right">수정</v-btn>
+        <v-btn class="float-right" v-on:click="save()">수정</v-btn>
     </v-container>
 </div>
         
@@ -61,7 +61,12 @@ export default {
                 userSeq: 3,
             };
             this.myinfo = (await myProfileApi.getMyInfo()).data;
+            this.selected.push(this.myinfo.positionCode);
             console.log(this.myinfo.data);
+        },
+        async save(){
+            this.selected.forEach(e=>this.myinfo.positionCode=e);
+            await myProfileApi.updateUser(this.myinfo);
         }
     },
     mounted () {

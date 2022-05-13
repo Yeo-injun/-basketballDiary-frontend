@@ -11,6 +11,10 @@ export default {
      */
     getMyInfo(){
         return axiosService.get(`/profile`);
+    },
+    updateUser(params){
+        console.log(params);
+        axiosService.post(`/profile`,params);
     }
 }
 

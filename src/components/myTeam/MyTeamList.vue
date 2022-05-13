@@ -62,13 +62,10 @@ export default {
   },
   methods:{
     async load(){
-      const param = {
-        userSeq: 3,
-      }
       // 비동기적인 console.log 처리로 인해 발생하는 현상
       // https://kkangdda.tistory.com/81
       try{
-        const list = await myTeamApi.searchTeams(param);
+        const list = await myTeamApi.searchTeams();
         list.data.forEach(element => {
           this.teamList.push(element);
         });
