@@ -1,15 +1,26 @@
 import axios from '@/common/customAxios';
 const axiosService = axios.createClientForLocal('/myTeams');
-
+// const axiosService = axios.createClientForAws('/myTeams');
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config
 /**
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
  */
 export const myTeamApi = {
-    getMyTeams(params) {
-        return axiosService.get('', {params}); 
+    /**
+     * seongju 
+     */
+    searchTeams(){
+        return axiosService.get();
     },
+    modifyMyTeamsProfile(params){
+        console.log(params);
+        return axiosService.post(`/${params.teamSeq}/profile`,{params});
+    },
+    /**
+     * changgi 
+     */
     findMyTeamsProfile(params) {
+        console.log(params);
         return axiosService.get(`/${params.teamId}/profile`);
     },
     searchManagers(params) {
@@ -17,5 +28,5 @@ export const myTeamApi = {
     },
     searchMembers(params) {
         return axiosService.get(`/${params.teamId}/members`);
-    },
+    },    
 }
