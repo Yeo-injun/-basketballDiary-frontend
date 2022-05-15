@@ -10,6 +10,8 @@
 
 <script>
 import authUserApi from '@/api/AuthUserAPI';
+// import axios from 'axios';
+
 
 export default {
     data : () => {
@@ -22,7 +24,8 @@ export default {
             await authUserApi.getJoinRequestsTo()
                     .then((res) => {
                         console.log(res);
-                        this.tempData(res);
+                        this.tempData = res;
+                        console.log(this);
                     })
                     .catch((error) => {
                         console.log(error);
