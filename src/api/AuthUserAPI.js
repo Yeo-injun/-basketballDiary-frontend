@@ -8,6 +8,15 @@ export default {
     getJoinRequestsTo() {
         return axiosService.get('/joinRequestsTo');
     },
-
+    /**
+     * seongju
+     */
+    getMyInfo(){
+        return axiosService.get(`/profile`);
+    },
+    updateUser(params){
+        console.log(params);
+        axiosService.post(`/profile`,params);
+    }
 }
 
