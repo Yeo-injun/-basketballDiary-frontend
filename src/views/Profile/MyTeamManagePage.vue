@@ -10,6 +10,8 @@
 
 <script>
 import authUserApi from '@/api/AuthUserAPI';
+// import axios from 'axios';
+
 
 export default {
     data : () => {
@@ -20,6 +22,10 @@ export default {
     methods: {
         async getJoinRequestsTo() {
             await authUserApi.getJoinRequestsTo()
+            // await axios.get(
+            //         "http://127.0.0.1:8080/api/loginUser/joinRequestsTo",
+            //         { withCredentials : true },
+            //     )
                     .then((res) => {
                         console.log(res);
                         this.tempData(res);

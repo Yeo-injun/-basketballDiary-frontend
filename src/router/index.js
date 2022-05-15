@@ -6,7 +6,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const myTeamPageChildren = [
-    createRoute('views/myTeam/MyTeamMemberPage', 'members'),
+    createRoute('views/myTeam/MyTeamMember', 'members'),
     createRoute('views/LoginPage', 'test'),
 ];
 

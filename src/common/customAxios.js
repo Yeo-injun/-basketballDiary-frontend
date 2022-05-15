@@ -13,19 +13,19 @@ export default {
     createClientForAws(apiUrl) {
         return axios.create({
             baseURL: `${API_SERVER.AWS}${apiUrl}`,
+            withCredentials: true,
             headers:{
                 "Content-Type": "application/json"
             }
         })
     },
     createClientForLocal(apiUrl) {
-        const createdAxios = axios.create({
+        return axios.create({
             baseURL: `${API_SERVER.LOCAL}${apiUrl}`,
             withCredentials: true,
             headers:{
                 "Content-Type": "application/json",
             }
         })
-        return createdAxios;
     },
 } 
