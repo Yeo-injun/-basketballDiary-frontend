@@ -11,6 +11,7 @@
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
+    "vue-cookies": "^1.8.1",
     "vue-router": "^3.5.3",
     "vuetify": "^2.6.4"
   },
@@ -40,7 +41,9 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "no-mixed-spaces-and-tabs": 0
+    }
   },
   "browserslist": [
     "> 1%",

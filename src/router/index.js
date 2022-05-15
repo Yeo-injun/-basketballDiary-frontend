@@ -1,19 +1,20 @@
 // 해당 방식은 Vue2.x와 Vue3.x 지원
 // Vue4.x에서는 VueRouter, Vue 지원 안되고, {}안에 필요한 모듈을 import 시켜야 함
+
+/**
+ * REFERENCE
+ * -중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
+ */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
-/** var는 hosting 문제 때문에 최대한 안쓰는걸 추천 */
-// var myTeamPageChildren = [
-//     createRoute('views/myTeam/MyTeamMember', 'members'),
-//     createRoute('views/LoginPage', 'test'),
-// ];
-//const 나 let을 사용
+
 const myTeamPageChildren = [
     createRoute('views/myTeam/MyTeamMember', 'members'),
     createRoute('views/LoginPage', 'test'),
 ];
+
 export default new VueRouter({
     // 기본은 Hash모드지만 이경우 웹브라우저 url입력창에 #이 계속 붙음.
     // 이를 방지하기 위해 history 모드로 변경.
@@ -21,14 +22,22 @@ export default new VueRouter({
     mode: "history",
     // routes: Vue router에 의해서 컨트롤되는 페이지 정보를 담는 array객체
     routes: [
+        createRoute('views/Profile/MyTeamManagePage', '/cookieTest'),
         createRoute('views/AppMain', '/'),
         createRoute('views/LoginPage', '/login'),
         createRoute('views/SignupPage', '/signup'),
+        
         /**
-         * 중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
+         * myTeam
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
-        createRoute('views/myTeam/MyTeamList', '/myTeams'),
+        createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
+        createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
+
+        /**
+         * loginUser
+         */
+        createRoute('views/loginUser/MyProfilePage','/myProfile'),
     ]
 })
 
