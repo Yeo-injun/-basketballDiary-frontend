@@ -22,13 +22,10 @@ export default {
     methods: {
         async getJoinRequestsTo() {
             await authUserApi.getJoinRequestsTo()
-            // await axios.get(
-            //         "http://127.0.0.1:8080/api/loginUser/joinRequestsTo",
-            //         { withCredentials : true },
-            //     )
                     .then((res) => {
                         console.log(res);
-                        this.tempData(res);
+                        this.tempData = res;
+                        console.log(this);
                     })
                     .catch((error) => {
                         console.log(error);
