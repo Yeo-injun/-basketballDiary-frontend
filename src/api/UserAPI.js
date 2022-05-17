@@ -12,5 +12,8 @@ export default {
     logout() {
         return axiosService.post('/logout');
     },
+    createUser(params) {
+        return axiosService.post('/registration', params);
+    }
 } 
 
