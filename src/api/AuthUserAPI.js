@@ -15,6 +15,6 @@ export default {
     updateUser(params){
         // console.log(params);
         return axiosService.post(`/profile`,params);
-    }
+    },
 }
 

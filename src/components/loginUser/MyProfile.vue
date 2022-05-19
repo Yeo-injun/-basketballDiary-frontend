@@ -45,7 +45,7 @@
         </v-card>
         <v-container>
             <v-row justify="center">                
-                <v-btn>비밀번호 변경</v-btn>
+                <v-btn to="/loginUser/updatePassword">비밀번호 변경</v-btn>
                 <v-btn>회원탈퇴</v-btn>                             
             </v-row>
         </v-container>   
@@ -63,7 +63,6 @@ export default {
             myinfo:{},
             selected:[],
             address:'',
-            // items: ['시도','서울시','부산시','대구시','대전시','광주시','울산시','세종시','인천시','경기도','강원도','충청북도','충청남도','경상북도','경상남도','전라북도','전라남도','제주도'],
         }
     },
     methods: {
