@@ -41,14 +41,12 @@
                 <v-col>
                     <v-btn class="float-right" @click="save()">수정</v-btn>    
                 </v-col>
-            </v-row>        
-        </v-card>
-        <v-container>
+            </v-row>  
             <v-row justify="center">                
-                <v-btn to="/loginUser/updatePassword">비밀번호 변경</v-btn>
+                <v-btn to="/updatePassword">비밀번호 변경</v-btn>
                 <v-btn>회원탈퇴</v-btn>                             
-            </v-row>
-        </v-container>   
+            </v-row>      
+        </v-card>
     </v-container>
 </div>
         
