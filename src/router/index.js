@@ -39,6 +39,8 @@ export default new VueRouter({
          */
         createRoute('views/loginUser/MyProfilePage','/myProfile'),
         createRoute('views/loginUser/UpdatePassword','/updatePassword'),
+        createRoute('views/loginUser/SignOutAccount','/signOutAccount'),
+        
     ]
 })
 
