@@ -42,15 +42,14 @@
             }
         },
         methods: {
-            getProflie() {
-                return myTeamApi.findMyTeamsProfile(this.params)
-                .then(response => {
+            async getProflie() {
+                try {
+                    var response = await myTeamApi.findMyTeamsProfile(this.params);
                     const {data} = response;
                     this.profile = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+                } catch(e) {
+                    console.log(e);
+                }
                 // .catch(function(error) {
                 //     if(error.response) {
                 //         console.log(error.response.data);
@@ -63,30 +62,29 @@
                 //     }
                 // })
             },
-            getListManager() {
-                return myTeamApi.searchManagers(this.params)
-                .then(response => {
+            async getListManager() {
+                try {
+                    var response = await myTeamApi.searchManagers(this.params);
                     const {data} = response;
                     this.managerList = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+                } catch(e) {
+                    console.log(e);
+                }
             },
-            getListMember() {
-                return myTeamApi.searchMembers(this.params)
-                .then(response => {
+            async getListMember() {
+                try {
+                    var response = await myTeamApi.searchMembers(this.params);
                     const {data} = response;
                     this.memberList = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+                }
+                catch(e) {
+                    console.log(e);
+                }
             },
-            async onLoad () {
-                await this.getProflie();
-                await this.getListManager();
-                await this.getListMember();
+            onLoad () {
+                this.getProflie();
+                this.getListManager();
+                this.getListMember();
             }
 
         },
