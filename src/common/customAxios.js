@@ -1,5 +1,7 @@
 import axios from 'axios';
-
+// TODO API호출 발생시 예외 페이지로 이동시키기 공통화
+// 인터셉터 참고자료 : https://yamoo9.github.io/axios/guide/interceptors.html
+// https://velog.io/@skyepodium/axios-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0%EB%A1%9C-API-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0
 const API_SERVER = {
     AWS : 'http://54.180.147.129/api',
     LOCAL : 'http://127.0.0.1:8080/api',
