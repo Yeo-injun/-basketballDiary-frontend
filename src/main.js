@@ -11,6 +11,9 @@ import router from '@/router/index.js';
 
 Vue.config.productionTip = false
 
+// 22.05.25(수) 작업목표
+// Vuex : 상태관리를 통해 모든 컴포넌트에서 접근 가능하게끔 작업 : https://jess2.xyz/vue/vue-tip/
+
 new Vue({
   vuetify,
   router, // router등록
