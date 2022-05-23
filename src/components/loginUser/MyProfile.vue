@@ -81,7 +81,8 @@ export default {
             new window.daum.Postcode({
                 oncomplete: (data) => {
                     this.address = data.address;
-                    console.log(this.address);
+                    // console.log(this.address);
+                    console.log(data);
                 }
             }).open();
         }
