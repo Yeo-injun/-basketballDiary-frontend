@@ -37,6 +37,8 @@
                     this.$emit('login-success', res);
                 } catch(e) {
                     // 함수로 감싸기 - 오류코드에 따라 에러 메세지 처리
+                    console.log("1. 인터셉터가 가로채기 전");
+                    console.log(e);
                     alert(e.response.data.message);
                     this.initInput();
                 }

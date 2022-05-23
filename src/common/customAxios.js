@@ -1,4 +1,6 @@
 import axios from 'axios';
+import router from "@/router"
+
 // TODO API호출 발생시 예외 페이지로 이동시키기 공통화
 // 인터셉터 참고자료 : https://yamoo9.github.io/axios/guide/interceptors.html
 // https://velog.io/@skyepodium/axios-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0%EB%A1%9C-API-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0
@@ -14,6 +16,9 @@ const API_SERVER = {
  * CORS일 경우 백엔드와 프론트에서 각각 설정을 추가해줘야 함. withCredential = true
  * samsSite설정은 백엔드에서 cookie생성시 설정 : 웹서버 설정을 변경하거나, cookie생성시 설정을 추가해서 생성해주기
  */
+
+// const NOT_FOUND_ERORR = 404;
+
 export default {
     createClientForAws(apiUrl) {
         return axios.create({
@@ -25,12 +30,27 @@ export default {
         })
     },
     createClientForLocal(apiUrl) {
-        return axios.create({
+        const axiosInstance = axios.create({
             baseURL: `${API_SERVER.LOCAL}${apiUrl}`,
             withCredentials: true,
             headers:{
                 "Content-Type": "application/json",
             }
-        })
+        });
+        axiosInstance.interceptors.response.use(
+            null,
+            function(error) {
+                // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
+                // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
+                let path = '/error';
+                switch (error.response.status) {
+                    case 401: path = '/login'; break;
+                    case 404: path = '/signup'; break;
+                }
+                router.push(path);
+                return Promise.reject(error);
+            }
+        );
+        return axiosInstance;
     },
 } 
