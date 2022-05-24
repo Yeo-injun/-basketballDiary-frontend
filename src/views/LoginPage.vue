@@ -33,7 +33,6 @@
                      * 'login-success'라는 이름의 커스텀 이벤트를 res 데이터와 함께 상위 컴포넌트로 올려보냄
                      */
                     const res = await userApi.login(param);
-                    console.log(res.headers);
                     this.$emit('login-success', res);
                 } catch(e) {
                     // request후 response에서 에러가 발생할 경우 Axios interceptor를 먼저 거침 

@@ -98,9 +98,13 @@ function getErrorPage(responseStutsCode)
     // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
     let errorPagePath = '/error';
     switch (responseStutsCode) {
-        case ERROR_CODE.UNAUTHORIZED : errorPagePath = '/login'; break;
-        // TODO 기본 에러페이지를 만들고, 
-        // 에러코드별로 에러페이지 만들기
+        case ERROR_CODE.UNAUTHORIZED : 
+            errorPagePath = '/login'; 
+            // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
+            // TODO 테스트 : 쿠키에 담긴 세션ID가 만료되어 오류가 발생했을 경우 자동으로 세션 스토리지 및 로그인상태를 업데이트해줘야 함. 
+            sessionStorage.clear();     
+            break;
+        // TODO 에러코드별로 에러페이지 만들기 - router등록
         // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
     }
     return errorPagePath;

@@ -51,6 +51,7 @@
 <script>
 import userApi from '@/api/UserAPI';
 
+// id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 // 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
     export default {
         data: ()=>{
