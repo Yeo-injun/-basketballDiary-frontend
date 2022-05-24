@@ -100,7 +100,9 @@ function getErrorPage(responseStutsCode)
     switch (responseStutsCode) {
         case ERROR_CODE.UNAUTHORIZED : 
             errorPagePath = '/login'; 
-            sessionStorage.clear();     // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
+            // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
+            // TODO 테스트 : 쿠키에 담긴 세션ID가 만료되어 오류가 발생했을 경우 자동으로 세션 스토리지 및 로그인상태를 업데이트해줘야 함. 
+            sessionStorage.clear();     
             break;
         // TODO 에러코드별로 에러페이지 만들기 - router등록
         // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;

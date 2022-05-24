@@ -5,8 +5,9 @@ const axiosService = axios.createClientForLocal('/loginUser');
 
 
 export default {
+    // 인준 테스트용
     getJoinRequestsTo() {
-        return axiosService.get('/joinRequestsTo');
+        return axios.createAxiosInstance('/loginUser').get('/joinRequestsTo');
     },
     /**
      * seongju
