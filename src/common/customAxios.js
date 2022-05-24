@@ -17,7 +17,12 @@ const API_SERVER = {
  * samsSite설정은 백엔드에서 cookie생성시 설정 : 웹서버 설정을 변경하거나, cookie생성시 설정을 추가해서 생성해주기
  */
 
-// const NOT_FOUND_ERORR = 404;
+const ERROR_CODE = {
+    BAD_REQUEST : 400,
+    UNAUTHORIZED : 401, 
+    NOT_FOUND : 404,
+    CONFLICT : 409,
+}
 
 export default {
     createClientForAws(apiUrl) {
@@ -42,10 +47,14 @@ export default {
             function(error) {
                 // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
                 // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
+                console.log(process.env.VUE_APP_GLOBAL_TEST);
+                console.log(process.env.VUE_APP_API_URI);
                 let path = '/error';
                 switch (error.response.status) {
-                    case 401: path = '/login'; break;
-                    case 404: path = '/signup'; break;
+                    case ERROR_CODE.UNAUTHORIZED : path = '/login'; break;
+                    // 기본 에러페이지를 만들고, 
+                    // 에러코드별로 에러페이지 만들기
+                    // case ERROR_CODE.NOT_FOUND : path = '/signup'; break;
                 }
                 router.push(path);
                 return Promise.reject(error);
@@ -53,4 +62,46 @@ export default {
         );
         return axiosInstance;
     },
+    // 실행모드에 따라 환경변수 동적으로 반영하기
+    // 참고자료 : https://velog.io/@skyepodium/vue-%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%93%9C%EC%99%80-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95
+    // .env환경변수 파일 만들기, 실행모드 스크립트 작성하기 -> package.json
+    createAxiosInstance(apiUrl) {
+        const axiosInstance = axios.create({
+            baseURL: `${process.env.VUE_APP_API_URI}${apiUrl}`,
+            withCredentials: true,
+            headers:{
+                "Content-Type": "application/json",
+            }
+        });
+        // 인터셉터 등록
+        axiosInstance.interceptors.response.use(
+            null, 
+            function(error) {
+                console.log(`${Object.keys(error)} ------ 인터셉터 진입`);
+                console.log(error.response);
+                if (typeof error.response == "undefined") {
+                    alert("네트워크 연결이 불안정합니다. 네트워크 상태를 확인해주세요.");
+                    return Promise.reject(error);
+                }
+
+                router.push(getErrorPage(error.response.status));
+                return Promise.reject(error);
+            }
+        );
+        return axiosInstance;
+    }
 } 
+
+function getErrorPage(responseStutsCode) 
+{
+    // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
+    // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
+    let errorPagePath = '/error';
+    switch (responseStutsCode) {
+        case ERROR_CODE.UNAUTHORIZED : errorPagePath = '/login'; break;
+        // TODO 기본 에러페이지를 만들고, 
+        // 에러코드별로 에러페이지 만들기
+        // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
+    }
+    return errorPagePath;
+}
