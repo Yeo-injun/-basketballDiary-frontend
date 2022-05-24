@@ -1,19 +1,25 @@
 <template>
     <div>
-        <v-container class="green darken-1 px-15">
+        <v-container class="px-15">
+            <div class="d-flex">
+                <v-subheader>개인프로필</v-subheader>
+                <v-btn class="ml-auto" color="black white--text" small>프로필 수정</v-btn>
+            </div>
             <MyProfile :data="profile"/>
-            <v-chip label color="green" text-color="white">운영진</v-chip>
-            <v-container class="pa-0">
-                <div v-for="(manager, index) in managerList" v-bind:key="index">
-                    <MyManager v-bind:data="manager"/>
-                </div>
-            </v-container>
-            <v-chip label color="green" text-color="white">팀원 목록</v-chip>
-            <v-container class="pa-0">
-                <div v-for="(member, index) in memberList" v-bind:key="index">                    
-                    <MyMember v-bind:data="member"/>
-                </div>
-            </v-container>
+
+            <v-subheader>운영진</v-subheader>
+            <div v-for="(manager, index) in managerList" v-bind:key="index">
+                <MyManager v-bind:data="manager"/>
+            </div>
+        
+            <div class="d-flex">
+                <v-subheader>팀원 목록</v-subheader>
+                <v-btn class="ml-auto" color="black white--text" small>팀원 추가</v-btn>
+            </div>
+            <div v-for="(member, index) in memberList" v-bind:key="index">                    
+                <MyMember v-bind:data="member"/>
+            </div>
+
         </v-container>
     </div>
 </template>
@@ -21,7 +27,7 @@
 <script>
     import {myTeamApi} from '@/api/MyTeamAPI';
     import MyProfile from '@/components/myTeam/MyProfile.vue';
-    import MyManager from '@/components/myTeam/MyMember.vue';
+    import MyManager from '@/components/myTeam/MyManager.vue';
     import MyMember from '@/components/myTeam/MyMember.vue';
 
     export default {
