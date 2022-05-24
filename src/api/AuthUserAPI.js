@@ -16,5 +16,8 @@ export default {
         // console.log(params);
         return axiosService.post(`/profile`,params);
     },
+    deleteUser(){
+        return axiosService.delete('/profile');
+    }
 }
 
