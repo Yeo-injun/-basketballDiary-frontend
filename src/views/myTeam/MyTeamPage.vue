@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container class="red">
+        <v-container class="green lighten-5">
             <v-tabs centered>
                 <!-- TODO router에 탭 추가시 CSS를 자연스럽게 먹이기 : to prop활용하면 쉽게 적용 --> 
                 <v-tab to="/myTeam/members">팀원 조회</v-tab>
