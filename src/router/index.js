@@ -1,15 +1,14 @@
-// 해당 방식은 Vue2.x와 Vue3.x 지원
-// Vue4.x에서는 VueRouter, Vue 지원 안되고, {}안에 필요한 모듈을 import 시켜야 함
-
-/**
- * REFERENCE
- * -중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
- */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+
+// 해당 방식은 Vue2.x와 Vue3.x 지원
+// Vue4.x에서는 VueRouter, Vue 지원 안되고, {}안에 필요한 모듈을 import 시켜야 함
 Vue.use(VueRouter);
 
+/** REFERENCE
+ * -중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
+ */
 const myTeamPageChildren = [
     createRoute('views/myTeam/MyTeamMemberPage', 'members'),
     createRoute('views/LoginPage', 'test'),
@@ -26,16 +25,22 @@ export default new VueRouter({
         createRoute('views/AppMain', '/'),
         createRoute('views/LoginPage', '/login'),
         createRoute('views/SignupPage', '/signup'),
+
+        /**
+         * error페이지
+         */
+        createRoute('views/errors/errorPage', '/error'),
+
         
         /**
-         * myTeam
+         * myTeam페이지
          */
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
 
         /**
-         * loginUser
+         * loginUser페이지
          */
         createRoute('views/loginUser/MyProfilePage','/myProfile'),
         createRoute('views/loginUser/UpdatePassword','/updatePassword'),

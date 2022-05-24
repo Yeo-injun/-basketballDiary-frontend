@@ -73,24 +73,35 @@ export default {
                 "Content-Type": "application/json",
             }
         });
+        // 인터셉터 등록
         axiosInstance.interceptors.response.use(
-            null,
+            null, 
             function(error) {
-                // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
-                // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
-                console.log(process.env.VUE_APP_GLOBAL_TEST);
-                console.log(process.env.VUE_APP_API_URI);
-                let path = '/error';
-                switch (error.response.status) {
-                    case ERROR_CODE.UNAUTHORIZED : path = '/login'; break;
-                    // 기본 에러페이지를 만들고, 
-                    // 에러코드별로 에러페이지 만들기
-                    // case ERROR_CODE.NOT_FOUND : path = '/signup'; break;
+                console.log(`${Object.keys(error)} ------ 인터셉터 진입`);
+                console.log(error.response);
+                if (typeof error.response == "undefined") {
+                    alert("네트워크 연결이 불안정합니다. 네트워크 상태를 확인해주세요.");
+                    return Promise.reject(error);
                 }
-                router.push(path);
+
+                router.push(getErrorPage(error.response.status));
                 return Promise.reject(error);
             }
         );
         return axiosInstance;
     }
 } 
+
+function getErrorPage(responseStutsCode) 
+{
+    // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
+    // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
+    let errorPagePath = '/error';
+    switch (responseStutsCode) {
+        case ERROR_CODE.UNAUTHORIZED : errorPagePath = '/login'; break;
+        // TODO 기본 에러페이지를 만들고, 
+        // 에러코드별로 에러페이지 만들기
+        // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
+    }
+    return errorPagePath;
+}
