@@ -3,9 +3,11 @@ node_modules
 /dist
 
 
-# local env files
-.env.local
-.env.*.local
+# local env files 
+# npm 실행모드에 따라서 환경변수 다르게 참조 가능.
+# 로컬 실행모드에서 참조할 수 있는 환경변수 파일이 git에 올라갈 수 있도록 .gitignore설정 변경
+# .env.local
+# .env.*.local
 
 # Log files
 npm-debug.log*
