@@ -15,11 +15,13 @@
                 <v-col>포지션 : </v-col>
                 <v-col>
                     <v-row>
-                        <v-checkbox v-model="selected" label="포인트가드" value="10" ></v-checkbox>
-                        <v-checkbox v-model="selected" label="슈팅가드" value="20" ></v-checkbox>                
-                        <v-checkbox v-model="selected" label="스몰포워드" value="30" ></v-checkbox>                
-                        <v-checkbox v-model="selected" label="파워포워드" value="40" ></v-checkbox>                
-                        <v-checkbox v-model="selected" label="센터" value="50" ></v-checkbox>
+                        <v-radio-group v-model="myinfo.positionCode">
+                            <v-radio label="포인트 가드" value="10"></v-radio>
+                            <v-radio label="센터" value="20"></v-radio>
+                            <v-radio label="스몰포워드" value="30"></v-radio>
+                            <v-radio label="파워포워드" value="40"></v-radio>
+                            <v-radio label="슈팅가드" value="50"></v-radio>
+                        </v-radio-group>
                     </v-row>                 
                 </v-col>                
             </v-row>
@@ -59,18 +61,15 @@ export default {
     data: () => {
         return {
             myinfo:{},
-            selected:[],
             address:'',
         }
     },
     methods: {
         async load(){
             this.myinfo = (await myProfileApi.getMyInfo()).data;
-            this.selected.push(this.myinfo.positionCode);
-            // console.log(this.myinfo.data);
         },
         async save(){
-            this.selected.forEach(e=>this.myinfo.positionCode=e);
+            // this.selected.forEach(e=>this.myinfo.positionCode=e);
             const success = await myProfileApi.updateUser(this.myinfo);
             console.log(success);
         },
