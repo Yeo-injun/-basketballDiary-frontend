@@ -8,7 +8,6 @@
               <v-col>현재 비밀번호</v-col>
               <v-col>
                   <v-text-field v-model="prevPassword" solo>
-                    {{prevPassword}}
                   </v-text-field>
               </v-col>
           </v-row>
@@ -16,15 +15,13 @@
               <v-col>새 비밀번호</v-col>
               <v-col>
                   <v-text-field v-model="curPassword" solo>
-                      {{curPassword}}
                   </v-text-field>
               </v-col>
           </v-row>
           <v-row>
               <v-col>새 비밀번호 확인</v-col>
               <v-col>
-                  <v-text-field solo>
-                      {{curPassword}}
+                  <v-text-field v-model="checkPassword" solo>
                   </v-text-field>
               </v-col>
           </v-row>
@@ -37,12 +34,36 @@
 </template>
 
 <script>
+import myProfileAPI from '@/api/AuthUserAPI';
+
 export default {
     data: ()=>{
         return {
             prevPassword:'',
             curPassword:'',
+            checkPassword:''
         }
+    },
+    methods:{
+        async update(){
+            const params={
+                prevPassword : this.prevPassword,
+                curPassword : this.curPassword,
+                checkPassword : this.checkPassword
+            };
+            const password = (await myProfileAPI.getMyInfo()).data.password;
+            console.log(password+" " + this.prevPassword+" "+this.curPassword+" "+this.checkPassword);
+            
+            if((password!=this.prevPassword) || (this.curPassword!=this.checkPassword)){
+                alert("입력하신 비밀번호가 일치하지 않습니다.");
+                return;
+            }
+            const res = await myProfileAPI.updatePassword(params);
+            console.log(res);
+        },
+        cancel(){
+
+        },
     }
 }
 </script>

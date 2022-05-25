@@ -21,6 +21,9 @@ export default {
     },
     deleteUser(){
         return axiosService.delete('/profile');
+    },
+    updatePassword(params){
+        return axiosService.post("/profile/password",params);
     }
 }
 
