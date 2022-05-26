@@ -5,11 +5,24 @@
         <v-card>
             <v-row>
                 <v-col>이름 :</v-col>
-                <v-col>{{myinfo.userName}}</v-col>
+                <v-col>
+                    <v-text-field v-model="userName" solo></v-text-field>
+                </v-col>
             </v-row>
             <v-row>
                 <v-col>이메일 :</v-col>
-                <v-col>{{myinfo.email}}</v-col>
+                <v-col>
+                    <v-text-field v-model="email" solo></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col>성별 :</v-col>
+                <v-col>
+                    <v-radio-group v-model="myinfo.gender">
+                        <v-radio label="남" value="M"></v-radio>
+                        <v-radio label="여" value="F"></v-radio>
+                    </v-radio-group>
+                </v-col>
             </v-row>
             <v-row>
                 <v-col>포지션 : </v-col>
@@ -27,31 +40,36 @@
             </v-row>
             <v-row>
                 <v-col>키 : </v-col>
-                <v-col>{{myinfo.height}}</v-col>
+                <v-col cols="1">
+                    <v-text-field v-model="height" solo></v-text-field>
+                </v-col>
             </v-row>
             <v-row>
                 <v-col>몸무게 : </v-col>
-                <v-col>{{myinfo.weight}}</v-col>
+                <v-col>
+                    <v-text-field v-model="weight" solo></v-text-field>
+                </v-col>
             </v-row>
             <v-row>
                 <v-col>주소 : </v-col>
                 <v-col>
-                    <v-text-field v-model="address" @click="showAPI()" solo></v-text-field>
+                    <v-btn @click="showAPI()" solo>주소찾기</v-btn>        
+                    <span>도로명주소<v-text-field v-model="roadAddress" solo></v-text-field></span>
+                    <span>우편번호<v-text-field v-model="zoneCode" solo></v-text-field></span>
                 </v-col>
             </v-row>
             <v-row>
                 <v-col>
                     <v-btn class="float-right" @click="save()">수정</v-btn>    
                 </v-col>
-            </v-row>  
+            </v-row>
             <v-row justify="center">                
                 <v-btn to="/updatePassword">비밀번호 변경</v-btn>
-                <v-btn to="/signOutAccount">회원탈퇴</v-btn>                             
-            </v-row>      
+                <v-btn to="/signOutAccount">회원탈퇴</v-btn>
+            </v-row>
         </v-card>
     </v-container>
-</div>
-        
+</div>        
 </template>
 
 <script>
@@ -61,16 +79,38 @@ export default {
     data: () => {
         return {
             myinfo:{},
-            address:'',
+            userName:'',
+            email:'',
+            gender:'',
+            height:'',
+            weight:'',
+            roadAddress:'',
+            zoneCode:'',
+            sidoCode:'',
+            sigunguCode:''
         }
     },
     methods: {
         async load(){
             this.myinfo = (await myProfileApi.getMyInfo()).data;
+            this.userName = this.myinfo.userName;
+            this.email = this.myinfo.email;
+            this.height = this.myinfo.height;
+            this.weight = this.myinfo.weight;
         },
-        async save(){
-            // this.selected.forEach(e=>this.myinfo.positionCode=e);
-            const success = await myProfileApi.updateUser(this.myinfo);
+        async save(){            
+            const params = {
+                userName : this.userName,
+                email : this.email,
+                gender : this.myinfo.gender,
+                height : this.height,
+                weight : this.weight,
+                sidoCode : this.sidoCode,
+                sigunguCode : this.sigunguCode,
+                zoneCode : this.zoneCode,
+                positionCode : this.myinfo.positionCode,
+            }
+            const success = await myProfileApi.updateUser(params);
             console.log(success);
         },
         // kakao Address API 사용 설명 : https://chlost.tistory.com/53
@@ -79,8 +119,10 @@ export default {
             // 출처 : https://medium.com/@hozacho/vuejs%EC%97%90%EC%84%9C-arrow-function%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0-ec067c342412
             new window.daum.Postcode({
                 oncomplete: (data) => {
-                    this.address = data.address;
-                    // console.log(this.address);
+                    this.roadAddress = data.roadAddress;
+                    this.zoneCode = data.zonecode;
+                    this.sidoCode = data.sigunguCode.substring(0,2);
+                    this.sigunguCode = data.sigunguCode;
                     console.log(data);
                 }
             }).open();
