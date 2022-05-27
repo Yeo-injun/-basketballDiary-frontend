@@ -5,6 +5,12 @@
         <v-text-field label="아이디" v-model="userId"></v-text-field>
         <v-text-field label="비밀번호" type="password" v-model="password"></v-text-field>
         <v-btn block color="primary" v-on:click="doLogin">로그인</v-btn>
+
+        <div class="text-subtitle-1 mt-5" align="center">
+            회원가입을 하려면 
+            <router-link to="/signup" class="text-subtitle-2">여기</router-link>
+            를 클릭해주세요.
+        </div>
     </v-container>
 </template>
 

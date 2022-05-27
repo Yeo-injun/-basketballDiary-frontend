@@ -84,7 +84,11 @@ export default {
                     return Promise.reject(error);
                 }
 
-                router.push(getErrorPage(error.response.status));
+                const statusCode = error.response.status;
+                router.push(getErrorPage(statusCode));
+                if (statusCode == ERROR_CODE.UNAUTHORIZED) {
+                    alert("권한이 없습니다. 로그인 후에 이용해주시기 바랍니다.");
+                }
                 return Promise.reject(error);
             }
         );
