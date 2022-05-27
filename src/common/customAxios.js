@@ -85,11 +85,15 @@ export default {
                 }
 
                 const statusCode = error.response.status;
+                if (statusCode == ERROR_CODE.CONFLICT) {
+                    return Promise.reject(error);   // 자원의 중복 에러는 발생한 곳에서 처리
+                }
+
                 router.push(getErrorPage(statusCode));
                 if (statusCode == ERROR_CODE.UNAUTHORIZED) {
                     alert("권한이 없습니다. 로그인 후에 이용해주시기 바랍니다.");
                 }
-                return Promise.reject(error);
+                return Promise.reject(error);   // API를 호출한 Axios에게 에러를 넘겨줌.
             }
         );
         return axiosInstance;
