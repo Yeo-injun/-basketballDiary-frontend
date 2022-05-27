@@ -3,7 +3,9 @@
         <v-form ref="form">
             <!-- 필수 입력값 표시 -->
             회원가입
-            <v-text-field label="아이디" v-model="userRegInfo.userId" :rules="requiredRules" required></v-text-field>
+            <v-text-field label="아이디" v-model="userRegInfo.userId" :rules="requiredRules" required v-on:change="initDuplicationCheckStatus"></v-text-field>
+            <v-btn block v-on:click="checkDuplicateUserId">ID중복확인</v-btn>
+
             <v-text-field label="비밀번호" type="password" v-model="userRegInfo.password" :rules="requiredRules" required></v-text-field>
             <v-text-field label="비밀번호 확인" type="password" v-model="passwordCheck"></v-text-field>
             
@@ -76,9 +78,22 @@ import userApi from '@/api/UserAPI';
             }
         }, // data
         methods: {
-            // TODO 아이디 중복체크  API
+            initDuplicationCheckStatus() {
+                this.isNotDuplicateUserId = false;
+            },
+            // 아이디 중복체크  API - 중복체크 후 다시 아이디를 고쳤을때 
             async checkDuplicateUserId() {
-
+                const params = {
+                    userId : this.userRegInfo.userId,
+                }
+                try {
+                    await userApi.checkDuplicateUserId(params);
+                    this.isNotDuplicateUserId = true;
+                    alert("사용할 수 있는 ID입니다!");
+                } catch (e) {
+                    this.isNotDuplicateUserId = false;
+                    alert("중복된 ID가 존재합니다. 다른 ID를 사용하시기 바랍니다.");
+                }
             },
             // 비밀번호 확인 로직
             checkPassword() {
@@ -90,7 +105,7 @@ import userApi from '@/api/UserAPI';
             // 회원가입 요청
             async createUser() {
                 if (!this.isNotDuplicateUserId) {
-                    alert("아이디가 중복되었습니다.");
+                    alert("ID중복확인을 해주시기 바랍니다.");
                     return;
                 }
 
