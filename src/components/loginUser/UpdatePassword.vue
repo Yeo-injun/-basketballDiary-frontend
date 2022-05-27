@@ -62,7 +62,7 @@ export default {
             console.log(res);
         },
         cancel(){
-
+            this.$router.go(-1);
         },
     }
 }

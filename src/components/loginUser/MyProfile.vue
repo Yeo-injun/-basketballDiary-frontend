@@ -87,7 +87,7 @@ export default {
             roadAddress:'',
             zoneCode:'',
             sidoCode:'',
-            sigunguCode:''
+            sigunguCode:'',
         }
     },
     methods: {
@@ -97,6 +97,8 @@ export default {
             this.email = this.myinfo.email;
             this.height = this.myinfo.height;
             this.weight = this.myinfo.weight;
+            this.roadAddress = this.myinfo.roadAddress;
+            this.zoneCode = this.myinfo.zonecode;
         },
         async save(){            
             const params = {
@@ -107,11 +109,12 @@ export default {
                 weight : this.weight,
                 sidoCode : this.sidoCode,
                 sigunguCode : this.sigunguCode,
-                zoneCode : this.zoneCode,
                 positionCode : this.myinfo.positionCode,
+                roadAddress : this.roadAddress,
+                zoneCode : this.zoneCode,
             }
             const success = await myProfileApi.updateUser(params);
-            console.log(success);
+            console.log(success.status);
         },
         // kakao Address API 사용 설명 : https://chlost.tistory.com/53
         showAPI(){            

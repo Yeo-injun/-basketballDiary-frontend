@@ -28,6 +28,9 @@ export default {
     async signOut() {
        const response = await myProfileApi.deleteUser();
        console.log(response);
+    },
+    cancel(){
+      this.$router.go(-1);
     }
   }
 }
