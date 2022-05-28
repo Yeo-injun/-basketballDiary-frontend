@@ -14,7 +14,6 @@
       <!-- <template v-if="!sessionUserInfo.isLogin"> -->
       <template v-if="!isLogin">
         <v-btn class="ma-1" to="/login">로그인</v-btn>
-        <v-btn class="ma-1" to="/signup">회원가입</v-btn>
       </template>
       <template v-else>
         <v-btn class="ma-1" v-on:click="doLogout">로그아웃</v-btn>
@@ -34,10 +33,7 @@ import userApi from '../api/UserAPI.js';
             let vueInstance = this;
             try {
                 await userApi.logout();
-                // 로그아웃 처리  TODO 데이터 변경에 따라 바로 컴포넌트 변경시키기 
                 vueInstance.$emit('logout-success');
-                console.log(vueInstance);
-                console.log(`로그아웃 처리 됐습니다.`);
             } catch(e) {
                 console.log(e);
             }
