@@ -15,6 +15,10 @@ export default {
     },
     createUser(params) {
         return axiosService.post('/registration', params);
-    }
+    },
+    checkDuplicateUserId(params) {
+        return axiosService.post('/duplicationCheck', params);
+    },
+
 } 
 

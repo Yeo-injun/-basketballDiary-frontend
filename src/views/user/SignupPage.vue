@@ -3,7 +3,9 @@
         <v-form ref="form">
             <!-- 필수 입력값 표시 -->
             회원가입
-            <v-text-field label="아이디" v-model="userRegInfo.userId" :rules="requiredRules" required></v-text-field>
+            <v-text-field label="아이디" v-model="userRegInfo.userId" :rules="requiredRules" required v-on:change="initDuplicationCheckStatus"></v-text-field>
+            <v-btn block v-on:click="checkDuplicateUserId">ID중복확인</v-btn>
+
             <v-text-field label="비밀번호" type="password" v-model="userRegInfo.password" :rules="requiredRules" required></v-text-field>
             <v-text-field label="비밀번호 확인" type="password" v-model="passwordCheck"></v-text-field>
             
@@ -34,13 +36,13 @@
 
             <v-container>
                 포지션
-                <v-row>
-                    <v-col cols="12" sm="2" md="2"><v-checkbox label="포인트가드" v-model="userRegInfo.positionCode" value="11" color="primary"></v-checkbox></v-col>
-                    <v-col cols="12" sm="2" md="2"><v-checkbox label="슈팅가드" v-model="userRegInfo.positionCode" value="12" color="primary"></v-checkbox></v-col>
-                    <v-col cols="12" sm="2" md="2"><v-checkbox label="스몰포워드" v-model="userRegInfo.positionCode" value="23" color="primary"></v-checkbox></v-col>
-                    <v-col cols="12" sm="2" md="2"><v-checkbox label="파워포워드" v-model="userRegInfo.positionCode" value="24" color="primary"></v-checkbox></v-col>
-                    <v-col cols="12" sm="2" md="2"><v-checkbox label="센터" v-model="userRegInfo.positionCode" value="30" color="primary"></v-checkbox></v-col>
-                </v-row>
+                <v-radio-group v-model="userRegInfo.positionCode" row>
+                    <v-radio label="포인트가드" value="11" color="primary"/>
+                    <v-radio label="슈팅가드" value="12" color="primary"/>
+                    <v-radio label="스몰포워드" value="23" color="primary"/>
+                    <v-radio label="파워포워드" value="24" color="primary"/>
+                    <v-radio label="센터" value="30" color="primary"/>
+                </v-radio-group>
             </v-container>
             시도, 시군구 코드
         </v-form>
@@ -58,6 +60,7 @@ import userApi from '@/api/UserAPI';
             return {
                 requiredRules: [v => !!v || '필수 입력값입니다.'],
                 isModalOpen: '',
+                isNotDuplicateUserId: false,
                 passwordCheck: '',
                 userRegInfo : {
                     userId: '',
@@ -73,10 +76,25 @@ import userApi from '@/api/UserAPI';
                     positionCode: [],
                 },
             }
-        },
+        }, // data
         methods: {
-            // TODO 아이디 중복체크  API
-
+            initDuplicationCheckStatus() {
+                this.isNotDuplicateUserId = false;
+            },
+            // 아이디 중복체크  API - 중복체크 후 다시 아이디를 고쳤을때 
+            async checkDuplicateUserId() {
+                const params = {
+                    userId : this.userRegInfo.userId,
+                }
+                try {
+                    await userApi.checkDuplicateUserId(params);
+                    this.isNotDuplicateUserId = true;
+                    alert("사용할 수 있는 ID입니다!");
+                } catch (e) {
+                    this.isNotDuplicateUserId = false;
+                    alert("중복된 ID가 존재합니다. 다른 ID를 사용하시기 바랍니다.");
+                }
+            },
             // 비밀번호 확인 로직
             checkPassword() {
                 if (this.passwordCheck == this.userRegInfo.password) {
@@ -86,6 +104,11 @@ import userApi from '@/api/UserAPI';
             },
             // 회원가입 요청
             async createUser() {
+                if (!this.isNotDuplicateUserId) {
+                    alert("ID중복확인을 해주시기 바랍니다.");
+                    return;
+                }
+
                 if (!this.checkPassword()) {
                     alert("비밀번호가 일치하지 않습니다.");
                     return;
@@ -100,8 +123,9 @@ import userApi from '@/api/UserAPI';
                 let params = this.userRegInfo;
                 console.log(params);
                 await userApi.createUser(params);
-            }
-        },
+            },
+
+        },  // methods
         
     }
 </script>
