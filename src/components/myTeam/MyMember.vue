@@ -20,7 +20,7 @@
                             <v-col>신장: {{data.height}}</v-col>
                             <v-col>몸무게: {{data.weight}}</v-col>
                             <v-col>등번호: {{data.backNumber}}</v-col>
-                            <v-col>경기참여: {{data.totGame}}</v-col>
+                            <v-col>경기참여: {{data.totGame}}회</v-col>
                         </v-row>
                     </v-col>
                 </v-row>
