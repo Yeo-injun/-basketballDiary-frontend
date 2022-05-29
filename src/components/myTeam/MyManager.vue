@@ -15,7 +15,14 @@
                             <v-col>신장: {{data.height}}</v-col>
                             <v-col>몸무게: {{data.weight}}</v-col>
                             <v-col>등번호: {{data.backNumber}}</v-col>
-                            <v-col>가입일: {{data.joinYmd}}</v-col>
+                            <v-col>
+                                <v-row>
+                                    가입일: {{data.joinYmd}}
+                                </v-row>
+                                <v-row>
+                                    <v-btn color="black white--text" small>임원 제명</v-btn>
+                                </v-row>
+                            </v-col>
                         </v-row>
                     </v-col>
                 </v-row>
