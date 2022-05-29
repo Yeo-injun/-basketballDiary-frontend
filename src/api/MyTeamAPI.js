@@ -19,14 +19,14 @@ export const myTeamApi = {
     /**
      * changgi 
      */
-    findMyTeamsProfile(params) {
-        console.log(params);
-        return axiosService.get(`/${params.teamId}/profile`);
+    findMyTeamsProfile(teamSeq) {
+        console.log(teamSeq);
+        return axiosService.get(`/${teamSeq}/profile`);
     },
-    searchManagers(params) {
-        return axiosService.get(`/${params.teamId}/managers`);
+    searchManagers(teamSeq) {
+        return axiosService.get(`/${teamSeq}/managers`);
     },
-    searchMembers(params) {
-        return axiosService.get(`/${params.teamId}/members`);
+    searchMembers(teamSeq) {
+        return axiosService.get(`/${teamSeq}/members`);
     },    
 }
