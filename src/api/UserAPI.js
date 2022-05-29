@@ -1,8 +1,6 @@
 import axios from '../common/customAxios';
 
 // API설정 공통화
-// const axiosService = axios.createClientForAws('/user');
-// const axiosService = axios.createClientForLocal('/user');
 const axiosService = axios.createAxiosInstance('/user');
 
 

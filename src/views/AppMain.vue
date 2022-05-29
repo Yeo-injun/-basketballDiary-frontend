@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import storageUtil from '@/common/StorageUtil.js';
+
   export default {
     data: () => {
       return {
@@ -16,7 +18,7 @@
     },
     computed : {
       getLoginUserInfoComputed() {
-        const auth = sessionStorage.getItem('AuthUser');
+        const auth = storageUtil.getAuthUserFromSession();
         if (auth == null) {
           return "로그인 정보가 없습니다.";
         }
@@ -25,7 +27,7 @@
     },
     methods: {
       getLoginUserInfo() {
-        const auth = sessionStorage.getItem('AuthUser');
+        const auth = storageUtil.getAuthUserFromSession();
         if (auth == null) {
           this.loginUserInfo = "로그인 정보가 없습니다.";
           return;
