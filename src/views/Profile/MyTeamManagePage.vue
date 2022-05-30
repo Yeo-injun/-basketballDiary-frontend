@@ -5,15 +5,18 @@
             {{ tempData }}
         </div>
         <v-btn v-on:click="getJoinRequestsTo">가입요청목록 가져오기</v-btn>
+        <MemberManageModal/>
   </v-container>
 </template>
 
 <script>
 import authUserApi from '@/api/AuthUserAPI';
-// import axios from 'axios';
-
+import MemberManageModal from '@/views/myTeam/modal/MemberManageModal.vue';
 
 export default {
+    components : {
+        MemberManageModal,
+    },
     data : () => {
         return {
             tempData : '요청전',

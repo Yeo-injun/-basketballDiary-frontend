@@ -21,7 +21,6 @@ export default new VueRouter({
     mode: "history",
     // routes: Vue router에 의해서 컨트롤되는 페이지 정보를 담는 array객체
     routes: [
-        createRoute('views/Profile/MyTeamManagePage', '/cookieTest'),
         createRoute('views/AppMain', '/'),
         createRoute('views/user/LoginPage', '/login'),
         createRoute('views/user/SignupPage', '/signup'),
@@ -38,9 +37,12 @@ export default new VueRouter({
         createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
+        createRoute('views/myTeam/modal/MemberManageModal', '/myTeam/memberManagement'),
+        createRoute('views/Profile/MyTeamManagePage', '/cookieTest'), // TODO 테스트용 차후에 MemberManageModal화면이랑 합칠 예정
+
 
         /**
-         * loginUser페이지
+         * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
          */
         createRoute('views/loginUser/MyProfilePage','/myProfile'),
         createRoute('views/loginUser/UpdatePassword','/updatePassword'),
