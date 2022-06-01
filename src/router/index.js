@@ -39,7 +39,7 @@ export default new VueRouter({
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
         createRoute('views/myTeam/modal/MemberManageModal', '/myTeam/memberManagement'),
         createRoute('views/Profile/MyTeamManagePage', '/cookieTest'), // TODO 테스트용 차후에 MemberManageModal화면이랑 합칠 예정
-
+        createRoute('views/myTeam/modal/JoinRequestPlayerTab', '/myTeam/memberManage/joinRequestPlayer'),
 
         /**
          * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
