@@ -21,6 +21,7 @@
  
 <script>
 import AppNavbar from './components/AppNavbar';
+import storageUtil from '@/common/StorageUtil.js';
 
 export default {
   name: 'App',
@@ -37,11 +38,6 @@ export default {
        * 해당 변수를 하위컴포넌트에 props로 내려주기
        **/
       // javascript의 한계 : 객체 변경감지가 제한적  -참고자료 : https://uxgjs.tistory.com/193
-      // 로그인여부에 따라서 
-      // sessionUserInfo: {
-      //     // isLogin : false,
-      //     userInfo : {},
-      // } 
       isLogin: false,   
     }
   },
@@ -65,20 +61,19 @@ export default {
          * 2안 : Vue의 최상위 컴포넌트에서 안증된 회원 정보를 관리하고, 하위 컴포넌트에 prop로 내려준다.
          * 3안(추가자료조사 필요) : Vuex사용??!
          */
-        let jsonAuth = JSON.stringify(response.data);
-        sessionStorage.setItem('AuthUser', jsonAuth);
+        storageUtil.setAuthUserOnSession(response.data);
         this.checkLoginState();
         this.$router.push('/');
       },
       deleteAuthUserInfo() 
       {
-        sessionStorage.clear();
+        storageUtil.clearSession();
         this.checkLoginState();
-        // this.$router.go(); //파라미터가 없으면 현재 위치 새로고침 - 숫자형 인수가 있으면 해당 숫자만큼 히스토리 스택으로 이동
+        this.$router.go(); //파라미터가 없으면 현재 위치 새로고침 - 숫자형 인수가 있으면 해당 숫자만큼 히스토리 스택으로 이동
       },
       checkLoginState() 
       {
-        const authUser = sessionStorage.getItem('AuthUser');
+        const authUser = storageUtil.getAuthUserFromSession();
         if (authUser == null) {
           this.isLogin = false;
           return;

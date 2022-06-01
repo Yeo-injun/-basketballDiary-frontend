@@ -23,8 +23,8 @@ export default new VueRouter({
     routes: [
         createRoute('views/Profile/MyTeamManagePage', '/cookieTest'),
         createRoute('views/AppMain', '/'),
-        createRoute('views/LoginPage', '/login'),
-        createRoute('views/SignupPage', '/signup'),
+        createRoute('views/user/LoginPage', '/login'),
+        createRoute('views/user/SignupPage', '/signup'),
 
         /**
          * error페이지

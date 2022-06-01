@@ -3,7 +3,10 @@
         <v-container class="px-15">
             <div class="d-flex">
                 <v-subheader>개인프로필</v-subheader>
-                <v-btn class="ml-auto" color="black white--text" small>프로필 수정</v-btn>
+                <v-btn class="ml-auto" 
+                       color="black white--text" small
+                       to="myTeamsProfile"
+                       :teamSeq="teamSeq">프로필 수정</v-btn>
             </div>
             <MyProfile :data="profile"/>
 
@@ -31,6 +34,12 @@
     import MyMember from '@/components/myTeam/MyMember.vue';
 
     export default {
+        props: {
+            teamSeq: {
+                type: Number,
+                required: true
+            }
+        },
         components: {
             MyProfile,
             MyManager,
@@ -39,9 +48,6 @@
         //data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
         data: () => {
             return {
-                params: {
-                    teamId: 4,
-                },
                 profile: {},
                 managerList: [],
                 memberList: []
@@ -50,7 +56,7 @@
         methods: {
             async getProflie() {
                 try {
-                    var response = await myTeamApi.findMyTeamsProfile(this.params);
+                    var response = await myTeamApi.findMyTeamsProfile(this.teamSeq);
                     const {data} = response;
                     this.profile = data;
                 } catch(e) {
@@ -70,7 +76,7 @@
             },
             async getListManager() {
                 try {
-                    var response = await myTeamApi.searchManagers(this.params);
+                    var response = await myTeamApi.searchManagers(this.teamSeq);
                     const {data} = response;
                     this.managerList = data;
                 } catch(e) {
@@ -79,7 +85,7 @@
             },
             async getListMember() {
                 try {
-                    var response = await myTeamApi.searchMembers(this.params);
+                    var response = await myTeamApi.searchMembers(this.teamSeq);
                     const {data} = response;
                     this.memberList = data;
                 }
@@ -92,7 +98,6 @@
                 this.getListManager();
                 this.getListMember();
             }
-
         },
         mounted () {
             this.onLoad();
