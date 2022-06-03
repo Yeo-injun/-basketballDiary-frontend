@@ -1,6 +1,6 @@
 import axios from '@/common/customAxios';
-const axiosService = axios.createClientForLocal('/myTeams');
-// const axiosService = axios.createClientForAws('/myTeams');
+const axiosService = axios.createAxiosInstance('/myTeams');
+
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config
 /**
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
