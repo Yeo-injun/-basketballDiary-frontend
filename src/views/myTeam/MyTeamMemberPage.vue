@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {myTeamApi} from '@/api/MyTeamAPI';
+    import myTeamApi from '@/api/MyTeamAPI';
     import MyProfile from '@/components/myTeam/MyProfile.vue';
     import MyManager from '@/components/myTeam/MyManager.vue';
     import MyMember from '@/components/myTeam/MyMember.vue';

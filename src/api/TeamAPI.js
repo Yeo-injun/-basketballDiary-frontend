@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from '../common/CustomAxios';
 
 const axiosService = axios.createAxiosInstance('/teams');

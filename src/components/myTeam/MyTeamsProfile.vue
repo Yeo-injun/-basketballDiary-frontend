@@ -49,31 +49,44 @@
 
 <script>
 // import {myTeamApi} from '@/api/MyTeamAPI';
-import UserAPI from '@/common/UploadFiles';
+// import axios from 'axios';
+import UploadFile from '@/common/UploadFiles';
 
 export default {
   data: ()=>{
     return {
       backNumber: undefined,
-      previewImage: undefined,
+      image: undefined,
     }
   },
   methods: {
     selectImage(image){
-      this.previewImage = URL.createObjectURL(image);
+      // this.image = URL.createObjectURL(image);
+      this.image = image;
     },
     async updateProfile(){
-      const dto = {
-        backNumber: this.backNumber,
-        image: this.previewImage
-      }
       const teamSeq = 4;
+      const formData = new FormData();
+
+      formData.append("backNumber",this.backNumber);
+      formData.append("imageFile",this.image);      
+      
       try{
-        const ret = await UserAPI.upload(dto,`${teamSeq}/profile`);
-        console.log("success"+ret);
+        const response = await UploadFile.upload(`/myTeams/${teamSeq}/profile`,formData);
+        console.log("response: "+response);
       }catch(error){
         console.log(error);
       }
+      
+      // axios.post(`http://127.0.0.1:8080/api/myTeams/${teamSeq}/profile`,formData,{
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   }
+      // }).then(res=>{
+      //   console.log("success"+res);
+      // }).catch((error)=>{
+      //   console.log(error);
+      // })
     }
   },
   mounted () {

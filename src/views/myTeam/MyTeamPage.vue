@@ -23,12 +23,14 @@
         },
         data: () => {
             return {
+                // teamId: this.teamSeq
                 teamId: 4
             }
         },
         methods: {
             onClick () {
-                console.log(123);
+                // console.log(123);
+                console.log(this.teamSeq);
             }
         }
     }

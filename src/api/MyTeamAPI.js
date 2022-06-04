@@ -5,7 +5,7 @@ const axiosService = axios.createAxiosInstance('/myTeams');
 /**
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
  */
-export const myTeamApi = {
+export default {
     /**
      * seongju 
      */

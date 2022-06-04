@@ -1,10 +1,8 @@
 import axios from "./CustomAxios"
-const axiosService = axios.createAxiosInstance("/myTeams");
+const axiosService = axios.createAxiosInstance('');
 
 class UploadFiles{
-    upload(dto,url){
-        let formData = new FormData();
-        formData.append("dto",dto);
+    upload(url,formData){
         return axiosService.post(url,formData,{
             headers: {
                 "Content-Type": "multipart/form-data"
