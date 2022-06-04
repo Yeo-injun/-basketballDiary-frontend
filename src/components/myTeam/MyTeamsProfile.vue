@@ -23,7 +23,7 @@
               등번호:
             </v-col>
             <v-col>
-              <v-text-field solo ></v-text-field>
+              <v-text-field solo v-model="backNumber"></v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -33,7 +33,7 @@
               accept="image/*"
               @change="selectImage"
             ></v-file-input>
-            <v-btn position: absolute right bottom v-on:click="setProfile">수정</v-btn>          
+            <v-btn position: absolute right bottom v-on:click="updateProfile">수정</v-btn>          
           </v-row>
       </v-card>
       
@@ -48,16 +48,33 @@
 </template>
 
 <script>
-import {myTeamApi} from '@/api/MyTeamAPI';
+// import {myTeamApi} from '@/api/MyTeamAPI';
+import UserAPI from '@/common/UploadFiles';
 
 export default {
   data: ()=>{
     return {
-
+      backNumber: undefined,
+      previewImage: undefined,
     }
   },
   methods: {
-    
+    selectImage(image){
+      this.previewImage = URL.createObjectURL(image);
+    },
+    async updateProfile(){
+      const dto = {
+        backNumber: this.backNumber,
+        image: this.previewImage
+      }
+      const teamSeq = 4;
+      try{
+        const ret = await UserAPI.upload(dto,`${teamSeq}/profile`);
+        console.log("success"+ret);
+      }catch(error){
+        console.log(error);
+      }
+    }
   },
   mounted () {
   }

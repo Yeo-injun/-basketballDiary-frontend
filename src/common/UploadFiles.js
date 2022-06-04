@@ -1,14 +1,14 @@
-import axios from "../common/CustomAxios"
-const axiosService = axios.createAxiosInstance();
+import axios from "./CustomAxios"
+const axiosService = axios.createAxiosInstance("/myTeams");
 
 class UploadFiles{
-    upload(file,onUploadProgree){
+    upload(dto,url){
         let formData = new FormData();
-        formData.append("file",file);
-        return axiosService.post(onUploadProgree,file,{
+        formData.append("dto",dto);
+        return axiosService.post(url,formData,{
             headers: {
                 "Content-Type": "multipart/form-data"
-            }
+            },
         });
     }
 }
