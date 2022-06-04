@@ -27,13 +27,12 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-img 
-              class="ml-10"
-              lazy-src="https://picsum.photos/id/11/10/6"
-              max-height="150"
-              max-width="250"
-              src="https://picsum.photos/id/11/500/300">
-            </v-img>
+            <v-file-input
+              show-size
+              label="Select Image"
+              accept="image/*"
+              @change="selectImage"
+            ></v-file-input>
             <v-btn position: absolute right bottom v-on:click="setProfile">수정</v-btn>          
           </v-row>
       </v-card>

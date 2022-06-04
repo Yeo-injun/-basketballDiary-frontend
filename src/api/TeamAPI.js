@@ -1,4 +1,4 @@
-import axios from '../common/customAxios';
+import axios from '../common/CustomAxios';
 
 const axiosService = axios.createAxiosInstance('/teams');
 
