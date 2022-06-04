@@ -7,7 +7,7 @@
               <span>이름:</span>                   
             </v-col>
             <v-col>
-              <v-input readonly>{{myinfo.userName}}</v-input>
+              <v-input readonly></v-input>
             </v-col>
           </v-row>
           <v-row class="mb-5">
@@ -15,7 +15,7 @@
               소속팀:
             </v-col>
             <v-col>
-              <v-input readonly>{{myinfo.email}}</v-input>
+              <v-input readonly></v-input>
             </v-col>
           </v-row>
           <v-row class="mb-5">
@@ -23,7 +23,7 @@
               등번호:
             </v-col>
             <v-col>
-              <v-text-field solo v-model="myinfo.birthYmd"></v-text-field>
+              <v-text-field solo ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -53,35 +53,13 @@ import {myTeamApi} from '@/api/MyTeamAPI';
 export default {
   data: ()=>{
     return {
-      myinfo: {}
+
     }
   },
   methods: {
-    async load () {
-      const params = {
-        userSeq: 3,
-        teamId: 4,
-      };
-      try{
-        const response = await myTeamApi.findMyTeamsProfile(params);
-        this.myinfo = response.data;
-      }catch(error){
-        console.log(error);
-      }
-    },
-    async setProfile(event){
-      event.preventDefault();
-
-      try{
-        console.log(this.myinfo);
-        const response = await myTeamApi.modifyMyTeamsProfile(this.myinfo);  //eslint-disable-line no-unused-vars
-      }catch(error){
-        console.log(error);
-      }
-    }
+    
   },
   mounted () {
-    this.load()
   }
 }
 </script>
