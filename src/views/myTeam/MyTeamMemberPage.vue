@@ -5,7 +5,7 @@
                 <v-subheader>개인프로필</v-subheader>
                 <v-btn class="ml-auto" 
                        color="black white--text" small
-                       to="myTeamsProfile"
+                       to="/myTeamsProfile"
                        :teamSeq="teamSeq">프로필 수정</v-btn>
             </div>
             <MyProfile :data="profile"/>
