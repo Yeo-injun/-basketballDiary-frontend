@@ -17,10 +17,10 @@
           <v-col>
             <v-row>
             <v-col>
-              팀이름: {{team.teamName}}
+              팀이름: {{teamInfo.teamName}}
             </v-col>
             <v-col>
-              연고지: {{team.hometown}}
+              연고지: {{teamInfo.hometown}}
             </v-col>
             </v-row>
             <v-row>
@@ -40,7 +40,8 @@
         </v-row>
         <v-col>
           <span>Ratels는 벌꿀오소리 처럼 상대를 가리지 않고 모든 경기에 열정을 다합니다.20대 초반부터 30대 중반까지로 선수층이 이뤄져 있습니다.</span>
-          <v-btn class="float-right" to="myTeam">상세보기</v-btn>
+          <!-- <v-btn class="float-right" to="myTeam">상세보기</v-btn> -->
+          <router-link :to="{name: 'MyTeamPage', params:{teamSeq: teamInfo.teamSeq}}"><v-btn>상세보기</v-btn></router-link>
         </v-col>                
       </v-card>      
   </v-container>

@@ -35,9 +35,16 @@ export default new VueRouter({
         /**
          * myTeam페이지
          */
-        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
+        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren,'MyTeamPage'),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
+        // {
+        //     path:'views/myTeam/MyTeamPage',
+        //     name: 'MyTeamPage',
+        //     component: MyTeamPage,            
+        //     props: true,
+        //     children: myTeamPageChildren
+        // },
 
         /**
          * loginUser페이지
@@ -51,7 +58,7 @@ export default new VueRouter({
 
 
 // TODO  클래스로 만들어서 생성자로 객체 만들기
-function createRoute(componentPath, urlPath, childernList) {
+function createRoute(componentPath, urlPath, childernList,componentName) {
     var route = 
     {
         path: urlPath,
@@ -62,6 +69,8 @@ function createRoute(componentPath, urlPath, childernList) {
         // TODO 컴포넌트 경로 유연하게 설정할 수 있도록 변경 필요
         component: () => import(`@/${componentPath}.vue`),
         children: childernList,
+        name: componentName,
+        props: true
     }
     return route;
 } 
