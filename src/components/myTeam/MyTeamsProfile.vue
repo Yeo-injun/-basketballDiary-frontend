@@ -78,15 +78,6 @@ export default {
         console.log(error);
       }
       
-      // axios.post(`http://127.0.0.1:8080/api/myTeams/${teamSeq}/profile`,formData,{
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   }
-      // }).then(res=>{
-      //   console.log("success"+res);
-      // }).catch((error)=>{
-      //   console.log(error);
-      // })
     }
   },
   mounted () {

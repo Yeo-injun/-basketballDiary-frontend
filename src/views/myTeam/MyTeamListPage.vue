@@ -6,7 +6,7 @@
 
 <script>   
 
-    import MyTeamList from '@/components/myTeam/MyTeamList.vue';
+    import MyTeamList from '@/views/myTeam/MyTeamList.vue';
 
     export default {
         components: {
