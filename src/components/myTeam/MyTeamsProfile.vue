@@ -7,7 +7,7 @@
               <span>이름:</span>                   
             </v-col>
             <v-col>
-              <v-input readonly>{{myinfo.userName}}</v-input>
+              <v-input readonly></v-input>
             </v-col>
           </v-row>
           <v-row class="mb-5">
@@ -15,7 +15,7 @@
               소속팀:
             </v-col>
             <v-col>
-              <v-input readonly>{{myinfo.email}}</v-input>
+              <v-input readonly></v-input>
             </v-col>
           </v-row>
           <v-row class="mb-5">
@@ -23,18 +23,17 @@
               등번호:
             </v-col>
             <v-col>
-              <v-text-field solo v-model="myinfo.birthYmd"></v-text-field>
+              <v-text-field solo v-model="backNumber"></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-img 
-              class="ml-10"
-              lazy-src="https://picsum.photos/id/11/10/6"
-              max-height="150"
-              max-width="250"
-              src="https://picsum.photos/id/11/500/300">
-            </v-img>
-            <v-btn position: absolute right bottom v-on:click="setProfile">수정</v-btn>          
+            <v-file-input
+              show-size
+              label="Select Image"
+              accept="image/*"
+              @change="selectImage"
+            ></v-file-input>
+            <v-btn position: absolute right bottom v-on:click="updateProfile">수정</v-btn>          
           </v-row>
       </v-card>
       
@@ -49,40 +48,39 @@
 </template>
 
 <script>
-import {myTeamApi} from '@/api/MyTeamAPI';
+// import {myTeamApi} from '@/api/MyTeamAPI';
+// import axios from 'axios';
+import UploadFile from '@/common/UploadFiles';
 
 export default {
   data: ()=>{
     return {
-      myinfo: {}
+      backNumber: undefined,
+      image: undefined,
     }
   },
   methods: {
-    async load () {
-      const params = {
-        userSeq: 3,
-        teamId: 4,
-      };
-      try{
-        const response = await myTeamApi.findMyTeamsProfile(params);
-        this.myinfo = response.data;
-      }catch(error){
-        console.log(error);
-      }
+    selectImage(image){
+      // this.image = URL.createObjectURL(image);
+      this.image = image;
     },
-    async setProfile(event){
-      event.preventDefault();
+    async updateProfile(){
+      const teamSeq = 4;
+      const formData = new FormData();
 
+      formData.append("backNumber",this.backNumber);
+      formData.append("imageFile",this.image);      
+      
       try{
-        console.log(this.myinfo);
-        const response = await myTeamApi.modifyMyTeamsProfile(this.myinfo);  //eslint-disable-line no-unused-vars
+        const response = await UploadFile.upload(`/myTeams/${teamSeq}/profile`,formData);
+        console.log("response: "+response);
       }catch(error){
         console.log(error);
       }
+      
     }
   },
   mounted () {
-    this.load()
   }
 }
 </script>

@@ -5,7 +5,7 @@
                 <v-subheader>개인프로필</v-subheader>
                 <v-btn class="ml-auto" 
                        color="black white--text" small
-                       to="myTeamsProfile"
+                       to="/myTeamsProfile"
                        :teamSeq="teamSeq">프로필 수정</v-btn>
             </div>
             <MyProfile :data="profile"/>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {myTeamApi} from '@/api/MyTeamAPI';
+    import myTeamApi from '@/api/MyTeamAPI';
     import MyProfile from '@/components/myTeam/MyProfile.vue';
     import MyManager from '@/components/myTeam/MyManager.vue';
     import MyMember from '@/components/myTeam/MyMember.vue';
