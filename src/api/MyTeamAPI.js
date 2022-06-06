@@ -29,4 +29,10 @@ export default {
     searchMembers(teamSeq) {
         return axiosService.get(`/${teamSeq}/members`);
     },    
+    /**
+     * injun 
+     */
+     searchInvitedPlayer(params) {
+         return axiosService.get(`/${params.teamSeq}/joinRequestsTo`);
+     }
 }
