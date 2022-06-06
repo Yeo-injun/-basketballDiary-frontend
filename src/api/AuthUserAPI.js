@@ -1,4 +1,4 @@
-import axios from '../common/customAxios';
+import axios from '../common/CustomAxios';
 
 const axiosService = axios.createAxiosInstance('/loginUser');
 
@@ -18,5 +18,11 @@ export default {
         // console.log(params);
         return axiosService.post(`/profile`,params);
     },
+    deleteUser(){
+        return axiosService.delete('/profile');
+    },
+    updatePassword(params){
+        return axiosService.post("/profile/password",params);
+    }
 }
 

@@ -1,4 +1,4 @@
-import axios from '../common/customAxios';
+import axios from '../common/CustomAxios';
 
 // API설정 공통화
 const axiosService = axios.createAxiosInstance('/user');

@@ -34,12 +34,22 @@ export default new VueRouter({
         /**
          * myTeam페이지
          */
-        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren),
+        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren,'MyTeamPage'),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
+<<<<<<< HEAD
         createRoute('views/myTeam/modal/MemberManageModal', '/myTeam/memberManagement'),
         createRoute('views/Profile/MyTeamManagePage', '/cookieTest'), // TODO 테스트용 차후에 MemberManageModal화면이랑 합칠 예정
         createRoute('views/myTeam/modal/JoinRequestPlayerTab', '/myTeam/memberManage/joinRequestPlayer'),
+=======
+        // {
+        //     path:'views/myTeam/MyTeamPage',
+        //     name: 'MyTeamPage',
+        //     component: MyTeamPage,            
+        //     props: true,
+        //     children: myTeamPageChildren
+        // },
+>>>>>>> 27d6f5e32a9c0ccaa1fdc79e98ca7bb7d9ba3aa7
 
         /**
          * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
@@ -53,7 +63,7 @@ export default new VueRouter({
 
 
 // TODO  클래스로 만들어서 생성자로 객체 만들기
-function createRoute(componentPath, urlPath, childernList) {
+function createRoute(componentPath, urlPath, childernList, componentName) {
     var route = 
     {
         path: urlPath,
@@ -64,6 +74,8 @@ function createRoute(componentPath, urlPath, childernList) {
         // TODO 컴포넌트 경로 유연하게 설정할 수 있도록 변경 필요
         component: () => import(`@/${componentPath}.vue`),
         children: childernList,
+        name: componentName,
+        props: true
     }
     return route;
 } 

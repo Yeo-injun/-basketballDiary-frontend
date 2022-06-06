@@ -16,8 +16,23 @@
 </template>
 
 <script>
-export default {
+import myProfileApi from '@/api/AuthUserAPI'
 
+export default {
+  data: () =>{
+    return {
+
+    }
+  },
+  methods: {
+    async signOut() {
+       const response = await myProfileApi.deleteUser();
+       console.log(response);
+    },
+    cancel(){
+      this.$router.go(-1);
+    }
+  }
 }
 </script>
 
