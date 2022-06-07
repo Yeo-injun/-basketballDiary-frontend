@@ -40,4 +40,10 @@ export default {
     modifyMyTeam(teamSeq, teamInfo) {
         return axiosService.put(`/${teamSeq}/info`, {teamInfo});
     },  
+    /**
+     * injun 
+     */
+    searchInvitedPlayer(params) {
+        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`);
+    },
 }
