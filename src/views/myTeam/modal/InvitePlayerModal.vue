@@ -19,53 +19,30 @@
                     </v-toolbar-items>
                 </v-toolbar>
                 
-                <v-tabs 
-                    v-model="tab"
-                    centered
-                >
-                    <v-tab 
-                        v-for="title in tabTitles" 
-                        :key="title"
-                    >
-                        {{ title }}
-                    </v-tab>
-                </v-tabs>
-
-                <v-tabs-items v-model="tab">
-                    <v-tab-item
-                        v-for="(title, idx) in tabTitles"
-                        :key="title"
-                    >
-                        <InvitePlayerListTab v-if="idx == 0" />
-                        <JoinRequestPlayerListTab v-if="idx == 1" />
-                    </v-tab-item>
-                </v-tabs-items>
+                사용자 검색
+                사용자 그리드
             </v-card>            
         </div>
         
         <!-- activator 영역 : 팝업이 뜨기전에 보여줄 컴포넌트들 -->
         <template v-slot:activator="{ on, attrs }">
-            <v-btn
+            <div class="text-right">
+                <v-btn
+                class="mt-2 mb-2"
                 color="primary"
                 dark
                 v-bind="attrs"
                 v-on="on"
-            >
-            (임시용) 팀원관리 버튼
-            </v-btn>
+                >
+                선수초대하기
+                </v-btn>
+            </div>
         </template>
     </v-dialog>
 </template>
 
 <script>
-import JoinRequestPlayerListTab from '@/views/myTeam/tab/JoinRequestPlayerListTab.vue';
-import InvitePlayerListTab from '@/views/myTeam/tab/InvitePlayerListTab.vue';
-
     export default {
-        components: {
-            InvitePlayerListTab,
-            JoinRequestPlayerListTab,
-        },
         data: () => {
             return {
                 dialog: false,

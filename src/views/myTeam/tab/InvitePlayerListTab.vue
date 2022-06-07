@@ -1,29 +1,34 @@
 <template>
-    <v-card>
-        <v-card-title>초대 선수 목록</v-card-title>
-        <v-card-subtitle>
-            <v-select
-            v-model="invitedPlayerFilterCond"
-            :items="invitedPlayerFilterConds"
-            label="초대상태"
-            ></v-select>
-        </v-card-subtitle>
-        <v-card-text>
-            <v-data-table
-            :headers="invitedPlayerHeader"
-            :items="invitedPlayers"
-            >
-
-            </v-data-table>
-        </v-card-text>
-        
-    </v-card>
+    <div>
+        <InvitePlayerModal/>
+        <v-card>
+            <v-card-title>초대 선수 목록</v-card-title>
+            <v-card-subtitle>
+                <v-select
+                v-model="invitedPlayerFilterCond"
+                :items="invitedPlayerFilterConds"
+                label="초대상태"
+                ></v-select>
+            </v-card-subtitle>
+            <v-card-text>
+                <v-data-table
+                :headers="invitedPlayerHeader"
+                :items="invitedPlayers"
+                >
+                </v-data-table>
+            </v-card-text>
+        </v-card>   <!--// 초대선수목록 -->
+    </div>
 </template>
 
 <script>
 import myTeamApi from '@/api/MyTeamAPI.js';
+import InvitePlayerModal from '@/views/myTeam/modal/InvitePlayerModal.vue';
 
     export default {
+        components: {
+            InvitePlayerModal,
+        },
         data() {
             return {
                 invitedPlayerFilterCond: {text : '전체', value: ''},
