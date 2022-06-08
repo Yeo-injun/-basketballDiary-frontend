@@ -7,6 +7,10 @@
                        color="black white--text" small
                        to="/myTeamsProfile"
                        :teamSeq="teamSeq">프로필 수정</v-btn>
+                <v-btn class="" 
+                       color="black white--text" small
+                       to="/myTeam/info"
+                       :teamSeq="teamSeq">팀정보 수정</v-btn>
             </div>
             <MyProfile :data="profile"/>
 
@@ -35,7 +39,7 @@
 
     export default {
         props: {
-            teamSeq: {
+            pTeamSeq: {
                 type: Number,
                 required: true
             }
@@ -50,13 +54,13 @@
             return {
                 profile: {},
                 managerList: [],
-                memberList: []
+                memberList: [],
             }
         },
         methods: {
             async getProflie() {
                 try {
-                    var response = await myTeamApi.findMyTeamsProfile(this.teamSeq);
+                    var response = await myTeamApi.findMyTeamsProfile(this.pTeamSeq);
                     const {data} = response;
                     this.profile = data;
                 } catch(e) {
@@ -76,7 +80,7 @@
             },
             async getListManager() {
                 try {
-                    var response = await myTeamApi.searchManagers(this.teamSeq);
+                    var response = await myTeamApi.searchManagers(this.pTeamSeq);
                     const {data} = response;
                     this.managerList = data;
                 } catch(e) {
@@ -85,7 +89,7 @@
             },
             async getListMember() {
                 try {
-                    var response = await myTeamApi.searchMembers(this.teamSeq);
+                    var response = await myTeamApi.searchMembers(this.pTeamSeq);
                     const {data} = response;
                     this.memberList = data;
                 }
