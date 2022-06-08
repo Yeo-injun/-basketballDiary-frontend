@@ -6,11 +6,11 @@
                 <v-btn class="ml-auto" 
                        color="black white--text" small
                        to="/myTeamsProfile"
-                       :teamSeq="teamSeq">프로필 수정</v-btn>
+                       :teamSeq="pTeamSeq">프로필 수정</v-btn>
                 <v-btn class="" 
                        color="black white--text" small
                        to="/myTeam/info"
-                       :teamSeq="teamSeq">팀정보 수정</v-btn>
+                       :teamSeq="pTeamSeq">팀정보 수정</v-btn>
             </div>
             <MyProfile :data="profile"/>
 
