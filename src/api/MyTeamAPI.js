@@ -13,7 +13,7 @@ export default {
         return axiosService.get();
     },
     modifyMyTeamsProfile(params){
-        console.log(params);
+        // console.log(params);
         return axiosService.post(`/${params.teamSeq}/profile`,{params});
     },
     /**
@@ -21,7 +21,7 @@ export default {
      */
     /* API011 소속팀 개인프로필 조회 */
     findMyTeamsProfile(teamSeq) {
-        console.log(teamSeq);
+        // console.log(teamSeq);
         return axiosService.get(`/${teamSeq}/profile`);
     },
     /* API001 : 소속팀 운영진 조회 */
