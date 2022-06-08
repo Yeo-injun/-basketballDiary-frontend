@@ -23,7 +23,7 @@
                 <v-subheader>팀원 목록</v-subheader>
                 <v-btn class="ml-auto" color="black white--text" small>팀원 추가</v-btn>
             </div>
-            <div v-for="(member, index) in memberList" v-bind:key="index">                    
+            <div v-for="(member, index) in memberList" v-bind:key="'A'+index">                    
                 <MyMember v-bind:data="member"/>
             </div>
 
