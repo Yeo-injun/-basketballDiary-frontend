@@ -4,7 +4,8 @@
             <v-card class="grey lighten-3">
                 <v-row align="center">
                     <v-col cols="2">
-                        <v-img class="ms-5" max-height="50" max-width="50" src="https://scontent.ficn1-1.fna.fbcdn.net/v/t1.6435-9/42930628_2123047524380299_6256315174584582144_n.png?_nc_cat=102&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=ShQS0dwV8PEAX9DlceS&_nc_ht=scontent.ficn1-1.fna&oh=00_AT-imSTO-8K8Fg4AZ2UTDAer242lnfa32yQqt67OT4V1jg&oe=628E2C34"/>
+                        <v-img class="ms-5" max-height="50" max-width="50"
+                            src="https://as2.ftcdn.net/v2/jpg/02/29/75/83/1000_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg" />
                     </v-col>
                     <v-col cols="10">
                         <v-row justify="space-between">

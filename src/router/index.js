@@ -37,7 +37,7 @@ export default new VueRouter({
         createRoute('views/myTeam/tab/MyTeamTab', '/myTeam', myTeamPageChildren,'MyTeamTab'),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
-        createRoute('views/myTeam/MyTeamPage', '/myTeam/info'),
+        createRoute('views/myTeam/modal/MyTeamModal', '/myTeam/info'),
         createRoute('views/myTeam/modal/MemberManageModal', '/myTeam/memberManagement'),
         // createRoute('views/Profile/MyTeamManagePage', '/cookieTest'), // TODO 테스트용 차후에 MemberManageModal화면이랑 합칠 예정
         createRoute('views/myTeam/modal/JoinRequestPlayerTab', '/myTeam/memberManage/joinRequestPlayer'),
