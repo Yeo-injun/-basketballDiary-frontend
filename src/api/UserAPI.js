@@ -17,6 +17,9 @@ export default {
     checkDuplicateUserId(params) {
         return axiosService.post('/duplicationCheck', params);
     },
+    findUserInfo(params) {
+        return axiosService.get('', {userName : params.userName, email : params.email });
+    },
 
 } 
 
