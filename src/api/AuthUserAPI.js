@@ -1,10 +1,10 @@
-import axios from '../common/customAxios';
+import axios from '../common/CustomAxios';
 
-const axiosService = axios.createClientForLocal('/loginUser');
-// const axiosService = axios.createClientForAws('/loginUser');
+const axiosService = axios.createAxiosInstance('/loginUser');
 
 
 export default {
+    // 인준 테스트용
     getJoinRequestsTo() {
         return axiosService.get('/joinRequestsTo');
     },
@@ -15,8 +15,14 @@ export default {
         return axiosService.get(`/profile`);
     },
     updateUser(params){
-        console.log(params);
-        axiosService.post(`/profile`,params);
+        // console.log(params);
+        return axiosService.post(`/profile`,params);
+    },
+    deleteUser(){
+        return axiosService.delete('/profile');
+    },
+    updatePassword(params){
+        return axiosService.post("/profile/password",params);
     }
 }
 

@@ -1,8 +1,7 @@
-import axios from '../common/customAxios';
+import axios from '../common/CustomAxios';
 
 // API설정 공통화
-// const axiosService = axios.createClientForAws('/user');
-const axiosService = axios.createClientForLocal('/user');
+const axiosService = axios.createAxiosInstance('/user');
 
 
 export default {
@@ -12,5 +11,15 @@ export default {
     logout() {
         return axiosService.post('/logout');
     },
+    createUser(params) {
+        return axiosService.post('/registration', params);
+    },
+    checkDuplicateUserId(params) {
+        return axiosService.post('/duplicationCheck', params);
+    },
+    findUserInfo(params) {
+        return axiosService.get('', {userName : params.userName, email : params.email });
+    },
+
 } 
 

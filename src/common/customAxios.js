@@ -1,10 +1,8 @@
 import axios from 'axios';
+import router from "@/router"
 
-const API_SERVER = {
-    AWS : 'http://54.180.147.129/api',
-    LOCAL : 'http://127.0.0.1:8080/api',
-}
-
+// 인터셉터 참고자료 : https://yamoo9.github.io/axios/guide/interceptors.html
+// https://velog.io/@skyepodium/axios-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0%EB%A1%9C-API-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0
 // CORS처리 필요 : https://inpa.tistory.com/entry/AXIOS-%F0%9F%93%9A-CORS-%EC%BF%A0%ED%82%A4-%EC%A0%84%EC%86%A1withCredentials-%EC%98%B5%EC%85%98
 // 참고자료 : https://jess2.xyz/vue/vue-tip/#2-router--%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EC%84%A4%EA%B3%84
 /**
@@ -12,23 +10,66 @@ const API_SERVER = {
  * CORS일 경우 백엔드와 프론트에서 각각 설정을 추가해줘야 함. withCredential = true
  * samsSite설정은 백엔드에서 cookie생성시 설정 : 웹서버 설정을 변경하거나, cookie생성시 설정을 추가해서 생성해주기
  */
+
+const ERROR_CODE = {
+    BAD_REQUEST : 400,
+    UNAUTHORIZED : 401, 
+    NOT_FOUND : 404,
+    CONFLICT : 409,
+}
+
 export default {
-    createClientForAws(apiUrl) {
-        return axios.create({
-            baseURL: `${API_SERVER.AWS}${apiUrl}`,
-            withCredentials: true,  
-            headers:{
-                "Content-Type": "application/json"
-            }
-        })
-    },
-    createClientForLocal(apiUrl) {
-        return axios.create({
-            baseURL: `${API_SERVER.LOCAL}${apiUrl}`,
+    // 실행모드에 따라 환경변수 동적으로 반영하기
+    // 참고자료 : https://velog.io/@skyepodium/vue-%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%93%9C%EC%99%80-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95
+    // .env환경변수 파일 만들기, 실행모드 스크립트 작성하기 -> package.json
+    createAxiosInstance(apiUrl) {
+        const axiosInstance = axios.create({
+            baseURL: `${process.env.VUE_APP_API_URI}${apiUrl}`,
             withCredentials: true,
             headers:{
                 "Content-Type": "application/json",
             }
-        })
-    },
+        });
+        // 인터셉터 등록
+        axiosInstance.interceptors.response.use(
+            null, 
+            function(error) {
+                console.log('----- 인터셉터 진입 -----');
+                if (typeof error.response == "undefined") {
+                    alert("네트워크 연결이 불안정합니다. 네트워크 상태를 확인해주세요.");
+                    return Promise.reject(error);
+                }
+
+                const statusCode = error.response.status;
+                if (statusCode == ERROR_CODE.CONFLICT) {
+                    return Promise.reject(error);   // 자원의 중복 에러는 발생한 곳에서 처리
+                }
+
+                router.push(getErrorPage(statusCode));
+                if (statusCode == ERROR_CODE.UNAUTHORIZED) {
+                    alert("권한이 없습니다. 로그인 후에 이용해주시기 바랍니다.");
+                }
+                return Promise.reject(error);   // API를 호출한 Axios에게 에러를 넘겨줌.
+            }
+        );
+        return axiosInstance;
+    }
 } 
+
+function getErrorPage(responseStutsCode) 
+{
+    // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
+    // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
+    let errorPagePath = '/error';
+    switch (responseStutsCode) {
+        case ERROR_CODE.UNAUTHORIZED : 
+            errorPagePath = '/login'; 
+            // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
+            // TODO 테스트 : 쿠키에 담긴 세션ID가 만료되어 오류가 발생했을 경우 자동으로 세션 스토리지 및 로그인상태를 업데이트해줘야 함. 
+            sessionStorage.clear();     
+            break;
+        // TODO 에러코드별로 에러페이지 만들기 - router등록
+        // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
+    }
+    return errorPagePath;
+}
