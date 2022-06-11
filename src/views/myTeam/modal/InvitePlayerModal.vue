@@ -18,15 +18,18 @@
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
-                
-                사용자 검색
-                사용자 그리드
+                {{ userList }}
+                TODO 사용자 검색 
+                TODO 사용자 그리드
             </v-card>            
         </div>
         
         <!-- activator 영역 : 팝업이 뜨기전에 보여줄 컴포넌트들 -->
+        <!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
         <template v-slot:activator="{ on, attrs }">
             <div class="text-right">
+                {{ on }}
+                {{ attrs }}
                 <v-btn
                 class="mt-2 mb-2"
                 color="primary"
@@ -42,14 +45,42 @@
 </template>
 
 <script>
+import userApi from '@/api/UserAPI.js';
+
     export default {
         data: () => {
             return {
                 dialog: false,
                 tab: null,
                 tabTitles: ['초대한 선수', '가입요청보낸 선수'],
+                searchCond: {},
+                userList: [],
             }
-        }
+        },
+        watch: { // 팝업창을 열고 닫는 dialog data를 감시하여 해당 데이터에 따라 콜백 함수 처리 
+            dialog: function(iSDialogOpend) {
+                if (iSDialogOpend) {
+                    this.searchUsers();
+                }
+            },
+        },
+        methods: {
+            async searchUsers() {
+                const params = {
+                    userName: "",
+                    email: "",
+                }
+
+                try {
+                    const res = await userApi.findUserInfo(params);
+                    this.userList = res.data;
+                    console.log(res);
+                } catch(e) {
+                    console.log(e);
+                }
+
+            },
+        },
     }
 </script>
 
