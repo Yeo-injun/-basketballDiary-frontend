@@ -7,7 +7,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item v-for="(title, idx) in tabTitles" :key="title">
-                <MyTeamMemberPage v-if="idx == 0" :pTeamSeq="pTeamSeq"/>
+                <MyTeamMemberTab v-if="idx == 0" :pTeamSeq="pTeamSeq" />
                 <v-card flat v-if="idx == 1">
                     <v-card-text>{{ title }}</v-card-text>
                 </v-card>
@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import MyTeamMemberPage from '@/views/myTeam/MyTeamMemberPage.vue';
+import MyTeamMemberTab from '@/components/myTeam/MyTeamMemberTab.vue';
     
     //import { API } from '@/api/MyTeamAPI.js';
     export default {
         components: {
-            MyTeamMemberPage
+            MyTeamMemberTab
         },
         data: () => {
             return {

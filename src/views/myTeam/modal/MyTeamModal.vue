@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" width="800">
+    <v-dialog v-model="dialog" width="1200">
         <v-card>
             <v-card-title class="text-h5 grey lighten-2">
                 팀정보 수정
@@ -8,20 +8,26 @@
             <v-card-text>
                 <v-container>
                     <v-row>
-                        <v-col cols="4">팀명</v-col>
-                        <v-col>
+                        <v-col cols="2" align-self="center">
+                            <v-input>팀명</v-input>
+                        </v-col>
+                        <v-col cols="4">
                             <v-text-field :rules="rules" v-model="teamInfo.teamName" />
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="4">연고지</v-col>
-                        <v-col>
+                        <v-col cols="2">
+                            <v-input>연고지</v-input>
+                        </v-col>
+                        <v-col cols="4">
                             <v-text-field :rules="rules" v-model="teamInfo.hometown" />
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="4">창단일</v-col>
-                        <v-col>
+                        <v-col cols="2">
+                            <v-input>창단일</v-input>
+                        </v-col>
+                        <v-col cols="4">
                             <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
                                 :return-value.sync="teamInfo.foundationYmd" transition="scale-transition" offset-y
                                 min-width="auto">
@@ -42,21 +48,36 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="4">정기운동시간</v-col>
-                        <v-col cols="2">
-                            <v-autocomplete :items="day" dense />
-                        </v-col>
-                        <v-col cols="2">
-                            <v-autocomplete :items="time" dense />
-                        </v-col>
-                        <v-col cols="2">
-                            <v-autocomplete :items="time" dense />
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="4">정기운동장소</v-col>
-                        <v-text-field disabled />
-                        <v-btn @click="showAPI()" solo>주소찾기</v-btn>
+                        <!-- v-for="(exercise, idx) in regularExerciseList :key="exercise" -->
+                        <div>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="2">
+                                        <v-input>정기운동시간</v-input>
+                                    </v-col>
+                                    <v-col cols="1">
+                                        <v-autocomplete :items="day" dense />
+                                    </v-col>
+                                    <v-col cols="1">
+                                        <v-autocomplete :items="time" dense />
+                                    </v-col>
+                                    <v-col cols="1">
+                                        <v-autocomplete :items="time" dense />
+                                    </v-col>
+                                    <v-col cols="3">
+                                        <v-text-field disabled />
+                                    </v-col>
+                                    <v-col cols="1">
+                                        <v-btn @click="showAPI()" solo>주소찾기</v-btn>
+                                        <!-- regularExerciseList[0].exercisePlaceAddress -->
+                                    </v-col>
+                                    <v-col cols="3">
+                                        <!-- <v-text-field :rules="rules" v-model="teamInfo.hometown" /> -->
+                                        <!-- regularExerciseList[0].exercisePlaceName -->
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </div>
                     </v-row>
                 </v-container>
             </v-card-text>
