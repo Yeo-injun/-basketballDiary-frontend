@@ -6,15 +6,20 @@ const axiosService = axios.createAxiosInstance('/myTeams');
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
  */
 export default {
+    
     /**
      * seongju 
      */
     searchTeams(){
         return axiosService.get();
     },
-    modifyMyTeamsProfile(params){
-        // console.log(params);
-        return axiosService.post(`/${params.teamSeq}/profile`,{params});
+    /* API012 소속팀 개인프로필 수정 */
+    modifyMyTeamsProfile(teamSeq,formData){
+        return axiosService.post(`/${teamSeq}/profile`,formData,{
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+        });
     },
     /**
      * changgi 
