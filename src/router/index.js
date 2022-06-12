@@ -34,7 +34,7 @@ export default new VueRouter({
         /**
          * myTeam페이지
          */
-        createRoute('views/myTeam/tab/MyTeamTab', '/myTeam', myTeamPageChildren,'MyTeamTab'),
+        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren,'MyTeamPage'),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
         createRoute('views/myTeam/modal/MyTeamModal', '/myTeam/info'),
