@@ -46,7 +46,6 @@
 
 <script>
 import userApi from '@/api/UserAPI.js';
-
     export default {
         data: () => {
             return {
@@ -70,7 +69,6 @@ import userApi from '@/api/UserAPI.js';
                     userName: "",
                     email: "",
                 }
-
                 try {
                     const res = await userApi.findUserInfo(params);
                     this.userList = res.data;
@@ -78,12 +76,10 @@ import userApi from '@/api/UserAPI.js';
                 } catch(e) {
                     console.log(e);
                 }
-
             },
         },
     }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
