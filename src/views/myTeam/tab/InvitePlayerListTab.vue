@@ -55,7 +55,7 @@ import InvitePlayerModal from '@/views/myTeam/modal/InvitePlayerModal.vue';
                         height: 'value',
                         weight: 'value',
                         joinRequestStateCodeName: 'value',
-                    }
+                    },
                 ]
             }
         },
