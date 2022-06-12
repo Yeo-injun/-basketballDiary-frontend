@@ -6,8 +6,15 @@
                 <v-subheader>개인프로필</v-subheader>
                 <v-btn class="ml-auto" color="black white--text" small to="/myTeamsProfile" :teamSeq="pTeamSeq">프로필 수정
                 </v-btn>
-                <v-btn color="black white--text" small @click.stop="dialog=true">팀정보 수정</v-btn> 
-                <MyTeamModal :value="dialog" @input="dialog = $event" />
+
+                <v-btn color="black white--text" small 
+                    @click.stop="dialog=true">
+                    팀정보 수정
+                </v-btn>
+                <MyTeamModal v-model="dialog"
+                    @input="dialog=$event"
+                    :pTeamSeq="pTeamSeq">
+                </MyTeamModal>
             </div>
             <MyProfile :data="profile" />
 
@@ -42,6 +49,7 @@
                 profile: {},
                 managerList: [],
                 memberList: [],
+                teamInfo: {},
                 dialog: false
             }
         },
@@ -81,8 +89,17 @@
                     var response = await myTeamApi.searchMembers(this.pTeamSeq);
                     const {data} = response;
                     this.memberList = data;
+                } catch(e) {
+                    console.log(e);
                 }
-                catch(e) {
+            },
+            async getTeamInfo() {
+                try {
+                    console.log(this.pTeamSeq);
+                    var response = await myTeamApi.searchTeam(this.pTeamSeq);
+                    const { data } = response;
+                    this.teamInfo = data;
+                } catch (e) {
                     console.log(e);
                 }
             },
@@ -90,6 +107,7 @@
                 this.getProflie();
                 this.getListManager();
                 this.getListMember();
+                this.getTeamInfo();
             }
         },
         mounted () {

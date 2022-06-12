@@ -34,7 +34,7 @@ export default new VueRouter({
         /**
          * myTeam페이지
          */
-        createRoute('views/myTeam/tab/MyTeamTab', '/myTeam', myTeamPageChildren,'MyTeamTab'),
+        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren,'MyTeamPage'),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
         createRoute('views/myTeam/modal/MyTeamModal', '/myTeam/info'), // TODO 라우터 사용하는지 확인하고, 필요없으면 삭제바람
