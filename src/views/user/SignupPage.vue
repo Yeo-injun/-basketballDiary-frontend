@@ -12,20 +12,9 @@
             <v-text-field label="이름" v-model="userRegInfo.name" :rules="requiredRules" required></v-text-field>
             <v-text-field label="이메일" v-model="userRegInfo.email" :rules="requiredRules" required></v-text-field>
 
-
-            <!-- https://vuetifyjs.com/en/components/date-pickers/#date-events -->
-            <!-- 생년월일 입력창  TODO v-lot 문법 숙지하기-->
-            <v-dialog ref="dialog" v-model="isModalOpen" :return-value.sync="userRegInfo.birthYmd" persistent width="290px">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-text-field v-model="userRegInfo.birthYmd" label="생년월일" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" :rules="requiredRules" required/>
-                </template>
-                <v-date-picker v-model="userRegInfo.birthYmd" scrollable>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="isModalOpen = false">취소</v-btn>
-                    <v-btn text color="primary" @click="$refs.dialog.save(userRegInfo.birthYmd)">확인</v-btn>
-                </v-date-picker>
-            </v-dialog>
-
+            <CustomDatePicker 
+            v-on:pickup-date="setBirthYmd"
+            v-bind:p-label-name="pPickerLabelName"/>
 
             <v-radio-group v-model="userRegInfo.gender" row :rules="requiredRules" required>
                 <v-radio label="남성" value="01"/>
@@ -52,12 +41,17 @@
 
 <script>
 import userApi from '@/api/UserAPI';
+import CustomDatePicker from '@/components/common/CustomDatePicker.vue';
 
 // id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 // 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
     export default {
+        components: {
+            CustomDatePicker,
+        },
         data: ()=>{
             return {
+                pPickerLabelName: '생년월일',
                 requiredRules: [v => !!v || '필수 입력값입니다.'],
                 isModalOpen: '',
                 isNotDuplicateUserId: false,
@@ -78,6 +72,9 @@ import userApi from '@/api/UserAPI';
             }
         }, // data
         methods: {
+            setBirthYmd(selecteDate) {
+                this.userRegInfo.birthYmd = selecteDate;
+            },
             initDuplicationCheckStatus() {
                 this.isNotDuplicateUserId = false;
             },
