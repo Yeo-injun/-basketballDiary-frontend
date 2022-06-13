@@ -138,7 +138,7 @@
                 }).open();
             },
             onLoad () {
-                this.getTeamInfo();
+                // this.getTeamInfo();
             },
         },
         //data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.

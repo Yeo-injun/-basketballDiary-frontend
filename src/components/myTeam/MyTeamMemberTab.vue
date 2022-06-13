@@ -107,7 +107,7 @@
                 this.getProflie();
                 this.getListManager();
                 this.getListMember();
-                this.getTeamInfo();
+                // this.getTeamInfo();
             }
         },
         mounted () {
