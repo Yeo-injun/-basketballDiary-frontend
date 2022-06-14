@@ -38,8 +38,6 @@ export default new VueRouter({
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
         createRoute('views/myTeam/modal/MyTeamModal', '/myTeam/info'), // TODO 라우터 사용하는지 확인하고, 필요없으면 삭제바람
-        createRoute('views/myTeam/modal/MemberManageModal', '/myTeam/memberManagement'), // TODO 삭제예정
-        // createRoute('views/myTeam/modal/JoinRequestPlayerTab', '/myTeam/memberManage/joinRequestPlayer'),
         createRoute('views/myTeam/MemberManagePage', '/myTeam/memberManage'),
         /**
          * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
