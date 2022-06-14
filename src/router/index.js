@@ -51,7 +51,7 @@ export default new VueRouter({
 
 
 // TODO  클래스로 만들어서 생성자로 객체 만들기
-function createRoute(componentPath, urlPath, childernList, componentName) {
+function createRoute(componentPath, urlPath,  childernList, componentName) {
     var route = 
     {
         path: urlPath,
