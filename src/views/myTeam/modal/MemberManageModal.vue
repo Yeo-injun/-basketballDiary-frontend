@@ -60,7 +60,6 @@
 <script>
 import JoinRequestPlayerListTab from '@/views/myTeam/tab/JoinRequestPlayerListTab.vue';
 import InvitePlayerListTab from '@/views/myTeam/tab/InvitePlayerListTab.vue';
-
     export default {
         components: {
             InvitePlayerListTab,
@@ -77,5 +76,4 @@ import InvitePlayerListTab from '@/views/myTeam/tab/InvitePlayerListTab.vue';
 </script>
 
 <style lang="scss" scoped>
-
 </style>
