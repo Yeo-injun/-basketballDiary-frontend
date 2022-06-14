@@ -23,7 +23,7 @@
 
 <script>
 import myTeamApi from '@/api/MyTeamAPI.js';
-import InvitePlayerModal from '@/views/myTeam/modal/InvitePlayerModal.vue';
+import InvitePlayerModal from '@/components/myTeam/modal/InvitePlayerModal.vue';
 
     export default {
         components: {
