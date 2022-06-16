@@ -48,7 +48,12 @@ export default {
     /**
      * injun 
      */
+    /* API005 : 소속팀의 초대한 선수목록 조회 */
     searchInvitedPlayer(params) {
         return axiosService.get(`/${params.teamSeq}/joinRequestsTo`);
     },
+    /* API007 : 소속팀의 선수초대 */
+    inviteTeamMember(params) {
+        return axiosService.post(`/${params.teamSeq}/joinRequestTo/${params.userSeq}`);
+    }
 }
