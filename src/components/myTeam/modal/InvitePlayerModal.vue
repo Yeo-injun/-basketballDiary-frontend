@@ -25,6 +25,8 @@
                     <v-select
                     v-model="searchCond"
                     :items="searchConds"
+                    item-text="text"
+                    item-value="value"
                     label="검색조건을 선택해주세요."
                     ></v-select>
 
@@ -33,7 +35,7 @@
                     v-model="searchKeyword"/>
                     
                     <v-btn
-                    v-on:click="searchUsers">
+                    v-on:click="clickSearchButton">
                     검색
                     </v-btn>
                 </v-card-subtitle>
@@ -77,10 +79,10 @@ import userApi from '@/api/UserAPI.js';
     export default {
         data: () => {
             return {
-                dialog: false,
-                tab: null,
-                tabTitles: ['초대한 선수', '가입요청보낸 선수'],
-                searchCond: "",
+                dialog: false,  // 모달창 제어목적의 변수
+                searchCond: {
+                    value: 'userName'    
+                },
                 searchConds: [
                     {text : '이름', value: 'userName'},
                     {text : '이메일', value: 'email'},
@@ -101,16 +103,28 @@ import userApi from '@/api/UserAPI.js';
             dialog: function(isDialogOpend) {
                 if (isDialogOpend) {
                     this.searchUsers();
+                    return;
                 }
+                // 팝업창이 닫히면 검색조건 초기화
+                this.clearSearchCondAndKeyword();
             },
         },
         methods: {
+            intlModal() {
+                this.searchUsers();
+            },
+            clickSearchButton() {
+                if (!this.searchCond) {
+                    alert("검색 조건을 선택해주세요.");
+                    return;
+                }
+                this.searchUsers();
+            },
             async searchUsers() {
                 const params = this.genSearchParams();
                 try {
                     const res = await userApi.findUserInfo(params);
                     this.userList = res.data;
-                    console.log(res);
                 } catch(e) {
                     console.log(e);
                 }
@@ -120,13 +134,16 @@ import userApi from '@/api/UserAPI.js';
                     userName: "",
                     email: "",
                 };
-                const searchCondText = this.searchCond;
-                if (searchCondText == "userName") {
-                    params.userName = this.searchKeyword;
-                } else if (searchCondText == "email") {
-                    params.email = this.searchKeyword;
+                const searchCondValue = this.searchCond;
+                switch (searchCondValue) {
+                    case "userName" : params.userName = this.searchKeyword; break;
+                    case "email"    : params.email = this.searchKeyword; break;
                 }
                 return params;
+            },
+            clearSearchCondAndKeyword() {
+                this.searchCond = "";
+                this.searchKeyword = "";
             }
         },
     }
