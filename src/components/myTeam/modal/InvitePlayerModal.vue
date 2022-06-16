@@ -43,6 +43,7 @@
                     <v-data-table
                     :headers="userListHeader"
                     :items="userList"
+                    @click:row="sendInvitation"
                     >
                     </v-data-table>
                 </v-card-text>
@@ -76,6 +77,7 @@
  */
 
 import userApi from '@/api/UserAPI.js';
+import MyTeamAPI from '@/api/MyTeamAPI';
     export default {
         data: () => {
             return {
@@ -144,6 +146,30 @@ import userApi from '@/api/UserAPI.js';
             clearSearchCondAndKeyword() {
                 this.searchCond = "";
                 this.searchKeyword = "";
+            },
+            async sendInvitation(e) {
+                if (!confirm("초대요청을 보내시겠습니까?")) {
+                    return;
+                }
+                // TODO 하드코딩 피하기 - vue store 공부하기(전역데이터로 관리);
+                const params = {
+                    teamSeq: "4", 
+                    userSeq: e.userSeq,
+                }
+                const response = await this.inviteTeamMember(params); 
+                if (response.status == "200") {
+                    alert("초대 완료했습니다. 선수의 승인을 기다리세요.");
+                    return;
+                }
+                alert(response.message);
+            },
+            async inviteTeamMember(params) {
+                try {
+                    const res = await MyTeamAPI.inviteTeamMember(params);
+                    return res;
+                } catch(error) {
+                    return error.response.data;
+                }
             }
         },
     }
