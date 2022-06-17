@@ -50,7 +50,7 @@ export default {
      */
     /* API005 : 소속팀의 초대한 선수목록 조회 */
     searchInvitedPlayer(params) {
-        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`);
+        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`, { params });
     },
     /* API007 : 소속팀의 선수초대 */
     inviteTeamMember(params) {

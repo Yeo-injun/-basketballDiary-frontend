@@ -35,7 +35,7 @@
                     v-model="searchKeyword"/>
                     
                     <v-btn
-                    v-on:click="clickSearchButton">
+                    @click="clickSearchButton">
                     검색
                     </v-btn>
                 </v-card-subtitle>
