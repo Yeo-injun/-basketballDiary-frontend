@@ -6,7 +6,6 @@ const axiosService = axios.createAxiosInstance('/myTeams');
  * axios.get('url',config[]) : config 스팩 속정중 params 정의
  */
 export default {
-    
     /**
      * seongju 
      */
@@ -49,11 +48,16 @@ export default {
      * injun 
      */
     /* API005 : 소속팀의 초대한 선수목록 조회 */
-    searchInvitedPlayer(params) {
-        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`, { params });
+    searchInvitedPlayer(params) { // TODO 왜 2번째 인자를 {}로 감싸야만 하는지 확인 -> 2번째 파라미터 자체가 객체여야 하고, 쿼리스트링으로 사용하기 위해서는 params속성의 값이 쿼리스트링이 됨
+        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`, { params : { state : params.state } });
     },
     /* API007 : 소속팀의 선수초대 */
     inviteTeamMember(params) {
         return axiosService.post(`/${params.teamSeq}/joinRequestTo/${params.userSeq}`);
-    }
+    },
+    /* API008 : 소속팀이 받은 가입요청목록 조회 */
+    searchJoinRequestPlayer(params) {
+        return axiosService.get(`/${params.teamSeq}/joinRequestsFrom`, { params : { state : params.state } });
+    },
 }
+

@@ -34,7 +34,7 @@ import InvitePlayerModal from '@/components/myTeam/modal/InvitePlayerModal.vue';
         },
         data() {
             return {
-                filterCond: {value: ''},
+                filterCond: '',
                 filterConds: [
                     {text : '전체', value: ''},
                     {text : '대기중', value: '01'},
