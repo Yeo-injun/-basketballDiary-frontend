@@ -5,8 +5,11 @@
             <v-card-title>초대 선수 목록</v-card-title>
             <v-card-subtitle>
                 <v-select
-                v-model="invitedPlayerFilterCond"
-                :items="invitedPlayerFilterConds"
+                v-model="filterCond"
+                :items="filterConds"
+                item-text="text"
+                item-value="value"
+                @change="searchInvitedPlayer"
                 label="초대상태"
                 ></v-select>
             </v-card-subtitle>
@@ -31,8 +34,8 @@ import InvitePlayerModal from '@/components/myTeam/modal/InvitePlayerModal.vue';
         },
         data() {
             return {
-                invitedPlayerFilterCond: {text : '전체', value: ''},
-                invitedPlayerFilterConds: [
+                filterCond: '',
+                filterConds: [
                     {text : '전체', value: ''},
                     {text : '대기중', value: '01'},
                     {text : '거절', value: '03'},
@@ -46,37 +49,27 @@ import InvitePlayerModal from '@/components/myTeam/modal/InvitePlayerModal.vue';
                     { text: '몸무게', value: 'weight', sortable: false },
                     { text: '초대상태', value: 'joinRequestStateCodeName', sortable: false },
                 ],
-                invitedPlayers: [
-                    {
-                        requestDate: '2022-06-06',
-                        name: 'value',
-                        email: 'value',
-                        positionCodeName: 'value',
-                        height: 'value',
-                        weight: 'value',
-                        joinRequestStateCodeName: 'value',
-                    },
-                ]
+                invitedPlayers: [],
             }
         },
         methods: {
-            async initLoad() {
+            async searchInvitedPlayer() {
+                // this를 어디서 호출하느냐에 따라서 지칭하는 대상이 달라짐.
+                const filterCond = this.filterCond;
                 const params = {
                     teamSeq: 4, // TODO 테스트용 화면에서 데이터 받아오기
-                    joinRequestStateCode: this.invitedPlayerFilterCond,
+                    state: filterCond,
                 }
-
                 try {
                     const res = await myTeamApi.searchInvitedPlayer(params);
                     this.invitedPlayers = res.data;
                 } catch (e) {
                     console.log(e);
                 }
-
             },
-            changeInvitedPlayerFilterParams() {
-
-            }
+            async initLoad() {
+                await this.searchInvitedPlayer();
+            },
         },
         mounted (){
             this.initLoad();
