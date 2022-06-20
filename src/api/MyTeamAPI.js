@@ -59,5 +59,13 @@ export default {
     searchJoinRequestPlayer(params) {
         return axiosService.get(`/${params.teamSeq}/joinRequestsFrom`, { params : { state : params.state } });
     },
+    /* API009 : 소속팀이 사용자의 가입요청 승인 */
+    approveJoinRequest(params) {
+        return axiosService.patch(`/${params.teamSeq}/joinRequestFrom/${params.teamJoinRequestSeq}/approval`);
+    },
+    /* API010 : 소속팀의 가입요청 거절 */
+    rejectJoinRequest(params) {
+        return axiosService.patch(`/${params.teamSeq}/joinRequestFrom/${params.teamJoinRequestSeq}/rejection`);
+    },
 }
 
