@@ -21,20 +21,32 @@
                 :items="joinRequestPlayers"
                 >
                     <!-- TODO 오류 원인 파악하기 - https://stackoverflow.com/questions/61344980/v-slot-directive-doesnt-support-any-modifier-->
-                    <template v-slot:[`item.approve`]="{ item }">
-                        <v-icon
+                    
+                    <template v-slot:[`item.approval`]="{ item }">
+                        <template
+                        v-if="item.joinRequestStateCode == '01'"
+                        >
+                            <v-btn
                             small
                             class="mr-2"
-                            @click="test(item)"
+                            @click="clickApproval(item)"
+                            >
+                                승인
+                            </v-btn>
+                        </template>
+                    </template>
+                    <template v-slot:[`item.rejection`]="{ item }">
+                        <template
+                        v-if="item.joinRequestStateCode == '01'"
                         >
-                            mdi-pencil
-                        </v-icon>
-                        <v-icon
+                            <v-btn
                             small
-                            @click="test(item)"
-                        >
-                            mdi-delete
-                        </v-icon>
+                            class="mr-2"
+                            @click="clickRejection(item)"
+                            >
+                                거절
+                            </v-btn>
+                        </template>
                     </template>
                 </v-data-table>
             </v-card-text>
@@ -48,8 +60,9 @@ import myTeamApi from '@/api/MyTeamAPI.js';
     export default {
         data() {
             return {
+                teamSeq: 3, //  TODO props로 받아오거나 아니면 vuex 공부해서 적용하기
                 selected: '',
-                filterCond: '',
+                filterCond: [],
                 filterConds: [
                     {text : '전체', value: ''},
                     {text : '대기중', value: '01'},
@@ -63,17 +76,23 @@ import myTeamApi from '@/api/MyTeamAPI.js';
                     { text: '키', value: 'height', sortable: false },
                     { text: '몸무게', value: 'weight', sortable: false },
                     { text: '초대상태', value: 'joinRequestStateCodeName', sortable: false },
-                    { text: '승낙/거절', value: 'approve', },
+                    { text: '승인', value: 'approval', },
+                    { text: '거절', value: 'rejection', },
                 ],
                 joinRequestPlayers: [],
             }
         },
         methods: {
+            async initLoad() {
+                await this.searchJoinRequestPlayer();
+            },
             async searchJoinRequestPlayer() {
                 // this를 어디서 호출하느냐에 따라서 지칭하는 대상이 달라짐.
+                const teamSeq = this.teamSeq;
                 const filterCond = this.filterCond;
+
                 const params = {
-                    teamSeq: 3, // TODO 테스트용 화면에서 데이터 받아오기
+                    teamSeq: teamSeq, // TODO 테스트용 화면에서 데이터 받아오기
                     state: filterCond,
                 }
                 try {
@@ -83,12 +102,43 @@ import myTeamApi from '@/api/MyTeamAPI.js';
                     console.log(e);
                 }
             },
-            async initLoad() {
-                await this.searchJoinRequestPlayer();
+            async clickApproval(item) {
+                if (!confirm("가입요청을 승낙하시겠습니까?")) {
+                    return;
+                }
+
+                const params = this.createParamsForProcessingJoinRequest(item);                
+                try {
+                    const res = await myTeamApi.approveJoinRequest(params);
+                    console.log(res);
+                    alert("팀원으로 추가되었습니다.");
+                } catch(e) {
+                    console.log(e.response);
+                    alert(e.response.message);
+                }
             },
-            test(item) {
-                // TODO 거절 혹은 승인API달기
-                alert(`${item.teamJoinRequestSeq}인가요?`);
+            async clickRejection(item) {
+                if (!confirm("가입요청을 거절하시겠습니까?")) {
+                    return;
+                }
+
+                const params = this.createParamsForProcessingJoinRequest(item);
+                try {
+                    const res = await myTeamApi.rejectJoinRequest(params);
+                    console.log(res);
+                    alert("가입요청이 거절되었습니다.");
+                } catch(e) {
+                    console.log(e.response);
+                    alert(e.response.message);
+                }
+            },
+            createParamsForProcessingJoinRequest(item) {
+                const teamSeq = this.teamSeq;
+                const teamJoinRequestSeq = item.teamJoinRequestSeq;
+                return {
+                    teamSeq: teamSeq,
+                    teamJoinRequestSeq: teamJoinRequestSeq,
+                }
             }
         },  
         mounted (){
