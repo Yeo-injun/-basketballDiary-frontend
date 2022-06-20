@@ -12,11 +12,30 @@
                 label="초대상태"
                 ></v-select>
             </v-card-subtitle>
+            <!-- 가입요청한 선수목록 -->
+            <!-- data-table안에 컴포넌트 넣기 : https://vuetifyjs.com/en/components/data-tables/#external-sorting -->
             <v-card-text>
                 <v-data-table
+                v-model="selected"
                 :headers="joinRequestPlayerHeader"
                 :items="joinRequestPlayers"
                 >
+                    <!-- TODO 오류 원인 파악하기 - https://stackoverflow.com/questions/61344980/v-slot-directive-doesnt-support-any-modifier-->
+                    <template v-slot:[`item.approve`]="{ item }">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="test(item)"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon
+                            small
+                            @click="test(item)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>   <!--// 가입요청한 선수목록 -->
@@ -29,6 +48,7 @@ import myTeamApi from '@/api/MyTeamAPI.js';
     export default {
         data() {
             return {
+                selected: '',
                 filterCond: '',
                 filterConds: [
                     {text : '전체', value: ''},
@@ -43,6 +63,7 @@ import myTeamApi from '@/api/MyTeamAPI.js';
                     { text: '키', value: 'height', sortable: false },
                     { text: '몸무게', value: 'weight', sortable: false },
                     { text: '초대상태', value: 'joinRequestStateCodeName', sortable: false },
+                    { text: '승낙/거절', value: 'approve', },
                 ],
                 joinRequestPlayers: [],
             }
@@ -65,7 +86,11 @@ import myTeamApi from '@/api/MyTeamAPI.js';
             async initLoad() {
                 await this.searchJoinRequestPlayer();
             },
-        },
+            test(item) {
+                // TODO 거절 혹은 승인API달기
+                alert(`${item.teamJoinRequestSeq}인가요?`);
+            }
+        },  
         mounted (){
             this.initLoad();
         }
