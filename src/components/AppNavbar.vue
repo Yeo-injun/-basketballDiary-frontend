@@ -5,8 +5,6 @@
       </router-link>      
 
       <v-spacer></v-spacer>
-
-      <v-btn class="ma-1" to="/myTeam/memberManage">(임시) 팀원관리 버튼</v-btn>
       <v-btn class="ma-1" to="/myTeams">소속팀</v-btn>
       <v-btn class="ma-1" to="/team">농구팀</v-btn>
       <v-btn class="ma-1" to="/myProfile">내정보</v-btn>

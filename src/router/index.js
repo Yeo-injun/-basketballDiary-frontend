@@ -34,11 +34,11 @@ export default new VueRouter({
         /**
          * myTeam페이지
          */
-        createRoute('views/myTeam/MyTeamPage', '/myTeam', myTeamPageChildren,'MyTeamPage'),
+        createRoute('views/myTeam/MyTeamPage', '/myTeam', 'MyTeamPage', myTeamPageChildren),
         createRoute('views/myTeam/MyTeamListPage', '/myTeams'),
         createRoute('views/myTeam/MyTeamsProfilePage','/myTeamsProfile'),
         createRoute('views/myTeam/modal/MyTeamModal', '/myTeam/info'), // TODO 라우터 사용하는지 확인하고, 필요없으면 삭제바람
-        createRoute('views/myTeam/MemberManagePage', '/myTeam/memberManage'),
+        createRoute('views/myTeam/MemberManagePage', '/myTeam/memberManage', 'MemberManagePage'),
         /**
          * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
          */
@@ -51,7 +51,7 @@ export default new VueRouter({
 
 
 // TODO  클래스로 만들어서 생성자로 객체 만들기
-function createRoute(componentPath, urlPath,  childernList, componentName) {
+function createRoute(componentPath, urlPath, componentName, childernList) {
     var route = 
     {
         path: urlPath,

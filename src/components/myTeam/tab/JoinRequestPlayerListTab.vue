@@ -16,7 +16,6 @@
             <!-- data-table안에 컴포넌트 넣기 : https://vuetifyjs.com/en/components/data-tables/#external-sorting -->
             <v-card-text>
                 <v-data-table
-                v-model="selected"
                 :headers="joinRequestPlayerHeader"
                 :items="joinRequestPlayers"
                 >
@@ -24,11 +23,10 @@
                     
                     <template v-slot:[`item.approval`]="{ item }">
                         <template
-                        v-if="item.joinRequestStateCode == '01'"
+                        v-if="isShowButton(item.joinRequestStateCode)"
                         >
                             <v-btn
-                            small
-                            class="mr-2"
+                            class="mr-2" small
                             @click="clickApproval(item)"
                             >
                                 승인
@@ -37,11 +35,10 @@
                     </template>
                     <template v-slot:[`item.rejection`]="{ item }">
                         <template
-                        v-if="item.joinRequestStateCode == '01'"
+                        v-if="isShowButton(item.joinRequestStateCode)"
                         >
                             <v-btn
-                            small
-                            class="mr-2"
+                            class="mr-2" small
                             @click="clickRejection(item)"
                             >
                                 거절
@@ -58,10 +55,11 @@
 import myTeamApi from '@/api/MyTeamAPI.js';
 
     export default {
+        props: {
+            pTeamSeq: Number,
+        },
         data() {
             return {
-                teamSeq: 3, //  TODO props로 받아오거나 아니면 vuex 공부해서 적용하기
-                selected: '',
                 filterCond: [],
                 filterConds: [
                     {text : '전체', value: ''},
@@ -88,11 +86,10 @@ import myTeamApi from '@/api/MyTeamAPI.js';
             },
             async searchJoinRequestPlayer() {
                 // this를 어디서 호출하느냐에 따라서 지칭하는 대상이 달라짐.
-                const teamSeq = this.teamSeq;
                 const filterCond = this.filterCond;
 
                 const params = {
-                    teamSeq: teamSeq, // TODO 테스트용 화면에서 데이터 받아오기
+                    teamSeq: this.getPropTeamSeq(), // TODO 테스트용 화면에서 데이터 받아오기
                     state: filterCond,
                 }
                 try {
@@ -132,14 +129,21 @@ import myTeamApi from '@/api/MyTeamAPI.js';
                     alert(e.response.message);
                 }
             },
+            getPropTeamSeq() {
+                return this.pTeamSeq;
+            },
             createParamsForProcessingJoinRequest(item) {
-                const teamSeq = this.teamSeq;
+                const teamSeq = this.getPropTeamSeq();
                 const teamJoinRequestSeq = item.teamJoinRequestSeq;
                 return {
                     teamSeq: teamSeq,
                     teamJoinRequestSeq: teamJoinRequestSeq,
                 }
-            }
+            },
+            isShowButton(joinRequestStateCode) {
+                const WAITING = "01";
+                return joinRequestStateCode == WAITING;
+            },
         },  
         mounted (){
             this.initLoad();

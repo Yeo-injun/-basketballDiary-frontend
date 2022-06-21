@@ -32,9 +32,12 @@ import InvitePlayerModal from '@/components/myTeam/modal/InvitePlayerModal.vue';
         components: {
             InvitePlayerModal,
         },
+        props: {
+            pTeamSeq: Number,
+        },
         data() {
             return {
-                filterCond: '',
+                filterCond: [],
                 filterConds: [
                     {text : '전체', value: ''},
                     {text : '대기중', value: '01'},
@@ -55,9 +58,10 @@ import InvitePlayerModal from '@/components/myTeam/modal/InvitePlayerModal.vue';
         methods: {
             async searchInvitedPlayer() {
                 // this를 어디서 호출하느냐에 따라서 지칭하는 대상이 달라짐.
+                const teamSeq = this.pTeamSeq;
                 const filterCond = this.filterCond;
                 const params = {
-                    teamSeq: 4, // TODO 테스트용 화면에서 데이터 받아오기
+                    teamSeq: teamSeq, // TODO 테스트용 화면에서 데이터 받아오기
                     state: filterCond,
                 }
                 try {
