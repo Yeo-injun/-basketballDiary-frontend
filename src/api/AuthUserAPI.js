@@ -4,10 +4,18 @@ const axiosService = axios.createAxiosInstance('/loginUser');
 
 
 export default {
-    // 인준 테스트용
+    /**
+     * injun
+     */
+    // API022 : 농구팀 가입요청 목록 조회
     getJoinRequestsTo() {
         return axiosService.get('/joinRequestsTo');
     },
+    // API032 : 농구팀 초대 목록 조회  
+    getJoinRequestsFrom() {
+        return axiosService.get('/joinRequestsFrom');
+    },
+
     /**
      * seongju
      */
