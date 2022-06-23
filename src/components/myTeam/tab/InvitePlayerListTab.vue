@@ -1,6 +1,7 @@
 <template>
     <div>
-        <InvitePlayerModal/>
+        <InvitePlayerModal
+        :pTeamSeq="pTeamSeq"/>
         <v-card>
             <v-card-title>초대 선수 목록</v-card-title>
             <v-card-subtitle>

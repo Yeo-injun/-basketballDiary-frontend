@@ -70,15 +70,35 @@ import authUserAPI from '@/api/AuthUserAPI.js';
                 if (!confirm("가입요청을 승낙하시겠습니까?")) {
                     return;
                 }
-                // TODO 구현예정
-                console.log(item);
+                const params = {
+                    teamJoinRequestSeq : item.teamJoinRequestSeq,
+                }
+
+                try {
+                    const res = await authUserAPI.approveInvitation(params);
+                    this.invitations = res.data;
+                    console.log(res);
+                } catch(e) {
+                    console.log(e.response);
+                    alert(e.response.message);
+                }
             },
             async clickRejection(item) {
                 if (!confirm("가입요청을 거절하시겠습니까?")) {
                     return;
                 }
-                // TODO 구현예정
-                console.log(item);
+                const params = {
+                    teamJoinRequestSeq : item.teamJoinRequestSeq,
+                }
+
+                try {
+                    const res = await authUserAPI.rejectInvitation(params);
+                    this.invitations = res.data;
+                    console.log(res);
+                } catch(e) {
+                    console.log(e.response);
+                    alert(e.response.message);
+                }
             },
             isShowButton(joinRequestStateCode) {
                 const WAITING = "01";

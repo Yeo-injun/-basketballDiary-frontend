@@ -58,8 +58,18 @@ import authUserAPI from '@/api/AuthUserAPI.js';
                 if (!confirm("가입요청을 취소하시겠습니까?")) {
                     return;
                 }
-                // TODO 구현예정
-                console.log(item);
+                const params = {
+                    teamJoinRequestSeq : item.teamJoinRequestSeq,
+                }
+
+                try {
+                    const res = await authUserAPI.cancelJoinReqeust(params);
+                    this.joinRequests = res.data;
+                    console.log(res);
+                } catch(e) {
+                    console.log(e.response);
+                    alert(e.response.message);
+                }
             },
             isShowButton(joinRequestStateCode) {
                 const WAITING = "01";

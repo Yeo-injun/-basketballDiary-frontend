@@ -79,6 +79,9 @@
 import userApi from '@/api/UserAPI.js';
 import MyTeamAPI from '@/api/MyTeamAPI';
     export default {
+        props : {
+            pTeamSeq : Number,
+        },
         data: () => {
             return {
                 dialog: false,  // 모달창 제어목적의 변수
@@ -151,9 +154,9 @@ import MyTeamAPI from '@/api/MyTeamAPI';
                 if (!confirm("초대요청을 보내시겠습니까?")) {
                     return;
                 }
-                // TODO 하드코딩 피하기 - vue store 공부하기(전역데이터로 관리);
+                const teamSeq = this.pTeamSeq;
                 const params = {
-                    teamSeq: "4", 
+                    teamSeq: teamSeq, 
                     userSeq: e.userSeq,
                 }
                 const response = await this.inviteTeamMember(params); 
