@@ -70,7 +70,6 @@ import authUserAPI from '@/api/AuthUserAPI.js';
                     console.log(e.response);
                     alert(e.response.message);
                 }
-                console.log(item);
             },
             isShowButton(joinRequestStateCode) {
                 const WAITING = "01";

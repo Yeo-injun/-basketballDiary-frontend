@@ -15,6 +15,14 @@ export default {
     cancelJoinReqeust(params) {
         return axiosService.delete(`/joinRequestsTo/${params.teamJoinRequestSeq}`);
     },
+    // API024 : 팀 초대 승인
+    approveInvitation(params) {
+        return axiosService.put(`/joinRequestsFrom/${params.teamJoinRequestSeq}/approval`);
+    },
+    // API033 : 농구팀 초대 거절
+    rejectInvitation(params) {
+        return axiosService.put(`/joinRequestsFrom/${params.teamJoinRequestSeq}/rejection`);
+    },
     // API032 : 농구팀 초대 목록 조회  
     getJoinRequestsFrom() {
         return axiosService.get(`/joinRequestsFrom`);
