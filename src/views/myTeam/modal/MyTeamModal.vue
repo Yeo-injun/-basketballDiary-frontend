@@ -20,7 +20,10 @@
                             <v-input>연고지</v-input>
                         </v-col>
                         <v-col cols="4">
-                            <v-text-field :rules="rules" v-model="teamInfo.hometown" />
+                            <v-input append-icon="mdi-pencil" 
+                                    @click:append="hometownAPI()">
+                                {{teamInfo.hometown}}
+                            </v-input>
                         </v-col>
                     </v-row>
                     <v-row>
@@ -72,7 +75,7 @@
                                     <td><v-autocomplete :items="time" dense v-model="item.startTime"/></td>
                                     <td><v-autocomplete :items="time" dense v-model="item.endTime"/></td>
                                     <td><v-text-field disabled v-model="item.exercisePlaceAddress"/></td>
-                                    <td><v-btn color="secondary" x-small fab dark @click="showAPI(index)" ><v-icon>mdi-pencil</v-icon></v-btn></td>
+                                    <td><v-btn color="secondary" x-small fab dark @click="addressAPI(index)" ><v-icon>mdi-pencil</v-icon></v-btn></td>
                                     <td><v-text-field v-model="item.exercisePlaceName"/></td>
                                     <td><v-btn color="secondary" x-small dark fab @click="deleteExercise(index)"><v-icon>mdi-delete</v-icon></v-btn></td>
                                 </tr>
@@ -204,13 +207,20 @@
                     console.log(e);
                 }
             },
-            showAPI(idx) {
-                // 단, 왜 arrow function을 사용했을까?
-                // 출처 : https://medium.com/@hozacho/vuejs%EC%97%90%EC%84%9C-arrow-function%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0-ec067c342412
+            addressAPI(idx) {
                 new window.daum.Postcode({
                     oncomplete: (data) => {
-                        console.log(`API call index: ${idx}`);
                         this.regularExerciseList[idx].exercisePlaceAddress = data.address;
+                    }
+                }).open();
+            },
+            hometownAPI() {
+                new window.daum.Postcode({
+                    oncomplete: (data) => {
+                        console.log(data);
+                        this.teamInfo.hometown = data.address;
+                        this.teamInfo.sidoCode = data.sigunguCode.substr(0, 2);
+                        this.teamInfo.sigunguCode = data.sigunguCode;
                     }
                 }).open();
             },
