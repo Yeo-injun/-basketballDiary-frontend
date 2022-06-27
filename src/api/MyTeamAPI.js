@@ -43,7 +43,7 @@ export default {
     },
     /* API017 : 소속팀 정보 수정 */
     modifyMyTeam(teamSeq, teamInfo) {
-        return axiosService.put(`/${teamSeq}/info`, {teamInfo});
+        return axiosService.post(`/${teamSeq}/info`, teamInfo);
     },  
     /**
      * injun 

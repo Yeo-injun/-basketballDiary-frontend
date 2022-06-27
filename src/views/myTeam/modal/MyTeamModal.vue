@@ -20,7 +20,10 @@
                             <v-input>연고지</v-input>
                         </v-col>
                         <v-col cols="4">
-                            <v-text-field :rules="rules" v-model="teamInfo.hometown" />
+                            <v-input append-icon="mdi-pencil" 
+                                    @click:append="hometownAPI()">
+                                {{teamInfo.hometown}}
+                            </v-input>
                         </v-col>
                     </v-row>
                     <v-row>
@@ -72,12 +75,11 @@
                                     <td><v-autocomplete :items="time" dense v-model="item.startTime"/></td>
                                     <td><v-autocomplete :items="time" dense v-model="item.endTime"/></td>
                                     <td><v-text-field disabled v-model="item.exercisePlaceAddress"/></td>
-                                    <td><v-btn color="secondary" x-small fab dark @click="showAPI(index)" ><v-icon>mdi-pencil</v-icon></v-btn></td>
+                                    <td><v-btn color="secondary" x-small fab dark @click="addressAPI(index)" ><v-icon>mdi-pencil</v-icon></v-btn></td>
                                     <td><v-text-field v-model="item.exercisePlaceName"/></td>
                                     <td><v-btn color="secondary" x-small dark fab @click="deleteExercise(index)"><v-icon>mdi-delete</v-icon></v-btn></td>
                                 </tr>
                             </template>
-
                         </v-data-table>
                     </v-row>
                     <v-row>
@@ -96,8 +98,11 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-btn color="blue darken-1" text @click.stop="dialog=false">
-                    Close
+                <v-btn outlined depressed text @click.stop="dialog=false">
+                    취소
+                </v-btn>
+                <v-btn color="primary" depressed @click="modifyTeamInfo()">
+                    저장
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -128,6 +133,43 @@
             },
         },
         methods: {
+            async modifyTeamInfo() {
+                try {
+                    var paramJSON = this.teamInfo;
+                    paramJSON.foundationYmd = paramJSON.foundationYmd.substr(0, 4) + paramJSON.foundationYmd.substr(5, 2) + paramJSON.foundationYmd.substr(8,2);
+                    console.log(paramJSON.foundationYmd);
+
+                    paramJSON.teamRegularExercisesList = this.regularExerciseList;
+                    for(let i in paramJSON.teamRegularExercisesList) {
+                        switch(paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode) {
+                        case '월': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '1'; break;
+                        case '화': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '2'; break;
+                        case '수': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '3'; break;
+                        case '목': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '4'; break;
+                        case '금': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '5'; break;
+                        case '토': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '6'; break;
+                        case '일': 
+                            paramJSON.teamRegularExercisesList[i].dayOfTheWeekCode = '7'; break;
+                        }
+
+                        paramJSON.teamRegularExercisesList[i].startTime = 
+                            paramJSON.teamRegularExercisesList[i].startTime.substr(0, 2) + paramJSON.teamRegularExercisesList[i].startTime.substr(3, 2);
+                        paramJSON.teamRegularExercisesList[i].endTime = 
+                            paramJSON.teamRegularExercisesList[i].endTime.substr(0, 2) + paramJSON.teamRegularExercisesList[i].endTime.substr(3, 2);
+                    }
+
+                    await myTeamApi.modifyMyTeam(this.pTeamSeq, paramJSON);
+                    this.dialog = false;
+                } catch(e) {
+                    console.log(e);
+                }
+            },
             async getTeamInfo() {
                 try {
                     var response = await myTeamApi.searchTeam(this.pTeamSeq);
@@ -160,17 +202,25 @@
                     }
 
                     this.regularExerciseList = data.teamRegularExercisesList;
-
+                    console.log(this.teamInfo);
                 } catch (e) {
                     console.log(e);
                 }
             },
-            showAPI(idx) {
-                // 단, 왜 arrow function을 사용했을까?
-                // 출처 : https://medium.com/@hozacho/vuejs%EC%97%90%EC%84%9C-arrow-function%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0-ec067c342412
+            addressAPI(idx) {
                 new window.daum.Postcode({
                     oncomplete: (data) => {
                         this.regularExerciseList[idx].exercisePlaceAddress = data.address;
+                    }
+                }).open();
+            },
+            hometownAPI() {
+                new window.daum.Postcode({
+                    oncomplete: (data) => {
+                        console.log(data);
+                        this.teamInfo.hometown = data.address;
+                        this.teamInfo.sidoCode = data.sigunguCode.substr(0, 2);
+                        this.teamInfo.sigunguCode = data.sigunguCode;
                     }
                 }).open();
             },
@@ -184,6 +234,14 @@
                 this.getTeamInfo();
             },
         },
+        watch: { // 팝업창을 열고 닫는 dialog data를 감시하여 해당 데이터에 따라 콜백 함수 처리 
+            dialog: function(isDialogOpend) {
+                if (isDialogOpend) {
+                    this.onLoad();
+                    return;
+                }
+            },
+        },
         //data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
         data: () => {
             return {
@@ -191,8 +249,8 @@
                 regularExerciseList: [],
                 menu: false,
                 day: ['일', '월', '화', '수', '목', '금', '토',],
-                time: ['0:00', '0:30', '1:00', '1:30', '2:00', '2:30', '3:00', '3:30', '4:00', '4:30', '5:00', '5:30', '6:00',
-                        '6:30', '7:00', '7:30', '8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', 
+                time: ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00',
+                        '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', 
                         '12:30', '13:00', '13:30', '14:00','14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00',
                         '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'],
                 rules: [
@@ -217,7 +275,7 @@
             }
         },
         mounted () {
-            this.onLoad();
+            //this.onLoad();
         }
     }
 </script>
