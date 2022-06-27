@@ -28,7 +28,7 @@ export default {
         list.data.forEach(element => {
           this.teamList.push(element);
         });
-      }catch(error){
+      }catch(error) {
         console.log(error);
       }      
     }

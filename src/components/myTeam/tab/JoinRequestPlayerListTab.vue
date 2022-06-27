@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-card-title>가입요청한 선수 목록</v-card-title>
+            <v-card-title>가입요청을 보낸 선수 목록</v-card-title>
             <v-card-subtitle>
                 <v-select
                 v-model="filterCond"
