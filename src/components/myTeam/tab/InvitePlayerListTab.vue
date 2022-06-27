@@ -3,7 +3,7 @@
         <InvitePlayerModal
         :pTeamSeq="pTeamSeq"/>
         <v-card>
-            <v-card-title>초대 선수 목록</v-card-title>
+            <v-card-title>초대한 선수 목록</v-card-title>
             <v-card-subtitle>
                 <v-select
                 v-model="filterCond"

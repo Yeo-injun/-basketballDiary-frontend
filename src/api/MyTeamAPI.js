@@ -9,6 +9,7 @@ export default {
     /**
      * seongju 
      */
+    /* API014 : 소속팀 목록 조회 */
     searchTeams(){
         return axiosService.get();
     },

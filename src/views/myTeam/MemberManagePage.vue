@@ -50,7 +50,7 @@ import InvitePlayerListTab from '@/components/myTeam/tab/InvitePlayerListTab.vue
         data: () => {
             return {
                 tab: null, // TODO 왜 필요한지 확인... (22.06.06 월. 인준 적용한 코드인데 추가 학습 필요)
-                tabTitles: ['초대한 선수', '가입요청보낸 선수'],
+                tabTitles: ['선수초대 목록', '받은 팀가입요청'],
             }
         },
 
