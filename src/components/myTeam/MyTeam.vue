@@ -1,6 +1,5 @@
 <template>
   <v-container>
-      <h1>소속팀 목록</h1>
       <!-- Error :  Avoid using non-primitive value as key, use string/number value instead. -->
       <!-- 해결법 : https://crispypotato.tistory.com/33 -->
       <v-card class="mt-10">    

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <h1>소속팀 목록</h1>
     <MyTeam v-for="(team,index) in teamList" :key="index" v-bind:teamInfo="team"></MyTeam>
   </v-container>
 </template>
