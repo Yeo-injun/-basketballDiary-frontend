@@ -39,15 +39,15 @@
                                 <v-select
                                 v-model="startTime"
                                 :items="times"
-                                @change="searchInvitedPlayer"
+                                @change="validateTime"
                                 label="시작시간"
                                 ></v-select>        
                             </v-col>
                             <v-col>
                                 <v-select
-                                v-model="endTimes"
+                                v-model="endTime"
                                 :items="times"
-                                @change="searchInvitedPlayer"
+                                @change="validateTime"
                                 label="끝시간"
                                 ></v-select>
                             </v-col>
@@ -78,25 +78,39 @@ import CodeUtil from '@/common/CodeUtil.js';
                 startTime: "",
                 endTime: "",
                 daysOfTheWeek : CodeUtil.getDaysOfTheWeek(),
-                times: CodeUtil.getExerciseTimes(),
+                times: CodeUtil.getExerciseTimes(30),
             }
         },
         methods: {
             validateDay() {
                 const startDay = Number(this.startDay);
                 const endDay = Number(this.endDay);
-                if (startDay == 0) {
-                    return;
-                }                
-                if (endDay == 0) {
-                    return;
-                }
-                const isFasterStartDay = (startDay - endDay) <= 0;
-                if (isFasterStartDay) {
+                if (isFasterStartThanEnd(startDay, endDay)) {
                     return;
                 }
                 alert("끝요일은 시작요일보다 빠를 수 없습니다.");
-            }
+            },
+            validateTime() {
+                const startTime = Number(this.startTime.replace(":", ""));
+                const endTime = Number(this.endTime.replace(":", ""));
+                if (isFasterStartThanEnd(startTime, endTime)) {
+                    return;
+                }
+                alert("끝시간은 시작시간보다 빠를 수 없습니다.");
+            },
+        }
+    }
+
+    function isFasterStartThanEnd(start, end) {
+        if (start == 0) {
+            return true;
+        }
+        if (end == 0) {
+            return true;
+        }
+        const isFasterStart = (start - end) <= 0;
+        if (isFasterStart) {
+            return true;
         }
     }
 </script>

@@ -10,15 +10,38 @@ export default {
             {text : "일", value: "7"},
         ];  
     },
-    getExerciseTimes() {
+    getExerciseTimes(intervalMinutes) {
+        if (typeof intervalMinutes == "undefined") {
+            intervalMinutes = 30;
+        }
         const result = [];
-        const oneday = 24;
-        for (let hour=0; hour<oneday; hour++) {
-            let time00 = (hour + ":00").padStart(5, "0");
-            result.push(time00);
-            let time30 = (hour + ":30").padStart(5, "0");
-            result.push(time30);
+        const day = 24;
+        
+        let hour = 0;
+        let minute = 0;
+        result.push(Format.toTimes(hour, minute));
+        while (hour < day) {
+            minute += intervalMinutes;
+            if (minute < 60) {
+                result.push(Format.toTimes(hour, minute));
+                continue;
+            }
+            minute -= 60;
+            hour += 1;
+            result.push(Format.toTimes(hour, minute));
         }
         return result;
     },
+}
+
+const Format = {
+    toTimes(hour, minute) {
+        if (typeof hour == "number") {
+            hour = String(hour);
+        }
+        if (typeof minute == "number") {
+            minute = String(minute);
+        }
+        return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+    }    
 }
