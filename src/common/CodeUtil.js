@@ -1,4 +1,16 @@
 export default {
+    WEEKS : {
+        "1" : "월",
+        "2" : "화",
+        "3" : "수",
+        "4" : "목",
+        "5" : "금",
+        "6" : "토",
+        "7" : "일",
+    },
+    getDayOfTheWeekByCode(code) {
+        return this.WEEKS[code];
+    },
     getDaysOfTheWeek() {
         return [
             {text : "월", value: "1"},
