@@ -45,15 +45,12 @@ export default {
                     return Promise.reject(error);
                 }
 
-                // 예외페이지 세팅
+                // 예외에 따라 메세지 알림창 호출
+                const errorMessage = error.response.data.message;
+                alert(errorMessage);
+
                 const statusCode = error.response.status;
-                router.push(getErrorPagePath(statusCode));
-                
-                // 예외코드에 따라 알림창 호출
-                if (statusCode == ERROR_CODE.UNAUTHORIZED) {
-                    alert("권한이 없습니다. 로그인 후에 이용해주시기 바랍니다.");
-                    return Promise.reject(error);
-                }
+                getErrorPage(statusCode);
                 return Promise.reject(error);   
             }
         );
@@ -61,20 +58,32 @@ export default {
     }
 } 
 
-function getErrorPagePath(responseStutsCode) 
+function getErrorPage(responseStutsCode) 
 {
-    // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
-    // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
     let errorPagePath = '/error';
     switch (responseStutsCode) {
         case ERROR_CODE.UNAUTHORIZED : 
-            // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
-            // TODO 테스트 : 쿠키에 담긴 세션ID가 만료되어 오류가 발생했을 경우 자동으로 세션 스토리지 및 로그인상태를 업데이트해줘야 함. 
-            errorPagePath = '/login'; 
             storageUtil.clearSession();     
+            errorPagePath = '/login';
+            router.push(errorPagePath); 
             break;
-        // TODO 에러코드별로 에러페이지 만들기 - router등록
-        // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
-    }
-    return errorPagePath;
+    } 
 }
+
+// function getErrorPagePath(responseStutsCode) 
+// {
+//     // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리 
+//     // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
+//     let errorPagePath = '/error';
+//     switch (responseStutsCode) {
+//         case ERROR_CODE.UNAUTHORIZED : 
+//             // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
+//             // TODO 테스트 : 쿠키에 담긴 세션ID가 만료되어 오류가 발생했을 경우 자동으로 세션 스토리지 및 로그인상태를 업데이트해줘야 함. 
+//             errorPagePath = '/login'; 
+//             storageUtil.clearSession();     
+//             break;
+//         // TODO 에러코드별로 에러페이지 만들기 - router등록
+//         // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
+//     }
+//     return errorPagePath;
+// }
