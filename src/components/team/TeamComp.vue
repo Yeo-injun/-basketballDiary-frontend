@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import authUserApi from '@/api/AuthUserAPI.js';
+
     export default {
         props: {
             pTeam : {},
@@ -55,9 +57,17 @@
             }
         },
         methods: {
-            sendJoinRequest() {
-                console.log(this.team);
-                alert("dd");
+            async sendJoinRequest() {
+                const params = {
+                    teamSeq: this.team.teamSeq,
+                }
+                try {
+                    const res = await authUserApi.sendJoinRequestToTeam(params);
+                    console.log(res);
+                    alert("가입신청이 완료되었습니다.");
+                } catch(e) {
+                    console.log(e);
+                }
             },
         },
     }

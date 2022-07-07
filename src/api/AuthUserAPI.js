@@ -7,6 +7,10 @@ export default {
     /**
      * injun
      */
+    // API020 : 농구팀 가입요청 보내기
+    sendJoinRequestToTeam(params) {
+        return axiosService.post(`/joinRequestTo/${params.teamSeq}`);
+    },
     // API022 : 농구팀 가입요청 목록 조회
     getJoinRequestsTo() {
         return axiosService.get(`/joinRequestsTo`);
