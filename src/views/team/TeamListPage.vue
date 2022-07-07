@@ -80,51 +80,26 @@
         <v-card>
             <v-card-title>팀목록</v-card-title>
             <v-card-subtitle>
-                <v-card
+                <v-container
                 v-for="(item, index) in teamList" 
                 :key="index">
-                    <v-card-title>
-                        {{ item.teamName }}
-                    </v-card-title>
-                    <v-row>
-                        <v-col
-                        cols="4">{{ item.teamImagePath }}</v-col>
-                        <v-col
-                        cols="8">
-                            <v-row>
-                                <v-col>{{ `창단일 : ${item.foundationYmd}` }}</v-col>
-                                <v-col>{{ `인원수 : ${item.totMember}명` }}</v-col>
-                                <v-col>{{ `연고지 : ${item.hometown}` }}</v-col>
-                            </v-row>
-                            <v-card>
-                                <v-card-subtitle>정기운동일정</v-card-subtitle>
-                                <v-card
-                                v-for="(exercise, index) in item.teamRegularExercisesList"
-                                :key="index">
-
-                                    <v-row>
-                                        <v-col>{{ exercise.dayOfTheWeekCode }}</v-col>
-                                        <v-col>{{ `${exercise.startTime} ~ ${exercise.endTime}` }}</v-col>
-                                        <v-col>{{ exercise.exercisePlaceName }}</v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>{{ exercise.exercisePlaceAddress }}</v-col>
-                                    </v-row>
-                                </v-card>
-                            </v-card>
-                        </v-col>
-                    </v-row>
-                </v-card>
+                    <TeamComp
+                    v-bind:pTeam="item"></TeamComp>
+                </v-container>
             </v-card-subtitle>
         </v-card>
     </v-container>
 </template>
 
 <script>
+import TeamComp from '@/components/team/TeamComp.vue';
 import CodeUtil from '@/common/CodeUtil.js';
 import teamApi from '@/api/TeamAPI.js';
 
     export default {
+        components: {
+            TeamComp,
+        },
         data() {
             return {
                 teamName: "",
