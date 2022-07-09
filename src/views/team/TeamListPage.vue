@@ -20,17 +20,17 @@
                                 :items="daysOfTheWeek"
                                 item-text="text"
                                 item-value="value"
-                                @change="validateDay"
+                                @change="setDayOnSearchParam(startDay, $event)"
                                 label="시작요일"
                                 ></v-select>        
                             </v-col>
                             <v-col>
                                 <v-select
-                                v-model="endDay"
+                                value="endDay"
                                 :items="daysOfTheWeek"
                                 item-text="text"
                                 item-value="value"
-                                @change="validateDay"
+                                @change="setDayOnSearchParam(startDay, $event)"
                                 label="끝요일"
                                 ></v-select>
                             </v-col>
@@ -45,7 +45,7 @@
                             </v-col>
                             <v-col>
                                 <v-select
-                                v-model="startTime"
+                                :value="startTime"
                                 :items="times"
                                 @change="validateTime"
                                 label="시작시간"
@@ -93,7 +93,7 @@
 
 <script>
 import TeamComp from '@/components/team/TeamComp.vue';
-import CodeUtil from '@/common/CodeUtil.js';
+import DateUtil from '@/common/DateUtil.js';
 import teamApi from '@/api/TeamAPI.js';
 
     export default {
@@ -107,19 +107,36 @@ import teamApi from '@/api/TeamAPI.js';
                 endDay : "",
                 startTime: "",
                 endTime: "",
-                daysOfTheWeek : CodeUtil.getDaysOfTheWeek(),
-                times: CodeUtil.getExerciseTimes(30),
+                daysOfTheWeek : DateUtil.getDaysOfTheWeek(),
+                times: DateUtil.getExerciseTimes(30),
                 teamList : [],
             }
         },
         methods: {
-            validateDay() {
+            setDayOnSearchParam(oldValue, e) {
+                console.log(e);
+                if (!this.validateDay(oldValue)) {
+                    return;
+                }
+
+                if (this.startDay == "") {
+                    this.startDay = "1";
+                }
+
+                if (this.endDay == "") {
+                    this.endDay = "7";
+                }
+            },
+            validateDay(oldValue) {
                 const startDay = Number(this.startDay);
                 const endDay = Number(this.endDay);
                 if (isFasterStartThanEnd(startDay, endDay)) {
-                    return;
+                    return true;
                 }
+                console.log(oldValue);
+                // TODO 이전 값을 계속 유지시키기  oldValue 활용해서
                 alert("끝요일은 시작요일보다 빠를 수 없습니다.");
+                return false;
             },
             validateTime() {
                 const startTime = Number(this.startTime.replace(":", ""));

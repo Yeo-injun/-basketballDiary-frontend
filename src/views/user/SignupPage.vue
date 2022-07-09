@@ -42,6 +42,7 @@
 <script>
 import userApi from '@/api/UserAPI';
 import CustomDatePicker from '@/components/common/CustomDatePicker.vue';
+import router from '@/router';
 
 // id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 // 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
@@ -119,7 +120,13 @@ import CustomDatePicker from '@/components/common/CustomDatePicker.vue';
                 // TODO 요청이 보내지고 400에러를 반환하는데 백엔드에서는 요청이력이 없음... 확인요망
                 let params = this.userRegInfo;
                 console.log(params);
-                await userApi.createUser(params);
+                try {
+                    await userApi.createUser(params);
+                    alert("회원가입이 완료되었습니다.");
+                    router.push('/login');
+                } catch(e) {
+                    console.log(e);
+                }
             },
 
         },  // methods
