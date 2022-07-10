@@ -20,17 +20,15 @@
                                 :items="daysOfTheWeek"
                                 item-text="text"
                                 item-value="value"
-                                @change="setDayOnSearchParam(startDay, $event)"
                                 label="시작요일"
                                 ></v-select>        
                             </v-col>
                             <v-col>
                                 <v-select
-                                value="endDay"
+                                v-model="endDay"
                                 :items="daysOfTheWeek"
                                 item-text="text"
                                 item-value="value"
-                                @change="setDayOnSearchParam(startDay, $event)"
                                 label="끝요일"
                                 ></v-select>
                             </v-col>
@@ -102,39 +100,49 @@ import teamApi from '@/api/TeamAPI.js';
         },
         data() {
             return {
-                teamName: "",
-                startDay : "",
-                endDay : "",
-                startTime: "",
-                endTime: "",
                 daysOfTheWeek : DateUtil.getDaysOfTheWeek(),
-                times: DateUtil.getExerciseTimes(30),
+                times: DateUtil.getExerciseTimes(),
+                teamName: "",
+                startDay : DateUtil.getDaysOfTheWeek()[0].value,
+                endDay : DateUtil.getDaysOfTheWeek()[6].value,
+                startTime: DateUtil.getExerciseTimes()[0],
+                endTime: DateUtil.getExerciseTimes()[DateUtil.getExerciseTimes().length - 1],
                 teamList : [],
             }
         },
+        watch: {
+            // TODO 유효하지 않은 데이터가 들어올 경우 이전 데이터를 유지는 하지만
+            // 화면에서는 이전 데이터로 보여지지 않음. v-select 태그를 더 연구해야 할듯.
+            startDay: function(newValue, oldValue) {
+                this.setStartDayOnSearchParam(newValue, oldValue);
+                return false;
+            },
+            endDay: function(newValue, oldValue) {
+                this.setEndDayOnSearchParam(newValue, oldValue);
+                return false;
+            }
+        },
         methods: {
-            setDayOnSearchParam(oldValue, e) {
-                console.log(e);
-                if (!this.validateDay(oldValue)) {
+            setStartDayOnSearchParam(newValue, oldValue) {
+                if (!this.validateDay()) {
+                    this.startDay = oldValue;
                     return;
                 }
-
-                if (this.startDay == "") {
-                    this.startDay = "1";
-                }
-
-                if (this.endDay == "") {
-                    this.endDay = "7";
-                }
+                this.startDay = newValue;
             },
-            validateDay(oldValue) {
+            setEndDayOnSearchParam(newValue, oldValue) {
+                if (!this.validateDay()) {
+                    this.endDay = oldValue;
+                    return;
+                }
+                this.endDay = newValue;
+            },
+            validateDay() {
                 const startDay = Number(this.startDay);
                 const endDay = Number(this.endDay);
                 if (isFasterStartThanEnd(startDay, endDay)) {
                     return true;
                 }
-                console.log(oldValue);
-                // TODO 이전 값을 계속 유지시키기  oldValue 활용해서
                 alert("끝요일은 시작요일보다 빠를 수 없습니다.");
                 return false;
             },
@@ -142,9 +150,10 @@ import teamApi from '@/api/TeamAPI.js';
                 const startTime = Number(this.startTime.replace(":", ""));
                 const endTime = Number(this.endTime.replace(":", ""));
                 if (isFasterStartThanEnd(startTime, endTime)) {
-                    return;
+                    return true;
                 }
                 alert("끝시간은 시작시간보다 빠를 수 없습니다.");
+                return false;
             },
             clickSearchButton(e) {
                 console.log(e);
@@ -183,6 +192,7 @@ import teamApi from '@/api/TeamAPI.js';
         if (isFasterStart) {
             return true;
         }
+        return false;
     }
 
 </script>
