@@ -20,7 +20,6 @@
                                 :items="daysOfTheWeek"
                                 item-text="text"
                                 item-value="value"
-                                @change="validateDay"
                                 label="시작요일"
                                 ></v-select>        
                             </v-col>
@@ -30,7 +29,6 @@
                                 :items="daysOfTheWeek"
                                 item-text="text"
                                 item-value="value"
-                                @change="validateDay"
                                 label="끝요일"
                                 ></v-select>
                             </v-col>
@@ -45,7 +43,7 @@
                             </v-col>
                             <v-col>
                                 <v-select
-                                v-model="startTime"
+                                :value="startTime"
                                 :items="times"
                                 @change="validateTime"
                                 label="시작시간"
@@ -93,7 +91,7 @@
 
 <script>
 import TeamComp from '@/components/team/TeamComp.vue';
-import CodeUtil from '@/common/CodeUtil.js';
+import DateUtil from '@/common/DateUtil.js';
 import teamApi from '@/api/TeamAPI.js';
 
     export default {
@@ -102,32 +100,60 @@ import teamApi from '@/api/TeamAPI.js';
         },
         data() {
             return {
+                daysOfTheWeek : DateUtil.getDaysOfTheWeek(),
+                times: DateUtil.getExerciseTimes(),
                 teamName: "",
-                startDay : "",
-                endDay : "",
-                startTime: "",
-                endTime: "",
-                daysOfTheWeek : CodeUtil.getDaysOfTheWeek(),
-                times: CodeUtil.getExerciseTimes(30),
+                startDay : DateUtil.getDaysOfTheWeek()[0].value,
+                endDay : DateUtil.getDaysOfTheWeek()[6].value,
+                startTime: DateUtil.getExerciseTimes()[0],
+                endTime: DateUtil.getExerciseTimes()[DateUtil.getExerciseTimes().length - 1],
                 teamList : [],
             }
         },
+        watch: {
+            // TODO 유효하지 않은 데이터가 들어올 경우 이전 데이터를 유지는 하지만
+            // 화면에서는 이전 데이터로 보여지지 않음. v-select 태그를 더 연구해야 할듯.
+            startDay: function(newValue, oldValue) {
+                this.setStartDayOnSearchParam(newValue, oldValue);
+                return false;
+            },
+            endDay: function(newValue, oldValue) {
+                this.setEndDayOnSearchParam(newValue, oldValue);
+                return false;
+            }
+        },
         methods: {
+            setStartDayOnSearchParam(newValue, oldValue) {
+                if (!this.validateDay()) {
+                    this.startDay = oldValue;
+                    return;
+                }
+                this.startDay = newValue;
+            },
+            setEndDayOnSearchParam(newValue, oldValue) {
+                if (!this.validateDay()) {
+                    this.endDay = oldValue;
+                    return;
+                }
+                this.endDay = newValue;
+            },
             validateDay() {
                 const startDay = Number(this.startDay);
                 const endDay = Number(this.endDay);
                 if (isFasterStartThanEnd(startDay, endDay)) {
-                    return;
+                    return true;
                 }
                 alert("끝요일은 시작요일보다 빠를 수 없습니다.");
+                return false;
             },
             validateTime() {
                 const startTime = Number(this.startTime.replace(":", ""));
                 const endTime = Number(this.endTime.replace(":", ""));
                 if (isFasterStartThanEnd(startTime, endTime)) {
-                    return;
+                    return true;
                 }
                 alert("끝시간은 시작시간보다 빠를 수 없습니다.");
+                return false;
             },
             clickSearchButton(e) {
                 console.log(e);
@@ -166,6 +192,7 @@ import teamApi from '@/api/TeamAPI.js';
         if (isFasterStart) {
             return true;
         }
+        return false;
     }
 
 </script>
