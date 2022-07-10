@@ -1,6 +1,5 @@
 <template>
   <v-container>
-      <h1>소속팀 목록</h1>
       <!-- Error :  Avoid using non-primitive value as key, use string/number value instead. -->
       <!-- 해결법 : https://crispypotato.tistory.com/33 -->
       <v-card class="mt-10">    
@@ -41,7 +40,7 @@
         <v-col>\                                                                                                                                                  
           <span>Ratels는 벌꿀오소리 처럼 상대를 가리지 않고 모든 경기에 열정을 다합니다.20대 초반부터 30대 중반까지로 선수층이 이뤄져 있습니다.</span>
           <!-- <v-btn class="float-right" to="myTeam">상세보기</v-btn> -->
-          <router-link :to="{name: 'MyTeamTab', params:{pTeamSeq: teamInfo.teamSeq}}"><v-btn>상세보기</v-btn></router-link>
+          <router-link :to="{name: 'MyTeamPage', params:{pTeamSeq: teamInfo.teamSeq}}"><v-btn>상세보기</v-btn></router-link>
         </v-col>                
       </v-card>      
   </v-container>

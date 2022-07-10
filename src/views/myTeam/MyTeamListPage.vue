@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <h1>소속팀 목록</h1>
     <MyTeam v-for="(team,index) in teamList" :key="index" v-bind:teamInfo="team"></MyTeam>
   </v-container>
 </template>
@@ -28,7 +29,7 @@ export default {
         list.data.forEach(element => {
           this.teamList.push(element);
         });
-      }catch(error){
+      }catch(error) {
         console.log(error);
       }      
     }

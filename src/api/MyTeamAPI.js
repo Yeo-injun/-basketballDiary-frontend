@@ -9,19 +9,24 @@ export default {
     /**
      * seongju 
      */
+    /* API014 : 소속팀 목록 조회 */
     searchTeams(){
         return axiosService.get();
     },
-    modifyMyTeamsProfile(params){
-        console.log(params);
-        return axiosService.post(`/${params.teamSeq}/profile`,{params});
+    /* API012 소속팀 개인프로필 수정 */
+    modifyMyTeamsProfile(teamSeq,formData){
+        return axiosService.post(`/${teamSeq}/profile`,formData,{
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+        });
     },
     /**
      * changgi 
      */
     /* API011 소속팀 개인프로필 조회 */
     findMyTeamsProfile(teamSeq) {
-        console.log(teamSeq);
+        // console.log(teamSeq);
         return axiosService.get(`/${teamSeq}/profile`);
     },
     /* API001 : 소속팀 운영진 조회 */
@@ -38,12 +43,30 @@ export default {
     },
     /* API017 : 소속팀 정보 수정 */
     modifyMyTeam(teamSeq, teamInfo) {
-        return axiosService.put(`/${teamSeq}/info`, {teamInfo});
+        return axiosService.post(`/${teamSeq}/info`, teamInfo);
     },  
     /**
      * injun 
      */
-    searchInvitedPlayer(params) {
-        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`);
+    /* API005 : 소속팀의 초대한 선수목록 조회 */
+    searchInvitedPlayer(params) { // TODO 왜 2번째 인자를 {}로 감싸야만 하는지 확인 -> 2번째 파라미터 자체가 객체여야 하고, 쿼리스트링으로 사용하기 위해서는 params속성의 값이 쿼리스트링이 됨
+        return axiosService.get(`/${params.teamSeq}/joinRequestsTo`, { params : { state : params.state } });
+    },
+    /* API007 : 소속팀의 선수초대 */
+    inviteTeamMember(params) {
+        return axiosService.post(`/${params.teamSeq}/joinRequestTo/${params.userSeq}`);
+    },
+    /* API008 : 소속팀이 받은 가입요청목록 조회 */
+    searchJoinRequestPlayer(params) {
+        return axiosService.get(`/${params.teamSeq}/joinRequestsFrom`, { params : { state : params.state } });
+    },
+    /* API009 : 소속팀이 사용자의 가입요청 승인 */
+    approveJoinRequest(params) {
+        return axiosService.patch(`/${params.teamSeq}/joinRequestFrom/${params.teamJoinRequestSeq}/approval`);
+    },
+    /* API010 : 소속팀의 가입요청 거절 */
+    rejectJoinRequest(params) {
+        return axiosService.patch(`/${params.teamSeq}/joinRequestFrom/${params.teamJoinRequestSeq}/rejection`);
     },
 }
+
