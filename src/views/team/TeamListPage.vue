@@ -43,8 +43,10 @@
                             </v-col>
                             <v-col>
                                 <v-select
-                                :value="startTime"
+                                v-model="startTime"
                                 :items="times"
+                                item-text="text"
+                                item-value="value"
                                 @change="validateTime"
                                 label="시작시간"
                                 ></v-select>
@@ -53,6 +55,8 @@
                                 <v-select
                                 v-model="endTime"
                                 :items="times"
+                                item-text="text"
+                                item-value="value"
                                 @change="validateTime"
                                 label="끝시간"
                                 ></v-select>
@@ -82,7 +86,11 @@
                 v-for="(item, index) in teamList" 
                 :key="index">
                     <TeamComp
-                    v-bind:pTeam="item"></TeamComp>
+                    v-bind:pTeam="item"/>
+                </v-container>
+                <v-container
+                v-if="teamList.length == 0">
+                    검색 조건에 맞는 팀이 없습니다!
                 </v-container>
             </v-card-subtitle>
         </v-card>
@@ -105,8 +113,8 @@ import teamApi from '@/api/TeamAPI.js';
                 teamName: "",
                 startDay : DateUtil.getDaysOfTheWeek()[0].value,
                 endDay : DateUtil.getDaysOfTheWeek()[6].value,
-                startTime: DateUtil.getExerciseTimes()[0],
-                endTime: DateUtil.getExerciseTimes()[DateUtil.getExerciseTimes().length - 1],
+                startTime: DateUtil.getExerciseTimes()[0].value,
+                endTime: DateUtil.getExerciseTimes()[DateUtil.getExerciseTimes().length - 1].value,
                 teamList : [],
             }
         },
