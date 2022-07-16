@@ -35,6 +35,7 @@
                     </v-card>
                     <v-row justify="end">
                         <v-btn 
+                        v-if="!this.isTeamMember(pTeam.teamSeq)"
                         class="ma-3"
                         @click="sendJoinRequest">팀가입요청</v-btn>
                     </v-row>
@@ -46,6 +47,7 @@
 
 <script>
 import authUserApi from '@/api/AuthUserAPI.js';
+import storageUtil from '@/common/StorageUtil.js';
 
     export default {
         props: {
@@ -69,6 +71,19 @@ import authUserApi from '@/api/AuthUserAPI.js';
                     console.log(e);
                 }
             },
+            isTeamMember(teamSeq) {
+                const userInfo = storageUtil.getAuthUserFromSession();
+                const joinedTeamSeqList = Object.keys(userInfo.userAuth);
+
+                let isTeamMember = false;
+                for (const joinedTeamSeq of joinedTeamSeqList) {
+                        if (teamSeq == joinedTeamSeq) {
+                        isTeamMember = true;
+                        break;
+                    }
+                }
+                return isTeamMember;
+            }
         },
     }
 </script>
