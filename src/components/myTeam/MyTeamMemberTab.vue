@@ -28,7 +28,7 @@
                 <MyMember v-bind:data="member" />
             </div>
             <div class="text-center">
-                <v-pagination v-model="page" :length="totalCount" :total-visible="5" @input="handlePage()" />
+                <v-pagination v-model="pagination.page" :length="pagination.totPagerNo" :total-visible="5" @input="handlePage" />
             </div>
         </v-container>
     </div>
@@ -52,8 +52,11 @@
                 teamInfo: {},
                 dialog: false,
                 teamProfile: false,
-                page: 1,
-                totalCount : 0,
+                pagination : {
+                    page: 1,
+                    teamCount: 0,
+                    totPagerNo: 0,
+                }
             }
         },
         props: {
@@ -96,11 +99,11 @@
             },
             async getListMember() {
                 try {
-                    var response = await myTeamApi.searchMembers(this.pTeamSeq, this.page-1);
+                    var response = await myTeamApi.searchMembers(this.pTeamSeq, this.pagination.page-1);
                     const { data } = response;
                     this.memberList = data;
-                    const totalCnt = this.memberList[0].pagerDTO.totalCount;
-                    this.totalCount = totalCnt / 3 + totalCnt % 3;
+                    this.pagination.teamCount = this.memberList[0].pagerDTO.totalCount;
+                    this.pagination.totPagerNo = this.pagination.teamCount % 3 > 0 ? this.pagination.teamCount / 3 + 1 : this.pagination.teamCount / 3;
                 } catch (e) {
                     console.log(e);
                 }
