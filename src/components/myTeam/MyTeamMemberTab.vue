@@ -28,7 +28,8 @@
                 <MyMember v-bind:data="member" />
             </div>
             <div class="text-center">
-                <v-pagination v-model="pagination.page" :length="pagination.totPagerNo" :total-visible="5" @input="handlePage" />
+                <v-pagination v-model="pagination.page" :length="pagination.totPagerNo"
+                     @input="handlePage" />
             </div>
         </v-container>
     </div>
@@ -55,7 +56,7 @@
                 pagination : {
                     page: 1,
                     teamCount: 0,
-                    totPagerNo: 0,
+                    totPagerNo: 1,
                 }
             }
         },
@@ -99,11 +100,13 @@
             },
             async getListMember() {
                 try {
+                    this.memberList = {};
                     var response = await myTeamApi.searchMembers(this.pTeamSeq, this.pagination.page-1);
                     const { data } = response;
                     this.memberList = data;
                     this.pagination.teamCount = this.memberList[0].pagerDTO.totalCount;
-                    this.pagination.totPagerNo = this.pagination.teamCount % 3 > 0 ? this.pagination.teamCount / 3 + 1 : this.pagination.teamCount / 3;
+                    this.pagination.totPagerNo = Math.ceil(this.pagination.teamCount / 3);
+                    console.log(this.pagination);
                 } catch (e) {
                     console.log(e);
                 }
@@ -116,7 +119,6 @@
                 })
             },
             handlePage() {
-                this.memberList = {};
                 this.getListMember();
             }
         },
