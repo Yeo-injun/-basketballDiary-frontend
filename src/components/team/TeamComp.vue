@@ -73,6 +73,10 @@ import storageUtil from '@/common/StorageUtil.js';
             },
             isTeamMember(teamSeq) {
                 const userInfo = storageUtil.getAuthUserFromSession();
+                if (userInfo == null) {
+                    return false;
+                }
+                
                 const joinedTeamSeqList = Object.keys(userInfo.userAuth);
 
                 let isTeamMember = false;
