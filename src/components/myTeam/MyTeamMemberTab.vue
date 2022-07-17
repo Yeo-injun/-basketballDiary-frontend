@@ -4,16 +4,13 @@
             <div class="d-flex">
                 <v-subheader>개인프로필</v-subheader>
 
-                <v-btn color="black white--text" small @click.stop="teamProfile=true">프로필 수정</v-btn> 
-                <MyTeamProfileModal :value="teamProfile" @input="teamProfile = $event" :teamSeq="pTeamSeq"/>
+                <v-btn color="black white--text" small @click.stop="teamProfile=true">프로필 수정</v-btn>
+                <MyTeamProfileModal :value="teamProfile" @input="teamProfile = $event" :teamSeq="pTeamSeq" />
 
-                <v-btn color="black white--text" small 
-                    @click.stop="dialog=true">
+                <v-btn color="black white--text" small @click.stop="dialog=true">
                     팀정보 수정
                 </v-btn>
-                <MyTeamModal v-model="dialog"
-                    @input="dialog=$event"
-                    :pTeamSeq="pTeamSeq">
+                <MyTeamModal v-model="dialog" @input="dialog=$event" :pTeamSeq="pTeamSeq">
                 </MyTeamModal>
             </div>
             <MyProfile :data="profile" />
@@ -25,16 +22,15 @@
 
             <div class="d-flex">
                 <v-subheader>팀원 목록</v-subheader>
-                <v-btn 
-                @click="clickAddTeamMember"
-                class="ml-auto" 
-                color="black white--text" 
-                small>팀원 추가</v-btn>
+                <v-btn @click="clickAddTeamMember" class="ml-auto" color="black white--text" small>팀원 추가</v-btn>
             </div>
             <div v-for="(member, index) in memberList" v-bind:key="'A'+index">
                 <MyMember v-bind:data="member" />
             </div>
-
+            <div class="text-center">
+                <v-pagination v-model="pagination.page" :length="pagination.totPagerNo"
+                     @input="handlePage" />
+            </div>
         </v-container>
     </div>
 </template>
@@ -56,7 +52,12 @@
                 memberList: [],
                 teamInfo: {},
                 dialog: false,
-                teamProfile: false
+                teamProfile: false,
+                pagination : {
+                    page: 1,
+                    teamCount: 0,
+                    totPagerNo: 1,
+                }
             }
         },
         props: {
@@ -74,6 +75,11 @@
             MyTeamProfileModal
         },
         methods: {
+            onLoad() {
+                this.getProflie();
+                this.getListManager();
+                this.getListMember();
+            },
             async getProflie() {
                 try {
                     var response = await myTeamApi.findMyTeamsProfile(this.pTeamSeq);
@@ -94,28 +100,16 @@
             },
             async getListMember() {
                 try {
-                    var response = await myTeamApi.searchMembers(this.pTeamSeq);
-                    const {data} = response;
-                    this.memberList = data;
-                } catch(e) {
-                    console.log(e);
-                }
-            },
-            async getTeamInfo() {
-                try {
-                    console.log(this.pTeamSeq);
-                    var response = await myTeamApi.searchTeam(this.pTeamSeq);
+                    this.memberList = {};
+                    var response = await myTeamApi.searchMembers(this.pTeamSeq, this.pagination.page-1);
                     const { data } = response;
-                    this.teamInfo = data;
+                    this.memberList = data;
+                    this.pagination.teamCount = this.memberList[0].pagerDTO.totalCount;
+                    this.pagination.totPagerNo = Math.ceil(this.pagination.teamCount / 3);
+                    console.log(this.pagination);
                 } catch (e) {
                     console.log(e);
                 }
-            },
-            onLoad () {
-                this.getProflie();
-                this.getListManager();
-                this.getListMember();
-                // this.getTeamInfo();
             },
             clickAddTeamMember() {
                 const teamSeq = this.pTeamSeq
@@ -123,11 +117,14 @@
                     name : "MemberManagePage",
                     params : { pTeamSeq : teamSeq },
                 })
+            },
+            handlePage() {
+                this.getListMember();
             }
         },
-        mounted () {
+        mounted () { 
             this.onLoad();
-        }
+        }, 
     }
 </script>
 

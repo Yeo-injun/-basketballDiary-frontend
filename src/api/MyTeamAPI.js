@@ -26,16 +26,23 @@ export default {
      */
     /* API011 소속팀 개인프로필 조회 */
     findMyTeamsProfile(teamSeq) {
-        // console.log(teamSeq);
+        console.log(`findMyTeamsProfile call : /${teamSeq}/profile`);
         return axiosService.get(`/${teamSeq}/profile`);
     },
     /* API001 : 소속팀 운영진 조회 */
     searchManagers(teamSeq) {
+        console.log(`searchManagers call : /${teamSeq}/managers`);
         return axiosService.get(`/${teamSeq}/managers`);
     },
     /* API002 : 소속팀 팀원목록 조회 */
-    searchMembers(teamSeq) {
-        return axiosService.get(`/${teamSeq}/members`);
+    searchMembers(teamSeq, pageNo) {
+        console.log(`searchMembers call : /${teamSeq}/members/pageNo=${pageNo}`);
+        return axiosService.get(`/${teamSeq}/members`, 
+        {
+            params : { 
+                pageNo : pageNo 
+            }
+        });
     },    
     /* API016 : 소속팀 정보 단건 조회 */
     searchTeam(teamSeq) {
