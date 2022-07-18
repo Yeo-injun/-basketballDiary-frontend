@@ -31,46 +31,56 @@ export default {
         
         let hour = 0;
         let minute = 0;
-        result.push(OptionFactory.time(hour, minute));
+        result.push(this.OptionFactory.time(hour, minute));
         while (hour < day) {
             minute += intervalMinutes;
             if (minute < 60) {
-                result.push(OptionFactory.time(hour, minute));
+                result.push(this.OptionFactory.time(hour, minute));
                 continue;
             }
             minute -= 60;
             hour += 1;
-            result.push(OptionFactory.time(hour, minute));
+            result.push(this.OptionFactory.time(hour, minute));
         }
         return result;
     },
+    Format : {
+        toTimes(hour, minute) {
+            if (typeof hour == "number") {
+                hour = String(hour);
+            }
+            if (typeof minute == "number") {
+                minute = String(minute);
+            }
+            return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+        },
+        toHHmm(hour, minute) {
+            if (typeof hour == "number") {
+                hour = String(hour);
+            }
+            if (typeof minute == "number") {
+                minute = String(minute);
+            }
+            return `${hour.padStart(2, "0")}${minute.padStart(2, "0")}`;
+        },
+        toYmd(strYmd) {
+            if (strYmd.length != 8) {
+                throw new Error("날짜의 길이가 맞지 않습니다.");
+            }
+            const year = strYmd.substr(0,4);
+            const month = strYmd.substr(4,2);
+            const day = strYmd.substr(6,2);
+            const seperator = '-';
+            return year + seperator + month + seperator + day;
+        }    
+    },
+    OptionFactory : {
+        time(hour, minute) {
+            let result = {};
+            result.text = this.Format.toTimes(hour, minute);
+            result.value = this.Format.toHHmm(hour, minute);
+            return result;
+        },
+    }
 }
 
-const OptionFactory = {
-    time(hour, minute) {
-        let result = {};
-        result.text = Format.toTimes(hour, minute);
-        result.value = Format.toHHmm(hour, minute);
-        return result;
-    },
-}
-const Format = {
-    toTimes(hour, minute) {
-        if (typeof hour == "number") {
-            hour = String(hour);
-        }
-        if (typeof minute == "number") {
-            minute = String(minute);
-        }
-        return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
-    },
-    toHHmm(hour, minute) {
-        if (typeof hour == "number") {
-            hour = String(hour);
-        }
-        if (typeof minute == "number") {
-            minute = String(minute);
-        }
-        return `${hour.padStart(2, "0")}${minute.padStart(2, "0")}`;
-    }    
-}
