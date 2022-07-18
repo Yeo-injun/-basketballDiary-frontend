@@ -14,7 +14,8 @@
 
             <CustomDatePicker 
             v-on:pickup-date="setBirthYmd"
-            v-bind:p-label-name="pPickerLabelName"/>
+            v-bind:p-label-name="pPickerLabelName"
+            v-bind:p-init-value="pInitValue"/>
 
             <v-radio-group v-model="userRegInfo.gender" row :rules="requiredRules" required>
                 <v-radio label="남성" value="01"/>
@@ -53,6 +54,7 @@ import router from '@/router';
         data: ()=>{
             return {
                 pPickerLabelName: '생년월일',
+                pInitValue: '',
                 requiredRules: [v => !!v || '필수 입력값입니다.'],
                 isModalOpen: '',
                 isNotDuplicateUserId: false,
