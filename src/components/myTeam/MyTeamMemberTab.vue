@@ -4,14 +4,23 @@
             <div class="d-flex">
                 <v-subheader>개인프로필</v-subheader>
 
-                <v-btn color="black white--text" small @click.stop="teamProfile=true">프로필 수정</v-btn>
-                <MyTeamProfileModal :value="teamProfile" @input="teamProfile = $event" :teamSeq="pTeamSeq" />
+                <v-btn color="black white--text" small 
+                @click.stop="teamProfile=true">
+                    프로필 수정
+                </v-btn>
+                <MyTeamProfileModal
+                :teamSeq="pTeamSeq" 
+                :value="teamProfile" 
+                @input="teamProfile = $event"/>
 
-                <v-btn color="black white--text" small @click.stop="dialog=true">
+                <v-btn color="black white--text" small 
+                @click.stop="dialog=true">
                     팀정보 수정
                 </v-btn>
-                <MyTeamModal v-model="dialog" @input="dialog=$event" :pTeamSeq="pTeamSeq">
-                </MyTeamModal>
+                <MyTeamInfoModal 
+                v-model="dialog" 
+                @input="dialog=$event" 
+                :pTeamSeq="pTeamSeq"/>
             </div>
             <MyProfile :data="profile" />
 
@@ -36,12 +45,13 @@
 </template>
 
 <script>
-    import myTeamApi from '@/api/MyTeamAPI';
-    import MyProfile from '@/components/myTeam/MyProfile.vue';
-    import MyManager from '@/components/myTeam/MyManager.vue';
-    import MyMember from '@/components/myTeam/MyMember.vue';
-    import MyTeamModal from '@/views/myTeam/modal/MyTeamModal.vue';    
-    import MyTeamProfileModal from '@/views/myTeam/modal/MyTeamProfileModal.vue';
+import myTeamApi from '@/api/MyTeamAPI';
+import MyProfile from '@/components/myTeam/MyProfile.vue';
+import MyManager from '@/components/myTeam/MyManager.vue';
+import MyMember from '@/components/myTeam/MyMember.vue';
+import MyTeamInfoModal from '@/components/myTeam/modal/MyTeamInfoModal.vue'; 
+// TODO 컴포넌트 폴더로 옮기기
+import MyTeamProfileModal from '@/views/myTeam/modal/MyTeamProfileModal.vue';
     
     export default {
         //data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
@@ -71,7 +81,7 @@
             MyManager,
             MyMember,
             // eslint-disable-next-line
-            MyTeamModal,
+            MyTeamInfoModal,
             MyTeamProfileModal
         },
         methods: {
