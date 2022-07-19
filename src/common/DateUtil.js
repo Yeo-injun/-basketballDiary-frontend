@@ -1,86 +1,120 @@
+const MON = "1";
+const TUE = "2";
+const WED = "3";
+const THU = "4";
+const FRI = "5";
+const SAT = "6";
+const SUN = "7";
+
+const WEEK = function() {
+    let week = {};
+    week[MON] = "월";
+    week[TUE] = "화";
+    week[WED] = "수";
+    week[THU] = "목";
+    week[FRI] = "금";
+    week[SAT] = "토";
+    week[SUN] = "일";
+    return week
+}
+ 
 export default {
-    WEEKS : {
-        "1" : "월",
-        "2" : "화",
-        "3" : "수",
-        "4" : "목",
-        "5" : "금",
-        "6" : "토",
-        "7" : "일",
-    },
-    getDayOfTheWeekByCode(code) {
-        return this.WEEKS[code];
-    },
-    getDaysOfTheWeek() {
-        return [
-            {text : "월", value: "1"},
-            {text : "화", value: "2"},
-            {text : "수", value: "3"},
-            {text : "목", value: "4"},
-            {text : "금", value: "5"},
-            {text : "토", value: "6"},
-            {text : "일", value: "7"},
-        ];  
-    },
-    getExerciseTimes(intervalMinutes) {
-        if (typeof intervalMinutes == "undefined") {
-            intervalMinutes = 30;
-        }
-        const result = [];
-        const day = 24;
-        
-        let hour = 0;
-        let minute = 0;
-        result.push(this.OptionFactory.time(hour, minute));
-        while (hour < day) {
-            minute += intervalMinutes;
-            if (minute < 60) {
-                result.push(this.OptionFactory.time(hour, minute));
-                continue;
-            }
-            minute -= 60;
-            hour += 1;
-            result.push(this.OptionFactory.time(hour, minute));
-        }
-        return result;
-    },
-    Format : {
-        toTimes(hour, minute) {
-            if (typeof hour == "number") {
-                hour = String(hour);
-            }
-            if (typeof minute == "number") {
-                minute = String(minute);
-            }
-            return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+    TheWeek : {
+        getDayNameByCode(code) {
+            return WEEK()[code];
         },
-        toHHmm(hour, minute) {
-            if (typeof hour == "number") {
-                hour = String(hour);
-            }
-            if (typeof minute == "number") {
-                minute = String(minute);
-            }
-            return `${hour.padStart(2, "0")}${minute.padStart(2, "0")}`;
+        getDayOptions() {
+            const weekMap = WEEK();
+            const dayCodeList = Object.keys(weekMap);
+            let dayOptions = [];
+            dayCodeList.forEach(function(code) {
+                const dayOption = {
+                    value : code,
+                    text : weekMap[code],
+                }
+                dayOptions.push(dayOption);
+            });
+            return dayOptions;
         },
-        toYmd(strYmd) {
-            if (strYmd.length != 8) {
-                throw new Error("날짜의 길이가 맞지 않습니다.");
-            }
-            const year = strYmd.substr(0,4);
-            const month = strYmd.substr(4,2);
-            const day = strYmd.substr(6,2);
-            const seperator = '-';
-            return year + seperator + month + seperator + day;
-        }    
+        getMondayCode() {
+            return MON;
+        },
+        getSundayCode() {
+            return SUN;
+        },
     },
-    OptionFactory : {
-        time(hour, minute) {
-            let result = {};
-            result.text = this.Format.toTimes(hour, minute);
-            result.value = this.Format.toHHmm(hour, minute);
+    Times : {
+        getOptions(intervalMinutes) {
+            if (typeof intervalMinutes == "undefined") {
+                intervalMinutes = 30;
+            }
+            const result = [];
+            const theTimeOfTheDay = 24;
+            
+            let hour = 0;
+            let minute = 0;
+            result.push(this.genOptionFormat(hour, minute));
+            while (hour < theTimeOfTheDay) {
+                minute += intervalMinutes;
+                if (minute < 60) {
+                    result.push(this.genOptionFormat(hour, minute));
+                    continue;
+                }
+                minute -= 60;
+                hour += 1;
+                result.push(this.genOptionFormat(hour, minute));
+            }
             return result;
         },
-    }
-}
+        genOptionFormat(hour, minute) {
+            let result = {};
+            result.text = Formatter.toTimes(hour, minute);
+            result.value = Formatter.toHHmm(hour, minute);
+            return result;
+        },
+        getFirstOptionValue() {
+            return this.getOptions()[0].value;
+        },
+        getLastOptionValue() {
+            const options = this.getOptions();
+            const lastIndex = options.length - 1;
+            return options[lastIndex].value;
+        }
+    },
+    Format : {
+        toYmd(strYmd) {
+            return Formatter.toYmd(strYmd);
+        }    
+    },
+}   //export
 
+const Formatter = {
+    toTimes(hour, minute) {
+        if (typeof hour == "number") {
+            hour = String(hour);
+        }
+        if (typeof minute == "number") {
+            minute = String(minute);
+        }
+        return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+    },
+    toHHmm(hour, minute) {
+        if (typeof hour == "number") {
+            hour = String(hour);
+        }
+        if (typeof minute == "number") {
+            minute = String(minute);
+        }
+        return `${hour.padStart(2, "0")}${minute.padStart(2, "0")}`;
+    },
+    toYmd(strYmd) {
+        if (strYmd.length != 8) {
+            throw new Error("날짜의 길이가 맞지 않습니다.");
+        }
+        const year = strYmd.substr(0,4);
+        const month = strYmd.substr(4,2);
+        const day = strYmd.substr(6,2);
+        const seperator = '-';
+        return year + seperator + month + seperator + day;
+    }    
+}

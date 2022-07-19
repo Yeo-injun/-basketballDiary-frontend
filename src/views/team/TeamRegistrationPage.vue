@@ -1,12 +1,7 @@
 <template>
     <v-container>
-        <v-btn
-        @click="registerTeam()"
-        >
-        팀 등록
-        </v-btn>
         <v-card>
-            <v-card-title>농구팀 검색</v-card-title>
+            <v-card-title>농구팀 검색(수정필요)</v-card-title>
             <v-card-subtitle>
                 <v-text-field 
                 label="팀명" 
@@ -187,9 +182,6 @@ export default {
             } catch(e) {
                 console.log(e);
             }
-        },
-        registerTeam() {
-            this.$router.push('/team/registration');
         }
     },
     mounted (){
