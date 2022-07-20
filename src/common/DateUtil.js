@@ -72,19 +72,33 @@ export default {
             result.value = Formatter.toHHmm(hour, minute);
             return result;
         },
-        getFirstOptionValue() {
-            return this.getOptions()[0].value;
+        getFirstOptionValue(intervalMinutes) {
+            return this.getOptions(intervalMinutes)[0].value;
         },
-        getLastOptionValue() {
-            const options = this.getOptions();
+        getLastOptionValue(intervalMinutes) {
+            const options = this.getOptions(intervalMinutes);
             const lastIndex = options.length - 1;
             return options[lastIndex].value;
         }
     },
     Format : {
+        /* @return yyyy-mm-dd */
         toYmd(strYmd) {
             return Formatter.toYmd(strYmd);
-        }    
+        },
+        toString(ymd) {
+            return Formatter.toString(ymd);
+        },
+        /* @return hh:mm */
+        toTime(time) {
+            if (typeof time == "number") {
+                time = String(time);
+            }
+            const hour = time.substr(0,2);
+            const minute = time.substr(2, 2);
+            return Formatter.toTimes(hour, minute);
+        },
+          
     },
 }   //export
 
@@ -116,5 +130,13 @@ const Formatter = {
         const day = strYmd.substr(6,2);
         const seperator = '-';
         return year + seperator + month + seperator + day;
+    },
+    toString(ymd) {
+        if (typeof ymd != "string") {
+            ymd = String(ymd);
+        }
+        const regExp = /[0-9]/g;
+        const strYmd = ymd.match(regExp).join('');
+        return strYmd;
     }    
 }

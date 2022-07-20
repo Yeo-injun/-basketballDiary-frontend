@@ -13,9 +13,9 @@
             <v-text-field label="이메일" v-model="userRegInfo.email" :rules="requiredRules" required></v-text-field>
 
             <CustomDatePicker 
-            v-on:pickup-date="setBirthYmd"
-            v-bind:p-label-name="pPickerLabelName"
-            v-bind:p-init-value="pInitValue"/>
+            @pickup-date="setBirthYmd"
+            :p-label-name="pPickerLabelName"
+            :p-init-value="pInitValue"/>
 
             <v-radio-group v-model="userRegInfo.gender" row :rules="requiredRules" required>
                 <v-radio label="남성" value="01"/>
