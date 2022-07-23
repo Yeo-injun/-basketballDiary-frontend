@@ -99,6 +99,12 @@
                 </v-container>
             </v-card-subtitle>
         </v-card>
+        <div class="text-center">
+            <v-pagination 
+            v-model="pagination.pageNo" 
+            :length="pagination.totalPageCount"
+            @input="handlePage" />
+        </div>
     </v-container>
 </template>
 
@@ -121,6 +127,11 @@ export default {
             startTime: DateUtil.Times.getFirstOptionValue(),
             endTime: DateUtil.Times.getLastOptionValue(),
             teamList : [],
+            pagination : {
+                pageNo: 1,
+                totalPageCount: 1,
+                totalCount: 0,
+            },
         }
     },
     watch: {
@@ -183,13 +194,18 @@ export default {
         async getTeamList(params) {
             try {
                 const res = await teamApi.searchTeamList(params);
-                this.teamList = res.data;
+                this.teamList = res.data.teamDTOList;
+                this.pagination = res.data.pagerDTO;
+                console.log(this.pagination);
             } catch(e) {
                 console.log(e);
             }
         },
         registerTeam() {
             this.$router.push('/team/registration');
+        },
+        handlePage() {
+            this.getTeamList();
         }
     },
     mounted (){

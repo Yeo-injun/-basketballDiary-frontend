@@ -37,8 +37,10 @@
                 <MyMember v-bind:data="member" />
             </div>
             <div class="text-center">
-                <v-pagination v-model="pagination.page" :length="pagination.totPagerNo"
-                     @input="handlePage" />
+                <v-pagination 
+                v-model="pagination.page" 
+                :length="pagination.totPagerNo"
+                @input="handlePage" />
             </div>
         </v-container>
     </div>

@@ -2,25 +2,26 @@
     <v-container>
         <v-card>
             <v-card-title>
-                {{ pTeam.teamName }}
+                {{ team.teamName }}
+
             </v-card-title>
             <v-row>
                 <v-col
                 cols="4">
-                    {{ pTeam.teamImagePath }}
+                    {{ team.teamImagePath }}
                 </v-col>
                 <v-col
                 cols="8">
                     <v-row>
-                        <v-col>{{ `창단일 : ${pTeam.foundationYmd}` }}</v-col>
-                        <v-col>{{ `인원수 : ${pTeam.totMember}명` }}</v-col>
-                        <v-col>{{ `연고지 : ${pTeam.hometown}` }}</v-col>
+                        <v-col>{{ `창단일 : ${team.foundationYmd}` }}</v-col>
+                        <v-col>{{ `인원수 : ${team.totMember}명` }}</v-col>
+                        <v-col>{{ `연고지 : ${team.hometown}` }}</v-col>
                     </v-row>
                     <v-card>
                         <!-- <v-card-subtitle></v-card-subtitle> -->
                         정기운동일정
                         <v-card
-                        v-for="(exercise, index) in pTeam.teamRegularExercisesList"
+                        v-for="(exercise, index) in team.teamRegularExerciseList"
                         :key="index">
 
                             <v-row no-gutters>
@@ -35,7 +36,7 @@
                     </v-card>
                     <v-row justify="end">
                         <v-btn 
-                        v-if="!this.isTeamMember(pTeam.teamSeq)"
+                        v-if="!this.isTeamMember(team.teamSeq)"
                         class="ma-3"
                         @click="sendJoinRequest">팀가입요청</v-btn>
                     </v-row>
