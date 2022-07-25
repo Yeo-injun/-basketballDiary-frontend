@@ -59,6 +59,12 @@ import storageUtil from '@/common/StorageUtil.js';
                 team : this.$props.pTeam,
             }
         },
+        // 상위 컴포넌트에서 받은 props가 변경되는 것을 감지하기 위함.
+        watch : {
+            pTeam: function(newValue) {
+                this.team = newValue;
+            },
+        },
         methods: {
             async sendJoinRequest() {
                 const params = {

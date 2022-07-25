@@ -1,8 +1,7 @@
 <template>
     <v-container>
         <v-btn
-        @click="registerTeam()"
-        >
+        @click="moveRegisterTeamPage()">
         팀 등록
         </v-btn>
         <v-card>
@@ -75,7 +74,7 @@
                     <v-btn
                     class="mb-2 mr-2"
                     width="100"
-                    @click="clickSearchButton">
+                    @click="searchTeams">
                     검색
                     </v-btn>
 
@@ -103,7 +102,7 @@
             <v-pagination 
             v-model="pagination.pageNo" 
             :length="pagination.totalPageCount"
-            @input="handlePage" />
+            @input="searchTeams"/>
         </div>
     </v-container>
 </template>
@@ -122,10 +121,10 @@ export default {
             daysOfTheWeek : DateUtil.TheWeek.getDayOptions(),
             times: DateUtil.Times.getOptions(),
             teamName: "",
-            startDay : "1", //DateUtil.TheWeek.getMondayCode(),
-            endDay : DateUtil.TheWeek.getSundayCode(),
-            startTime: DateUtil.Times.getFirstOptionValue(),
-            endTime: DateUtil.Times.getLastOptionValue(),
+            startDay :  "",// DateUtil.TheWeek.getMondayCode(),
+            endDay : "",// DateUtil.TheWeek.getSundayCode(),
+            startTime: "",//DateUtil.Times.getFirstOptionValue(),
+            endTime: "",//DateUtil.Times.getLastOptionValue(),
             teamList : [],
             pagination : {
                 pageNo: 1,
@@ -179,16 +178,8 @@ export default {
             alert("끝시간은 시작시간보다 빠를 수 없습니다.");
             return false;
         },
-        clickSearchButton(e) {
-            console.log(e);
-            const params = {
-                "team-name" : this.teamName,
-                "start-day" : this.startDay,
-                "end-day" : this.endDay,
-                "start-time" : this.startTime,
-                "end-time" : this.endTime,
-                // "sigungu" : this.sigungu,
-            }
+        searchTeams() {
+            const params = getSearchParams(this);
             this.getTeamList(params);
         },
         async getTeamList(params) {
@@ -201,12 +192,9 @@ export default {
                 console.log(e);
             }
         },
-        registerTeam() {
+        moveRegisterTeamPage() {
             this.$router.push('/team/registration');
         },
-        handlePage() {
-            this.getTeamList();
-        }
     },
     mounted (){
         this.getTeamList();
@@ -227,6 +215,18 @@ function isFasterStartThanEnd(start, end) {
     return false;
 }
 
+function getSearchParams(vueData) 
+{
+    return {
+        "team-name" : vueData.teamName,
+        "start-day" : vueData.startDay,
+        "end-day" : vueData.endDay,
+        "start-time" : vueData.startTime,
+        "end-time" : vueData.endTime,
+        // "sigungu" : vueData.sigungu,
+        "page-no" : vueData.pagination.pageNo,
+    }
+}
 </script>
 
 <style lang="scss" scoped>
