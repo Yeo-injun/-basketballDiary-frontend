@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router from "@/router"
 import storageUtil from './StorageUtil';
+import { loading } from './GlobalStateStore';
 
 // 인터셉터 참고자료 : https://yamoo9.github.io/axios/guide/interceptors.html
 // https://velog.io/@skyepodium/axios-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0%EB%A1%9C-API-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0
@@ -29,12 +30,22 @@ export default {
             withCredentials: true,
             headers:{
                 "Content-Type": "application/json",
-            }
+            },
         });
         // 인터셉터 등록
+        axiosInstance.interceptors.request.use(
+            function(config) {
+                loading.start();
+                return config;
+            }, 
+        ),
         axiosInstance.interceptors.response.use(
-            null, 
+            function(response) {
+                loading.end();
+                return response;
+            }, 
             function(error) {
+                loading.end();
                 /** Promise.reject() return의 효과
                  *  에러를 API를 호출한 Axios에게 넘겨줌 - API를 호출한 곳에서 try ~ catch문으로 예외처리
                  **/ 
