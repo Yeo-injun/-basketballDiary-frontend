@@ -1,8 +1,8 @@
 <template>
     <v-app-bar color="green" dark app>
       <v-progress-linear
-      :active="loading"
-      :indeterminate="loading"
+      :active="isLoading"
+      :indeterminate="isLoading"
       top
       absolute
       color="teal darken-4"
@@ -27,13 +27,17 @@
 
 <script>
 import userApi from '../api/UserAPI.js';
-import { loading } from '@/common/GlobalStateStore.js';
+import { store } from '@/common/GlobalStateManager';
 
     export default {
         data() {
           return {
-            loading : loading.isLoading, //  this.$props.pIsLoading,
           }
+        },
+        computed : {
+            isLoading() {
+              return store.isLoading;
+            },
         },
         /**상위컴포넌트에서 데이터 받기 : props 사용하기
          * props선언시 <template>영역에서는 kebab-case로 작성해야함.
@@ -41,7 +45,6 @@ import { loading } from '@/common/GlobalStateStore.js';
          */
         props: {
           pIsLogin: Boolean,
-          pIsLoading : Boolean,
         },
         methods: {
           async doLogout() {
@@ -57,10 +60,6 @@ import { loading } from '@/common/GlobalStateStore.js';
             }
           }
         },
-        mounted() {
-          setTimeout(()=>{ this.loading = false}, 3000);
-        },
-
     }
 </script>
 
