@@ -3,8 +3,8 @@
 <!-- v-app태그가 vuetify의 기본 골격됨. 도화지 역할 -->
   <v-app>
     <AppNavbar 
-      v-bind:is-login="isLogin"
-      v-on:logout-success="deleteAuthUserInfo"
+      :is-login="isLogin"
+      @logout-success="deleteAuthUserInfo"
     /> <!-- 라우팅을 이용해서 v-main 컴포넌트 하위의 내용 바꿔치기 하기 -->
     <v-main>
       <!-- v-main 하위의 컴포넌트는 라우팅에 따라서 다른 컴포넌트 보여주기 : Tap 영역 컴포넌트 추가 -->
@@ -12,8 +12,8 @@
       <!-- v-on 속성을 이용해서 login-success이라는 이름의 이벤트 리스너를 설정해줌.-->
       <!-- 하위 컴포넌트에서 login-success라는 이벤트가 발생하면 setAuthUserInfo함수가 호출됨 -->
       <router-view
-        v-bind:is-login="isLogin"
-        v-on:login-success="setUserInfoOnStorage"
+        :is-login="isLogin"
+        @login-success="setUserInfoOnStorage"
       />
     </v-main>
   </v-app>
