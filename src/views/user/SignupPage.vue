@@ -13,8 +13,9 @@
             <v-text-field label="이메일" v-model="userRegInfo.email" :rules="requiredRules" required></v-text-field>
 
             <CustomDatePicker 
-            v-on:pickup-date="setBirthYmd"
-            v-bind:p-label-name="pPickerLabelName"/>
+            @pickup-date="setBirthYmd"
+            :p-label-name="pPickerLabelName"
+            :p-init-value="pInitValue"/>
 
             <v-radio-group v-model="userRegInfo.gender" row :rules="requiredRules" required>
                 <v-radio label="남성" value="01"/>
@@ -42,6 +43,7 @@
 <script>
 import userApi from '@/api/UserAPI';
 import CustomDatePicker from '@/components/common/CustomDatePicker.vue';
+import router from '@/router';
 
 // id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 // 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
@@ -52,6 +54,7 @@ import CustomDatePicker from '@/components/common/CustomDatePicker.vue';
         data: ()=>{
             return {
                 pPickerLabelName: '생년월일',
+                pInitValue: '',
                 requiredRules: [v => !!v || '필수 입력값입니다.'],
                 isModalOpen: '',
                 isNotDuplicateUserId: false,
@@ -119,7 +122,13 @@ import CustomDatePicker from '@/components/common/CustomDatePicker.vue';
                 // TODO 요청이 보내지고 400에러를 반환하는데 백엔드에서는 요청이력이 없음... 확인요망
                 let params = this.userRegInfo;
                 console.log(params);
-                await userApi.createUser(params);
+                try {
+                    await userApi.createUser(params);
+                    alert("회원가입이 완료되었습니다.");
+                    router.push('/login');
+                } catch(e) {
+                    console.log(e);
+                }
             },
 
         },  // methods

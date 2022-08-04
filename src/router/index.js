@@ -41,10 +41,10 @@ export default new VueRouter({
         createRoute('views/myTeam/MemberManagePage', '/myTeam/memberManage', 'MemberManagePage'),
         
         /**
-         * myTeam페이지
+         * team페이지
          */
-         createRoute('views/team/TeamListPage', '/teams'),
-
+        createRoute('views/team/TeamListPage', '/teams'),
+        createRoute('views/team/TeamRegistrationPage', '/team/registration'),
          
          /**
          * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)

@@ -2,25 +2,26 @@
     <v-container>
         <v-card>
             <v-card-title>
-                {{ pTeam.teamName }}
+                {{ team.teamName }}
+
             </v-card-title>
             <v-row>
                 <v-col
                 cols="4">
-                    {{ pTeam.teamImagePath }}
+                    {{ team.teamImagePath }}
                 </v-col>
                 <v-col
                 cols="8">
                     <v-row>
-                        <v-col>{{ `창단일 : ${pTeam.foundationYmd}` }}</v-col>
-                        <v-col>{{ `인원수 : ${pTeam.totMember}명` }}</v-col>
-                        <v-col>{{ `연고지 : ${pTeam.hometown}` }}</v-col>
+                        <v-col>{{ `창단일 : ${team.foundationYmd}` }}</v-col>
+                        <v-col>{{ `인원수 : ${team.totMember}명` }}</v-col>
+                        <v-col>{{ `연고지 : ${team.hometown}` }}</v-col>
                     </v-row>
                     <v-card>
                         <!-- <v-card-subtitle></v-card-subtitle> -->
                         정기운동일정
                         <v-card
-                        v-for="(exercise, index) in pTeam.teamRegularExercisesList"
+                        v-for="(exercise, index) in team.teamRegularExerciseList"
                         :key="index">
 
                             <v-row no-gutters>
@@ -35,6 +36,7 @@
                     </v-card>
                     <v-row justify="end">
                         <v-btn 
+                        v-if="!this.isTeamMember(team.teamSeq)"
                         class="ma-3"
                         @click="sendJoinRequest">팀가입요청</v-btn>
                     </v-row>
@@ -46,6 +48,7 @@
 
 <script>
 import authUserApi from '@/api/AuthUserAPI.js';
+import storageUtil from '@/common/StorageUtil.js';
 
     export default {
         props: {
@@ -55,6 +58,12 @@ import authUserApi from '@/api/AuthUserAPI.js';
             return {
                 team : this.$props.pTeam,
             }
+        },
+        // 상위 컴포넌트에서 받은 props가 변경되는 것을 감지하기 위함.
+        watch : {
+            pTeam: function(newValue) {
+                this.team = newValue;
+            },
         },
         methods: {
             async sendJoinRequest() {
@@ -69,6 +78,23 @@ import authUserApi from '@/api/AuthUserAPI.js';
                     console.log(e);
                 }
             },
+            isTeamMember(teamSeq) {
+                const userInfo = storageUtil.getAuthUserFromSession();
+                if (userInfo == null) {
+                    return false;
+                }
+                
+                const joinedTeamSeqList = Object.keys(userInfo.userAuth);
+
+                let isTeamMember = false;
+                for (const joinedTeamSeq of joinedTeamSeqList) {
+                        if (teamSeq == joinedTeamSeq) {
+                        isTeamMember = true;
+                        break;
+                    }
+                }
+                return isTeamMember;
+            }
         },
     }
 </script>

@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import DateUtil from '@/common/DateUtil.js';
+
 /** 사용방법
  * 1. 상위 컴포넌트에 CustomDatePicker컴포넌트를 import시키고, 상위 컴포넌트의 vue인스턴스에 컨포넌트로 등록한다.
  * 2. 상위 컴포넌트의 HTML작성영역에 CustomDatePicker컴포넌트를 작성한다.
@@ -34,9 +36,9 @@
  * 4. CustomDatePicker의 라벨(label)이름을 상위컴포넌트에서 제어할 수 있도록 v-bind속성을 활용하여 props로 데이터를 내려준다.
  */
     export default {
-        data: ()=>{
+        data() {
             return {
-                selectedDate: "",
+                selectedDate: this.setInitDateValue(this.pInitValue),
             }
         },
         watch: {
@@ -46,10 +48,24 @@
         },
         props: {
             pLabelName: String,
+            pInitValue: String,
         },
         methods: {
             closeDatePicker(pickupedDate) {
                 this.$emit('pickup-date', pickupedDate);                
+            },
+            setInitDateValue(initValue) {
+                if (typeof initValue == "undefined") {
+                    return "";
+                }
+                if (initValue == null) {
+                    return "";
+                }
+                if (initValue == "") {
+                    return "";
+                }
+                // TODO Date타입일 경우에도 처리해줘야 함.
+                return DateUtil.Format.toYmd(initValue);
             },
         },
     }

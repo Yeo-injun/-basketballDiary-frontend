@@ -111,6 +111,7 @@
 
 <script>
 import myTeamApi from '@/api/MyTeamAPI';
+import DateUtil from '@/common/DateUtil.js';
 
 export default {
     props: {
@@ -173,34 +174,22 @@ export default {
         },
         async getTeamInfo() {
             try {
-                var response = await myTeamApi.searchTeam(this.pTeamSeq);
+                const response = await myTeamApi.searchTeam(this.pTeamSeq);
                 let { data } = response;
                 this.teamInfo = data;
-                this.teamInfo.foundationYmd = data.foundationYmd.substr(0, 4) + "-"
-                    + data.foundationYmd.substr(4, 2) + "-" + data.foundationYmd.substr(6, 2);
+                this.teamInfo.foundationYmd = DateUtil.Format.toYmd(data.foundationYmd);
 
-                for(let i in data.teamRegularExercisesList) {
-                    switch(data.teamRegularExercisesList[i].dayOfTheWeekCode) {
-                    case '1': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '월'; break;
-                    case '2': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '화'; break;
-                    case '3': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '수'; break;
-                    case '4': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '목'; break;
-                    case '5': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '금'; break;
-                    case '6': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '토'; break;
-                    case '7': 
-                        data.teamRegularExercisesList[i].dayOfTheWeekCode = '일'; break;
-                    }
-                    data.teamRegularExercisesList[i].startTime = 
-                        data.teamRegularExercisesList[i].startTime.substr(0, 2) + ":" + data.teamRegularExercisesList[i].startTime.substr(2, 2);
-                    data.teamRegularExercisesList[i].endTime = 
-                        data.teamRegularExercisesList[i].endTime.substr(0, 2) + ":" + data.teamRegularExercisesList[i].endTime.substr(2, 2);
-                }
+                const regularExercises = data.teamRegularExercisesList;
+                regularExercises.forEach(regularExercise => {
+                    const dayName = DateUtil.TheWeek.getDayNameByCode(regularExercise.dayOfTheWeekCode);
+                    regularExercise.dayOfTheWeekCode = dayName; // TODO 코드값과 코드명을 분리해서 관리할 수 있도록 UI변경... 필요
+
+                    const startTime = DateUtil.Format.toTime(regularExercise.startTime);
+                    regularExercise.startTime = startTime;
+
+                    const endTime = DateUtil.Format.toTime(regularExercise.endTime);
+                    regularExercise.endTime = endTime;
+                });
 
                 this.regularExerciseList = data.teamRegularExercisesList;
                 console.log(this.teamInfo);
