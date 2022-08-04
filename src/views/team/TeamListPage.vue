@@ -143,7 +143,17 @@ export default {
         endDay: function(newValue, oldValue) {
             this.setEndDayOnSearchParam(newValue, oldValue);
             return false;
-        }
+        },
+        teamList: function(newTeamList) {
+            // TODO 더 좋은 방식있다면 변경 요망... : 요일 코드로 요일명을 할당시켜주기..
+            newTeamList.forEach(team => {
+                const teamExcerciseList = team.teamRegularExerciseList;
+                teamExcerciseList.forEach(excercise => {
+                    const dayCode = excercise.dayOfTheWeekCode;
+                    excercise.dayOfTheWeekCodeName = DateUtil.TheWeek.getDayNameByCode(dayCode);
+                });
+            });
+        },
     },
     methods: {
         setStartDayOnSearchParam(newValue, oldValue) {

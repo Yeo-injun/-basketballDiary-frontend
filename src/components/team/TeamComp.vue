@@ -25,7 +25,7 @@
                         :key="index">
 
                             <v-row no-gutters>
-                                <v-col>{{ exercise.dayOfTheWeekCode }}</v-col>
+                                <v-col>{{ exercise.dayOfTheWeekCodeName }}</v-col>
                                 <v-col>{{ `${exercise.startTime} ~ ${exercise.endTime}` }}</v-col>
                                 <v-col>{{ exercise.exercisePlaceName }}</v-col>
                             </v-row>
@@ -88,13 +88,13 @@ import storageUtil from '@/common/StorageUtil.js';
 
                 let isTeamMember = false;
                 for (const joinedTeamSeq of joinedTeamSeqList) {
-                        if (teamSeq == joinedTeamSeq) {
+                    if (teamSeq == joinedTeamSeq) {
                         isTeamMember = true;
                         break;
                     }
                 }
                 return isTeamMember;
-            }
+            },
         },
     }
 </script>
