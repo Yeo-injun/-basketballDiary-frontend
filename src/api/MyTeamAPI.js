@@ -10,11 +10,11 @@ export default {
      * seongju 
      */
     /* API014 : 소속팀 목록 조회 */
-    searchTeams(){
+    searchTeams() {
         return axiosService.get();
     },
     /* API012 소속팀 개인프로필 수정 */
-    modifyMyTeamsProfile(teamSeq,formData){
+    modifyMyTeamsProfile(teamSeq,formData) {
         return axiosService.post(`/${teamSeq}/profile`,formData,{
             headers: {
                 "Content-Type": "multipart/form-data"
