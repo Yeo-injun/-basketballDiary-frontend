@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <h1>소속팀 목록</h1>
-    <MyTeam v-for="(team,index) in teamList" :key="index" v-bind:teamInfo="team"></MyTeam>
+    <MyTeam 
+    v-for="(team,index) in teamList" :key="index" 
+    v-bind:teamInfo="team"/>
   </v-container>
 </template>
 
@@ -21,7 +23,7 @@ export default {
     MyTeam
   },
   methods:{
-    async load(){
+    async load() {
       // 비동기적인 console.log 처리로 인해 발생하는 현상
       // https://kkangdda.tistory.com/81
       try{

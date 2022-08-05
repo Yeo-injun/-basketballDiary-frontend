@@ -1,8 +1,9 @@
 <template>
   <v-container>
-      <!-- Error :  Avoid using non-primitive value as key, use string/number value instead. -->
-      <!-- 해결법 : https://crispypotato.tistory.com/33 -->
-      <v-card class="mt-10">    
+    <!-- Error :  Avoid using non-primitive value as key, use string/number value instead. -->
+    <!-- 해결법 : https://crispypotato.tistory.com/33 -->
+    <v-card class="mt-10">
+      <v-container>
         <v-row class="mb-5">
           <v-col align-self="center" md="3">
             <v-img
@@ -15,48 +16,54 @@
           </v-col>
           <v-col>
             <v-row>
-            <v-col>
-              팀이름: {{teamInfo.teamName}}
-            </v-col>
-            <v-col>
-              연고지: {{teamInfo.hometown}}
-            </v-col>
+              <v-col>팀이름: {{ teamInfo.teamName }}</v-col>
+              <v-col>연고지: {{ teamInfo.hometown }}</v-col>
             </v-row>
             <v-row>
-            <v-col>
-              회원수:
-            </v-col>
-            <v-col>
-              창단일:
-            </v-col>
-          </v-row>       
-          <v-row>
-            <v-col>
-              정기운동 시간/장소:
-            </v-col>            
-          </v-row>
+              <v-col>회원수: {{ teamInfo.totMember }}명</v-col>
+              <v-col>창단일: {{ teamInfo.foundationYmd }}</v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                정기운동 시간/장소: 팀목록 조회하는 화면과 공통으로 사용하는
+                컴포넌트로 구현하기
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
-        <v-col>\                                                                                                                                                  
-          <span>Ratels는 벌꿀오소리 처럼 상대를 가리지 않고 모든 경기에 열정을 다합니다.20대 초반부터 30대 중반까지로 선수층이 이뤄져 있습니다.</span>
-          <!-- <v-btn class="float-right" to="myTeam">상세보기</v-btn> -->
-          <router-link :to="{name: 'MyTeamPage', params:{pTeamSeq: teamInfo.teamSeq}}"><v-btn>상세보기</v-btn></router-link>
-        </v-col>                
-      </v-card>      
+        <v-row no-gutters>
+          {{ teamInfo.introduction }}
+        </v-row>
+      </v-container>
+
+      <v-container>
+        <v-row align="center" justify="space-around">
+          <v-btn
+            absolute
+            right
+            color="info"
+            :to="{
+              name: 'MyTeamPage',
+              params: { pTeamSeq: teamInfo.teamSeq },
+            }"
+          >
+            상세보기
+          </v-btn>
+        </v-row>
+      </v-container>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 export default {
-    data:()=>{
-        return {
-
-        }
-    },
-    props:['teamInfo']
-}
+  data: () => {
+    return {};
+  },
+  props: {
+    teamInfo: Object,
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
