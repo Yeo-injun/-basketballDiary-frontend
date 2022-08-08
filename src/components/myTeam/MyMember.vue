@@ -13,19 +13,26 @@
           </v-col>
           <v-col cols="10">
             <v-row justify="space-between">
-              <v-col>{{ data.userName }}/{{ data.teamAuthCode }}</v-col>
-              <v-col>포지션: {{ data.positionCode }}</v-col>
-              <v-col>가입일: {{ data.joinYmd }}</v-col>
-              <v-col v-if="this.isManager()">
-                <v-btn color="black white--text" small>임원임명</v-btn>
+              <v-col
+                >{{ pTeamMember.userName }}/{{
+                  pTeamMember.teamAuthCode
+                }}</v-col
+              >
+              <v-col>포지션: {{ pTeamMember.positionCode }}</v-col>
+              <v-col>가입일: {{ pTeamMember.joinYmd }}</v-col>
+              <v-col v-if="this.isLeader()">
+                <ManagerAppointmentBtn
+                  :pTeamMemberSeq="pTeamMember.teamMemberSeq"
+                  :pTeamSeq="this.pTeamSeq"
+                />
                 <v-btn color="red white--text" small>강퇴하기</v-btn>
               </v-col>
             </v-row>
             <v-row>
-              <v-col>신장: {{ data.height }}</v-col>
-              <v-col>몸무게: {{ data.weight }}</v-col>
-              <v-col>등번호: {{ data.backNumber }}</v-col>
-              <v-col>경기참여: {{ data.totGame }}회</v-col>
+              <v-col>신장: {{ pTeamMember.height }}</v-col>
+              <v-col>몸무게: {{ pTeamMember.weight }}</v-col>
+              <v-col>등번호: {{ pTeamMember.backNumber }}</v-col>
+              <v-col>경기참여: {{ pTeamMember.totGame }}회</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -36,15 +43,19 @@
 
 <script>
 import authUtil from "@/common/AuthUtil.js";
+import ManagerAppointmentBtn from "@/components/button/ManagerAppointmentBtn.vue";
 
 export default {
+  components: {
+    ManagerAppointmentBtn,
+  },
   props: {
-    data: Object,
-    pTeamSeq: String,
+    pTeamMember: Object,
+    pTeamSeq: Number,
   },
   methods: {
-    isManager() {
-      return authUtil.isManager(this.pTeamSeq);
+    isLeader() {
+      return authUtil.isLeader(this.pTeamSeq);
     },
   },
 };
