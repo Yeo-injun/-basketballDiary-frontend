@@ -14,16 +14,24 @@
           <v-col cols="10">
             <v-row justify="space-between">
               <v-col>
-                <v-row>{{ data.teamAuthCode }}/{{ data.userName }}</v-row>
-                <v-row>{{ data.birthYmd }}</v-row>
+                <v-row
+                  >{{ pTeamManager.teamAuthCode }}/{{
+                    pTeamManager.userName
+                  }}</v-row
+                >
+                <v-row>{{ pTeamManager.birthYmd }}</v-row>
               </v-col>
-              <v-col>신장: {{ data.height }}</v-col>
-              <v-col>몸무게: {{ data.weight }}</v-col>
-              <v-col>등번호: {{ data.backNumber }}</v-col>
+              <v-col>신장: {{ pTeamManager.height }}</v-col>
+              <v-col>몸무게: {{ pTeamManager.weight }}</v-col>
+              <v-col>등번호: {{ pTeamManager.backNumber }}</v-col>
               <v-col>
-                <v-row> 가입일: {{ data.joinYmd }} </v-row>
+                <v-row> 가입일: {{ pTeamManager.joinYmd }} </v-row>
                 <v-row v-if="this.isLeader()">
-                  <v-btn color="black white--text" small>임원 제명</v-btn>
+                  <!-- 팀장인 경우에는 해임 버튼 안보이게 하기 -->
+                  <ManagerDismissalBtn
+                    :pTeamMemberSeq="pTeamManager.teamMemberSeq"
+                    :pTeamSeq="this.pTeamSeq"
+                  />
                 </v-row>
               </v-col>
             </v-row>
@@ -36,11 +44,15 @@
 
 <script>
 import authUtil from "@/common/AuthUtil.js";
+import ManagerDismissalBtn from "@/components/button/ManagerDismissalBtn.vue";
 
 export default {
+  components: {
+    ManagerDismissalBtn,
+  },
   props: {
-    data: Object,
-    pTeamSeq: String,
+    pTeamManager: Object,
+    pTeamSeq: Number,
   },
   methods: {
     isLeader() {

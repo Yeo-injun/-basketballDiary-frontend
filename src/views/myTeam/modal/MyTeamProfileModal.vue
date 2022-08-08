@@ -62,7 +62,7 @@ export default {
     }
   },
   props: {
-    teamSeq: {
+    pTeamSeq: {
         type: Number,
         required: true
     },
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     async load(){
-        const response = (await MyTeamApi.findMyTeamsProfile(this.teamSeq)).data;
+        const response = (await MyTeamApi.findMyTeamsProfile(this.pTeamSeq)).data;
         this.name = response.userName;
         this.teamName = response.teamName;
         this.backNumber = response.backNumber;
@@ -101,8 +101,8 @@ export default {
         formData.append("imageFile",this.image);      
         
         try{
-            const response = await MyTeamApi.modifyMyTeamsProfile(this.teamSeq,formData);
-            // const response = await UploadFile.upload(`/myTeams/${this.teamSeq}/profile`,formData);
+            const response = await MyTeamApi.modifyMyTeamsProfile(this.pTeamSeq,formData);
+            // const response = await UploadFile.upload(`/myTeams/${this.pTeamSeq}/profile`,formData);
             console.log("response: "+response);
         }catch(error){
             console.log(error);

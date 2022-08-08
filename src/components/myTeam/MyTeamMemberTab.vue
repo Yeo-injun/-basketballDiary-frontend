@@ -8,7 +8,7 @@
           프로필 수정
         </v-btn>
         <MyTeamProfileModal
-          :teamSeq="pTeamSeq"
+          :pTeamSeq="pTeamSeq"
           :value="teamProfile"
           @input="teamProfile = $event"
         />
@@ -27,11 +27,11 @@
           :pTeamSeq="pTeamSeq"
         />
       </div>
-      <MyProfile :data="profile" />
+      <MyProfile :pMyProfile="profile" />
 
       <v-subheader>운영진</v-subheader>
       <div v-for="(manager, index) in managerList" v-bind:key="index">
-        <MyManager :data="manager" :pTeamSeq="pTeamSeq" />
+        <MyManager :pTeamManager="manager" :pTeamSeq="pTeamSeq" />
       </div>
 
       <div class="d-flex">
@@ -47,7 +47,7 @@
         </v-btn>
       </div>
       <div v-for="(member, index) in memberList" v-bind:key="'A' + index">
-        <MyMember :data="member" :pTeamSeq="pTeamSeq" />
+        <MyMember :pTeamMember="member" :pTeamSeq="pTeamSeq" />
       </div>
       <div class="text-center">
         <v-pagination
