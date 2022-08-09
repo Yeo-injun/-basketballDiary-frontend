@@ -26,9 +26,10 @@
               <v-col>등번호: {{ pTeamManager.backNumber }}</v-col>
               <v-col>
                 <v-row> 가입일: {{ pTeamManager.joinYmd }} </v-row>
-                <v-row v-if="this.isLeader()">
+                <v-row v-if="this.isLeaderAuth()">
                   <!-- 팀장인 경우에는 해임 버튼 안보이게 하기 -->
                   <ManagerDismissalBtn
+                    v-if="!this.isLeaderMember()"
                     :pTeamMemberSeq="pTeamManager.teamMemberSeq"
                     :pTeamSeq="this.pTeamSeq"
                   />
@@ -55,8 +56,15 @@ export default {
     pTeamSeq: Number,
   },
   methods: {
-    isLeader() {
+    isLeaderAuth() {
       return authUtil.isLeader(this.pTeamSeq);
+    },
+    isLeaderMember() {
+      const targetAuth = this.pTeamManager.teamAuthCode;
+      if (targetAuth == 3) {
+        return true;
+      }
+      return false;
     },
   },
 };
