@@ -97,4 +97,10 @@ export default {
       `/${params.teamSeq}/members/${params.teamMemberSeq}/manager`
     );
   },
+  /* API004 : 소속팀 회원 강퇴시키기 */
+  dischargeTeamMember(params) {
+    return axiosService.delete(
+      `/${params.teamSeq}/members/${params.teamMemberSeq}`
+    );
+  },
 };
