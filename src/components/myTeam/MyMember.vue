@@ -25,7 +25,10 @@
                   :pTeamMemberSeq="pTeamMember.teamMemberSeq"
                   :pTeamSeq="this.pTeamSeq"
                 />
-                <v-btn color="red white--text" small>강퇴하기</v-btn>
+                <TeamMemberDischargeBtn
+                  :pTeamMemberSeq="pTeamMember.teamMemberSeq"
+                  :pTeamSeq="this.pTeamSeq"
+                />
               </v-col>
             </v-row>
             <v-row>
