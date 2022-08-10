@@ -1,9 +1,7 @@
 <template>
-  <v-container>
-    <v-btn color="red white--text" small @click="dischargeTeamMember()">
-      강퇴하기
-    </v-btn>
-  </v-container>
+  <v-btn color="red white--text" small @click="dischargeTeamMember()">
+    강퇴하기
+  </v-btn>
 </template>
 
 <script>
