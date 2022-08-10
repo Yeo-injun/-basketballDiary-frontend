@@ -47,10 +47,12 @@
 <script>
 import authUtil from "@/common/AuthUtil.js";
 import ManagerAppointmentBtn from "@/components/button/ManagerAppointmentBtn.vue";
+import TeamMemberDischargeBtn from "@/components/button/TeamMemberDischargeBtn.vue";
 
 export default {
   components: {
     ManagerAppointmentBtn,
+    TeamMemberDischargeBtn,
   },
   props: {
     pTeamMember: Object,

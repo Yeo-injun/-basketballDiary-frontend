@@ -1,9 +1,7 @@
 <template>
-  <v-container>
-    <v-btn color="black white--text" small @click="appointManager()">
-      임원임명
-    </v-btn>
-  </v-container>
+  <v-btn color="black white--text" small @click="appointManager()">
+    임원임명
+  </v-btn>
 </template>
 
 <script>
