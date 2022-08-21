@@ -13,12 +13,11 @@
           </v-col>
           <v-col cols="10">
             <v-row justify="space-between">
-              <v-col
-                >{{ pTeamMember.userName }}/{{
-                  pTeamMember.teamAuthCode
-                }}</v-col
-              >
-              <v-col>포지션: {{ pTeamMember.positionCode }}</v-col>
+              <v-col>
+                {{ pTeamMember.teamAuthCodeName }}
+                / {{ pTeamMember.userName }}
+              </v-col>
+              <v-col>포지션: {{ pTeamMember.positionCodeName }}</v-col>
               <v-col>가입일: {{ pTeamMember.joinYmd }}</v-col>
               <v-col v-if="this.isLeader()">
                 <ManagerAppointmentBtn

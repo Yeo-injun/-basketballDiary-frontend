@@ -19,7 +19,6 @@
 <script>
 import MyTeamMemberTab from "@/components/myTeam/MyTeamMemberTab.vue";
 
-//import { API } from '@/api/MyTeamAPI.js';
 export default {
   components: {
     MyTeamMemberTab,
@@ -35,17 +34,6 @@ export default {
       type: Number,
       required: true,
     },
-  },
-  methods: {
-    onClick() {
-      // console.log(123);
-      // console.log(this.teamSeq);
-    },
-    init() {},
-  },
-  mounted() {
-    // this.onClick();
-    this.init();
   },
 };
 </script>
