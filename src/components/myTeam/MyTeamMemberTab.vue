@@ -103,10 +103,15 @@ export default {
     MyTeamProfileModal,
   },
   methods: {
-    onLoad() {
-      this.getProflie();
-      this.getListManager();
-      this.getListMember();
+    async onLoad() {
+      try {
+        // TODO 새로고침시 props값이 날라가는 것을 제어해야함...(제어할 수 있는지 검토 필요)
+        await this.getProflie();
+        await this.getListManager();
+        await this.getListMember();
+      } catch (e) {
+        console.log("에러 났습니다.");
+      }
     },
     async getProflie() {
       try {

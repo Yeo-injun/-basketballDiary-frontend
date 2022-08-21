@@ -15,9 +15,8 @@
             <v-row justify="space-between">
               <v-col>
                 <v-row
-                  >{{ pTeamManager.teamAuthCode }}/{{
-                    pTeamManager.userName
-                  }}</v-row
+                  >{{ pTeamManager.teamAuthCodeName }} /
+                  {{ pTeamManager.userName }}</v-row
                 >
                 <v-row>{{ pTeamManager.birthYmd }}</v-row>
               </v-col>
