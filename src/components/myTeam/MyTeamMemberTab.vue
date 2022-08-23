@@ -37,7 +37,6 @@
       <div class="d-flex">
         <v-subheader>팀원 목록</v-subheader>
         <v-btn
-          v-if="this.isManager()"
           @click="clickAddTeamMember"
           class="ml-auto"
           small

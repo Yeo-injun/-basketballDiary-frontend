@@ -61,7 +61,8 @@ export default {
           alert(errorMessage);
 
           const statusCode = error.response.status;
-          getErrorPage(statusCode);
+          const errorCodeName = error.response.data.code;
+          getErrorPage(statusCode, errorCodeName);
           return Promise.reject(error);
         }
       );
@@ -69,10 +70,13 @@ export default {
   },
 };
 
-function getErrorPage(responseStutsCode) {
+function getErrorPage(responseStutsCode, errorCodeName) {
   let errorPagePath = "/error";
   switch (responseStutsCode) {
     case ERROR_CODE.UNAUTHORIZED:
+      if (errorCodeName == "UNAUTHORIZED_ACCESS") {
+        break;
+      }
       storageUtil.clearSession();
       errorPagePath = "/login";
       router.push(errorPagePath);
