@@ -5,17 +5,19 @@
 // 참고문서 : https://velog.io/@ken1204/Vue%EC%9D%98-Reactivity-System-Vue2
 
 // Vue2 버전의 전역상태관리 - observable() : https://ko.n4zc.com/article/web_develop/javascript/6f8wyjwy.html
-import Vue from 'vue';
+import Vue from "vue";
 
 export const store = Vue.observable({
-    isLoading: false,
+  isLoading: false,
 });
 
 export const mutations = {
-    loadingStart() {
-        store.isLoading = true;
-    },
-    loadingEnd() {
-        store.isLoading = false;
-    },
-}
+  loadingStart() {
+    store.isLoading = true;
+  },
+  loadingEnd() {
+    store.isLoading = false;
+  },
+};
+
+// TODO 로그인 상태 전역으로 관리하기!!
