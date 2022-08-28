@@ -45,13 +45,13 @@
           팀원 추가
         </v-btn>
       </div>
-      <div v-for="(member, index) in memberList" v-bind:key="'A' + index">
+      <div v-for="(member, index) in teamMembers" v-bind:key="'A' + index">
         <MyMember :pTeamMember="member" :pTeamSeq="pTeamSeq" />
       </div>
       <div class="text-center">
         <v-pagination
-          v-model="pagination.page"
-          :length="pagination.totPagerNo"
+          v-model="pager.pageNo"
+          :length="pager.totalPageCount"
           @input="handlePage"
         />
       </div>
@@ -76,14 +76,14 @@ export default {
     return {
       profile: {},
       managerList: [],
-      memberList: [],
+      teamMembers: [],
       teamInfo: {},
       dialog: false,
       teamProfile: false,
-      pagination: {
-        page: 1,
-        teamCount: 0,
-        totPagerNo: 1,
+      pager: {
+        pageNo: 1,
+        totalCount: 0,
+        totalPageCount: 1,
       },
     };
   },
@@ -134,13 +134,11 @@ export default {
       try {
         const response = await myTeamApi.searchMembers(
           this.pTeamSeq,
-          this.pagination.page - 1
+          this.pager.pageNo - 1
         );
         const { data } = response;
-        this.memberList = data;
-        this.pagination.teamCount = this.memberList[0].pagerDTO.totalCount;
-        this.pagination.totPagerNo = Math.ceil(this.pagination.teamCount / 3);
-        console.log(this.pagination);
+        this.teamMembers = data.teamMembers;
+        this.pager = data.pager;
       } catch (e) {
         console.log(e);
       }
