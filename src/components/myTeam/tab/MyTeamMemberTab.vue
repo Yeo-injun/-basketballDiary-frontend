@@ -67,8 +67,7 @@ import MyProfile from "@/components/myTeam/MyProfile.vue";
 import MyManager from "@/components/myTeam/MyManager.vue";
 import MyMember from "@/components/myTeam/MyMember.vue";
 import MyTeamInfoModal from "@/components/myTeam/modal/MyTeamInfoModal.vue";
-// TODO 컴포넌트 폴더로 옮기기
-import MyTeamProfileModal from "@/views/myTeam/modal/MyTeamProfileModal.vue";
+import MyTeamProfileModal from "@/components/myTeam/modal/MyTeamProfileModal.vue";
 
 export default {
   //data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
@@ -146,7 +145,7 @@ export default {
     clickAddTeamMember() {
       const teamSeq = this.pTeamSeq;
       this.$router.push({
-        name: "MemberManagePage",
+        name: "MyTeamMemberManagePage",
         params: { pTeamSeq: teamSeq },
       });
     },

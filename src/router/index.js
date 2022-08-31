@@ -22,7 +22,7 @@ export default new VueRouter({
     /**
      * error페이지
      */
-    createRoute("views/errors/errorPage", "/error"),
+    createRoute("views/errors/ErrorPage", "/error"),
 
     /**
      * myTeam페이지
@@ -30,11 +30,10 @@ export default new VueRouter({
     createRoute("views/myTeam/MyTeamListPage", "/myTeams"),
     createRoute("views/myTeam/MyTeamPage", "/myTeam", "MyTeamPage"), // TODO Named Router 사용검토 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
     createRoute("views/myTeam/MyTeamsProfilePage", "/myTeamsProfile"),
-    createRoute("views/myTeam/modal/MyTeamModal", "/myTeam/info"), // TODO 라우터 사용하는지 확인하고, 필요없으면 삭제바람
     createRoute(
-      "views/myTeam/MemberManagePage",
-      "/myTeam/memberManage",
-      "MemberManagePage"
+      "views/myTeam/MyTeamMemberManagePage",
+      "/myTeam/teamMemberManage",
+      "MyTeamMemberManagePage"
     ),
 
     /**
@@ -46,9 +45,21 @@ export default new VueRouter({
     /**
      * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
      */
-    createRoute("views/loginUser/MyProfilePage", "/myProfile"),
-    createRoute("views/loginUser/UpdatePassword", "/updatePassword"),
-    createRoute("views/loginUser/SignOutAccount", "/signOutAccount"),
+    createRoute(
+      "views/authUser/MyProfilePage",
+      "/account/profile",
+      "MyProfilePage"
+    ),
+    createRoute(
+      "views/authUser/PasswordUpdatePage",
+      "/account/profile/passwordUpdate",
+      "PasswordUpdatePage"
+    ),
+    createRoute(
+      "views/authUser/AccountSignOutPage",
+      "/account/profile/accountSignOut",
+      "AccountSignOutPage"
+    ),
   ],
 });
 

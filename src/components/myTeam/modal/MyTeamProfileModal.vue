@@ -50,7 +50,6 @@
 
 <script>
 import MyTeamApi from '@/api/MyTeamAPI';
-// import UploadFile from '@/common/UploadFiles';
 
 export default {
   data: ()=>{
