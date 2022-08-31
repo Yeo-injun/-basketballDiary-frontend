@@ -7,35 +7,35 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="(title, idx) in tabTitles" :key="title">
-        <MyTeamMemberTab v-if="idx == 0" :pTeamSeq="pTeamSeq" />
-        <v-card flat v-if="idx == 1">
-          <v-card-text>{{ title }}</v-card-text>
-        </v-card>
+        <TeamJoinManageTab v-if="idx == 0" />
+        <MyProfileTab v-if="idx == 1" />
       </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
 
 <script>
-import MyTeamMemberTab from "@/components/myTeam/tab/MyTeamMemberTab.vue";
+import TeamJoinManageTab from "@/components/authUser/tab/TeamJoinManageTab.vue";
+import MyProfileTab from "@/components/authUser/tab/MyProfileTab.vue";
 
 export default {
   components: {
-    MyTeamMemberTab,
+    TeamJoinManageTab,
+    MyProfileTab,
   },
   data: () => {
     return {
       tab: null,
-      tabTitles: ["팀원 조회", "팀기록 조회"],
+      tabTitles: ["팀가입관리", "내정보수정"],
     };
   },
-  props: {
-    pTeamSeq: {
-      type: Number,
-      required: true,
-    },
+  methods: {
+    init() {},
+  },
+  mounted() {
+    this.init();
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style></style>
