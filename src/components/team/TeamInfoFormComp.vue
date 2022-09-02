@@ -134,7 +134,7 @@ export default {
       },
       rules: [
         (str) => !!str || "필수 입력사항입니다.",
-        (str) => (str && str.length >= 5) || "5자 이상 입력해야합니다.",
+        (str) => (str && str.length >= 2) || "2자 이상 입력해야합니다.",
       ],
       days: DateUtil.TheWeek.getDayOptions(),
       times: DateUtil.Times.getOptions(),

@@ -16,7 +16,7 @@ export default new VueRouter({
   // routes: Vue router에 의해서 컨트롤되는 페이지 정보를 담는 array객체
   routes: [
     createRoute("views/AppMain", "/"),
-    createRoute("views/user/LoginPage", "/login"),
+    createRoute("views/user/LoginPage", "/login", "LoginPage"),
     createRoute("views/user/SignupPage", "/signup"),
 
     /**
@@ -27,9 +27,8 @@ export default new VueRouter({
     /**
      * myTeam페이지
      */
-    createRoute("views/myTeam/MyTeamListPage", "/myTeams"),
+    createRoute("views/myTeam/MyTeamListPage", "/myTeams", "MyTeamListPage"),
     createRoute("views/myTeam/MyTeamPage", "/myTeam", "MyTeamPage"), // TODO Named Router 사용검토 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
-    createRoute("views/myTeam/MyTeamsProfilePage", "/myTeamsProfile"),
     createRoute(
       "views/myTeam/MyTeamMemberManagePage",
       "/myTeam/teamMemberManage",
@@ -39,11 +38,15 @@ export default new VueRouter({
     /**
      * team페이지
      */
-    createRoute("views/team/TeamListPage", "/teams"),
-    createRoute("views/team/TeamRegistrationPage", "/team/registration"),
+    createRoute("views/team/TeamListPage", "/teams", "TeamListPage"),
+    createRoute(
+      "views/team/TeamRegistrationPage",
+      "/team/registration",
+      "TeamRegistrationPage"
+    ),
 
     /**
-     * loginUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
+     * authUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
      */
     createRoute(
       "views/authUser/MyProfilePage",
