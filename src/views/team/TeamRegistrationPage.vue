@@ -38,7 +38,7 @@ export default {
         const { data } = response;
         console.log(data);
         alert("팀이 정상적으로 등록됐습니다.");
-        this.$router.push("/myTeams");
+        this.$router.push({ name: "MyTeamListPage" });
       } catch (e) {
         console.log(e);
       }

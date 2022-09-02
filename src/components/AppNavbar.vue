@@ -14,12 +14,12 @@
     </router-link>
 
     <v-spacer></v-spacer>
-    <v-btn class="ma-1" to="/myTeams">소속팀</v-btn>
-    <v-btn class="ma-1" to="/teams">농구팀</v-btn>
+    <v-btn class="ma-1" :to="{ name: 'MyTeamListPage' }">소속팀</v-btn>
+    <v-btn class="ma-1" :to="{ name: 'TeamListPage' }">농구팀</v-btn>
     <v-btn class="ma-1" :to="{ name: 'MyProfilePage' }">내정보</v-btn>
     <!-- v-if사용 tips : 하나의 엘리먼트에 적용해야함. 래퍼 엘리먼트 <template>을 사용하여 하나의 엘리먼트로 묶어주기 https://kr.vuejs.org/v2/guide/conditional.html -->
     <template v-if="!pIsLogin">
-      <v-btn class="ma-1" to="/login">로그인</v-btn>
+      <v-btn class="ma-1" :to="{ name: 'LoginPage' }">로그인</v-btn>
     </template>
     <template v-else>
       <v-btn class="ma-1" v-on:click="doLogout">로그아웃</v-btn>
