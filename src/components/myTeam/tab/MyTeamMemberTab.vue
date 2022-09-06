@@ -2,12 +2,10 @@
   <div>
     <v-container class="px-15">
       <div class="d-flex">
-        <v-subheader>개인프로필</v-subheader>
-
         <v-btn color="black white--text" small @click.stop="teamProfile = true">
           프로필 수정
         </v-btn>
-        <MyTeamProfileModal
+        <MyTeamProfileUpdateModal
           :pTeamSeq="pTeamSeq"
           :value="teamProfile"
           @input="teamProfile = $event"
@@ -21,33 +19,37 @@
         >
           팀정보 수정
         </v-btn>
-        <MyTeamInfoModal
+        <MyTeamInfoUpdateModal
           v-model="dialog"
           @input="dialog = $event"
           :pTeamSeq="pTeamSeq"
         />
       </div>
-      <MyProfile :pMyProfile="profile" />
+
+      <v-subheader>개인프로필</v-subheader>
+      <MyTeamProfileComp :pMyProfile="profile" />
 
       <v-subheader>운영진</v-subheader>
       <div v-for="(manager, index) in managerList" v-bind:key="index">
-        <MyManager :pTeamManager="manager" :pTeamSeq="pTeamSeq" />
+        <MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="pTeamSeq" />
       </div>
 
-      <div class="d-flex">
-        <v-subheader>팀원 목록</v-subheader>
-        <v-btn
-          @click="clickAddTeamMember"
-          class="ml-auto"
-          small
-          color="black white--text"
-        >
-          팀원 추가
-        </v-btn>
-      </div>
+      <v-btn
+        v-if="this.isManager()"
+        class="ml-auto"
+        small
+        color="black white--text"
+        @click="clickAddTeamMember"
+      >
+        팀원 추가
+      </v-btn>
+
+      <v-subheader>팀원 목록</v-subheader>
       <div v-for="(member, index) in teamMembers" v-bind:key="'A' + index">
-        <MyMember :pTeamMember="member" :pTeamSeq="pTeamSeq" />
+        <MyTeamMemberComp :pTeamMember="member" :pTeamSeq="pTeamSeq" />
       </div>
+
+      <!-- TODO 페이지네이션 공통 컴포넌트로 관리하기 -->
       <div class="text-center">
         <v-pagination
           v-model="pager.pageNo"
@@ -60,14 +62,16 @@
 </template>
 
 <script>
-import authUtil from "@/common/AuthUtil.js";
-
 import myTeamApi from "@/api/MyTeamAPI";
-import MyProfile from "@/components/myTeam/MyProfile.vue";
-import MyManager from "@/components/myTeam/MyManager.vue";
-import MyMember from "@/components/myTeam/MyMember.vue";
-import MyTeamInfoModal from "@/components/myTeam/modal/MyTeamInfoModal.vue";
-import MyTeamProfileModal from "@/components/myTeam/modal/MyTeamProfileModal.vue";
+
+import MyTeamProfileComp from "@/components/myTeam/MyTeamProfileComp.vue";
+import MyTeamManagerComp from "@/components/myTeam/MyTeamManagerComp.vue";
+import MyTeamMemberComp from "@/components/myTeam/MyTeamMemberComp.vue";
+
+import MyTeamInfoUpdateModal from "@/components/myTeam/modal/MyTeamInfoUpdateModal.vue";
+import MyTeamProfileUpdateModal from "@/components/myTeam/modal/MyTeamProfileUpdateModal.vue";
+
+import authUtil from "@/common/AuthUtil.js";
 
 export default {
   //data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
@@ -93,12 +97,12 @@ export default {
     },
   },
   components: {
-    MyProfile,
-    MyManager,
-    MyMember,
+    MyTeamProfileComp,
+    MyTeamManagerComp,
+    MyTeamMemberComp,
     // eslint-disable-next-line
-    MyTeamInfoModal,
-    MyTeamProfileModal,
+    MyTeamInfoUpdateModal,
+    MyTeamProfileUpdateModal,
   },
   methods: {
     async onLoad() {
