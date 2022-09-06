@@ -182,6 +182,7 @@
 <script>
 import myTeamApi from "@/api/MyTeamAPI";
 import DateUtil from "@/common/DateUtil.js";
+// TODO TeamInfoFormComp로 대체하기
 
 export default {
   props: {

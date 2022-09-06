@@ -8,7 +8,7 @@
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="(title, idx) in tabTitles" :key="title">
         <TeamJoinManageTab v-if="idx == 0" />
-        <MyProfileTab v-if="idx == 1" />
+        <MyProfileUpdateTab v-if="idx == 1" />
       </v-tab-item>
     </v-tabs-items>
   </div>
@@ -16,12 +16,12 @@
 
 <script>
 import TeamJoinManageTab from "@/components/authUser/tab/TeamJoinManageTab.vue";
-import MyProfileTab from "@/components/authUser/tab/MyProfileTab.vue";
+import MyProfileUpdateTab from "@/components/authUser/tab/MyProfileUpdateTab.vue";
 
 export default {
   components: {
     TeamJoinManageTab,
-    MyProfileTab,
+    MyProfileUpdateTab,
   },
   data: () => {
     return {
