@@ -24,7 +24,10 @@
           <v-input>창단일</v-input>
         </v-col>
         <v-col cols="4">
-          <CustomDatePicker @pickup-date="setFoundationYmd" />
+          <CustomDatePickerComp
+            :p-init-value="teamInfo.foundationYmd"
+            @pickup-date="setFoundationYmd"
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -116,12 +119,12 @@
 </template>
 
 <script>
-import CustomDatePicker from "@/components/common/CustomDatePicker.vue";
+import CustomDatePickerComp from "@/components/common/CustomDatePickerComp.vue";
 import DateUtil from "@/common/DateUtil.js";
 
 export default {
   components: {
-    CustomDatePicker,
+    CustomDatePickerComp,
   },
   data() {
     return {
@@ -214,6 +217,11 @@ export default {
       }
       this.teamInfo.teamRegularExercises.splice(idx, 1);
     },
+  },
+  mounted() {
+    if (this.pTeamInfo != null) {
+      this.teamInfo = this.pTeamInfo;
+    }
   },
 };
 </script>
