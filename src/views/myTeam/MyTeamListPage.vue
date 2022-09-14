@@ -6,40 +6,52 @@
       :key="index"
       v-bind:teamInfo="team"
     />
+
+    <v-pagination
+      v-model="pagination.pageNo"
+      :length="pagination.totalPageCount"
+      @input="searchMyTeams"
+    />
   </v-container>
 </template>
 
 <script>
 // Vue lifeCycle 에 관하여
 // https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
-import MyTeamApi from "@/api/MyTeamAPI";
+import myTeamApi from "@/api/MyTeamAPI";
 import MyTeamComp from "@/components/myTeam/MyTeamComp.vue";
 
 export default {
   data: () => {
     return {
       teamList: [],
+      pagination: {
+        pageNo: 1,
+        totalPageCount: 1,
+        totalCount: 0,
+      },
     };
   },
   components: {
     MyTeamComp,
   },
   methods: {
-    async load() {
+    async getMyTeams(params) {
       // 비동기적인 console.log 처리로 인해 발생하는 현상
       // https://kkangdda.tistory.com/81
-      try {
-        const list = await MyTeamApi.searchTeams();
-        list.data.forEach((element) => {
-          this.teamList.push(element);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const res = await myTeamApi.searchTeams(params);
+      this.teamList = res.data.myTeamDTOList;
+      this.pagination = res.data.pagerDTO;
+    },
+    searchMyTeams() {
+      const params = {
+        pageNo: this.pagination.pageNo,
+      };
+      this.getMyTeams(params);
     },
   },
   mounted() {
-    this.load();
+    this.getMyTeams();
   },
 };
 </script>
