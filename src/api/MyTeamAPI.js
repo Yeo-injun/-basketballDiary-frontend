@@ -10,8 +10,8 @@ export default {
    * seongju
    */
   /* API014 : 소속팀 목록 조회 */
-  searchTeams() {
-    return axiosService.get();
+  searchTeams(params) {
+    return axiosService.get("", { params });
   },
   /* API012 소속팀 개인프로필 수정 */
   modifyMyTeamsProfile(teamSeq, formData) {
