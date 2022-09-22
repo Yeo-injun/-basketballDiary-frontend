@@ -58,8 +58,13 @@ export default {
       this.teamInfo = eTeamInfo;
     },
     async getTeamInfo(teamSeq) {
-      const response = await myTeamApi.searchTeam(teamSeq);
-      this.teamInfo = response.data;
+      try {
+        // TODO 두번째 팝업 호출시 왜 순서대로 호출이 안되는지... 확인필요
+        const response = await myTeamApi.searchTeam(teamSeq);
+        this.teamInfo = response.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async modifyTeamInfo() {
       try {
@@ -70,23 +75,21 @@ export default {
         console.log(e);
       }
     },
-    onInit() {
-      const teamSeq = this.pTeamSeq;
-      this.getTeamInfo(teamSeq);
-    },
   },
   watch: {
     // 팝업창을 활성화 상태를 감지하여 데이터 호출
     // isActivate data를 감시하여 해당 데이터에 따라 콜백 함수 처리
     isActivate: function (isDialogOpend) {
       if (isDialogOpend) {
-        // this.onInit();
+        const teamSeq = this.pTeamSeq;
+        this.getTeamInfo(teamSeq);
       }
     },
   },
   // TODO 팝업창이 활성화될때 데이터 호출하는 구조로 변경하기...
   mounted() {
-    this.onInit();
+    const teamSeq = this.pTeamSeq;
+    this.getTeamInfo(teamSeq);
   },
 };
 </script>

@@ -1,46 +1,32 @@
 <template>
   <v-container>
-    <h1> {{ isLogin }} </h1>
-    <div> {{ loginUserInfo }} </div>
-    <div> {{ getLoginUserInfoComputed }} </div>
-
+    <h1>{{ isLogin }}</h1>
+    <div>{{ loginUserInfo }}</div>
   </v-container>
 </template>
 
 <script>
-import storageUtil from '@/common/StorageUtil.js';
+import AuthStateManager from "@/common/state/AuthStateManager";
 
-  export default {
-    data: () => {
-      return {
-        loginUserInfo : {},
+export default {
+  data: () => {
+    return {
+      isLogin: AuthStateManager.getters.isLogin(),
+      loginUserInfo: {},
+    };
+  },
+  methods: {
+    getLoginUserInfo() {
+      const auth = AuthStateManager.getters.authUserInfo();
+      if (auth == null) {
+        this.loginUserInfo = "로그인 정보가 없습니다.";
+        return;
       }
+      this.loginUserInfo = auth;
     },
-    computed : {
-      getLoginUserInfoComputed() {
-        const auth = storageUtil.getAuthUserFromSession();
-        if (auth == null) {
-          return "로그인 정보가 없습니다.";
-        }
-        return auth;
-      }
-    },
-    methods: {
-      getLoginUserInfo() {
-        const auth = storageUtil.getAuthUserFromSession();
-        if (auth == null) {
-          this.loginUserInfo = "로그인 정보가 없습니다.";
-          return;
-        }
-        this.loginUserInfo = auth;
-      }
-    },
-    props: 
-    {
-      isLogin: Boolean,
-    },
-    mounted() {
-      this.getLoginUserInfo();
-    }
-  }
+  },
+  mounted() {
+    this.getLoginUserInfo();
+  },
+};
 </script>

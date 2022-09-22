@@ -1,7 +1,8 @@
 import axios from "axios";
 import router from "@/router";
-import storageUtil from "./StorageUtil";
-import { mutations } from "@/common/GlobalStateManager.js";
+
+import LoadingStateManager from "@/common/state/LoadingStateManager";
+import AuthStateManager from "@/common/state/AuthStateManager";
 
 // 인터셉터 참고자료 : https://yamoo9.github.io/axios/guide/interceptors.html
 // https://velog.io/@skyepodium/axios-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0%EB%A1%9C-API-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0
@@ -34,16 +35,16 @@ export default {
     });
     // 인터셉터 등록
     axiosInstance.interceptors.request.use(function (config) {
-      mutations.loadingStart();
+      LoadingStateManager.mutations.loadingStart();
       return config;
     }),
       axiosInstance.interceptors.response.use(
         function (response) {
-          mutations.loadingEnd();
+          LoadingStateManager.mutations.loadingEnd();
           return response;
         },
         function (error) {
-          mutations.loadingEnd();
+          LoadingStateManager.mutations.loadingEnd();
           /** Promise.reject() return의 효과
            *  에러를 API를 호출한 Axios에게 넘겨줌 - API를 호출한 곳에서 try ~ catch문으로 예외처리
            **/
@@ -62,7 +63,7 @@ export default {
 
           const statusCode = error.response.status;
           const errorCodeName = error.response.data.code;
-          getErrorPage(statusCode, errorCodeName);
+          routeErrorPage(statusCode, errorCodeName);
           return Promise.reject(error);
         }
       );
@@ -70,34 +71,16 @@ export default {
   },
 };
 
-function getErrorPage(responseStutsCode, errorCodeName) {
+function routeErrorPage(responseStutsCode, errorCodeName) {
   let errorPagePath = "/error";
   switch (responseStutsCode) {
     case ERROR_CODE.UNAUTHORIZED:
       if (errorCodeName == "UNAUTHORIZED_ACCESS") {
         break;
       }
-      storageUtil.clearSession();
+      AuthStateManager.mutations.processLogout();
       errorPagePath = "/login";
       router.push(errorPagePath);
       break;
   }
 }
-
-// function getErrorPagePath(responseStutsCode)
-// {
-//     // 참고자료 : 인터셉터 등록해서 에러코드에 따라서 에러페이지 분기처리
-//     // https://medium.com/@saulchelewani/custom-error-pages-with-vue-router-and-axios-response-interceptors-based-on-api-response-54ff1375376d
-//     let errorPagePath = '/error';
-//     switch (responseStutsCode) {
-//         case ERROR_CODE.UNAUTHORIZED :
-//             // 권한이 없는 상태면 스토리지에 저장된 user정보도 필요없기 때문에 일괄삭제
-//             // TODO 테스트 : 쿠키에 담긴 세션ID가 만료되어 오류가 발생했을 경우 자동으로 세션 스토리지 및 로그인상태를 업데이트해줘야 함.
-//             errorPagePath = '/login';
-//             storageUtil.clearSession();
-//             break;
-//         // TODO 에러코드별로 에러페이지 만들기 - router등록
-//         // case ERROR_CODE.NOT_FOUND : errorPagePath = '/signup'; break;
-//     }
-//     return errorPagePath;
-// }
