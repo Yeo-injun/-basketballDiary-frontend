@@ -49,7 +49,8 @@
 
 <script>
 import authUserApi from "@/api/AuthUserAPI.js";
-import storageUtil from "@/common/StorageUtil.js";
+
+import AuthUtil from "@/common/AuthUtil.js";
 
 export default {
   props: {
@@ -80,27 +81,10 @@ export default {
       }
     },
     isTeamMember(teamSeq) {
-      const userInfo = storageUtil.getAuthUserFromSession();
-      if (userInfo == null) {
-        return false;
-      }
-
-      const joinedTeamSeqList = Object.keys(userInfo.userAuth);
-
-      let isTeamMember = false;
-      for (const joinedTeamSeq of joinedTeamSeqList) {
-        if (teamSeq == joinedTeamSeq) {
-          isTeamMember = true;
-          break;
-        }
-      }
-      return isTeamMember;
+      return AuthUtil.isTeamMemeber(teamSeq);
     },
     hasExcercises() {
-      if (this.team.teamRegularExercises.length > 0) {
-        return true;
-      }
-      return false;
+      return this.team.teamRegularExercises.length > 0;
     },
   },
 };

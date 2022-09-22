@@ -2,13 +2,17 @@
   <div>
     <v-container class="px-15">
       <div class="d-flex">
-        <v-btn color="black white--text" small @click.stop="teamProfile = true">
+        <v-btn
+          color="black white--text"
+          small
+          @click.stop="isActivatedMyTeamProfileModal = true"
+        >
           프로필 수정
         </v-btn>
         <MyTeamProfileUpdateModal
           :pTeamSeq="pTeamSeq"
-          :value="teamProfile"
-          @input="teamProfile = $event"
+          :value="isActivatedMyTeamProfileModal"
+          @input="isActivatedMyTeamProfileModal = $event"
         />
 
         <v-btn
@@ -82,7 +86,8 @@ export default {
       teamMembers: [],
       teamInfo: {},
       dialog: false,
-      teamProfile: false,
+      isActivatedMyTeamProfileModal: false,
+      // TODO 페이지네이션 공통 처리 적용
       pager: {
         pageNo: 1,
         totalCount: 0,
