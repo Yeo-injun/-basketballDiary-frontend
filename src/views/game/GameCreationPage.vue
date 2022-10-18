@@ -4,12 +4,13 @@
 <template>
 	<v-container>
 		<h2>경기 정보</h2>
-		<v-button>다음</v-button>
-		<v-text-field>경기일자</v-text-field>
-		<v-text-field>경기시간</v-text-field>
-		<v-text-field>주소</v-text-field>
-		<v-button @click="searchAddress()">주소검색</v-button>
-		<v-text-field>경기장명</v-text-field>
+		<v-btn :to="{ name: 'GameJoinTeamSelectionPage' }">다음</v-btn>
+		<v-text-field label="경기">경기일자</v-text-field>
+		<v-text-field label="경기시작시간" /> ~
+		<v-text-field label="경기종료시간" />
+		<v-text-field label="주소" />
+		<v-btn @click="searchAddress()">주소검색</v-btn>
+		<v-text-field label="경기장명" />
 	</v-container>
 </template>
 
