@@ -4,14 +4,14 @@
 <template>
 	<v-container>
 		<h2>게임참가팀 선택</h2>
-		<v-btn :to="{ name: 'GameJoinTeamSelectionPage' }">다음</v-btn>
+		<!-- TODO 다음 화면 컴포넌트 등록후 라우팅명 정상화 필요 -->
+		<PageMoveBtn pRouteCompName="LoginPage" />
 		<v-select
 			v-model="selectedGameType"
 			:items="selectItems"
 			item-text="gameTypeCodeName"
 			item-value="gameTypeCode"
 			label="경기유형"
-			outlined
 		/>
 		<!-- 상대팀 검색 화면 별도 컴포넌트로 분리 -->
 		<GameOpponentSearchComp v-if="isMatchGame()" />
@@ -20,10 +20,12 @@
 
 <script>
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
+	import PageMoveBtn from '@/components/button/PageMoveBtn.vue';
 
 	export default {
 		components: {
 			GameOpponentSearchComp,
+			PageMoveBtn,
 		},
 		data() {
 			return {
