@@ -1,11 +1,8 @@
 <template>
-	<!-- TODO 버튼 위치 잡기 -->
 	<v-container>
-		<v-row justify="end">
+		<v-row justify="center">
 			<v-col cols="1">
-				<v-btn text color="primary" :to="{ name: pRouteCompName }">
-					{{ btnName }}
-				</v-btn>
+				<v-btn color="error">{{ btnName }}</v-btn>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -14,7 +11,6 @@
 <script>
 	export default {
 		props: {
-			pRouteCompName: String,
 			pBtnName: String,
 		},
 		data() {
@@ -29,7 +25,7 @@
 					this.pBtnName == undefined ||
 					this.pBtnName == ''
 				) {
-					return '다음';
+					return '삭제';
 				}
 				return this.pBtnName;
 			},
@@ -37,4 +33,4 @@
 	};
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>
