@@ -15,17 +15,20 @@
 		/>
 		<!-- 상대팀 검색 화면 별도 컴포넌트로 분리 -->
 		<GameOpponentSearchComp v-if="isMatchGame()" />
+		<DeleteBtn pBtnName="경기삭제" />
 	</v-container>
 </template>
 
 <script>
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
 	import PageMoveBtn from '@/components/button/PageMoveBtn.vue';
+	import DeleteBtn from '@/components/button/DeleteBtn.vue';
 
 	export default {
 		components: {
 			GameOpponentSearchComp,
 			PageMoveBtn,
+			DeleteBtn,
 		},
 		data() {
 			return {
