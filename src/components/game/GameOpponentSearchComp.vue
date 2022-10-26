@@ -4,14 +4,7 @@
 		<v-text-field label="경기">경기일자</v-text-field>
 		<v-text-field label="팀명" />
 		<v-text-field label="팀장이름" />
-		<!-- TODO 검색버튼 공통컴포넌트로 작성 -->
-		<v-container>
-			<v-row justify="end">
-				<v-col cols="1">
-					<v-btn>검색</v-btn>
-				</v-col>
-			</v-row>
-		</v-container>
+		<SearchBtn />
 
 		<v-data-table
 			v-model="selected"
@@ -26,7 +19,12 @@
 </template>
 
 <script>
+	import SearchBtn from '@/components/button/SearcheBtn.vue';
+
 	export default {
+		components: {
+			SearchBtn,
+		},
 		data() {
 			return {
 				headers: [
