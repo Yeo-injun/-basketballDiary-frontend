@@ -2,7 +2,7 @@
 	<v-container>
 		<v-row justify="end">
 			<v-col cols="1">
-				<v-btn color="primary">{{ btnName }}</v-btn>
+				<v-btn>{{ btnName }}</v-btn>
 			</v-col>
 		</v-row>
 	</v-container>
