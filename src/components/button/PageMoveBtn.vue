@@ -1,7 +1,7 @@
 <template>
 	<!-- TODO 버튼 위치 잡기 -->
 	<v-container>
-		<v-row justify="end">
+		<v-row no-gutters justify="end">
 			<v-col cols="1">
 				<v-btn text color="primary" :to="{ name: pRouteCompName }">
 					{{ btnName }}
