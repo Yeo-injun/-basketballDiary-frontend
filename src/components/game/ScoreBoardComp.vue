@@ -10,7 +10,10 @@
 					/>
 				</v-col>
 				<v-col cols="12" sm="2">
-					<ScoreInfoComp pIsGameScore="true" :pSorceInfo="pScoreInfo" />
+					<ScoreInfoComp
+						:pIsGameScore="pIsGameScore"
+						:pScoreInfo="pScoreInfo"
+					/>
 				</v-col>
 				<v-col cols="12" sm="5">
 					<TeamScoreComp
@@ -39,7 +42,7 @@
 				pHomeAwayCode02: '02',
 				pIsGameScore: true,
 				pHomeTeamScoreInfo: {},
-				pSocreInfo: {
+				pScoreInfo: {
 					gameTypeCode: '01',
 					gameTypeCodeName: '자체전',
 				},

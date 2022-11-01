@@ -18,7 +18,7 @@
 		data() {
 			return {
 				isGameScore: this.pIsGameScore,
-				scoreInfo: this.pIsGameScore,
+				scoreInfo: this.pScoreInfo,
 			};
 		},
 	};
