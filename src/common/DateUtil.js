@@ -53,20 +53,20 @@ export default {
 
 			let hour = 0;
 			let minute = 0;
-			result.push(this.genOptionFormat(hour, minute));
+			result.push(this._genOptionFormat(hour, minute));
 			while (hour < theTimeOfTheDay) {
 				minute += intervalMinutes;
 				if (minute < 60) {
-					result.push(this.genOptionFormat(hour, minute));
+					result.push(this._genOptionFormat(hour, minute));
 					continue;
 				}
 				minute -= 60;
 				hour += 1;
-				result.push(this.genOptionFormat(hour, minute));
+				result.push(this._genOptionFormat(hour, minute));
 			}
 			return result;
 		},
-		genOptionFormat(hour, minute) {
+		_genOptionFormat(hour, minute) {
 			let result = {};
 			result.text = Formatter.toTimes(hour, minute);
 			result.value = Formatter.toHHmm(hour, minute);
@@ -107,7 +107,7 @@ export default {
 			2,
 			'0'
 		);
-		const currentDay = currentTimeStamp.getDate();
+		const currentDay = String(currentTimeStamp.getDate()).padStart(2, '0');
 		return `${currentYear}${currentMonth}${currentDay}`;
 	},
 }; //export

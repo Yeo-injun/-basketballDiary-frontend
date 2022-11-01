@@ -11,29 +11,53 @@
 		<PageMoveBtn :pRouteCompName="this.routeCompName" />
 		<v-btn @click="createGame()">게임생성(임시)</v-btn>
 
-		<CustomDatePickerComp
-			p-label-name="경기일자"
-			:p-init-value="currentYmd"
-			@pickup-date="setGameYmd"
-		/>
 		<!-- 경기시작시간 및 종료시간 셀렉트박스로 만드는거 검토 -->
-		<v-text-field
-			label="경기시작시간"
-			v-model="gameCreationDTO.gameStartTime"
-		/>
-		~
-		<v-text-field label="경기종료시간" v-model="gameCreationDTO.gameEndTime" />
+		<tr>
+			<td>
+				<CustomDatePickerComp
+					p-label-name="경기일자"
+					:p-init-value="gameCreationDTO.gameYmd"
+					@pickup-date="setGameYmd"
+				/>
+			</td>
+			<td>
+				<GameTimeSelect
+					p-label-name="경기시작시간"
+					@select-value="setGameStartTime"
+				/>
+			</td>
+			<td>~</td>
+			<td>
+				<GameTimeSelect
+					p-label-name="경기종료시간"
+					@select-value="setGameEndTime"
+				/>
+			</td>
+		</tr>
 
-		<v-text-field label="주소" v-model="gameCreationDTO.gamePlaceAddress" />
-		<v-btn @click="popupAddressSearch()">주소검색</v-btn>
+		<!-- TODO 공통컴포넌트로 AddressInputComp.vue -->
+		<tr>
+			<td>
+				<v-text-field
+					label="주소"
+					v-model="gameCreationDTO.gamePlaceAddress"
+					disabled
+				/>
+			</td>
+			<td>
+				<v-btn @click="popupAddressSearch()">주소검색</v-btn>
+			</td>
+		</tr>
+
 		<v-text-field label="경기장명" v-model="gameCreationDTO.gamePlaceName" />
 	</v-container>
 </template>
 
 <script>
 	import gameApi from '@/api/GameAPI.js';
-
 	import AddressOpenApi from '@/common/address/AddressOpenApi.js';
+
+	import GameTimeSelect from '@/components/selectbox/GameTimeSelect.vue';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 	import PageMoveBtn from '@/components/button/PageMoveBtn.vue';
 
@@ -41,32 +65,35 @@
 
 	export default {
 		components: {
+			GameTimeSelect,
 			CustomDatePickerComp,
 			PageMoveBtn,
 		},
 		data() {
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
-				currentYmd: DateUtil.getCurrentYmd(),
 				// TODO 파라미터값 정리 / rule부여해서 필수값 체크
 				gameCreationDTO: {
-					teamSeq: '1',
-					creatorTeamMemberSeq: '1',
-					gameYmd: '20221021',
-					gameStartTime: '1000',
-					gameEndTime: '1300',
-					gamePlaceAddress: '경기도 시흥시 배곧',
-					gamePlaceName: '빈대떡과찜',
-					sidoCode: '11',
-					sigunguCode: '110',
+					teamSeq: '2', // TODO 파라미터 값으로 가져오기...
+					gameYmd: DateUtil.getCurrentYmd(),
+					gameStartTime: '',
+					gameEndTime: '',
+					gamePlaceAddress: '',
+					gamePlaceName: '',
+					sidoCode: '',
+					sigunguCode: '',
 				},
 			};
 		},
 		methods: {
 			popupAddressSearch() {
+				const gameCreationDTO = this.gameCreationDTO;
 				AddressOpenApi.open(function (data) {
-					console.log('===============');
-					console.log(data);
+					gameCreationDTO.gamePlaceAddress = data.address;
+
+					const sidoSigunguCode = data.sigunguCode;
+					gameCreationDTO.sidoCode = sidoSigunguCode.substr(0, 2);
+					gameCreationDTO.sigunguCode = sidoSigunguCode.substr(2, 3);
 				});
 			},
 			getCurrentYmd() {
@@ -74,6 +101,12 @@
 			},
 			setGameYmd(ymd) {
 				this.gameCreationDTO.gameYmd = DateUtil.Format.toString(ymd);
+			},
+			setGameStartTime(time) {
+				this.gameCreationDTO.gameStartTime = time;
+			},
+			setGameEndTime(time) {
+				this.gameCreationDTO.gameEndTime = time;
 			},
 			createGame() {
 				const params = this.gameCreationDTO;
