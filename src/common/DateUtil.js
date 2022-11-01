@@ -107,7 +107,7 @@ export default {
 			2,
 			'0'
 		);
-		const currentDay = currentTimeStamp.getDate();
+		const currentDay = String(currentTimeStamp.getDate()).padStart(2, '0');
 		return `${currentYear}${currentMonth}${currentDay}`;
 	},
 }; //export
