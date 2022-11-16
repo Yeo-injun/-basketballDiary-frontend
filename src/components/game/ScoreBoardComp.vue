@@ -3,24 +3,13 @@
 		<v-card>
 			<v-row no-gutters>
 				<v-col cols="12" sm="5">
-					<TeamScoreComp
-						:pHomeAwayCode="pHomeAwayCode01"
-						:pIsGameScore="pIsGameScore"
-						:pTeamScoreInfo="pHomeTeamScoreInfo"
-					/>
+					<TeamScoreComp :pTeamScoreInfo="this.homeTeam" />
 				</v-col>
 				<v-col cols="12" sm="2">
-					<ScoreInfoComp
-						:pIsGameScore="pIsGameScore"
-						:pScoreInfo="pScoreInfo"
-					/>
+					<ScoreInfoComp :pGameTypeCodeName="this.gameTypeCodeName" />
 				</v-col>
 				<v-col cols="12" sm="5">
-					<TeamScoreComp
-						:pHomeAwayCode="pHomeAwayCode02"
-						:pIsGameScore="pIsGameScore"
-						:pTeamScoreInfo="pHomeTeamScoreInfo"
-					/>
+					<TeamScoreComp :pTeamScoreInfo="this.awayTeam" />
 				</v-col>
 			</v-row>
 		</v-card>
@@ -36,16 +25,15 @@
 			TeamScoreComp,
 			ScoreInfoComp,
 		},
+		props: {
+			pGameScore: Object,
+		},
 		data() {
 			return {
-				pHomeAwayCode01: '01',
-				pHomeAwayCode02: '02',
-				pIsGameScore: true,
-				pHomeTeamScoreInfo: {},
-				pScoreInfo: {
-					gameTypeCode: '01',
-					gameTypeCodeName: '자체전',
-				},
+				gameTypeCode: this.pGameScore.gameTypeCode,
+				gameTypeCodeName: this.pGameScore.gameTypeCodeName,
+				homeTeam: this.pGameScore.homeTeam,
+				awayTeam: this.pGameScore.awayTeam,
 			};
 		},
 		setup() {
