@@ -2,8 +2,7 @@
 	<v-container>
 		<v-col align-self="center">
 			<v-row no-gutters justify="center">
-				{{ isGameScore }}
-				{{ scoreInfo.gameTypeCodeName }}
+				{{ this.pGameTypeCode }}
 			</v-row>
 		</v-col>
 	</v-container>
@@ -12,13 +11,11 @@
 <script>
 	export default {
 		props: {
-			pIsGameScore: Boolean,
-			pScoreInfo: Object,
+			pGameTypeCode: String,
 		},
 		data() {
 			return {
-				isGameScore: this.pIsGameScore,
-				scoreInfo: this.pScoreInfo,
+				gameTypeCode: this.pGameTypeCode,
 			};
 		},
 	};

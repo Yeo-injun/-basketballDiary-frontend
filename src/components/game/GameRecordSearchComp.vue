@@ -8,9 +8,6 @@
 		<v-text-field label="경기장주소" />
 		<v-text-field label="경기장명" />
 		<SearchBtn />
-
-		<!-- 반복문을 돌려서 데이터 렌더링 -->
-		<GameRecordComp />
 	</v-container>
 </template>
 
@@ -19,7 +16,6 @@
 	import SearchBtn from '@/components/button/SearcheBtn.vue';
 	import GameTypeSelect from '@/components/selectbox/GameTypeSelect.vue';
 	import HomeAwaySelect from '@/components/selectbox/HomeAwaySelect.vue';
-	import GameRecordComp from '@/components/game/GameRecordComp.vue';
 
 	export default {
 		components: {
@@ -27,7 +23,6 @@
 			SearchBtn,
 			GameTypeSelect,
 			HomeAwaySelect,
-			GameRecordComp,
 		},
 		data() {
 			return {

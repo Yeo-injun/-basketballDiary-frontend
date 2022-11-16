@@ -1,5 +1,5 @@
 <template>
-	<v-card>
+	<v-card class="ma-6 pa-2">
 		<PageMoveBtn :pBtnName="this.getBtnName()" />
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
@@ -8,7 +8,8 @@
 				경기장주소 : {{ gamePlaceAddress }} / 경기장명 : {{ gamePlaceName }}
 			</div>
 		</v-card-text>
-		<ScoreBoardComp />
+		<ScoreBoardComp :pGameScore="this.gameScore" />
+		<!-- TODO 쿼터기록 렌더링 하기 -->
 		<QuarterScoreBoardComp />
 	</v-card>
 </template>
@@ -24,11 +25,20 @@
 			ScoreBoardComp,
 			QuarterScoreBoardComp,
 		},
+		props: {
+			pGame: Object,
+		},
 		data() {
 			return {
-				gameYmd: '2022-10-27',
-				gamePlaceAddress: '',
-				gamePlaceName: '',
+				gameYmd: this.pGame.gameYmd,
+				gamePlaceAddress: this.pGame.gamePlaceAddress,
+				gamePlaceName: this.pGame.gamePlaceName,
+				gameScore: {
+					gameTypeCode: this.pGame.gameTypeCode,
+					gameTypeCodeName: this.pGame.gameTypeCodeName,
+					homeTeam: this.pGame.homeTeam,
+					awayTeam: this.pGame.awayTeam,
+				},
 			};
 		},
 		methods: {
