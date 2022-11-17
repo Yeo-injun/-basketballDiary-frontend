@@ -9,8 +9,7 @@
 			</div>
 		</v-card-text>
 		<ScoreBoardComp :pGameScore="this.gameScore" />
-		<!-- TODO 쿼터기록 렌더링 하기 -->
-		<QuarterScoreBoardComp />
+		<QuarterScoreBoardComp :pQuarterScore="this.quarterScore" />
 	</v-card>
 </template>
 
@@ -36,6 +35,10 @@
 				gameScore: {
 					gameTypeCode: this.pGame.gameTypeCode,
 					gameTypeCodeName: this.pGame.gameTypeCodeName,
+					homeTeam: this.pGame.homeTeam,
+					awayTeam: this.pGame.awayTeam,
+				},
+				quarterScore: {
 					homeTeam: this.pGame.homeTeam,
 					awayTeam: this.pGame.awayTeam,
 				},
