@@ -119,6 +119,7 @@
 </template>
 
 <script>
+
 import CustomDatePickerComp from "@/components/common/CustomDatePickerComp.vue";
 import DateUtil from "@/common/DateUtil.js";
 
@@ -218,11 +219,13 @@ export default {
       this.teamInfo.teamRegularExercises.splice(idx, 1);
     },
   },
+
   mounted() {
     if (this.pTeamInfo != null) {
       this.teamInfo = this.pTeamInfo;
     }
   },
+
 };
 </script>
 
