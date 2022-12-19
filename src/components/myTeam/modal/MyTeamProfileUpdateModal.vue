@@ -50,7 +50,6 @@
 
 <script>
 import MyTeamApi from '@/api/MyTeamAPI';
-// import UploadFile from '@/common/UploadFiles';
 
 export default {
   data: ()=>{
@@ -102,7 +101,6 @@ export default {
         
         try{
             const response = await MyTeamApi.modifyMyTeamsProfile(this.pTeamSeq,formData);
-            // const response = await UploadFile.upload(`/myTeams/${this.pTeamSeq}/profile`,formData);
             console.log("response: "+response);
         }catch(error){
             console.log(error);

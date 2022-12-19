@@ -1,27 +1,23 @@
 <template>
-    <div>
-        <JoinRequestToList/>
-        <InviteFromTeamList/>    
-    </div>
+  <div>
+    <JoinRequestListComp />
+    <InvitationListComp />
+  </div>
 </template>
 
 <script>
-import JoinRequestToList from '@/components/authUser/JoinRequestToList.vue';
-import InviteFromTeamList from '@/components/authUser/InviteFromList.vue';
+import JoinRequestListComp from "@/components/authUser/JoinRequestListComp.vue";
+import InvitationListComp from "@/components/authUser/InvitationListComp.vue";
 
-    export default {
-        components: {
-            JoinRequestToList,
-            InviteFromTeamList,
-        },
-        data: () => {
-            return {
-            }
-        },
-
-    }
+export default {
+  components: {
+    JoinRequestListComp,
+    InvitationListComp,
+  },
+  data: () => {
+    return {};
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

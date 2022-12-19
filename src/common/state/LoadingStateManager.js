@@ -7,17 +7,37 @@
 // Vue2 버전의 전역상태관리 - observable() : https://ko.n4zc.com/article/web_develop/javascript/6f8wyjwy.html
 import Vue from "vue";
 
-export const store = Vue.observable({
+const store = Vue.observable({
   isLoading: false,
 });
 
-export const mutations = {
-  loadingStart() {
-    store.isLoading = true;
+// export const getters = {
+//   isLoading() {
+//     return store.isLoading;
+//   },
+// };
+
+// export const mutations = {
+//   loadingStart() {
+//     store.isLoading = true;
+//   },
+//   loadingEnd() {
+//     store.isLoading = false;
+//   },
+// };
+
+export default {
+  getters: {
+    isLoading() {
+      return store.isLoading;
+    },
   },
-  loadingEnd() {
-    store.isLoading = false;
+  mutations: {
+    loadingStart() {
+      store.isLoading = true;
+    },
+    loadingEnd() {
+      store.isLoading = false;
+    },
   },
 };
-
-// TODO 로그인 상태 전역으로 관리하기!!

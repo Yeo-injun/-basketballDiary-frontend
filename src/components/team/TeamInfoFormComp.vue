@@ -24,7 +24,10 @@
           <v-input>창단일</v-input>
         </v-col>
         <v-col cols="4">
-          <CustomDatePicker @pickup-date="setFoundationYmd" />
+          <CustomDatePickerComp
+            :p-init-value="teamInfo.foundationYmd"
+            @pickup-date="setFoundationYmd"
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -116,12 +119,13 @@
 </template>
 
 <script>
-import CustomDatePicker from "@/components/common/CustomDatePicker.vue";
+
+import CustomDatePickerComp from "@/components/common/CustomDatePickerComp.vue";
 import DateUtil from "@/common/DateUtil.js";
 
 export default {
   components: {
-    CustomDatePicker,
+    CustomDatePickerComp,
   },
   data() {
     return {
@@ -134,7 +138,7 @@ export default {
       },
       rules: [
         (str) => !!str || "필수 입력사항입니다.",
-        (str) => (str && str.length >= 5) || "5자 이상 입력해야합니다.",
+        (str) => (str && str.length >= 2) || "2자 이상 입력해야합니다.",
       ],
       days: DateUtil.TheWeek.getDayOptions(),
       times: DateUtil.Times.getOptions(),
@@ -215,6 +219,13 @@ export default {
       this.teamInfo.teamRegularExercises.splice(idx, 1);
     },
   },
+
+  mounted() {
+    if (this.pTeamInfo != null) {
+      this.teamInfo = this.pTeamInfo;
+    }
+  },
+
 };
 </script>
 
