@@ -69,12 +69,18 @@
 			CustomDatePickerComp,
 			PageMoveBtn,
 		},
+		props: {
+			pTeamSeq: {
+				type: Number,
+				required: true,
+			},
+		},
 		data() {
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
 				// TODO 파라미터값 정리 / rule부여해서 필수값 체크
 				gameCreationDTO: {
-					teamSeq: '2', // TODO 파라미터 값으로 가져오기...
+					teamSeq: this.pTeamSeq, // TODO 파라미터 값으로 가져오기...
 					gameYmd: DateUtil.getCurrentYmd(),
 					gameStartTime: '',
 					gameEndTime: '',
