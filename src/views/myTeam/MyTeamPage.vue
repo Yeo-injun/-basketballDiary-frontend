@@ -9,7 +9,6 @@
 			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
 				<MyTeamMemberTab v-if="idx == 0" :pTeamSeq="pTeamSeq" />
 				<MyTeamGameListTab v-if="idx == 1" />
-				<!-- TODO 게임생성화면을 탭으로 전환시키기...! -->
 				<GameCreationPage v-if="idx == 2" :pTeamSeq="pTeamSeq" />
 			</v-tab-item>
 		</v-tabs-items>

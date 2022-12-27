@@ -16,7 +16,7 @@
 			<td>
 				<CustomDatePickerComp
 					p-label-name="경기일자"
-					:p-init-value="gameCreationDTO.gameYmd"
+					:p-init-value="gameCreationInfo.gameYmd"
 					@pickup-date="setGameYmd"
 				/>
 			</td>
@@ -40,7 +40,7 @@
 			<td>
 				<v-text-field
 					label="주소"
-					v-model="gameCreationDTO.gamePlaceAddress"
+					v-model="gameCreationInfo.gamePlaceAddress"
 					disabled
 				/>
 			</td>
@@ -49,7 +49,7 @@
 			</td>
 		</tr>
 
-		<v-text-field label="경기장명" v-model="gameCreationDTO.gamePlaceName" />
+		<v-text-field label="경기장명" v-model="gameCreationInfo.gamePlaceName" />
 	</v-container>
 </template>
 
@@ -79,7 +79,7 @@
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
 				// TODO 파라미터값 정리 / rule부여해서 필수값 체크
-				gameCreationDTO: {
+				gameCreationInfo: {
 					teamSeq: this.pTeamSeq, // TODO 파라미터 값으로 가져오기...
 					gameYmd: DateUtil.getCurrentYmd(),
 					gameStartTime: '',
@@ -93,31 +93,42 @@
 		},
 		methods: {
 			popupAddressSearch() {
-				const gameCreationDTO = this.gameCreationDTO;
+				const gameCreationInfo = this.gameCreationInfo;
 				AddressOpenApi.open(function (data) {
-					gameCreationDTO.gamePlaceAddress = data.address;
+					gameCreationInfo.gamePlaceAddress = data.address;
 
 					const sidoSigunguCode = data.sigunguCode;
-					gameCreationDTO.sidoCode = sidoSigunguCode.substr(0, 2);
-					gameCreationDTO.sigunguCode = sidoSigunguCode.substr(2, 3);
+					gameCreationInfo.sidoCode = sidoSigunguCode.substr(0, 2);
+					gameCreationInfo.sigunguCode = sidoSigunguCode.substr(2, 3);
 				});
 			},
 			getCurrentYmd() {
 				return DateUtil.getCurrentYmd();
 			},
 			setGameYmd(ymd) {
-				this.gameCreationDTO.gameYmd = DateUtil.Format.toString(ymd);
+				this.reqBody.gameYmd = DateUtil.Format.toString(ymd);
 			},
 			setGameStartTime(time) {
-				this.gameCreationDTO.gameStartTime = time;
+				this.gameCreationInfo.gameStartTime = time;
 			},
 			setGameEndTime(time) {
-				this.gameCreationDTO.gameEndTime = time;
+				this.gameCreationInfo.gameEndTime = time;
 			},
-			createGame() {
-				const params = this.gameCreationDTO;
-				console.log(params);
-				gameApi.createGame(params);
+			async createGame() {
+				const reqBody = {
+					gameCreationInfo: this.gameCreationInfo,
+				};
+
+				try {
+					const res = await gameApi.createGame(reqBody);
+					const resBody = res.data;
+					this.$router.push({
+						name: this.routeCompName,
+						params: { gameSeq: resBody.gameSeq },
+					});
+				} catch (e) {
+					console.log(e);
+				}
 			},
 		},
 	};
