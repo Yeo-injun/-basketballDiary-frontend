@@ -9,6 +9,7 @@
 			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
 				<MyTeamMemberTab v-if="idx == 0" :pTeamSeq="pTeamSeq" />
 				<MyTeamGameListTab v-if="idx == 1" />
+				<GameCreationPage v-if="idx == 2" :pTeamSeq="pTeamSeq" />
 			</v-tab-item>
 		</v-tabs-items>
 	</div>
@@ -17,16 +18,18 @@
 <script>
 	import MyTeamMemberTab from '@/components/myTeam/tab/MyTeamMemberTab.vue';
 	import MyTeamGameListTab from '@/components/myTeam/tab/MyTeamGameListTab.vue';
+	import GameCreationPage from '@/views/game/GameCreationPage.vue';
 
 	export default {
 		components: {
 			MyTeamMemberTab,
 			MyTeamGameListTab,
+			GameCreationPage,
 		},
 		data: () => {
 			return {
 				tab: null,
-				tabTitles: ['팀원 조회', '팀기록 조회'],
+				tabTitles: ['팀원 조회', '팀기록 조회', '게임생성'],
 			};
 		},
 		props: {
