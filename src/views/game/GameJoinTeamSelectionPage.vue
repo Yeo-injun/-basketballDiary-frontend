@@ -5,7 +5,10 @@
 	<v-container>
 		<h2>게임참가팀 선택</h2>
 		<!-- TODO 다음 화면 컴포넌트 등록후 라우팅명 정상화 필요 -->
-		<PageMoveBtn pRouteCompName="LoginPage" />
+		<PageMoveBtn
+			pRouteCompName="GameRecordDetailPage"
+			@click="selectGameJoinTeam()"
+		/>
 		<v-select
 			v-model="selectedGameType"
 			:items="selectItems"
@@ -45,6 +48,9 @@
 					return true;
 				}
 				return false;
+			},
+			selectGameJoinTeam() {
+				alert('ddd');
 			},
 		},
 	};
