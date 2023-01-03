@@ -2,7 +2,7 @@
 	<v-container>
 		<v-row justify="center">
 			<v-col cols="1">
-				<v-btn color="error">{{ btnName }}</v-btn>
+				<v-btn color="error" @click="deleteGame">{{ btnName }}</v-btn>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -28,6 +28,10 @@
 					return '삭제';
 				}
 				return this.pBtnName;
+			},
+			async deleteGame() {
+				alert('게임생성취소 구현중');
+				this.$emit('delete-event-emit');
 			},
 		},
 	};
