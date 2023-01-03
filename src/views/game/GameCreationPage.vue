@@ -8,8 +8,7 @@
 	-->
 	<v-container>
 		<h2>경기 정보</h2>
-		<PageMoveBtn :pRouteCompName="this.routeCompName" />
-		<v-btn @click="createGame()">게임생성(임시)</v-btn>
+		<v-btn @click="createGame()">게임생성</v-btn>
 
 		<!-- 경기시작시간 및 종료시간 셀렉트박스로 만드는거 검토 -->
 		<tr>
@@ -59,7 +58,6 @@
 
 	import GameTimeSelect from '@/components/selectbox/GameTimeSelect.vue';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
-	import PageMoveBtn from '@/components/button/PageMoveBtn.vue';
 
 	import DateUtil from '@/common/DateUtil.js';
 
@@ -67,7 +65,6 @@
 		components: {
 			GameTimeSelect,
 			CustomDatePickerComp,
-			PageMoveBtn,
 		},
 		props: {
 			pTeamSeq: {
@@ -122,6 +119,7 @@
 				try {
 					const res = await gameApi.createGame(reqBody);
 					const resBody = res.data;
+
 					this.$router.push({
 						name: this.routeCompName,
 						params: { gameSeq: resBody.gameSeq },
