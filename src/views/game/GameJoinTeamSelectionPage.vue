@@ -4,7 +4,7 @@
 <template>
 	<v-container>
 		<h2>게임참가팀 선택</h2>
-		<v-btn @click="selectGameJoinTeam">참가팀선택</v-btn>
+		<v-btn @click="confirmGameJoinTeam">참가팀 확정</v-btn>
 
 		<v-select
 			v-model="selectedGameType"
@@ -22,7 +22,12 @@
 <script>
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
 	import DeleteBtn from '@/components/button/DeleteBtn.vue';
+	import GameApi from '@/api/GameAPI.js';
 
+	const GameTypeCode = {
+		SELF_GAME: '01',
+		MATCH_UP_GAME: '02',
+	};
 	export default {
 		components: {
 			GameOpponentSearchComp,
@@ -31,23 +36,49 @@
 		data() {
 			return {
 				selectItems: [
-					{ gameTypeCodeName: '자체전', gameTypeCode: '01' },
-					{ gameTypeCodeName: '교류전', gameTypeCode: '02' },
+					{ gameTypeCodeName: '자체전', gameTypeCode: GameTypeCode.SELF_GAME },
+					{
+						gameTypeCodeName: '교류전',
+						gameTypeCode: GameTypeCode.MATCH_UP_GAME,
+					},
 				],
-				selectedGameType: '01',
+				selectedGameType: GameTypeCode.SELF_GAME,
+				gameSeq: this.$route.params.gameSeq,
 			};
 		},
 		methods: {
 			isMatchGame() {
-				if (this.selectedGameType == '02') {
+				if (this.selectedGameType == GameTypeCode.MATCH_UP_GAME) {
 					return true;
 				}
 				return false;
 			},
-			async selectGameJoinTeam() {
-				console.log('222');
-				alert('ddd');
+			async confirmGameJoinTeam() {
+				const params = {
+					gameSeq: this.gameSeq,
+					gameJoinTeamInfo: this.getGameJoinTeamInfo(),
+				};
+
+				await GameApi.confirmJoinTeam(params);
+				this.$router.push({
+					name: 'LoginPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
+					params: { gameSeq: this.gameSeq },
+				});
 			},
+			getGameJoinTeamInfo() {
+				if (this.selectedGameType == GameTypeCode.SELF_GAME) {
+					const gameJoinTeamInfo = {
+						gameTypeCode: GameTypeCode.SELF_GAME,
+					};
+					return gameJoinTeamInfo;
+				}
+				const gameJoinTeamInfo = {
+					gameTypeCode: GameTypeCode.MATCH_UP_GAME,
+					opponentTeamSeq: '',
+				};
+				return gameJoinTeamInfo;
+			},
+			// TODO API051 경기삭제 구현
 			moveMainPage() {
 				alert('메인페이지 이동 구현');
 			},
