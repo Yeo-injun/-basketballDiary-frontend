@@ -23,11 +23,8 @@
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
 	import DeleteBtn from '@/components/button/DeleteBtn.vue';
 	import GameApi from '@/api/GameAPI.js';
+	import { GameTypeCode } from '@/const/code/GameCode.js';
 
-	const GameTypeCode = {
-		SELF_GAME: '01',
-		MATCH_UP_GAME: '02',
-	};
 	export default {
 		components: {
 			GameOpponentSearchComp,
