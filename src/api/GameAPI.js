@@ -5,6 +5,12 @@ const axiosService = axios.createAxiosInstance('/games');
 export default {
 	/** injun */
 	/**
+	 * API044 : 상대팀 찾기
+	 */
+	searchOpponents(params) {
+		return axiosService.get(`/opponents`, { params });
+	},
+	/**
 	 * API053 : 게임생성하기
 	 */
 	createGame(params) {
