@@ -14,7 +14,10 @@
 			label="경기유형"
 		/>
 		<!-- 상대팀 검색 화면 별도 컴포넌트로 분리 -->
-		<GameOpponentSearchComp v-if="isMatchGame()" />
+		<GameOpponentSearchComp
+			v-if="isMatchGame()"
+			@select-opponent="setOpponentTeamSeq"
+		/>
 		<DeleteBtn pBtnName="경기삭제" @delete-event-emit="moveMainPage" />
 	</v-container>
 </template>
@@ -25,6 +28,8 @@
 	import GameApi from '@/api/GameAPI.js';
 	import { GameTypeCode } from '@/const/code/GameCode.js';
 
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
 	export default {
 		components: {
 			GameOpponentSearchComp,
@@ -33,7 +38,10 @@
 		data() {
 			return {
 				selectItems: [
-					{ gameTypeCodeName: '자체전', gameTypeCode: GameTypeCode.SELF_GAME },
+					{
+						gameTypeCodeName: '자체전',
+						gameTypeCode: GameTypeCode.SELF_GAME,
+					},
 					{
 						gameTypeCodeName: '교류전',
 						gameTypeCode: GameTypeCode.MATCH_UP_GAME,
@@ -41,6 +49,7 @@
 				],
 				selectedGameType: GameTypeCode.SELF_GAME,
 				gameSeq: this.$route.params.gameSeq,
+				opponentTeamSeq: '',
 			};
 		},
 		methods: {
@@ -50,6 +59,10 @@
 				}
 				return false;
 			},
+			setOpponentTeamSeq(opponentTeamSeq) {
+				this.opponentTeamSeq = opponentTeamSeq;
+			},
+			/* API062 게임참가팀 확정 */
 			async confirmGameJoinTeam() {
 				const params = {
 					gameSeq: this.gameSeq,
@@ -69,9 +82,15 @@
 					};
 					return gameJoinTeamInfo;
 				}
+
+				if (ValidationUtil.isNull(this.opponentTeamSeq)) {
+					const message = '상대팀을 선택해주세요.';
+					alert(message);
+					throw new Error(message);
+				}
 				const gameJoinTeamInfo = {
 					gameTypeCode: GameTypeCode.MATCH_UP_GAME,
-					opponentTeamSeq: '',
+					opponentTeamSeq: this.opponentTeamSeq,
 				};
 				return gameJoinTeamInfo;
 			},

@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<h2>게임기록 검색조건</h2>
+		<h4>검색조건</h4>
 		<GameTypeSelect @value="setGameTypeCode" />
 		<HomeAwaySelect @value="setHomeAwayCode" />
 		<DatePickerComp pLabelName="검색 시작일" />

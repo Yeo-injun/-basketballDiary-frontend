@@ -6,10 +6,10 @@
 		<v-btn @click="searchOpponents()">검색</v-btn>
 
 		<v-data-table
-			v-model="selected"
+			:single-select="true"
 			:headers="headers"
 			:items="opponents"
-			:single-select="true"
+			v-model="selectedOpponentInfo"
 			item-key="teamSeq"
 			show-select
 			class="elevation-1"
@@ -20,6 +20,7 @@
 <script>
 	import GameAPI from '@/api/GameAPI.js';
 	// import SearchBtn from '@/components/button/SearcheBtn.vue';
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	export default {
 		components: {
@@ -39,11 +40,21 @@
 					{ text: '활동지역', value: 'hometown' },
 				],
 				opponents: [],
-				selected: [],
+				selectedOpponentInfo: [],
 			};
 		},
+		// data의 상태를 감지하여 emit함
+		watch: {
+			selectedOpponentInfo(selected) {
+				if (ValidationUtil.isNotNull(selected)) {
+					const teamSeq = selected[0].teamSeq;
+					this.$emit('select-opponent', teamSeq);
+					return;
+				}
+			},
+		},
 		methods: {
-			// TODO API044 농구팀 목록 조회 붙이기
+			/** API044 농구팀 목록 조회 */
 			async searchOpponents() {
 				const queryStrings = this.searchCond;
 				const res = await GameAPI.searchOpponents(queryStrings);
