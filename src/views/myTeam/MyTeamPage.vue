@@ -37,6 +37,10 @@
 				type: Number,
 				required: true,
 			},
+			pTeamName: {
+				type: String,
+				required: true,
+			},
 		},
 	};
 </script>

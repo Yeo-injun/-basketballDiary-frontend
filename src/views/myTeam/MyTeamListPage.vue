@@ -24,6 +24,8 @@
 
 	import TeamCreationBtn from '@/components/team/button/TeamCreationBtn.vue';
 
+	import PaginationUtil from '@/common/util/PaginationUtil.js';
+
 	export default {
 		components: {
 			MyTeamComp,
@@ -32,11 +34,7 @@
 		data: () => {
 			return {
 				teamList: [],
-				pagination: {
-					pageNo: 1,
-					totalPageCount: 1,
-					totalCount: 0,
-				},
+				pagination: PaginationUtil.getIntlPager(),
 			};
 		},
 		methods: {
