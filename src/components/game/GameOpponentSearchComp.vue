@@ -43,7 +43,7 @@
 			};
 		},
 		methods: {
-			// TODO API044 농구팀 목록 조회 붙이기
+			/** API044 농구팀 목록 조회 */
 			async searchOpponents() {
 				const queryStrings = this.searchCond;
 				const res = await GameAPI.searchOpponents(queryStrings);

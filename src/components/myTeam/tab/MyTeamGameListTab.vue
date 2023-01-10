@@ -6,7 +6,7 @@
 		<h4>게임목록조회</h4>
 		<GameRecordSearchComp />
 		<!-- 목록영역 컴포넌트 : 소제목 포함 / item 반복문 -->
-		<div>총 00개</div>
+		<div>총 {{ gameCount }}개</div>
 		<v-container v-for="game in games" :key="game.gameSeq">
 			<GameRecordComp :pGame="game" />
 		</v-container>
@@ -26,7 +26,8 @@
 		},
 		data() {
 			return {
-				games: {},
+				games: [],
+				gameCount: 0,
 			};
 		},
 		methods: {
@@ -35,12 +36,10 @@
 				const params = {
 					teamSeq: 7,
 				};
-				try {
-					const response = await myTeamAPI.searchMyTeamGames(params);
-					this.games = response.data;
-				} catch (e) {
-					console.log(e);
-				}
+
+				const response = await myTeamAPI.searchMyTeamGames(params);
+				this.games = response.data;
+				this.gameCount = response.data.length;
 			},
 		},
 		mounted() {
