@@ -3,7 +3,6 @@ import axios from '../common/CustomAxios';
 const axiosService = axios.createAxiosInstance('/games');
 
 export default {
-	/** injun */
 	/**
 	 * API044 : 상대팀 찾기
 	 */
@@ -21,8 +20,14 @@ export default {
 	 */
 	confirmJoinTeam(params) {
 		return axiosService.post(
-			`${params.gameSeq}/gameJoinTeams`,
+			`/${params.gameSeq}/gameJoinTeams`,
 			params.gameJoinTeamInfo
 		);
+	},
+	/**
+	 * API051 게임 삭제
+	 */
+	deleteGame(params) {
+		return axiosService.delete(`${params.gameSeq}`);
 	},
 };

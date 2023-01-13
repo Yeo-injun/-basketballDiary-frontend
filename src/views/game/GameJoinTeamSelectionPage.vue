@@ -18,13 +18,16 @@
 			v-if="isMatchGame()"
 			@select-opponent="setOpponentTeamSeq"
 		/>
-		<DeleteBtn pBtnName="경기삭제" @delete-event-emit="moveMainPage" />
+		<GameDeletionBtn
+			:pGameSeq="this.gameSeq"
+			@delete-event-emit="moveMainPage"
+		/>
 	</v-container>
 </template>
 
 <script>
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
-	import DeleteBtn from '@/components/button/DeleteBtn.vue';
+	import GameDeletionBtn from '@/components/button/GameDeletionBtn.vue';
 	import GameApi from '@/api/GameAPI.js';
 	import { GameTypeCode } from '@/const/code/GameCode.js';
 
@@ -33,7 +36,7 @@
 	export default {
 		components: {
 			GameOpponentSearchComp,
-			DeleteBtn,
+			GameDeletionBtn,
 		},
 		data() {
 			return {
@@ -70,6 +73,7 @@
 				};
 
 				await GameApi.confirmJoinTeam(params);
+				// TODO 이동할 화면 구현하기 - 게임기록 화면
 				this.$router.push({
 					name: 'LoginPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
 					params: { gameSeq: this.gameSeq },
@@ -94,8 +98,8 @@
 				};
 				return gameJoinTeamInfo;
 			},
-			// TODO API051 경기삭제 구현
 			moveMainPage() {
+				// TODO 메인페이지로 이동하는 라우터 등록
 				alert('메인페이지 이동 구현');
 			},
 		},
