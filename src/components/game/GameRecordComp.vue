@@ -83,14 +83,14 @@
 					this.gameRecordStateCode == GameRecordStateCode.JOIN_TEAM_CONFIRMATION
 				) {
 					return {
-						name: 'GameJoinTeamSelectionPage', // TODO 구현 예정 화면 : 게임상세기록화면
+						name: 'GameRecordDetailPage', // TODO 구현 예정 화면 : 게임상세기록화면
 						params: { gameSeq: this.gameSeq },
 					};
 				}
 
 				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
 					return {
-						name: 'LoginPage', // TODO 구현 예정 화면 : 게임상세기록화면
+						name: 'GameRecordDetailPage', // TODO 구현 예정 화면 : 게임상세기록화면
 						params: { gameSeq: this.gameSeq },
 					};
 				}
