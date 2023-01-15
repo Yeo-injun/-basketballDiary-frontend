@@ -30,4 +30,10 @@ export default {
 	deleteGame(params) {
 		return axiosService.delete(`${params.gameSeq}`);
 	},
+	/**
+	 * API046 게임 기초정보 조회
+	 */
+	getGameBasicInfo(params) {
+		return axiosService.get(`${params.gameSeq}/info`);
+	},
 };

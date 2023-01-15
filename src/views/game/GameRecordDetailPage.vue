@@ -3,7 +3,7 @@
 
 <template>
 	<v-container>
-		<h2>경기 정보</h2>
+		<GameInfoComp :pGameInfo="this.gameBasicInfo" />
 		<h2>팀 정보</h2>
 		<h2>게임참가선수</h2>
 		<h2>경기기록</h2>
@@ -11,15 +11,45 @@
 </template>
 
 <script>
+	import GameAPI from '@/api/GameAPI.js';
+
+	import DateUtil from '@/common/DateUtil.js';
+
+	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
+
 	export default {
-		components: {},
-		props: {},
+		components: {
+			GameInfoComp,
+		},
 		data() {
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
+				gameSeq: this.$route.params.gameSeq,
+				gameBasicInfo: {},
 			};
 		},
-		methods: {},
+		methods: {
+			async getGameBasicInfo() {
+				const params = {
+					gameSeq: this.gameSeq,
+				};
+
+				const res = await GameAPI.getGameBasicInfo(params);
+				const gameBasicInfo = res.data.gameInfo;
+
+				const startTime = DateUtil.Format.toTime(gameBasicInfo.gameStartTime);
+				const endTime = DateUtil.Format.toTime(gameBasicInfo.gameEndTime);
+				this.gameBasicInfo = {
+					gameYmd: DateUtil.Format.toYmd(gameBasicInfo.gameYmd),
+					gameTime: `${startTime} ~ ${endTime}`,
+					gamePlaceAddress: gameBasicInfo.gamePlaceAddress,
+					gamePlaceName: gameBasicInfo.gamePlaceName,
+				};
+			},
+		},
+		mounted() {
+			this.getGameBasicInfo();
+		},
 	};
 </script>
 
