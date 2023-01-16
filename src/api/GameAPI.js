@@ -36,4 +36,14 @@ export default {
 	getGameBasicInfo(params) {
 		return axiosService.get(`${params.gameSeq}/info`);
 	},
+	/**
+	 * API047 경기참가팀 조회
+	 */
+	getGameJoinTeamsInfo(params) {
+		return axiosService.get(`${params.gameSeq}/teams`, {
+			params: {
+				homeAwayCode: params.homeAwayCode,
+			},
+		});
+	},
 };

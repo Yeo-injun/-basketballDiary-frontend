@@ -4,7 +4,7 @@
 <template>
 	<v-container>
 		<GameInfoComp :pGameInfo="this.gameBasicInfo" />
-		<h2>팀 정보</h2>
+		<GameJoinTeamInfoComp :pGameJoinTeamsInfo="this.gameJoinTeamsInfo" />
 		<h2>게임참가선수</h2>
 		<h2>경기기록</h2>
 	</v-container>
@@ -16,16 +16,19 @@
 	import DateUtil from '@/common/DateUtil.js';
 
 	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
+	import GameJoinTeamInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamInfoComp.vue';
 
 	export default {
 		components: {
 			GameInfoComp,
+			GameJoinTeamInfoComp,
 		},
 		data() {
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
 				gameSeq: this.$route.params.gameSeq,
 				gameBasicInfo: {},
+				gameJoinTeamsInfo: {},
 			};
 		},
 		methods: {
@@ -46,9 +49,21 @@
 					gamePlaceName: gameBasicInfo.gamePlaceName,
 				};
 			},
+			async getGameJoinTeamsInfo() {
+				const params = {
+					gameSeq: this.gameSeq,
+				};
+
+				const res = await GameAPI.getGameJoinTeamsInfo(params);
+				this.gameJoinTeamsInfo = {
+					homeTeamInfo: res.data.homeTeamInfo,
+					awayTeamInfo: res.data.awayTeamInfo,
+				};
+			},
 		},
 		mounted() {
 			this.getGameBasicInfo();
+			this.getGameJoinTeamsInfo();
 		},
 	};
 </script>
