@@ -5,7 +5,7 @@
 	<v-container>
 		<GameInfoComp :pGameInfo="this.gameBasicInfo" />
 		<GameJoinTeamsInfoComp :pGameJoinTeamsInfo="this.gameJoinTeamsInfo" />
-		<h2>게임참가선수</h2>
+		<GameJoinPlayersInfoComp :pGameJoinPlayersInfo="this.gameJoinPlayersInfo" />
 		<h2>경기기록</h2>
 	</v-container>
 </template>
@@ -17,11 +17,13 @@
 
 	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
 	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
+	import GameJoinPlayersInfoComp from '@/views/game/gameRecordDetail/GameJoinPlayersInfoComp.vue';
 
 	export default {
 		components: {
 			GameInfoComp,
 			GameJoinTeamsInfoComp,
+			GameJoinPlayersInfoComp,
 		},
 		data() {
 			return {
@@ -29,6 +31,7 @@
 				gameSeq: this.$route.params.gameSeq,
 				gameBasicInfo: {},
 				gameJoinTeamsInfo: {},
+				gameJoinPlayersInfo: {},
 			};
 		},
 		methods: {
@@ -60,6 +63,7 @@
 					awayTeamInfo: res.data.awayTeamInfo,
 				};
 			},
+			// TODO 게임참가선수 목록 조회 API붙이기
 		},
 		mounted() {
 			this.getGameBasicInfo();

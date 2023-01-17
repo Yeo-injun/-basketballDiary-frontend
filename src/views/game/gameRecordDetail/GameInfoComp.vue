@@ -1,20 +1,24 @@
 <template>
 	<v-container>
 		<h2>경기 정보</h2>
-		<v-card>
-			<v-row>
-				<v-col no-gutters>
-					<v-row no-gutters>경기일자 : {{ this.pGameInfo.gameYmd }}</v-row>
-					<v-row no-gutters>경기시간 : {{ this.pGameInfo.gameTime }}</v-row>
-				</v-col>
-				<v-col no-gutters>
-					<v-row no-gutters>주소 : {{ this.pGameInfo.gamePlaceAddress }}</v-row>
-					<v-row no-gutters
-						>경기장명 : {{ this.pGameInfo.gamePlaceName }}</v-row
-					>
-				</v-col>
-			</v-row>
-		</v-card>
+		<v-container>
+			<v-card>
+				<v-row>
+					<v-col no-gutters>
+						<v-row no-gutters>경기일자 : {{ this.pGameInfo.gameYmd }}</v-row>
+						<v-row no-gutters>경기시간 : {{ this.pGameInfo.gameTime }}</v-row>
+					</v-col>
+					<v-col no-gutters>
+						<v-row no-gutters
+							>주소 : {{ this.pGameInfo.gamePlaceAddress }}</v-row
+						>
+						<v-row no-gutters
+							>경기장명 : {{ this.pGameInfo.gamePlaceName }}</v-row
+						>
+					</v-col>
+				</v-row>
+			</v-card>
+		</v-container>
 	</v-container>
 </template>
 
