@@ -4,7 +4,7 @@
 <template>
 	<v-container>
 		<GameInfoComp :pGameInfo="this.gameBasicInfo" />
-		<GameJoinTeamInfoComp :pGameJoinTeamsInfo="this.gameJoinTeamsInfo" />
+		<GameJoinTeamsInfoComp :pGameJoinTeamsInfo="this.gameJoinTeamsInfo" />
 		<h2>게임참가선수</h2>
 		<h2>경기기록</h2>
 	</v-container>
@@ -16,12 +16,12 @@
 	import DateUtil from '@/common/DateUtil.js';
 
 	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
-	import GameJoinTeamInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamInfoComp.vue';
+	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
 
 	export default {
 		components: {
 			GameInfoComp,
-			GameJoinTeamInfoComp,
+			GameJoinTeamsInfoComp,
 		},
 		data() {
 			return {

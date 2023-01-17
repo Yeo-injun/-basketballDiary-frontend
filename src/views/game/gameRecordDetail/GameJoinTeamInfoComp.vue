@@ -1,16 +1,51 @@
 <template>
-	<v-container>
-		<h2>팀 정보</h2>
-		{{ this.pGameJoinTeamsInfo.homeTeamInfo.teamName }}
-		{{ this.pGameJoinTeamsInfo.awayTeamInfo.teamName }}
-	</v-container>
+	<v-col cols="6">
+		<v-card>
+			<v-card-title :class="this.titleColor">
+				<div class="font-weight-bold">
+					{{ this.teamInfo.teamName }}
+					( {{ this.teamInfo.homeAwayCodeName }} )
+				</div>
+			</v-card-title>
+			<v-row dense>
+				<v-col cols="5">
+					<!-- 사진 -->
+					사진 넣기
+					{{ this.teamInfo.imagePath }}
+				</v-col>
+				<v-col cols="7">
+					<div>팀장이름 : {{ this.teamInfo.leaderName }}</div>
+					<div>연고지 : {{ this.teamInfo.hometown }}</div>
+				</v-col>
+			</v-row>
+		</v-card>
+	</v-col>
 </template>
 
 <script>
-	// TODO 팀명과 홈어웨이 사진 등을 보여주는 컴포넌트 하나를 만들어서 재사용
+	import { HomeAwayCode } from '@/const/code/GameCode.js';
+
 	export default {
 		props: {
-			pGameJoinTeamsInfo: Object,
+			pGameJoinTeamInfo: Object,
+		},
+		data() {
+			return {
+				teamInfo: this.pGameJoinTeamInfo,
+			};
+		},
+		computed: {
+			titleColor() {
+				const homeAwayCode = this.teamInfo.homeAwayCode;
+				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
+					return 'red lighten-4';
+				}
+
+				if (HomeAwayCode.AWAY_TEAM == homeAwayCode) {
+					return 'blue lighten-4';
+				}
+				return '';
+			},
 		},
 	};
 </script>

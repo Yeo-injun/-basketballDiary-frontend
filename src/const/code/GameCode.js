@@ -21,3 +21,13 @@ export const GameRecordStateCode = {
 	JOIN_TEAM_CONFIRMATION: '02',
 	CONFIRMATION: '03',
 };
+
+/**
+ * 홈/어웨이 코드
+ * 01 : HOME_TEAM(홈팀)
+ * 02 : AWAY_TEAM(어웨이팀)
+ */
+export const HomeAwayCode = {
+	HOME_TEAM: '01',
+	AWAY_TEAM: '02',
+};
