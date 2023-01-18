@@ -3,35 +3,56 @@
 		<h2>게임참가선수</h2>
 		<v-container>
 			<v-row dense>
-				<v-col cols="6">
-					<v-container>
-						<v-btn>참가선수관리</v-btn>
-					</v-container>
-				</v-col>
-				<v-col cols="6">
-					<v-container>
-						<v-btn>참가선수관리</v-btn>
-					</v-container>
-				</v-col>
+				<HomeTeamPlayerManageBtn />
+				<AwayTeamPlayerManageBtn />
 			</v-row>
 			<v-row dense>
-				<HomeTeamPlayerList />
-				<AwayTeamPlayerList />
+				<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
+				<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
 			</v-row>
 		</v-container>
 	</v-container>
 </template>
 
 <script>
-	import HomeTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
-	import AwayTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
+	import GameAPI from '@/api/GameAPI.js';
 
-	// TODO 참가선수관리 버튼도 컴포넌트로 만들고 내부 이벤트로 모달창 띄우기
-	// TODO 게임참가팀 목록 가져오기
+	import HomeTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
+	import HomeTeamPlayerManageBtn from '@/views/game/gameRecordDetail/GameJoinPlayerManageBtn.vue';
+
+	import AwayTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
+	import AwayTeamPlayerManageBtn from '@/views/game/gameRecordDetail/GameJoinPlayerManageBtn.vue';
+
 	export default {
 		components: {
 			HomeTeamPlayerList,
+			HomeTeamPlayerManageBtn,
 			AwayTeamPlayerList,
+			AwayTeamPlayerManageBtn,
+		},
+		props: {
+			pGameSeq: Number,
+		},
+		data() {
+			return {
+				homeTeamPlayers: [],
+				awayTeamPlayers: [],
+			};
+		},
+		methods: {
+			async getAllGameJoinPlayers() {
+				const params = {
+					gameSeq: this.pGameSeq,
+				};
+
+				const res = await GameAPI.getGameJoinPlayers(params);
+
+				this.homeTeamPlayers = res.data.homeTeam.players;
+				this.awayTeamPlayers = res.data.awayTeam.players;
+			},
+		},
+		mounted() {
+			this.getAllGameJoinPlayers();
 		},
 	};
 </script>

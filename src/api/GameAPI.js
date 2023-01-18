@@ -46,4 +46,14 @@ export default {
 			},
 		});
 	},
+	/**
+	 * API061 경기참가선수 조회
+	 */
+	getGameJoinPlayers(params) {
+		return axiosService.get(`${params.gameSeq}/players`, {
+			params: {
+				homeAwayCode: params.homeAwayCode,
+			},
+		});
+	},
 };

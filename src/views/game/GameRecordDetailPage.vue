@@ -3,18 +3,14 @@
 
 <template>
 	<v-container>
-		<GameInfoComp :pGameInfo="this.gameBasicInfo" />
-		<GameJoinTeamsInfoComp :pGameJoinTeamsInfo="this.gameJoinTeamsInfo" />
-		<GameJoinPlayersInfoComp :pGameJoinPlayersInfo="this.gameJoinPlayersInfo" />
+		<GameInfoComp :pGameSeq="this.gameSeq" />
+		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
+		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
 		<h2>경기기록</h2>
 	</v-container>
 </template>
 
 <script>
-	import GameAPI from '@/api/GameAPI.js';
-
-	import DateUtil from '@/common/DateUtil.js';
-
 	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
 	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
 	import GameJoinPlayersInfoComp from '@/views/game/gameRecordDetail/GameJoinPlayersInfoComp.vue';
@@ -29,45 +25,7 @@
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
 				gameSeq: this.$route.params.gameSeq,
-				gameBasicInfo: {},
-				gameJoinTeamsInfo: {},
-				gameJoinPlayersInfo: {},
 			};
-		},
-		methods: {
-			async getGameBasicInfo() {
-				const params = {
-					gameSeq: this.gameSeq,
-				};
-
-				const res = await GameAPI.getGameBasicInfo(params);
-				const gameBasicInfo = res.data.gameInfo;
-
-				const startTime = DateUtil.Format.toTime(gameBasicInfo.gameStartTime);
-				const endTime = DateUtil.Format.toTime(gameBasicInfo.gameEndTime);
-				this.gameBasicInfo = {
-					gameYmd: DateUtil.Format.toYmd(gameBasicInfo.gameYmd),
-					gameTime: `${startTime} ~ ${endTime}`,
-					gamePlaceAddress: gameBasicInfo.gamePlaceAddress,
-					gamePlaceName: gameBasicInfo.gamePlaceName,
-				};
-			},
-			async getGameJoinTeamsInfo() {
-				const params = {
-					gameSeq: this.gameSeq,
-				};
-
-				const res = await GameAPI.getGameJoinTeamsInfo(params);
-				this.gameJoinTeamsInfo = {
-					homeTeamInfo: res.data.homeTeamInfo,
-					awayTeamInfo: res.data.awayTeamInfo,
-				};
-			},
-			// TODO 게임참가선수 목록 조회 API붙이기
-		},
-		mounted() {
-			this.getGameBasicInfo();
-			this.getGameJoinTeamsInfo();
 		},
 	};
 </script>

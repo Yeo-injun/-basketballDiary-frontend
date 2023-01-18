@@ -21,4 +21,10 @@ export default {
 	isNotNull(val) {
 		return !this.isNull(val);
 	},
+	ifNullToEmptyString(val) {
+		if (this.isNull(val)) {
+			return '';
+		}
+		return val;
+	},
 };
