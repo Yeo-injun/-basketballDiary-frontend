@@ -5,15 +5,19 @@
 			<v-card>
 				<v-row>
 					<v-col no-gutters>
-						<v-row no-gutters>경기일자 : {{ this.pGameInfo.gameYmd }}</v-row>
-						<v-row no-gutters>경기시간 : {{ this.pGameInfo.gameTime }}</v-row>
+						<v-row no-gutters
+							>경기일자 : {{ this.gameBasicInfo.gameYmd }}</v-row
+						>
+						<v-row no-gutters
+							>경기시간 : {{ this.gameBasicInfo.gameTime }}</v-row
+						>
 					</v-col>
 					<v-col no-gutters>
 						<v-row no-gutters
-							>주소 : {{ this.pGameInfo.gamePlaceAddress }}</v-row
+							>주소 : {{ this.gameBasicInfo.gamePlaceAddress }}</v-row
 						>
 						<v-row no-gutters
-							>경기장명 : {{ this.pGameInfo.gamePlaceName }}</v-row
+							>경기장명 : {{ this.gameBasicInfo.gamePlaceName }}</v-row
 						>
 					</v-col>
 				</v-row>
@@ -23,32 +27,45 @@
 </template>
 
 <script>
-	// import DateUtil from '@/common/DateUtil.js';
+	import GameAPI from '@/api/GameAPI.js';
+
+	import DateUtil from '@/common/DateUtil.js';
 
 	export default {
 		props: {
-			pGameInfo: Object,
+			pGameSeq: Number,
 		},
-		// data() {
-		// 	return {
-		// 		gameYmd: DateUtil.Format.toYmd(this.pGameInfo.gameYmd),
-		// 		gameAddress: this.pGameInfo.gamePlaceAddress,
-		// 		gameTime: this.pGameInfo.gameYmd,
-		// 		gamePlaceName: this.pGameInfo.gamePlaceName,
-		// 	};
-		// },
-		// methods: {
-		// 	setGameInfo() {
-		// 		this.gameYmd = DateUtil.Format.toYmd(this.pGameInfo.gameYmd);
-		// 		this.gameAddress = this.pGameInfo.gamePlaceAddress;
-		// 		this.gameTime = this.pGameInfo.gameYmd;
-		// 		this.gamePlaceName = this.pGameInfo.gamePlaceName;
-		// 	},
-		// },
+		data() {
+			return {
+				gameBasicInfo: function () {
+					console.log('data가 호출되는 시점 ');
+				},
+			};
+		},
+		methods: {
+			async getGameBasicInfo() {
+				console.log('getGameInfo 호출되는 시점');
+				const params = {
+					gameSeq: this.pGameSeq,
+				};
 
-		// mounted() {
-		// 	this.setGameInfo();
-		// },
+				const res = await GameAPI.getGameBasicInfo(params);
+				const gameBasicInfo = res.data.gameInfo;
+
+				const startTime = DateUtil.Format.toTime(gameBasicInfo.gameStartTime);
+				const endTime = DateUtil.Format.toTime(gameBasicInfo.gameEndTime);
+				this.gameBasicInfo = {
+					gameYmd: DateUtil.Format.toYmd(gameBasicInfo.gameYmd),
+					gameTime: `${startTime} ~ ${endTime}`,
+					gamePlaceAddress: gameBasicInfo.gamePlaceAddress,
+					gamePlaceName: gameBasicInfo.gamePlaceName,
+				};
+			},
+		},
+		mounted() {
+			console.log('마운트되는 시점');
+			this.getGameBasicInfo();
+		},
 	};
 </script>
 

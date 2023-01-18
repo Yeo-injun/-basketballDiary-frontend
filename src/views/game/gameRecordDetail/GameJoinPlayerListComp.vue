@@ -2,7 +2,7 @@
 	<v-col cols="6">
 		<v-data-table
 			:headers="headers"
-			:items="players"
+			:items="this.pGameJoinPlayers"
 			hide-default-footer
 			class="elevation-1"
 		></v-data-table>
@@ -11,15 +11,18 @@
 
 <script>
 	export default {
+		props: {
+			pGameJoinPlayers: Array,
+		},
 		data() {
 			return {
 				headers: [
 					{ text: '등번호', value: 'backnumber' },
-					{ text: '포지션', value: 'calories' },
-					{ text: '이름', value: 'fat' },
-					{ text: '팀원 구분', value: 'carbs' },
+					{ text: '포지션', value: 'positionCodeName' },
+					{ text: '이름', value: 'name' },
+					{ text: '팀원 구분', value: 'playerTypeCodeName' },
 				],
-				players: [],
+				// players: this.pGameJoinPlayers,
 			};
 		},
 	};
