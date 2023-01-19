@@ -3,8 +3,14 @@
 		<h2>게임참가선수</h2>
 		<v-container>
 			<v-row dense>
-				<HomeTeamPlayerManageBtn />
-				<AwayTeamPlayerManageBtn />
+				<HomeTeamPlayerManageBtn
+					:pHomeAwayCode="this.homeTeamCode"
+					@select-players="callbackSelectPlayers"
+				/>
+				<AwayTeamPlayerManageBtn
+					:pHomeAwayCode="this.awayTeamCode"
+					@select-players="callbackSelectPlayers"
+				/>
 			</v-row>
 			<v-row dense>
 				<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
@@ -16,6 +22,8 @@
 
 <script>
 	import GameAPI from '@/api/GameAPI.js';
+
+	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	import HomeTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
 	import HomeTeamPlayerManageBtn from '@/views/game/gameRecordDetail/GameJoinPlayerManageBtn.vue';
@@ -35,6 +43,8 @@
 		},
 		data() {
 			return {
+				homeTeamCode: HomeAwayCode.HOME_TEAM,
+				awayTeamCode: HomeAwayCode.AWAY_TEAM,
 				homeTeamPlayers: [],
 				awayTeamPlayers: [],
 			};
@@ -48,6 +58,21 @@
 				const res = await GameAPI.getGameJoinPlayers(params);
 
 				this.homeTeamPlayers = res.data.homeTeam.players;
+				this.awayTeamPlayers = res.data.awayTeam.players;
+			},
+			async callbackSelectPlayers(eventParams) {
+				const homeAwayCode = eventParams.homeAwayCode;
+				const params = {
+					gameSeq: this.pGameSeq,
+					homeAwayCode: homeAwayCode,
+				};
+
+				const res = await GameAPI.getGameJoinPlayers(params);
+
+				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
+					this.homeTeamPlayers = res.data.homeTeam.players;
+					return;
+				}
 				this.awayTeamPlayers = res.data.awayTeam.players;
 			},
 		},
