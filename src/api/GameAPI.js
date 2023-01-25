@@ -56,4 +56,11 @@ export default {
 			},
 		});
 	},
+
+	/**
+	 * API063 게임전체쿼터 조회
+	 */
+	getGameAllQuartersRecords(params) {
+		return axiosService.get(`${params.gameSeq}/quarters`);
+	},
 };

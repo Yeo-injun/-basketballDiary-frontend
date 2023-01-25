@@ -6,7 +6,7 @@
 		<GameInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
-		<h2>경기기록</h2>
+		<GameQuartersComp :pGameSeq="this.gameSeq" />
 	</v-container>
 </template>
 
@@ -14,12 +14,14 @@
 	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
 	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
 	import GameJoinPlayersInfoComp from '@/views/game/gameRecordDetail/GameJoinPlayersInfoComp.vue';
+	import GameQuartersComp from '@/views/game/gameRecordDetail/GameQuartersComp.vue';
 
 	export default {
 		components: {
 			GameInfoComp,
 			GameJoinTeamsInfoComp,
 			GameJoinPlayersInfoComp,
+			GameQuartersComp,
 		},
 		data() {
 			return {
