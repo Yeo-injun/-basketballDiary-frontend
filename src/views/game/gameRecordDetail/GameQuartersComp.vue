@@ -4,14 +4,28 @@
 		<v-container>
 			<v-btn>입력권한관리 - 별도 컴포넌트로 분리(Layer포함)</v-btn>
 		</v-container>
-		<Quarter1stComp :pQuarterTeamsRecords="this.teamsRecords1stQuarter" />
-		<Quarter2ndComp :pQuarterTeamsRecords="this.teamsRecords2ndQuarter" />
-		<Quarter3rdComp :pQuarterTeamsRecords="this.teamsRecords3rdQuarter" />
-		<Quarter4thComp :pQuarterTeamsRecords="this.teamsRecords4thQuarter" />
+		<Quarter1stComp
+			:pQuarterTeamsRecords="this.teamsRecords1stQuarter"
+			:pQuarterCode="this.quarter1st"
+		/>
+		<Quarter2ndComp
+			:pQuarterTeamsRecords="this.teamsRecords2ndQuarter"
+			:pQuarterCode="this.quarter2nd"
+		/>
+		<Quarter3rdComp
+			:pQuarterTeamsRecords="this.teamsRecords3rdQuarter"
+			:pQuarterCode="this.quarter3rd"
+		/>
+		<Quarter4thComp
+			:pQuarterTeamsRecords="this.teamsRecords4thQuarter"
+			:pQuarterCode="this.quarter4th"
+		/>
 	</v-container>
 </template>
 
 <script>
+	import { QuarterCode } from '@/const/code/GameCode.js';
+
 	import GameAPI from '@/api/GameAPI.js';
 
 	import Quarter1stComp from '@/components/game/quarter/GameQuarterComp.vue';
@@ -31,6 +45,10 @@
 		},
 		data() {
 			return {
+				quarter1st: QuarterCode.QUARTER_1ST,
+				quarter2nd: QuarterCode.QUARTER_2ND,
+				quarter3rd: QuarterCode.QUARTER_3RD,
+				quarter4th: QuarterCode.QUARTER_4TH,
 				teamsRecords1stQuarter: {},
 				teamsRecords2ndQuarter: {},
 				teamsRecords3rdQuarter: {},

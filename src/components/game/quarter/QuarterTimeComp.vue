@@ -10,17 +10,17 @@
 </template>
 
 <script>
+	import DateUtil from '@/common/DateUtil.js';
+
 	export default {
 		props: {
-			pQuarterCode: String,
-			pQuarterCodeName: String,
-			pQuarterTime: String,
+			pQuarterInfo: Object,
 		},
 		data() {
 			return {
 				quarterCode: this.pQuarterCode,
-				quarterCodeName: this.pQuarterCodeName,
-				quarterTime: this.pQuarterTime,
+				quarterCodeName: this.pQuarterInfo.quarterCodeName,
+				quarterTime: DateUtil.Format.toTime(this.pQuarterInfo.quarterTime),
 			};
 		},
 	};

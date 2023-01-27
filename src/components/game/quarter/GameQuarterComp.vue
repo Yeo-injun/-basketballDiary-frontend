@@ -3,13 +3,13 @@
 		<v-card>
 			<v-row no-gutters>
 				<v-col cols="12" sm="5">
-					<QuarterTeamScoreComp :pTeamScoreInfo="this.homeTeam" />
+					<TeamQuarterRecordsComp :pTeamQuarterRecords="this.homeTeamRecords" />
 				</v-col>
 				<v-col cols="12" sm="2">
-					<QuarterTimeComp :pGameTypeCodeName="this.gameTypeCodeName" />
+					<QuarterTimeComp :pQuarterInfo="this.quarterInfo" />
 				</v-col>
 				<v-col cols="12" sm="5">
-					<QuarterTeamScoreComp :pTeamScoreInfo="this.awayTeam" />
+					<TeamQuarterRecordsComp :pTeamQuarterRecords="this.awayTeamRecords" />
 				</v-col>
 			</v-row>
 		</v-card>
@@ -17,27 +17,32 @@
 </template>
 
 <script>
-	import QuarterTeamScoreComp from '@/components/game/quarter/QuarterTeamScoreComp.vue';
+	import TeamQuarterRecordsComp from '@/components/game/quarter/TeamQuarterRecordsComp.vue';
 	import QuarterTimeComp from '@/components/game/quarter/QuarterTimeComp.vue';
 
 	export default {
 		components: {
-			QuarterTeamScoreComp,
+			TeamQuarterRecordsComp,
 			QuarterTimeComp,
 		},
 		props: {
-			pGameScore: Object,
+			pQuarterTeamsRecords: Object,
+			pQuarterCode: String,
 		},
 		data() {
 			return {
-				gameTypeCode: this.pGameScore.gameTypeCode,
-				gameTypeCodeName: this.pGameScore.gameTypeCodeName,
-				homeTeam: this.pGameScore.homeTeam,
-				awayTeam: this.pGameScore.awayTeam,
+				quarterInfo: {
+					quarterCode: this.pQuarterTeamsRecords.quarterCode,
+					quarterCodeName: this.pQuarterTeamsRecords.quarterCodeName,
+					quarterTime: this.pQuarterTeamsRecords.quarterTime,
+				},
+				homeTeamRecords: this.pQuarterTeamsRecords.homeTeamRecords,
+				awayTeamRecords: this.pQuarterTeamsRecords.awayTeamRecords,
 			};
 		},
-		setup() {
-			return {};
+		mounted() {
+			debugger;
+			return;
 		},
 	};
 </script>
