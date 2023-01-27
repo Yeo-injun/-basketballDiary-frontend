@@ -31,3 +31,17 @@ export const HomeAwayCode = {
 	HOME_TEAM: '01',
 	AWAY_TEAM: '02',
 };
+
+/**
+ * 쿼터 코드
+ * 01 : QUARTER_1ST(1쿼터)
+ * 02 : QUARTER_2ND(2쿼터)
+ * 03 : QUARTER_3RD(3쿼터)
+ * 04 : QUARTER_4TH(4쿼터)
+ */
+export const QuarterCode = {
+	QUARTER_1ST: '01',
+	QUARTER_2ND: '02',
+	QUARTER_3RD: '03',
+	QUARTER_4TH: '04',
+};
