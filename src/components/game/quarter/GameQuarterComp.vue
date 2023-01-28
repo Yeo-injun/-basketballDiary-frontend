@@ -1,22 +1,35 @@
 <template>
 	<v-container>
 		<v-card>
-			<v-row no-gutters>
-				<v-col cols="12" sm="5">
-					<TeamQuarterRecordsComp :pTeamQuarterRecords="this.homeTeamRecords" />
-				</v-col>
-				<v-col cols="12" sm="2">
-					<QuarterTimeComp :pQuarterInfo="this.quarterInfo" />
-				</v-col>
-				<v-col cols="12" sm="5">
-					<TeamQuarterRecordsComp :pTeamQuarterRecords="this.awayTeamRecords" />
-				</v-col>
-			</v-row>
+			<div v-if="hasQuarterRecords(this.pTeamsQuarterRecords)">
+				<v-row no-gutters>
+					<v-col cols="12" sm="5">
+						<TeamQuarterRecordsComp
+							:pTeamQuarterRecords="this.pTeamsQuarterRecords.homeTeamRecords"
+						/>
+					</v-col>
+					<v-col cols="12" sm="2">
+						<QuarterTimeComp
+							:pQuarterCodeName="this.pTeamsQuarterRecords.quarterCodeName"
+							:pQuarterTime="this.pTeamsQuarterRecords.quarterTime"
+						/>
+					</v-col>
+					<v-col cols="12" sm="5">
+						<TeamQuarterRecordsComp
+							:pTeamQuarterRecords="this.pTeamsQuarterRecords.awayTeamRecords"
+						/>
+					</v-col>
+				</v-row>
+			</div>
+			<div v-else>
+				<v-btn>테스트</v-btn>
+			</div>
 		</v-card>
 	</v-container>
 </template>
 
 <script>
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import TeamQuarterRecordsComp from '@/components/game/quarter/TeamQuarterRecordsComp.vue';
 	import QuarterTimeComp from '@/components/game/quarter/QuarterTimeComp.vue';
 
@@ -26,23 +39,16 @@
 			QuarterTimeComp,
 		},
 		props: {
-			pQuarterTeamsRecords: Object,
 			pQuarterCode: String,
+			pTeamsQuarterRecords: Object,
 		},
-		data() {
-			return {
-				quarterInfo: {
-					quarterCode: this.pQuarterTeamsRecords.quarterCode,
-					quarterCodeName: this.pQuarterTeamsRecords.quarterCodeName,
-					quarterTime: this.pQuarterTeamsRecords.quarterTime,
-				},
-				homeTeamRecords: this.pQuarterTeamsRecords.homeTeamRecords,
-				awayTeamRecords: this.pQuarterTeamsRecords.awayTeamRecords,
-			};
-		},
-		mounted() {
-			debugger;
-			return;
+		methods: {
+			hasQuarterRecords(quarterRecords) {
+				if (ValidationUtil.isNull(quarterRecords)) {
+					return false;
+				}
+				return true;
+			},
 		},
 	};
 </script>
