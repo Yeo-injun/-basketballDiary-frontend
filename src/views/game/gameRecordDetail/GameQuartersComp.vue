@@ -6,18 +6,22 @@
 		</v-container>
 		<div v-if="this.isLoading">
 			<GameQuarterComp
+				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter1st"
 				:pTeamsQuarterRecords="this.teamsRecords1stQuarter"
 			/>
 			<GameQuarterComp
+				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter2nd"
 				:pTeamsQuarterRecords="this.teamsRecords2ndQuarter"
 			/>
 			<GameQuarterComp
+				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter3rd"
 				:pTeamsQuarterRecords="this.teamsRecords3rdQuarter"
 			/>
 			<GameQuarterComp
+				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter4th"
 				:pTeamsQuarterRecords="this.teamsRecords4thQuarter"
 			/>
@@ -46,6 +50,7 @@
 				quarter2nd: QuarterCode.QUARTER_2ND,
 				quarter3rd: QuarterCode.QUARTER_3RD,
 				quarter4th: QuarterCode.QUARTER_4TH,
+				gameRecordStateCode: '',
 				teamsRecords1stQuarter: {},
 				teamsRecords2ndQuarter: {},
 				teamsRecords3rdQuarter: {},
@@ -60,6 +65,7 @@
 				};
 
 				const res = await GameAPI.getGameAllQuartersRecords(params);
+				this.gameRecordStateCode = res.data.gameRecordStateCode;
 				this.teamsRecords1stQuarter = res.data.teamsRecords1stQuarter;
 				this.teamsRecords2ndQuarter = res.data.teamsRecords2ndQuarter;
 				this.teamsRecords3rdQuarter = res.data.teamsRecords3rdQuarter;

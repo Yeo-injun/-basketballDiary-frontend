@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container @click="routePageByGameRecordState()">
 		<v-card>
 			<div v-if="hasQuarterRecords(this.pTeamsQuarterRecords)">
 				<v-row no-gutters>
@@ -39,6 +39,7 @@
 			QuarterTimeComp,
 		},
 		props: {
+			pGameRecordStateCode: String,
 			pQuarterCode: String,
 			pTeamsQuarterRecords: Object,
 		},
@@ -48,6 +49,10 @@
 					return false;
 				}
 				return true;
+			},
+			routePageByGameRecordState() {
+				alert('ddd!');
+				alert(this.pGameRecordStateCode);
 			},
 		},
 	};
