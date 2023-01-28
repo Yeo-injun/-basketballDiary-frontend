@@ -4,22 +4,24 @@
 		<v-container>
 			<v-btn>입력권한관리 - 별도 컴포넌트로 분리(Layer포함)</v-btn>
 		</v-container>
-		<Quarter1stComp
-			:pQuarterTeamsRecords="this.teamsRecords1stQuarter"
-			:pQuarterCode="this.quarter1st"
-		/>
-		<Quarter2ndComp
-			:pQuarterTeamsRecords="this.teamsRecords2ndQuarter"
-			:pQuarterCode="this.quarter2nd"
-		/>
-		<Quarter3rdComp
-			:pQuarterTeamsRecords="this.teamsRecords3rdQuarter"
-			:pQuarterCode="this.quarter3rd"
-		/>
-		<Quarter4thComp
-			:pQuarterTeamsRecords="this.teamsRecords4thQuarter"
-			:pQuarterCode="this.quarter4th"
-		/>
+		<div v-if="this.isLoading">
+			<GameQuarterComp
+				:pQuarterCode="this.quarter1st"
+				:pTeamsQuarterRecords="this.teamsRecords1stQuarter"
+			/>
+			<GameQuarterComp
+				:pQuarterCode="this.quarter2nd"
+				:pTeamsQuarterRecords="this.teamsRecords2ndQuarter"
+			/>
+			<GameQuarterComp
+				:pQuarterCode="this.quarter3rd"
+				:pTeamsQuarterRecords="this.teamsRecords3rdQuarter"
+			/>
+			<GameQuarterComp
+				:pQuarterCode="this.quarter4th"
+				:pTeamsQuarterRecords="this.teamsRecords4thQuarter"
+			/>
+		</div>
 	</v-container>
 </template>
 
@@ -28,23 +30,18 @@
 
 	import GameAPI from '@/api/GameAPI.js';
 
-	import Quarter1stComp from '@/components/game/quarter/GameQuarterComp.vue';
-	import Quarter2ndComp from '@/components/game/quarter/GameQuarterComp.vue';
-	import Quarter3rdComp from '@/components/game/quarter/GameQuarterComp.vue';
-	import Quarter4thComp from '@/components/game/quarter/GameQuarterComp.vue';
+	import GameQuarterComp from '@/components/game/quarter/GameQuarterComp.vue';
 
 	export default {
 		components: {
-			Quarter1stComp,
-			Quarter2ndComp,
-			Quarter3rdComp,
-			Quarter4thComp,
+			GameQuarterComp,
 		},
 		props: {
 			pGameSeq: Number,
 		},
 		data() {
 			return {
+				isLoading: false,
 				quarter1st: QuarterCode.QUARTER_1ST,
 				quarter2nd: QuarterCode.QUARTER_2ND,
 				quarter3rd: QuarterCode.QUARTER_3RD,
@@ -67,6 +64,7 @@
 				this.teamsRecords2ndQuarter = res.data.teamsRecords2ndQuarter;
 				this.teamsRecords3rdQuarter = res.data.teamsRecords3rdQuarter;
 				this.teamsRecords4thQuarter = res.data.teamsRecords4thQuarter;
+				this.isLoading = true;
 			},
 		},
 		mounted() {

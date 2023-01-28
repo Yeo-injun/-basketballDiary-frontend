@@ -4,21 +4,28 @@
 			<v-row no-gutters>
 				<v-col cols="12" sm="4" align-self="center">
 					<v-row no-gutters align-content="center" justify="center">
-						<!-- 파울기록Comp -->
-						<div v-if="this.isHomeTeam()">파울</div>
-						<!-- 점수Comp -->
-						<div v-else>{{ this.gameTotalScore }}</div>
+						<div v-if="this.isHomeTeam()">
+							<QuarterTeamFoulComp :pFoulCnt="this.foulCnt" />
+						</div>
+						<div v-else>
+							{{ this.score }}
+						</div>
 					</v-row>
 				</v-col>
-				<!-- HOME/AWAY여부  -->
+
 				<v-col cols="12" sm="4">
 					<v-row no-gutters justify="center">{{ this.homeAwayCodeName }}</v-row>
 					<v-row no-gutters justify="center">{{ this.teamName }}</v-row>
 				</v-col>
+
 				<v-col cols="12" sm="4" align-self="center">
 					<v-row no-gutters justify="center">
-						<div v-if="this.isHomeTeam()">{{ this.gameTotalScore }}</div>
-						<div v-else>파울</div>
+						<div v-if="this.isHomeTeam()">
+							{{ this.score }}
+						</div>
+						<div v-else>
+							<QuarterTeamFoulComp :pFoulCnt="this.foulCnt" />
+						</div>
 					</v-row>
 				</v-col>
 			</v-row>
@@ -29,7 +36,12 @@
 <script>
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
+	import QuarterTeamFoulComp from '@/components/game/quarter/QuarterTeamFoulComp.vue';
+
 	export default {
+		components: {
+			QuarterTeamFoulComp,
+		},
 		props: {
 			pTeamQuarterRecords: Object,
 		},
@@ -38,7 +50,8 @@
 				teamName: this.pTeamQuarterRecords.teamName,
 				homeAwayCode: this.pTeamQuarterRecords.homeAwayCode,
 				homeAwayCodeName: this.pTeamQuarterRecords.homeAwayCodeName,
-				gameTotalScore: this.pTeamQuarterRecords.gameTotalScore,
+				score: this.pTeamQuarterRecords.score,
+				foulCnt: this.pTeamQuarterRecords.foul,
 			};
 		},
 		methods: {

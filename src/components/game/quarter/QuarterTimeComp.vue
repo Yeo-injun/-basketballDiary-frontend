@@ -2,7 +2,7 @@
 	<v-container>
 		<v-col align-self="center">
 			<v-row no-gutters justify="center">
-				{{ this.quarterCodeName }} /
+				{{ this.pQuarterCodeName }} /
 				{{ this.quarterTime }}
 			</v-row>
 		</v-col>
@@ -14,13 +14,12 @@
 
 	export default {
 		props: {
-			pQuarterInfo: Object,
+			pQuarterCodeName: String,
+			pQuarterTime: String,
 		},
 		data() {
 			return {
-				quarterCode: this.pQuarterCode,
-				quarterCodeName: this.pQuarterInfo.quarterCodeName,
-				quarterTime: DateUtil.Format.toTime(this.pQuarterInfo.quarterTime),
+				quarterTime: DateUtil.Format.toTime(this.pQuarterTime),
 			};
 		},
 	};
