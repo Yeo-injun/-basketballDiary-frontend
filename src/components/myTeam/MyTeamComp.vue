@@ -47,6 +47,8 @@
 							params: {
 								pTeamSeq: teamInfo.teamSeq,
 								pTeamName: teamInfo.teamName,
+								teamSeq: teamInfo.teamSeq,
+								teamName: teamInfo.teamName,
 							},
 						}"
 					>

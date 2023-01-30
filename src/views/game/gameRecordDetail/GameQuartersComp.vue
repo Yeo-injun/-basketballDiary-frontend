@@ -60,8 +60,7 @@
 		methods: {
 			async getGameAllQuartersRecords() {
 				const params = {
-					// gameSeq: this.pGameSeq,
-					gameSeq: 1,
+					gameSeq: this.pGameSeq,
 				};
 
 				const res = await GameAPI.getGameAllQuartersRecords(params);

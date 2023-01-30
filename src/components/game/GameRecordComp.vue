@@ -79,7 +79,6 @@
 				};
 			},
 			_getRouteParams() {
-				debugger;
 				const routeParams = this.$route.params;
 				return {
 					gameSeq: this.gameSeq,
