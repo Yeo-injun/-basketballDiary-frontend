@@ -1,9 +1,6 @@
 <template>
 	<v-card class="ma-6 pa-2">
-		<PageMoveBtn
-			:pBtnName="this.getBtnName()"
-			:pRouteInfo="this.getRouteInfo()"
-		/>
+		<GameRecordPageMoveBtn :pBtnInfo="this.getBtnInfo()" />
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
 			<div>경기일자 : {{ gameYmd }}</div>
@@ -17,7 +14,7 @@
 </template>
 
 <script>
-	import PageMoveBtn from '@/components/button/PageMoveBtn.vue';
+	import GameRecordPageMoveBtn from '@/views/myTeam/GameRecordPageMoveBtn.vue';
 	import ScoreBoardComp from '@/components/game/ScoreBoardComp.vue';
 	import QuarterScoreBoardComp from '@/components/game/QuarterScoreBoardComp.vue';
 
@@ -25,7 +22,7 @@
 
 	export default {
 		components: {
-			PageMoveBtn,
+			GameRecordPageMoveBtn,
 			ScoreBoardComp,
 			QuarterScoreBoardComp,
 		},
@@ -52,57 +49,43 @@
 			};
 		},
 		methods: {
-			getBtnName() {
+			getBtnInfo() {
 				if (this.gameRecordStateCode == GameRecordStateCode.CREATION) {
-					return '참가팀선택하기';
+					return this._getBtnInfo(
+						'참가팀선택하기',
+						'GameJoinTeamSelectionPage'
+					);
 				}
 
 				if (
 					this.gameRecordStateCode == GameRecordStateCode.JOIN_TEAM_CONFIRMATION
 				) {
-					return '기록하기';
+					return this._getBtnInfo('기록하기', 'GameRecordDetailPage');
 				}
 
 				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
-					return '상세보기';
+					return this._getBtnInfo('상세보기', 'GameRecordDetailPage');
 				}
 
 				throw new Error(
 					`존재하지 않는 코드입니다. 입력 코드 : ${this.gameRecordStateCode}`
 				);
 			},
-			getRouteInfo() {
-				if (this.gameRecordStateCode == GameRecordStateCode.CREATION) {
-					return {
-						name: 'GameJoinTeamSelectionPage',
-						params: { gameSeq: this.gameSeq },
-					};
-				}
-
-				if (
-					this.gameRecordStateCode == GameRecordStateCode.JOIN_TEAM_CONFIRMATION
-				) {
-					return {
-						name: 'GameRecordDetailPage', // TODO 구현 예정 화면 : 게임상세기록화면
-						params: { gameSeq: this.gameSeq },
-					};
-				}
-
-				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
-					return {
-						name: 'GameRecordDetailPage', // TODO 구현 예정 화면 : 게임상세기록화면
-						params: { gameSeq: this.gameSeq },
-					};
-				}
-
-				throw new Error(
-					`존재하지 않는 코드입니다. 입력 코드 : ${this.gameRecordStateCode}`
-				);
+			_getBtnInfo(btnName, pageName) {
+				return {
+					btnName: btnName,
+					pageName: pageName,
+					routeParams: this._getRouteParams(),
+				};
 			},
-
-			testCallback: function () {
-				alert('dd');
-				alert('1234');
+			_getRouteParams() {
+				debugger;
+				const routeParams = this.$route.params;
+				return {
+					gameSeq: this.gameSeq,
+					teamSeq: routeParams.pTeamSeq,
+					teamName: routeParams.pTeamName,
+				};
 			},
 		},
 	};

@@ -7,6 +7,7 @@
 		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
 		<GameQuartersComp :pGameSeq="this.gameSeq" />
+		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="moveMyTeamPage" />
 	</v-container>
 </template>
 
@@ -15,6 +16,7 @@
 	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
 	import GameJoinPlayersInfoComp from '@/views/game/gameRecordDetail/GameJoinPlayersInfoComp.vue';
 	import GameQuartersComp from '@/views/game/gameRecordDetail/GameQuartersComp.vue';
+	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
 	export default {
 		components: {
@@ -22,12 +24,24 @@
 			GameJoinTeamsInfoComp,
 			GameJoinPlayersInfoComp,
 			GameQuartersComp,
+			GameDeletionBtn,
 		},
 		data() {
 			return {
-				routeCompName: 'GameJoinTeamSelectionPage',
 				gameSeq: this.$route.params.gameSeq,
 			};
+		},
+		methods: {
+			moveMyTeamPage() {
+				const routeParams = this.$route.params;
+				this.$router.push({
+					name: 'MyTeamPage',
+					params: {
+						teamSeq: routeParams.teamSeq,
+						teamName: routeParams.teamName,
+					},
+				});
+			},
 		},
 	};
 </script>

@@ -18,20 +18,18 @@
 			v-if="isMatchGame()"
 			@select-opponent="setOpponentTeamSeq"
 		/>
-		<GameDeletionBtn
-			:pGameSeq="this.gameSeq"
-			@delete-event-emit="moveMainPage"
-		/>
+		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="moveMainPage" />
 	</v-container>
 </template>
 
 <script>
-	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
-	import GameDeletionBtn from '@/components/button/GameDeletionBtn.vue';
 	import GameApi from '@/api/GameAPI.js';
-	import { GameTypeCode } from '@/const/code/GameCode.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
+	import { GameTypeCode } from '@/const/code/GameCode.js';
+
+	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
+	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
 	export default {
 		components: {
