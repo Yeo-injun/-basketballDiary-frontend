@@ -18,15 +18,19 @@
 		data() {
 			return {
 				gameSeq: this.pGameSeq,
+				eventEmitName: 'delete-game',
 			};
 		},
 		methods: {
 			async deleteGame() {
+				if (!confirm('게임을 삭제하겠습니까?')) {
+					return;
+				}
 				const params = {
 					gameSeq: this.gameSeq,
 				};
 				await GameAPI.deleteGame(params);
-				this.$emit('delete-event-emit');
+				this.$emit(this.eventEmitName);
 			},
 		},
 	};
