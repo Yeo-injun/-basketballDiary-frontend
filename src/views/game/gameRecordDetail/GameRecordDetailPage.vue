@@ -8,9 +8,12 @@
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
 		<GameQuartersComp :pGameSeq="this.gameSeq" />
 		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
-		<v-row>
+		<v-row v-if="isShowGameManageBtn()">
 			<v-col>
-				<GameConfirmBtn @confirm-game="moveMyTeamPage" />
+				<GameConfirmBtn
+					:pGameSeq="this.gameSeq"
+					@confirm-game="moveMyTeamPage"
+				/>
 			</v-col>
 			<v-col>
 				<GameDeletionBtn
@@ -45,6 +48,10 @@
 			};
 		},
 		methods: {
+			// TODO 게임기록권한 테이블의 데이터를 조회해서 제어하기
+			isShowGameManageBtn() {
+				return true;
+			},
 			moveMyTeamPage() {
 				const routeParams = this.$route.params;
 				this.$router.push({

@@ -63,4 +63,11 @@ export default {
 	getGameAllQuartersRecords(params) {
 		return axiosService.get(`${params.gameSeq}/quarters`);
 	},
+
+	/**
+	 * API050 경기 확정
+	 */
+	confirmGame(params) {
+		return axiosService.post(`${params.gameSeq}/confirmation`);
+	},
 };
