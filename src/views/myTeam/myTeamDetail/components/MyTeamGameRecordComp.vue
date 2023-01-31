@@ -14,7 +14,7 @@
 </template>
 
 <script>
-	import GameRecordPageMoveBtn from '@/views/myTeam/GameRecordPageMoveBtn.vue';
+	import GameRecordPageMoveBtn from '@/views/myTeam/myTeamDetail/button/GameRecordPageMoveBtn.vue';
 	import ScoreBoardComp from '@/components/game/ScoreBoardComp.vue';
 	import QuarterScoreBoardComp from '@/components/game/QuarterScoreBoardComp.vue';
 

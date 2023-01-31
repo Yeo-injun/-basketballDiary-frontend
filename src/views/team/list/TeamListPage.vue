@@ -93,9 +93,9 @@
 </template>
 
 <script>
-	import TeamComp from '@/components/team/TeamComp.vue';
+	import TeamComp from '@/views/team/list/components/TeamComp.vue';
 	import DateUtil from '@/common/DateUtil.js';
-	import teamApi from '@/api/TeamAPI.js';
+	import TeamAPI from '@/api/TeamAPI.js';
 
 	export default {
 		components: {
@@ -169,7 +169,7 @@
 			},
 			async getTeamList(params) {
 				try {
-					const res = await teamApi.searchTeamList(params);
+					const res = await TeamAPI.searchTeamList(params);
 					this.teamList = res.data.teamDTOList;
 					this.pagination = res.data.pagerDTO;
 					console.log(this.pagination);

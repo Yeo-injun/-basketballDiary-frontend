@@ -1,3 +1,17 @@
+<!--
+# 역할 및 책임 : 화면 라우팅만 담당하는 추상버튼. (API콜은 불가능) 
+# Props 
+1. pBtnInfo : {
+	name : String (버튼의 이름) / 기본값 : "다음"
+	... 추가 필요
+}
+
+2. pRouteInfo : {
+	name : Stirng (라우팅할 화면 이름) 
+	params : Object (라우팅시 전달할 파라미터)
+}
+-->
+
 <template>
 	<!-- TODO 버튼 위치 잡기 -->
 	<v-container>
@@ -15,11 +29,8 @@
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	export default {
 		props: {
-			pRouteCompName: String, // TODO 삭제 예정 (pRouteInfo로 대체)
+			pBtnInfo: Object,
 			pRouteInfo: Object,
-			pBtnName: String,
-			// TODO API 호출 후 성공 여부에 따라 화면 전환 코드 구현 예정
-			pAPICallBeforeRoute: Function,
 		},
 		data() {
 			return {
@@ -28,10 +39,10 @@
 		},
 		methods: {
 			getBtnName() {
-				if (ValidationUtil.isNull(this.pBtnName)) {
+				if (ValidationUtil.isNull(this.pBtnInfo.name)) {
 					return '다음';
 				}
-				return this.pBtnName;
+				return this.pBtnInfo.name;
 			},
 			moveRoutePage() {
 				const hasNotRouteInfo = ValidationUtil.isNull(this.pRouteInfo);
@@ -44,7 +55,6 @@
 					params: this.pRouteInfo.params,
 				});
 			},
-			/** TODO API호출 후 성공할 시에 화면전환 함수 구현 */
 		},
 	};
 </script>

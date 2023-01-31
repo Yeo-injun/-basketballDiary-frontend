@@ -19,10 +19,10 @@
 <script>
 	// Vue lifeCycle 에 관하여
 	// https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
-	import myTeamApi from '@/api/MyTeamAPI';
-	import MyTeamComp from '@/components/myTeam/MyTeamComp.vue';
+	import MyTeamAPI from '@/api/MyTeamAPI';
+	import MyTeamComp from '@/views/myTeam/myTeamList/components/MyTeamComp.vue';
 
-	import TeamCreationBtn from '@/components/team/button/TeamCreationBtn.vue';
+	import TeamCreationBtn from '@/views/myTeam/myTeamList/button/TeamCreationBtn.vue';
 
 	import PaginationUtil from '@/common/util/PaginationUtil.js';
 
@@ -41,7 +41,7 @@
 			async getMyTeams(params) {
 				// 비동기적인 console.log 처리로 인해 발생하는 현상
 				// https://kkangdda.tistory.com/81
-				const res = await myTeamApi.searchTeams(params);
+				const res = await MyTeamAPI.searchTeams(params);
 				this.teamList = res.data.myTeamDTOList;
 				this.pagination = res.data.pagerDTO;
 			},

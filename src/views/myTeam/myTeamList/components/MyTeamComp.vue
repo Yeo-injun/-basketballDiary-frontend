@@ -38,20 +38,7 @@
 
 			<v-container>
 				<v-row align="center" justify="space-around">
-					<v-btn
-						absolute
-						right
-						color="info"
-						:to="{
-							name: 'MyTeamPage',
-							params: {
-								pTeamSeq: teamInfo.teamSeq,
-								pTeamName: teamInfo.teamName,
-								teamSeq: teamInfo.teamSeq,
-								teamName: teamInfo.teamName,
-							},
-						}"
-					>
+					<v-btn absolute right color="info" @click="moveMyTeamDetailPage()">
 						상세보기
 					</v-btn>
 				</v-row>
@@ -62,11 +49,21 @@
 
 <script>
 	export default {
-		data: () => {
-			return {};
-		},
 		props: {
 			teamInfo: Object,
+		},
+		methods: {
+			moveMyTeamDetailPage() {
+				this.$router.push({
+					name: 'MyTeamDetailPage',
+					params: {
+						pTeamSeq: this.teamInfo.teamSeq,
+						pTeamName: this.teamInfo.teamName,
+						teamSeq: this.teamInfo.teamSeq,
+						teamName: this.teamInfo.teamName,
+					},
+				});
+			},
 		},
 	};
 </script>
