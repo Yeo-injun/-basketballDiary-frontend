@@ -26,10 +26,10 @@
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	import HomeTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
-	import HomeTeamPlayerManageBtn from '@/views/game/gameRecordDetail/GameJoinPlayerManageBtn.vue';
+	import HomeTeamPlayerManageBtn from '@/views/game/gameRecordDetail/button/GameJoinPlayerManageBtn.vue';
 
 	import AwayTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
-	import AwayTeamPlayerManageBtn from '@/views/game/gameRecordDetail/GameJoinPlayerManageBtn.vue';
+	import AwayTeamPlayerManageBtn from '@/views/game/gameRecordDetail/button/GameJoinPlayerManageBtn.vue';
 
 	export default {
 		components: {

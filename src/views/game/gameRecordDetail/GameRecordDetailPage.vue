@@ -7,7 +7,21 @@
 		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
 		<GameQuartersComp :pGameSeq="this.gameSeq" />
-		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="moveMyTeamPage" />
+		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
+		<v-row v-if="isShowGameManageBtn()">
+			<v-col>
+				<GameConfirmBtn
+					:pGameSeq="this.gameSeq"
+					@confirm-game="moveMyTeamPage"
+				/>
+			</v-col>
+			<v-col>
+				<GameDeletionBtn
+					:pGameSeq="this.gameSeq"
+					@delete-game="moveMyTeamPage"
+				/>
+			</v-col>
+		</v-row>
 	</v-container>
 </template>
 
@@ -16,6 +30,7 @@
 	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
 	import GameJoinPlayersInfoComp from '@/views/game/gameRecordDetail/GameJoinPlayersInfoComp.vue';
 	import GameQuartersComp from '@/views/game/gameRecordDetail/GameQuartersComp.vue';
+	import GameConfirmBtn from '@/views/game/gameRecordDetail/button/GameConfirmBtn.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
 	export default {
@@ -24,6 +39,7 @@
 			GameJoinTeamsInfoComp,
 			GameJoinPlayersInfoComp,
 			GameQuartersComp,
+			GameConfirmBtn,
 			GameDeletionBtn,
 		},
 		data() {
@@ -32,6 +48,10 @@
 			};
 		},
 		methods: {
+			// TODO 게임기록권한 테이블의 데이터를 조회해서 제어하기
+			isShowGameManageBtn() {
+				return true;
+			},
 			moveMyTeamPage() {
 				const routeParams = this.$route.params;
 				this.$router.push({

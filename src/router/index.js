@@ -46,10 +46,18 @@ export default new VueRouter({
 		/**
 		 * myTeam페이지
 		 */
-		createRoute('views/myTeam/MyTeamListPage', '/myTeams', 'MyTeamListPage'),
-		createRoute('views/myTeam/MyTeamPage', '/myTeam', 'MyTeamPage'), // TODO Named Router 사용검토 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
 		createRoute(
-			'views/myTeam/MyTeamMemberManagePage',
+			'views/myTeam/myTeamList/MyTeamListPage',
+			'/myTeams',
+			'MyTeamListPage'
+		),
+		createRoute(
+			'views/myTeam/myTeamDetail/MyTeamDetailPage',
+			'/myTeam',
+			'MyTeamDetailPage'
+		), // TODO Named Router 사용검토 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
+		createRoute(
+			'views/myTeam/myTeamMemeberManage/MyTeamMemberManagePage',
 			'/myTeam/teamMemberManage',
 			'MyTeamMemberManagePage'
 		),
@@ -57,9 +65,9 @@ export default new VueRouter({
 		/**
 		 * team페이지
 		 */
-		createRoute('views/team/TeamListPage', '/teams', 'TeamListPage'),
+		createRoute('views/team/list/TeamListPage', '/teams', 'TeamListPage'),
 		createRoute(
-			'views/team/TeamRegistrationPage',
+			'views/team/registration/TeamRegistrationPage',
 			'/team/registration',
 			'TeamRegistrationPage'
 		),

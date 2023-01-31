@@ -48,7 +48,7 @@
 </template>
 
 <script>
-	import authUserApi from '@/api/AuthUserAPI.js';
+	import AuthUserAPI from '@/api/AuthUserAPI.js';
 
 	import AuthUtil from '@/common/AuthUtil.js';
 
@@ -73,7 +73,7 @@
 					teamSeq: this.team.teamSeq,
 				};
 				try {
-					const res = await authUserApi.sendJoinRequestToTeam(params);
+					const res = await AuthUserAPI.sendJoinRequestToTeam(params);
 					console.log(res);
 					alert('가입신청이 완료되었습니다.');
 				} catch (e) {
