@@ -34,6 +34,8 @@
 </template>
 
 <script>
+	console.log('TeamQuarterRecords / created111???');
+
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	import QuarterTeamFoulComp from '@/components/game/quarter/QuarterTeamFoulComp.vue';
@@ -46,6 +48,8 @@
 			pTeamQuarterRecords: Object,
 		},
 		data() {
+			console.log('TeamQuarterRecords / data???');
+
 			return {
 				teamName: this.pTeamQuarterRecords.teamName,
 				homeAwayCode: this.pTeamQuarterRecords.homeAwayCode,
@@ -56,11 +60,16 @@
 		},
 		methods: {
 			isHomeTeam() {
+				console.log('TeamQuarterRecords / isHomeTeam???');
+
 				if (this.homeAwayCode == HomeAwayCode.HOME_TEAM) {
 					return true;
 				}
 				return false;
 			},
+		},
+		mounted() {
+			console.log('TeamQuarterRecords / mounted???');
 		},
 	};
 </script>

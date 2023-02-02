@@ -4,7 +4,7 @@
 		<v-container>
 			<v-btn>입력권한관리 - 별도 컴포넌트로 분리(Layer포함)</v-btn>
 		</v-container>
-		<div v-if="this.isLoading">
+		<div v-if="this.isLoadingComplete">
 			<GameQuarterComp
 				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter1st"
@@ -45,7 +45,7 @@
 		},
 		data() {
 			return {
-				isLoading: false,
+				isLoadingComplete: false,
 				quarter1st: QuarterCode.QUARTER_1ST,
 				quarter2nd: QuarterCode.QUARTER_2ND,
 				quarter3rd: QuarterCode.QUARTER_3RD,
@@ -69,7 +69,7 @@
 				this.teamsRecords2ndQuarter = res.data.teamsRecords2ndQuarter;
 				this.teamsRecords3rdQuarter = res.data.teamsRecords3rdQuarter;
 				this.teamsRecords4thQuarter = res.data.teamsRecords4thQuarter;
-				this.isLoading = true;
+				this.isLoadingComplete = true;
 			},
 		},
 		mounted() {
