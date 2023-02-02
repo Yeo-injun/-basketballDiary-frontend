@@ -29,6 +29,8 @@
 </template>
 
 <script>
+	console.log('GameQuarterComp / created111???');
+
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import TeamQuarterRecordsComp from '@/components/game/quarter/TeamQuarterRecordsComp.vue';
 	import QuarterTimeComp from '@/components/game/quarter/QuarterTimeComp.vue';
@@ -45,6 +47,8 @@
 		},
 		methods: {
 			hasQuarterRecords(quarterRecords) {
+				console.log('GameQuarterComp / hasQuarterRecords???');
+
 				if (ValidationUtil.isNull(quarterRecords)) {
 					return false;
 				}
@@ -55,7 +59,12 @@
 				alert(this.pGameRecordStateCode);
 			},
 		},
+		mounted() {
+			console.log('GameQuarterComp / mounted111???');
+		},
 	};
+
+	console.log('GameQuarterComp / created222???');
 </script>
 
 <style lang="scss" scoped></style>
