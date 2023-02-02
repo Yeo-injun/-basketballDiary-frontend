@@ -1,20 +1,22 @@
 <template>
 	<v-container>
 		<h2>게임참가선수</h2>
-		<v-container>
+		<v-container v-if="this.isLoadingComplete">
 			<v-row dense>
-				<HomeTeamPlayerManageBtn
-					:pHomeAwayCode="this.homeTeamCode"
-					@select-players="callbackSelectPlayers"
-				/>
-				<AwayTeamPlayerManageBtn
-					:pHomeAwayCode="this.awayTeamCode"
-					@select-players="callbackSelectPlayers"
-				/>
-			</v-row>
-			<v-row dense>
-				<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
-				<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
+				<v-col cols="6">
+					<HomeTeamPlayersManageModal
+						:pHomeAwayCode="this.homeTeamCode"
+						@select-players="callbackSelectPlayers"
+					/>
+					<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
+				</v-col>
+				<v-col cols="6">
+					<AwayTeamPlayersManageModal
+						:pHomeAwayCode="this.awayTeamCode"
+						@select-players="callbackSelectPlayers"
+					/>
+					<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
+				</v-col>
 			</v-row>
 		</v-container>
 	</v-container>
@@ -25,24 +27,25 @@
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
-	import HomeTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
-	import HomeTeamPlayerManageBtn from '@/views/game/gameRecordDetail/button/GameJoinPlayerManageBtn.vue';
+	import HomeTeamPlayerList from '@/views/game/recordDetail/GameJoinPlayerListComp.vue';
+	import HomeTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
-	import AwayTeamPlayerList from '@/views/game/gameRecordDetail/GameJoinPlayerListComp.vue';
-	import AwayTeamPlayerManageBtn from '@/views/game/gameRecordDetail/button/GameJoinPlayerManageBtn.vue';
+	import AwayTeamPlayerList from '@/views/game/recordDetail/GameJoinPlayerListComp.vue';
+	import AwayTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
 	export default {
 		components: {
 			HomeTeamPlayerList,
-			HomeTeamPlayerManageBtn,
+			HomeTeamPlayersManageModal,
 			AwayTeamPlayerList,
-			AwayTeamPlayerManageBtn,
+			AwayTeamPlayersManageModal,
 		},
 		props: {
 			pGameSeq: Number,
 		},
 		data() {
 			return {
+				isLoadingComplete: false,
 				homeTeamCode: HomeAwayCode.HOME_TEAM,
 				awayTeamCode: HomeAwayCode.AWAY_TEAM,
 				homeTeamPlayers: [],
@@ -59,6 +62,7 @@
 
 				this.homeTeamPlayers = res.data.homeTeam.players;
 				this.awayTeamPlayers = res.data.awayTeam.players;
+				this.isLoadingComplete = true;
 			},
 			async callbackSelectPlayers(eventParams) {
 				const homeAwayCode = eventParams.homeAwayCode;

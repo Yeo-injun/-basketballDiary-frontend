@@ -1,12 +1,10 @@
 <template>
-	<v-col cols="6">
-		<v-data-table
-			:headers="headers"
-			:items="this.pGameJoinPlayers"
-			hide-default-footer
-			class="elevation-1"
-		></v-data-table>
-	</v-col>
+	<v-data-table
+		:headers="headers"
+		:items="this.pGameJoinPlayers"
+		hide-default-footer
+		class="elevation-1"
+	/>
 </template>
 
 <script>
