@@ -82,6 +82,7 @@
 				const routeParams = this.$route.params;
 				return {
 					gameSeq: this.gameSeq,
+					gameRecordState: this.pGame.gameRecordStateCode,
 					teamSeq: routeParams.pTeamSeq,
 					teamName: routeParams.pTeamName,
 				};

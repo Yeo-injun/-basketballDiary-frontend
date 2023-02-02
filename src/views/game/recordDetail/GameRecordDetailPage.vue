@@ -26,11 +26,13 @@
 </template>
 
 <script>
-	import GameInfoComp from '@/views/game/gameRecordDetail/GameInfoComp.vue';
-	import GameJoinTeamsInfoComp from '@/views/game/gameRecordDetail/GameJoinTeamsInfoComp.vue';
-	import GameJoinPlayersInfoComp from '@/views/game/gameRecordDetail/GameJoinPlayersInfoComp.vue';
-	import GameQuartersComp from '@/views/game/gameRecordDetail/GameQuartersComp.vue';
-	import GameConfirmBtn from '@/views/game/gameRecordDetail/button/GameConfirmBtn.vue';
+	import { GameRecordStateCode } from '@/const/code/GameCode.js';
+
+	import GameInfoComp from '@/views/game/recordDetail/GameInfoComp.vue';
+	import GameJoinTeamsInfoComp from '@/views/game/recordDetail/GameJoinTeamsInfoComp.vue';
+	import GameJoinPlayersInfoComp from '@/views/game/recordDetail/GameJoinPlayersInfoComp.vue';
+	import GameQuartersComp from '@/views/game/recordDetail/GameQuartersComp.vue';
+	import GameConfirmBtn from '@/views/game/recordDetail/button/GameConfirmBtn.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
 	export default {
@@ -48,8 +50,15 @@
 			};
 		},
 		methods: {
-			// TODO 게임기록권한 테이블의 데이터를 조회해서 제어하기
 			isShowGameManageBtn() {
+				const isConfirm =
+					this.$route.params.gameRecordState ==
+					GameRecordStateCode.CONFIRMATION;
+				if (isConfirm) {
+					return false;
+				}
+
+				// TODO 게임기록권한 테이블의 데이터를 조회해서 제어하기 (어느 API에서 가져올 것인지 )
 				return true;
 			},
 			moveMyTeamPage() {

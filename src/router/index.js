@@ -38,7 +38,7 @@ export default new VueRouter({
 			'GameJoinTeamSelectionPage'
 		),
 		createRoute(
-			'views/game/gameRecordDetail/GameRecordDetailPage',
+			'views/game/recordDetail/GameRecordDetailPage',
 			'/game/record',
 			'GameRecordDetailPage'
 		),
