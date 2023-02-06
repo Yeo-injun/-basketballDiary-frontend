@@ -15,8 +15,8 @@
 <script>
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
-	import MyTeamGameRecordSearchComp from '@/views/myTeam/myTeamDetail/components/MyTeamGameRecordSearchComp.vue';
-	import MyTeamGameRecordComp from '@/views/myTeam/myTeamDetail/components/MyTeamGameRecordComp.vue';
+	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
+	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
 
 	export default {
 		components: {
