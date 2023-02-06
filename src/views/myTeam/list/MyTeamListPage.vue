@@ -20,9 +20,9 @@
 	// Vue lifeCycle 에 관하여
 	// https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
 	import MyTeamAPI from '@/api/MyTeamAPI';
-	import MyTeamComp from '@/views/myTeam/myTeamList/components/MyTeamComp.vue';
+	import MyTeamComp from '@/views/myTeam/list/components/MyTeamComp.vue';
 
-	import TeamCreationBtn from '@/views/myTeam/myTeamList/button/TeamCreationBtn.vue';
+	import TeamCreationBtn from '@/views/myTeam/list/button/TeamCreationBtn.vue';
 
 	import PaginationUtil from '@/common/util/PaginationUtil.js';
 

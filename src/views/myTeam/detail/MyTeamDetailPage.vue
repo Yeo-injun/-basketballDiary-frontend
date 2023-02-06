@@ -16,9 +16,9 @@
 </template>
 
 <script>
-	import MyTeamMemberTab from '@/views/myTeam/myTeamDetail/tab/MyTeamMemberTab.vue';
-	import MyTeamGameListTab from '@/views/myTeam/myTeamDetail/tab/MyTeamGameListTab.vue';
-	import GameCreationPage from '@/views/game/GameCreationPage.vue';
+	import MyTeamMemberTab from '@/views/myTeam/detail/tab/MyTeamMemberTab.vue';
+	import MyTeamGameListTab from '@/views/myTeam/detail/tab/MyTeamGameListTab.vue';
+	import GameCreationPage from '@/views/game/creation/GameCreationPage.vue';
 
 	export default {
 		components: {
