@@ -1,7 +1,7 @@
 <template>
 	<v-col cols="6">
 		<v-container>
-			<v-btn @click="openModal()">참가선수관리</v-btn>
+			<v-btn @click="registerPlayers()">등록</v-btn>
 		</v-container>
 	</v-col>
 </template>
@@ -12,8 +12,8 @@
 			pHomeAwayCode: String,
 		},
 		methods: {
-			openModal() {
-				this.$emit('select-players', { homeAwayCode: this.pHomeAwayCode });
+			registerPlayers() {
+				this.$emit('register-players');
 			},
 		},
 	};
