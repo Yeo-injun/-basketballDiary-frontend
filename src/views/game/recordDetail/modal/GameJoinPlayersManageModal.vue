@@ -15,6 +15,8 @@
 				:pHomeAwayCode="this.pHomeAwayCode"
 				:pIsOpen="this.dialog"
 			/>
+
+			<GameJoinPlayerSelectionComp />
 		</v-card>
 	</v-dialog>
 </template>
@@ -24,11 +26,13 @@
 	import GameJoinPlayerManageBtn from '@/views/game/recordDetail/button/GameJoinPlayerManageBtn.vue';
 	import PlayerListComp from '@/components/game/gameJoinPlayer/PlayerListComp.vue';
 
+	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
 	export default {
 		components: {
 			GameJoinPlayerRegistrationBtn,
 			GameJoinPlayerManageBtn,
 			PlayerListComp,
+			GameJoinPlayerSelectionComp,
 		},
 		props: {
 			pHomeAwayCode: String,

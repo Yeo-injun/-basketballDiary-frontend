@@ -1,16 +1,15 @@
 <template>
 	<v-container>
-		<div>{{ this.title }}</div>
 		<v-data-table
 			:headers="headers"
 			:items="playerList"
 			item-key="userSeq"
 			class="elevation-1"
 		>
-			<!-- row별 승인 버튼 -->
+			<!-- row별 버튼 -->
 			<template v-slot:[`item.delete`]="{ item }">
 				<template>
-					<v-btn class="mr-2" small @click="deletePlayer(item)">삭제</v-btn>
+					<v-btn class="mr-2" small @click="deletePlayer(item)">추가</v-btn>
 				</template>
 			</template>
 		</v-data-table>
@@ -18,19 +17,12 @@
 </template>
 
 <script>
-	import GameAPI from '@/api/GameAPI.js';
-
-	import { HomeAwayCode } from '@/const/code/GameCode.js';
-
 	export default {
 		props: {
 			pHomeAwayCode: String,
-			pIsOpen: Boolean,
 		},
 		data() {
 			return {
-				isOpen: this.pIsOpen,
-				title: '참가선수 목록',
 				headers: [
 					{ text: '선수구분', value: 'playerTypeCodeName' },
 					{ text: '이름', value: 'name' },
@@ -81,40 +73,10 @@
 			};
 		},
 		methods: {
-			async getGameJoinPlayers() {
-				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
-				};
-
-				const res = await GameAPI.getGameJoinPlayers(params);
-
-				switch (this.pHomeAwayCode) {
-					case HomeAwayCode.HOME_TEAM:
-						this.playerList = res.data.homeTeam.players;
-						break;
-					case HomeAwayCode.AWAY_TEAM:
-						this.playerList = res.data.awayTeam.players;
-						break;
-				}
-			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deletePlayer(targetPlayer) {
 				console.log(targetPlayer);
-
-				const newPlayers = [];
-				for (const player of this.playerList) {
-					if (targetPlayer.userSeq == player.userSeq) {
-						continue;
-					}
-					newPlayers.push(player);
-				}
-				this.playerList = newPlayers;
 			},
-		},
-		mounted() {
-			// TODO 모달창이 활성화될때마다 API콜해서 데이터 가져오기
-			// this.getGameJoinPlayers();
 		},
 	};
 </script>
