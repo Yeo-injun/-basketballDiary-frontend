@@ -107,4 +107,13 @@ export default {
 	searchMyTeamGames(params) {
 		return axiosService.get(`/${params.teamSeq}/games`);
 	},
+	/* API036 : 소속팀 전체 팀원 검색 */
+	searchAllTeamMembers(params) {
+		return axiosService.get(`/${params.teamSeq}/allTeamMembers`, {
+			params: {
+				pageNo: params.pageNo,
+				playerName: params.playerName,
+			},
+		});
+	},
 };
