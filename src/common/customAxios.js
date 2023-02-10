@@ -37,6 +37,9 @@ export default {
 
 		// Request 인터셉터 등록
 		axiosInstance.interceptors.request.use(function (config) {
+			const method = config.method.toUpperCase();
+			const targetUrl = config.baseURL;
+			console.log(`${method} / ${targetUrl}`);
 			LoadingStateManager.mutations.loadingStart();
 			return config;
 		}),
