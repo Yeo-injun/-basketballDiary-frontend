@@ -70,4 +70,13 @@ export default {
 	confirmGame(params) {
 		return axiosService.post(`/${params.gameSeq}/confirmation`);
 	},
+
+	/**
+	 * API035 게임참가 선수등록하기
+	 */
+	registerGameJoinPlayers(params) {
+		return axiosService.post(
+			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`
+		);
+	},
 };

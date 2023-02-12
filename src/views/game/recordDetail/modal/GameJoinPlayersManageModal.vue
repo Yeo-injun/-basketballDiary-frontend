@@ -9,45 +9,114 @@
 		</template>
 
 		<v-card>
-			<v-card-title>참가선수관리</v-card-title>
+			<v-card-title> {{ pModalTitlePrefix }} 참가선수관리</v-card-title>
 			<GameJoinPlayerRegistrationBtn @register-players="closeModal" />
-			<PlayerListComp
-				:pHomeAwayCode="this.pHomeAwayCode"
-				:pIsOpen="this.dialog"
-			/>
+			<v-container>
+				<div>참가선수 목록</div>
+				<PlayerDataTable
+					v-if="isLoading"
+					:pPlayers="gameJoinPlayers"
+					pRowBtnName="삭제"
+					@row-btn-click="deleteGameJoinPlayer"
+				/>
+			</v-container>
 
-			<GameJoinPlayerSelectionComp />
+			<GameJoinPlayerSelectionComp @add-game-join-player="addGameJoinPlayer" />
 		</v-card>
 	</v-dialog>
 </template>
 
 <script>
+	import GameAPI from '@/api/GameAPI.js';
+
+	import { HomeAwayCode } from '@/const/code/GameCode.js';
+
 	import GameJoinPlayerRegistrationBtn from '@/views/game/recordDetail/button/GameJoinPlayerRegistrationBtn.vue';
 	import GameJoinPlayerManageBtn from '@/views/game/recordDetail/button/GameJoinPlayerManageBtn.vue';
-	import PlayerListComp from '@/components/game/gameJoinPlayer/PlayerListComp.vue';
+	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
 	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
 	export default {
 		components: {
 			GameJoinPlayerRegistrationBtn,
 			GameJoinPlayerManageBtn,
-			PlayerListComp,
+			PlayerDataTable,
 			GameJoinPlayerSelectionComp,
 		},
 		props: {
+			pModalTitlePrefix: String,
 			pHomeAwayCode: String,
 		},
 		data() {
 			return {
 				dialog: false,
+				isLoading: false,
+				gameJoinPlayers: [],
 			};
 		},
 		methods: {
-			closeModal() {
-				// TODO 선택한 선수들 등록하기 >> List에 추가
+			async closeModal() {
+				// TODO 선택한 선수들 등록하기 API035 호출
+				const params = {
+					gameSeq: this.$route.params.gameSeq,
+					gameJoinTeamSeq: 2, // TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
+					gameJoinPlayers: this.gameJoinPlayers,
+				};
+				await GameAPI.registerGameJoinPlayers(params);
+
 				this.dialog = false;
-				this.$emit('');
+				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
+				this.$emit('register-complete');
 			},
+			async getGameJoinPlayers() {
+				const params = {
+					gameSeq: this.$route.params.gameSeq,
+					homeAwayCode: this.pHomeAwayCode,
+				};
+
+				const res = await GameAPI.getGameJoinPlayers(params);
+				this.isLoading = true;
+
+				switch (this.pHomeAwayCode) {
+					case HomeAwayCode.HOME_TEAM:
+						this.gameJoinPlayers = res.data.homeTeam.players;
+						break;
+					case HomeAwayCode.AWAY_TEAM:
+						this.gameJoinPlayers = res.data.awayTeam.players;
+						break;
+				}
+			},
+			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
+			deleteGameJoinPlayer(targetPlayer) {
+				console.log(targetPlayer);
+
+				const newPlayers = [];
+
+				for (const player of this.gameJoinPlayers) {
+					if (targetPlayer.userSeq == player.userSeq) {
+						continue;
+					}
+					newPlayers.push(player);
+				}
+				this.gameJoinPlayers = newPlayers;
+			},
+
+			addGameJoinPlayer(targetPlayer) {
+				console.log(`게임참가선수 목록 Modal : ${targetPlayer}`);
+				console.log('addGameJoinPlayer');
+				// TODO userSeq로 중복 추가 방지 알림 구현
+				for (const players of this.gameJoinPlayers) {
+					const isAlreadyExistPlayer = players.userSeq == targetPlayer.userSeq;
+					if (isAlreadyExistPlayer) {
+						alert('이미 등록되어 있는 선수입니다.');
+						return;
+					}
+				}
+				this.gameJoinPlayers.unshift(targetPlayer);
+			},
+		},
+		mounted() {
+			this.getGameJoinPlayers();
 		},
 	};
 </script>

@@ -2,14 +2,16 @@
 	<v-container>
 		<v-data-table
 			:headers="headers"
-			:items="playerList"
+			:items="pPlayers"
 			item-key="userSeq"
 			class="elevation-1"
 		>
 			<!-- row별 버튼 -->
-			<template v-slot:[`item.delete`]="{ item }">
+			<template v-slot:[`item.button`]="{ item }">
 				<template>
-					<v-btn class="mr-2" small @click="deletePlayer(item)">추가</v-btn>
+					<v-btn class="mr-2" small @click="clickRowButton(item)">
+						{{ pRowBtnName }}
+					</v-btn>
 				</template>
 			</template>
 		</v-data-table>
@@ -21,6 +23,10 @@
 		props: {
 			pHomeAwayCode: String,
 			pPlayers: Array,
+			pRowBtnName: {
+				type: String,
+				default: '삭제',
+			},
 		},
 		data() {
 			return {
@@ -30,9 +36,8 @@
 					{ text: '포지션', value: 'positionCodeName' },
 					{ text: '등번호', value: 'backNumber' },
 					{ text: '이메일', value: 'email' },
-					{ test: '삭제', value: 'delete', sortable: false },
+					{ test: '버튼', value: 'button', sortable: false },
 				],
-				playerList: this.pPlayers,
 				// [
 				// 	{
 				// 		gameJoinPlayerSeq: 1,
@@ -76,8 +81,8 @@
 		},
 		methods: {
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
-			deletePlayer(targetPlayer) {
-				console.log(targetPlayer);
+			clickRowButton(targetPlayer) {
+				this.$emit('row-btn-click', targetPlayer);
 			},
 		},
 	};

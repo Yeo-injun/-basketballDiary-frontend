@@ -5,6 +5,7 @@
 			<v-row dense>
 				<v-col cols="6">
 					<HomeTeamPlayersManageModal
+						pModalTitlePrefix="홈팀"
 						:pHomeAwayCode="this.homeTeamCode"
 						@select-players="callbackSelectPlayers"
 					/>
@@ -12,6 +13,7 @@
 				</v-col>
 				<v-col cols="6">
 					<AwayTeamPlayersManageModal
+						pModalTitlePrefix="어웨이팀"
 						:pHomeAwayCode="this.awayTeamCode"
 						@select-players="callbackSelectPlayers"
 					/>

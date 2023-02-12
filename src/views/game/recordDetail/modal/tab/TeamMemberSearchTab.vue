@@ -6,7 +6,12 @@
 		<v-btn class="mb-2 mr-2" width="100" @click="searchAllTeamMember">
 			검색
 		</v-btn>
-		<PlayerDataTable v-if="isLoading" :pPlayers="teamMembers" />
+		<PlayerDataTable
+			v-if="isLoading"
+			pRowBtnName="추가"
+			:pPlayers="teamMembers"
+			@row-btn-click="addGameJoinPlayer"
+		/>
 	</div>
 </template>
 
@@ -40,6 +45,9 @@
 
 				this.isLoading = true;
 				this.teamMembers = res.data.teamMembers;
+			},
+			addGameJoinPlayer(targetPlayer) {
+				this.$emit('add-game-join-player', targetPlayer);
 			},
 		},
 		mounted() {

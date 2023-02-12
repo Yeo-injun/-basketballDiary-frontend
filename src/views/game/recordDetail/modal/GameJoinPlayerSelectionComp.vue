@@ -7,7 +7,10 @@
 		</v-tabs>
 		<v-tabs-items v-model="tab">
 			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
-				<TeamMemberSearchTab v-if="idx == 0" />
+				<TeamMemberSearchTab
+					v-if="idx == 0"
+					@add-game-join-player="addGameJoinPlayer"
+				/>
 				<GuestMemberSearchTab v-if="idx == 1" />
 				<GuestRegistrationTab v-if="idx == 2" />
 			</v-tab-item>
@@ -31,6 +34,11 @@
 				tab: null,
 				tabTitles: ['팀원', '게스트(회원)', '게스트(비회원)'],
 			};
+		},
+		methods: {
+			addGameJoinPlayer(targetPlayer) {
+				this.$emit('add-game-join-player', targetPlayer);
+			},
 		},
 	};
 </script>
