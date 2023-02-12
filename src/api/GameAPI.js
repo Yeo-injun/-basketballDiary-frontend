@@ -28,19 +28,19 @@ export default {
 	 * API051 게임 삭제
 	 */
 	deleteGame(params) {
-		return axiosService.delete(`${params.gameSeq}`);
+		return axiosService.delete(`/${params.gameSeq}`);
 	},
 	/**
 	 * API046 게임 기초정보 조회
 	 */
 	getGameBasicInfo(params) {
-		return axiosService.get(`${params.gameSeq}/info`);
+		return axiosService.get(`/${params.gameSeq}/info`);
 	},
 	/**
 	 * API047 경기참가팀 조회
 	 */
 	getGameJoinTeamsInfo(params) {
-		return axiosService.get(`${params.gameSeq}/teams`, {
+		return axiosService.get(`/${params.gameSeq}/teams`, {
 			params: {
 				homeAwayCode: params.homeAwayCode,
 			},
@@ -50,7 +50,7 @@ export default {
 	 * API061 경기참가선수 조회
 	 */
 	getGameJoinPlayers(params) {
-		return axiosService.get(`${params.gameSeq}/players`, {
+		return axiosService.get(`/${params.gameSeq}/players`, {
 			params: {
 				homeAwayCode: params.homeAwayCode,
 			},
@@ -61,13 +61,22 @@ export default {
 	 * API063 게임전체쿼터 조회
 	 */
 	getGameAllQuartersRecords(params) {
-		return axiosService.get(`${params.gameSeq}/quarters`);
+		return axiosService.get(`/${params.gameSeq}/quarters`);
 	},
 
 	/**
 	 * API050 경기 확정
 	 */
 	confirmGame(params) {
-		return axiosService.post(`${params.gameSeq}/confirmation`);
+		return axiosService.post(`/${params.gameSeq}/confirmation`);
+	},
+
+	/**
+	 * API035 게임참가 선수등록하기
+	 */
+	registerGameJoinPlayers(params) {
+		return axiosService.post(
+			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`
+		);
 	},
 };
