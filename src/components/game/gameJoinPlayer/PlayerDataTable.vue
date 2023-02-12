@@ -20,56 +20,58 @@
 	export default {
 		props: {
 			pHomeAwayCode: String,
+			pPlayers: Array,
 		},
 		data() {
 			return {
 				headers: [
 					{ text: '선수구분', value: 'playerTypeCodeName' },
-					{ text: '이름', value: 'name' },
+					{ text: '이름', value: 'userName' },
 					{ text: '포지션', value: 'positionCodeName' },
 					{ text: '등번호', value: 'backNumber' },
 					{ text: '이메일', value: 'email' },
 					{ test: '삭제', value: 'delete', sortable: false },
 				],
-				playerList: [
-					{
-						gameJoinPlayerSeq: 1,
-						playerTypeCode: '01',
-						playerTypeCodeName: '팀원',
-						userSeq: 1,
-						name: '여인준',
-						backNumber: '93',
-						positionCode: '10',
-						positionCodeName: '가드',
-						email: 'test01@nongguilgi.com',
-					},
-					{
-						gameJoinPlayerSeq: 2,
-						playerTypeCode: '01',
-						playerTypeCodeName: '팀원',
-						userSeq: 2,
-						name: '여인준22',
-						backNumber: '93',
-						positionCode: '10',
-						positionCodeName: '가드',
-						email: 'test01@nongguilgi.com',
-					},
-					{
-						gameJoinPlayerSeq: 3,
-						userSeq: 3,
-						name: '여33인준22',
-					},
-					{
-						gameJoinPlayerSeq: 4,
-						userSeq: 4,
-						name: '여인44준22',
-					},
-					{
-						gameJoinPlayerSeq: 5,
-						userSeq: 5,
-						name: '여545인준22',
-					},
-				],
+				playerList: this.pPlayers,
+				// [
+				// 	{
+				// 		gameJoinPlayerSeq: 1,
+				// 		playerTypeCode: '01',
+				// 		playerTypeCodeName: '팀원',
+				// 		userSeq: 1,
+				// 		name: '여인준',
+				// 		backNumber: '93',
+				// 		positionCode: '10',
+				// 		positionCodeName: '가드',
+				// 		email: 'test01@nongguilgi.com',
+				// 	},
+				// 	{
+				// 		gameJoinPlayerSeq: 2,
+				// 		playerTypeCode: '01',
+				// 		playerTypeCodeName: '팀원',
+				// 		userSeq: 2,
+				// 		name: '여인준22',
+				// 		backNumber: '93',
+				// 		positionCode: '10',
+				// 		positionCodeName: '가드',
+				// 		email: 'test01@nongguilgi.com',
+				// 	},
+				// 	{
+				// 		gameJoinPlayerSeq: 3,
+				// 		userSeq: 3,
+				// 		name: '여33인준22',
+				// 	},
+				// 	{
+				// 		gameJoinPlayerSeq: 4,
+				// 		userSeq: 4,
+				// 		name: '여인44준22',
+				// 	},
+				// 	{
+				// 		gameJoinPlayerSeq: 5,
+				// 		userSeq: 5,
+				// 		name: '여545인준22',
+				// 	},
+				// ],
 			};
 		},
 		methods: {

@@ -6,7 +6,7 @@
 		<v-btn class="mb-2 mr-2" width="100" @click="searchAllTeamMember">
 			검색
 		</v-btn>
-		<PlayerDataTable />
+		<PlayerDataTable v-if="isLoading" :pPlayers="teamMembers" />
 	</div>
 </template>
 
@@ -21,7 +21,9 @@
 		},
 		data() {
 			return {
+				isLoading: false,
 				playerName: '',
+				teamMembers: [],
 			};
 		},
 		methods: {
@@ -35,6 +37,9 @@
 
 				const res = await MyTeamAPI.searchAllTeamMembers(params);
 				console.log(res);
+
+				this.isLoading = true;
+				this.teamMembers = res.data.teamMembers;
 			},
 		},
 		mounted() {
