@@ -76,7 +76,10 @@ export default {
 	 */
 	registerGameJoinPlayers(params) {
 		return axiosService.post(
-			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`
+			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`,
+			{
+				gameJoinPlayers: params.gameJoinPlayers,
+			}
 		);
 	},
 };

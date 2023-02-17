@@ -33,7 +33,6 @@
 		},
 		methods: {
 			async searchAllTeamMember() {
-				console.log(this.playerName);
 				const params = {
 					teamSeq: 7, // TODO 동적처리
 					playerName: this.playerName,

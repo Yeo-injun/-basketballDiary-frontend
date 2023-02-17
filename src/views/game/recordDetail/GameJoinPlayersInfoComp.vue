@@ -6,16 +6,16 @@
 				<v-col cols="6">
 					<HomeTeamPlayersManageModal
 						pModalTitlePrefix="홈팀"
-						:pHomeAwayCode="this.homeTeamCode"
-						@select-players="callbackSelectPlayers"
+						:pGameJoinTeamInfo="this.homeTeamInfo"
+						@register-complete="setSelectedPlayers"
 					/>
 					<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
 				</v-col>
 				<v-col cols="6">
 					<AwayTeamPlayersManageModal
 						pModalTitlePrefix="어웨이팀"
-						:pHomeAwayCode="this.awayTeamCode"
-						@select-players="callbackSelectPlayers"
+						:pGameJoinTeamInfo="this.awayTeamInfo"
+						@register-complete="setSelectedPlayers"
 					/>
 					<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
 				</v-col>
@@ -48,8 +48,8 @@
 		data() {
 			return {
 				isLoadingComplete: false,
-				homeTeamCode: HomeAwayCode.HOME_TEAM,
-				awayTeamCode: HomeAwayCode.AWAY_TEAM,
+				homeTeamInfo: {},
+				awayTeamInfo: {},
 				homeTeamPlayers: [],
 				awayTeamPlayers: [],
 			};
@@ -62,11 +62,25 @@
 
 				const res = await GameAPI.getGameJoinPlayers(params);
 
-				this.homeTeamPlayers = res.data.homeTeam.players;
-				this.awayTeamPlayers = res.data.awayTeam.players;
+				const homeTeam = res.data.homeTeam;
+				this.homeTeamInfo = {
+					homeAwayCode: HomeAwayCode.HOME_TEAM,
+					gameJoinTeamSeq: homeTeam.gameJoinTeamSeq,
+					teamSeq: homeTeam.teamSeq,
+				};
+				this.homeTeamPlayers = homeTeam.players;
+
+				const awayTeam = res.data.awayTeam;
+				this.awayTeamInfo = {
+					homeAwayCode: HomeAwayCode.AWAY_TEAM,
+					gameJoinTeamSeq: awayTeam.gameJoinTeamSeq,
+					teamSeq: awayTeam.teamSeq,
+				};
+				this.awayTeamPlayers = awayTeam.players;
 				this.isLoadingComplete = true;
 			},
-			async callbackSelectPlayers(eventParams) {
+			async setSelectedPlayers(eventParams) {
+				console.log(eventParams);
 				const homeAwayCode = eventParams.homeAwayCode;
 				const params = {
 					gameSeq: this.pGameSeq,
