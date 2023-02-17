@@ -10,7 +10,7 @@
 
 		<v-card>
 			<v-card-title> {{ pModalTitlePrefix }} 참가선수관리</v-card-title>
-			<GameJoinPlayerRegistrationBtn @register-players="closeModal" />
+			<GameJoinPlayerRegistrationBtn @register-players="registerPlayers" />
 			<v-container>
 				<div>참가선수 목록</div>
 				<PlayerDataTable
@@ -45,7 +45,7 @@
 		},
 		props: {
 			pModalTitlePrefix: String,
-			pHomeAwayCode: String,
+			pGameJoinTeamInfo: Object,
 		},
 		data() {
 			return {
@@ -55,29 +55,31 @@
 			};
 		},
 		methods: {
-			async closeModal() {
+			async registerPlayers() {
 				// TODO 선택한 선수들 등록하기 API035 호출
 				const params = {
 					gameSeq: this.$route.params.gameSeq,
-					gameJoinTeamSeq: 2, // TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
+					gameJoinTeamSeq: this.pGameJoinTeamInfo.gameJoinTeamSeq, // TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
 					gameJoinPlayers: this.gameJoinPlayers,
 				};
 				await GameAPI.registerGameJoinPlayers(params);
 
 				this.dialog = false;
 				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
-				this.$emit('register-complete');
+				this.$emit('register-complete', {
+					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
+				});
 			},
 			async getGameJoinPlayers() {
 				const params = {
 					gameSeq: this.$route.params.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
+					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
 				this.isLoading = true;
 
-				switch (this.pHomeAwayCode) {
+				switch (this.pGameJoinTeamInfo.homeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
 						this.gameJoinPlayers = res.data.homeTeam.players;
 						break;
