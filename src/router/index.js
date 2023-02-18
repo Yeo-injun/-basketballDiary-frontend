@@ -43,6 +43,11 @@ export default new VueRouter({
 			'/game/record',
 			'GameRecordDetailPage'
 		),
+		createRoute(
+			'views/game/quarterRecordInputBoard/QuarterRecordInputBoardPage',
+			'/game/record/inputBoard',
+			'QuarterRecordInputBoardPage'
+		),
 
 		/**
 		 * myTeam페이지
