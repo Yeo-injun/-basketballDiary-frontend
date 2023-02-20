@@ -82,4 +82,16 @@ export default {
 			}
 		);
 	},
+
+	/**
+	 * API040 게임엔트리 조회
+	 */
+	getGameEntry(params) {
+		return axiosService.get(
+			`/${params.gameSeq}/quarters/${params.quarterCode}/entry`,
+			{
+				homeAwayCode: params.homeAwayCode,
+			}
+		);
+	},
 };

@@ -51,10 +51,10 @@
 		},
 		methods: {
 			isShowGameManageBtn() {
-				const isConfirm =
-					this.$route.params.gameRecordState ==
-					GameRecordStateCode.CONFIRMATION;
-				if (isConfirm) {
+				const isConfirmState =
+					GameRecordStateCode.CONFIRMATION ==
+					this.$route.params.gameRecordState;
+				if (isConfirmState) {
 					return false;
 				}
 
