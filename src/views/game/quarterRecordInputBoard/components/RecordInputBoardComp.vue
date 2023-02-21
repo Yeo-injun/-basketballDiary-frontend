@@ -1,0 +1,34 @@
+<template>
+	<v-container>
+		{{ this.pEntry }}
+		<h3>선수기록</h3>
+		<PlayerRecordComp />
+		<v-row>
+			<v-col>
+				<QuarterEntryComp />
+			</v-col>
+			<v-col>
+				<StatInputComp />
+			</v-col>
+		</v-row>
+	</v-container>
+</template>
+
+<script>
+	import PlayerRecordComp from '@/components/game/gameJoinPlayer/PlayerRecordComp.vue';
+	import QuarterEntryComp from '@/views/game/quarterRecordInputBoard/components/QuarterEntryComp.vue';
+	import StatInputComp from '@/views/game/quarterRecordInputBoard/components/StatInputComp.vue';
+
+	export default {
+		components: {
+			PlayerRecordComp,
+			QuarterEntryComp,
+			StatInputComp,
+		},
+		props: {
+			pEntry: Array,
+		},
+	};
+</script>
+
+<style lang="scss" scoped></style>
