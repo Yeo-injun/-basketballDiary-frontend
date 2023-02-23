@@ -1,11 +1,10 @@
 <template>
 	<v-container>
-		{{ this.pEntry }}
 		<h3>선수기록</h3>
 		<PlayerRecordComp />
 		<v-row>
 			<v-col>
-				<QuarterEntryComp />
+				<QuarterEntryComp :pEntry="this.pEntry" />
 			</v-col>
 			<v-col>
 				<StatInputComp />

@@ -1,12 +1,22 @@
 <template>
 	<div>
 		<h3>쿼터 엔트리</h3>
-		// TODO 게임엔트리 구현
+		// TODO 클릭 이벤트 에밋
+		<EntryTable :pEntry="pEntry" />
 	</div>
 </template>
 
 <script>
-	export default {};
+	import EntryTable from '@/views/game/quarterRecordInputBoard/components/EntryTable.vue';
+
+	export default {
+		components: {
+			EntryTable,
+		},
+		props: {
+			pEntry: Array,
+		},
+	};
 </script>
 
 <style lang="scss" scoped></style>
