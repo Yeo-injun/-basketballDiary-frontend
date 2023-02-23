@@ -20,14 +20,16 @@
 		</v-container>
 		<HomeTeamRecordInputBoardComp
 			v-if="this.isHomeTeamInputMode"
-			:pEntry="this.testArr"
+			:pEntry="this.homeTeamEntry"
 		/>
-		<AwayTeamRecordInputBoardComp v-else />
-		// TODO 팀별 RecordInputBoard가 있어야 함 // 하단 버튼 - 저장 / 쿼터삭제
+		<AwayTeamRecordInputBoardComp v-else :pEntry="this.awayTeamEntry" />
+		// 하단 버튼 - 저장 / 쿼터삭제
 	</div>
 </template>
 
 <script>
+	import GameAPI from '@/api/GameAPI.js';
+
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
@@ -47,19 +49,36 @@
 		},
 		data() {
 			return {
-				testArr: ['dd'],
 				isHomeTeamInputMode: true,
 				homeTeamTitleInfo: {
-					teamName: '테스트HOME',
-					homeAwayCode: '01',
+					teamName: '',
+					homeAwayCode: '',
 				},
+				homeTeamEntry: [],
 				awayTeamTitleInfo: {
-					teamName: '테스트AWAY',
-					homeAwayCode: '02',
+					teamName: '',
+					homeAwayCode: '',
 				},
+				awayTeamEntry: [],
 			};
 		},
 		methods: {
+			async getGameEntry() {
+				const params = {
+					gameSeq: this.$route.params.gameSeq,
+					quarterCode: this.$route.params.quarterCode,
+				};
+
+				const res = await GameAPI.getGameEntry(params);
+
+				this.homeTeamTitleInfo.teamName = res.data.homeTeamEntry.teamName;
+				this.homeTeamTitleInfo.homeAwayCode = HomeAwayCode.HOME_TEAM;
+				this.homeTeamEntry = res.data.homeTeamEntry.entry;
+
+				this.awayTeamTitleInfo.teamName = res.data.awayTeamEntry.teamName;
+				this.awayTeamTitleInfo.homeAwayCode = HomeAwayCode.AWAY_TEAM;
+				this.awayTeamEntry = res.data.awayTeamEntry.entry;
+			},
 			changeRecordInputTeam(params) {
 				console.log(params);
 				const homeAwayCode = params.homeAwayCode;
@@ -69,6 +88,9 @@
 					this.isHomeTeamInputMode = false;
 				}
 			},
+		},
+		mounted() {
+			this.getGameEntry();
 		},
 	};
 </script>
