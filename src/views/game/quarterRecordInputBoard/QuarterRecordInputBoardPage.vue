@@ -65,7 +65,7 @@
 		methods: {
 			async getGameEntry() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
+					gameSeq: 2, //this.$route.params.gameSeq,
 					quarterCode: this.$route.params.quarterCode,
 				};
 
@@ -78,6 +78,9 @@
 				this.awayTeamTitleInfo.teamName = res.data.awayTeamEntry.teamName;
 				this.awayTeamTitleInfo.homeAwayCode = HomeAwayCode.AWAY_TEAM;
 				this.awayTeamEntry = res.data.awayTeamEntry.entry;
+
+				// TODO 컴포넌트 라이프사이클과 비동기 데이터 조회 시점이 맞지 않아
+				// 데이터 바인딩이 제대로 안될 경우를 위해 동기처리해주기...!
 			},
 			changeRecordInputTeam(params) {
 				console.log(params);
