@@ -1,10 +1,10 @@
 <template>
 	<v-container>
 		<h3>선수기록</h3>
-		<PlayerRecordComp />
+		<PlayerRecordComp :pPlayerRecordInfo="this.selectedPlayer" />
 		<v-row>
 			<v-col>
-				<QuarterEntryComp :pEntry="this.pEntry" />
+				<QuarterEntryComp :pEntry="this.pEntry" @select-player="selectPlayer" />
 			</v-col>
 			<v-col>
 				<StatInputComp />
@@ -26,6 +26,17 @@
 		},
 		props: {
 			pEntry: Array,
+		},
+		data() {
+			return {
+				selectedPlayer: {},
+			};
+		},
+		methods: {
+			selectPlayer(player) {
+				console.log(player);
+				this.selectedPlayer = player;
+			},
 		},
 	};
 </script>

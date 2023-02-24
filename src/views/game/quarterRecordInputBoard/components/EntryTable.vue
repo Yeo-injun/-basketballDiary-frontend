@@ -4,6 +4,7 @@
 		<v-data-table
 			:headers="headers"
 			:items="pEntry"
+			@click:row="clickRowButton"
 			item-key="quarterPlayerRecordsSeq"
 			hide-default-footer
 			class="elevation-1"
@@ -39,8 +40,12 @@
 		},
 		methods: {
 			// TODO data-table-click시 이벤트 emit시키기
+			// 클릭한 row의 선수 정보를 파라미터로 올리기
+			// 해당 이벤트를 RecordInputBoardComp까지 emit하여 해당 컴포넌트에서 선택된 선수정보를 바꾸기
+			// 해당 선수정보는 PlayerRecordComp의 props로 내려감
 			clickRowButton(targetPlayer) {
-				this.$emit('click-player', targetPlayer);
+				this.$emit('select-player', targetPlayer);
+				console.log(targetPlayer);
 			},
 		},
 	};

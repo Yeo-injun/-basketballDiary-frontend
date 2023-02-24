@@ -1,6 +1,6 @@
 <template>
 	<div>
-		TODO 쿼터기록 입력창
+		TODO 쿼터기록 입력창 - API048 게임쿼터기록조회 붙이기
 		<GameQuarterInfoComp />
 		<v-container>
 			<v-row>
