@@ -34,7 +34,6 @@
 		},
 		methods: {
 			selectPlayer(player) {
-				console.log(player);
 				this.selectedPlayer = player;
 			},
 		},

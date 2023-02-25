@@ -12,10 +12,19 @@
 						</v-col>
 					</v-row>
 					<v-row justify="space-between">
-						<v-col>총득점 : {{ this.pPlayerRecordInfo.totalScore }}</v-col>
-						<v-col>자유투 : {{ this.pPlayerRecordInfo.freeThrow }}</v-col>
-						<v-col>2점 : {{ this.pPlayerRecordInfo.twoPoint }}</v-col>
-						<v-col>3점 : {{ this.pPlayerRecordInfo.threePoint }}</v-col>
+						<v-col>총득점 : {{ this.pPlayerRecordInfo.totalScore }} 점</v-col>
+						<v-col>
+							자유투 : {{ this.pPlayerRecordInfo.freeThrow }} /
+							{{ this.pPlayerRecordInfo.tryFreeThrow }}
+						</v-col>
+						<v-col>
+							2점 : {{ this.pPlayerRecordInfo.twoPoint }} /
+							{{ this.pPlayerRecordInfo.tryTwoPoint }}
+						</v-col>
+						<v-col>
+							3점 : {{ this.pPlayerRecordInfo.threePoint }} /
+							{{ this.pPlayerRecordInfo.tryThreePoint }}
+						</v-col>
 					</v-row>
 					<v-row justify="space-between">
 						<v-col>리바운드 : {{ this.pPlayerRecordInfo.rebound }}</v-col>

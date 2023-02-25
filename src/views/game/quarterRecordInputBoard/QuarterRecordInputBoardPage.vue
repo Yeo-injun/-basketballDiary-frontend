@@ -18,11 +18,13 @@
 				</v-col>
 			</v-row>
 		</v-container>
-		<HomeTeamRecordInputBoardComp
-			v-if="this.isHomeTeamInputMode"
-			:pEntry="this.homeTeamEntry"
-		/>
-		<AwayTeamRecordInputBoardComp v-else :pEntry="this.awayTeamEntry" />
+		<div v-if="this.isGetGameEntryLoadOk">
+			<HomeTeamRecordInputBoardComp
+				v-if="this.isHomeTeamInputMode"
+				:pEntry="this.homeTeamEntry"
+			/>
+			<AwayTeamRecordInputBoardComp v-else :pEntry="this.awayTeamEntry" />
+		</div>
 		// 하단 버튼 - 저장 / 쿼터삭제
 	</div>
 </template>
@@ -49,15 +51,18 @@
 		},
 		data() {
 			return {
+				isGetGameEntryLoadOk: false,
 				isHomeTeamInputMode: true,
 				homeTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
+					homeAwayCodeName: '',
 				},
 				homeTeamEntry: [],
 				awayTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
+					homeAwayCodeName: '',
 				},
 				awayTeamEntry: [],
 			};
@@ -71,19 +76,22 @@
 
 				const res = await GameAPI.getGameEntry(params);
 
-				this.homeTeamTitleInfo.teamName = res.data.homeTeamEntry.teamName;
+				const homeTeamInfo = res.data.homeTeamEntry;
+				this.homeTeamTitleInfo.teamName = homeTeamInfo.teamName;
 				this.homeTeamTitleInfo.homeAwayCode = HomeAwayCode.HOME_TEAM;
-				this.homeTeamEntry = res.data.homeTeamEntry.entry;
+				this.homeTeamTitleInfo.homeAwayCodeName = homeTeamInfo.homeAwayCodeName;
+				this.homeTeamEntry = homeTeamInfo.entry;
 
-				this.awayTeamTitleInfo.teamName = res.data.awayTeamEntry.teamName;
+				const awayTeamInfo = res.data.awayTeamEntry;
+				this.awayTeamTitleInfo.teamName = awayTeamInfo.teamName;
 				this.awayTeamTitleInfo.homeAwayCode = HomeAwayCode.AWAY_TEAM;
+				this.awayTeamTitleInfo.homeAwayCodeName = awayTeamInfo.homeAwayCodeName;
 				this.awayTeamEntry = res.data.awayTeamEntry.entry;
 
-				// TODO 컴포넌트 라이프사이클과 비동기 데이터 조회 시점이 맞지 않아
-				// 데이터 바인딩이 제대로 안될 경우를 위해 동기처리해주기...!
+				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
+				this.isGetGameEntryLoadOk = true;
 			},
 			changeRecordInputTeam(params) {
-				console.log(params);
 				const homeAwayCode = params.homeAwayCode;
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					this.isHomeTeamInputMode = true;
