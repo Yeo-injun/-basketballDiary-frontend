@@ -21,8 +21,15 @@
 		},
 		data() {
 			return {
+				foulCnt: this.pFoulCnt,
 				foulInfoList: this.generateFoulInfoList(),
 			};
+		},
+		// TODO 파울갯수가 올라갈때 동시에 개인파울 갯수 컴포넌트의 색깔이 변경안됨. 동시에 바뀌도록 구현해야 함... props가 변경되는것을 실시간으로 감지하여 다시 렌더링해줘야 함.
+		watch: {
+			pFoulCnt() {
+				this.generateFoulInfoList();
+			},
 		},
 		methods: {
 			generateFoulInfoList() {

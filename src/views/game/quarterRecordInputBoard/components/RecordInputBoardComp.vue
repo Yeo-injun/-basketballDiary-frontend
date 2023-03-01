@@ -25,6 +25,7 @@
 			StatInputBoardComp,
 		},
 		props: {
+			pHomeAwayCode: String,
 			pEntry: Array,
 		},
 		data() {
@@ -39,14 +40,12 @@
 			recordStat(inputInfo) {
 				const player = this.selectedPlayer;
 				const record = {
+					homeAwayCode: this.pHomeAwayCode,
 					gameJoinPlayerSeq: player.gameJoinPlayerSeq,
 					statType: inputInfo.statType,
 					mode: inputInfo.mode,
+					timeStamp: new Date(),
 				};
-				console.log(record);
-				// TODO
-				// 입력데이터는 현재 컴포넌트에서 관리하고,
-				// pEntry를 관리하는 상위 컴포넌트에서 총괄 데이터를 변경을 할 수 있도록 emit해주기
 				this.$emit('get-clicked-record-info', record);
 			},
 		},
