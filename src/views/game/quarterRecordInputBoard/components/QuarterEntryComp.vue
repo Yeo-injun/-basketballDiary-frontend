@@ -23,8 +23,11 @@
 			},
 		},
 		mounted() {
-			const defaultSelectedPlayer = this.pEntry[0];
-			this.$emit(SELECT_PLAER_EVENT, defaultSelectedPlayer);
+			const hasEntryPlayers = this.pEntry.length > 0;
+			if (hasEntryPlayers) {
+				const defaultSelectedPlayer = this.pEntry[0];
+				this.$emit(SELECT_PLAER_EVENT, defaultSelectedPlayer);
+			}
 		},
 	};
 </script>
