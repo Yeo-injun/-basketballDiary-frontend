@@ -22,6 +22,7 @@
 			<HomeTeamRecordInputBoardComp
 				v-if="this.isHomeTeamInputMode"
 				:pEntry="this.homeTeamEntry"
+				@get-clicked-record-info="mergeInputRecordStat"
 			/>
 			<AwayTeamRecordInputBoardComp v-else :pEntry="this.awayTeamEntry" />
 		</div>
@@ -98,6 +99,12 @@
 				} else {
 					this.isHomeTeamInputMode = false;
 				}
+			},
+			mergeInputRecordStat(record) {
+				console.log(record);
+				// home팀이냐, away팀이냐 구분하고
+				// 해당되는 팀의 엔트리를 순회하여 해당 선수의 기록 변경
+				// TODO record에서 homeAwayCode속성 추가
 			},
 		},
 		mounted() {

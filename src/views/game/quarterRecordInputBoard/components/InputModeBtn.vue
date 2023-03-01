@@ -24,7 +24,7 @@
 				const btnMode = this.pBtnInfo.mode;
 				const isActiveBtn = btnMode == this.pActiveMode;
 				if (isActiveBtn) {
-					return 'blue lighten-4';
+					return 'green lighten-4';
 				}
 				return '';
 			},
