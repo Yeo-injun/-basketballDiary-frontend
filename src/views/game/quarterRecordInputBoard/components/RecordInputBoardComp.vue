@@ -3,10 +3,10 @@
 		<h3>선수기록</h3>
 		<PlayerRecordComp :pPlayerRecordInfo="this.selectedPlayer" />
 		<v-row>
-			<v-col>
+			<v-col cols="5">
 				<QuarterEntryComp :pEntry="this.pEntry" @select-player="selectPlayer" />
 			</v-col>
-			<v-col>
+			<v-col cols="7">
 				<StatInputBoardComp @record-stat="recordStat" />
 			</v-col>
 		</v-row>

@@ -1,31 +1,113 @@
 <template>
 	<v-container>
-		{{ this.test }}
 		<v-row>
 			<v-col>
 				<AddModeBtn
 					:pBtnInfo="this.addBtnInfo"
 					:pActiveMode="this.activeMode"
-					@click-mode-btn="enableBtn"
+					@click-mode-btn="changeActiveMode"
 				/>
 			</v-col>
 			<v-col>
 				<CancelModeBtn
 					:pBtnInfo="this.cancelBtnInfo"
 					:pActiveMode="this.activeMode"
-					@click-mode-btn="enableBtn"
+					@click-mode-btn="changeActiveMode"
 				/>
 			</v-col>
 		</v-row>
-		<TwoPointInputBtn
-			:pType="this.type.twoPoint"
-			@get-stat-type="emitInputInfo"
-		/>
-		<TryTwoPointInputBtn
-			:pType="this.type.tryTwoPoint"
-			@get-stat-type="emitInputInfo"
-		/>
-
+		<v-row>
+			<v-col cols="4">
+				<FreeThrowInputBtn
+					:pType="this.type.freeThrow"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<TwoPointInputBtn
+					:pType="this.type.twoPoint"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<ThreePointInputBtn
+					:pType="this.type.threePoint"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col cols="4">
+				<TryFreeThrowInputBtn
+					:pType="this.type.tryFreeThrow"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<TryTwoPointInputBtn
+					:pType="this.type.tryTwoPoint"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<TryThreePointInputBtn
+					:pType="this.type.tryThreePoint"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col cols="4">
+				<AssistInputBtn
+					:pType="this.type.assist"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<ReboundInputBtn
+					:pType="this.type.rebound"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<TurnoverInputBtn
+					:pType="this.type.turnover"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col cols="4">
+				<BlockInputBtn
+					:pType="this.type.block"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<StealInputBtn
+					:pType="this.type.steal"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+			<v-col cols="4">
+				<FoulInputBtn
+					:pType="this.type.foul"
+					:pActiveMode="this.activeMode"
+					@get-stat-type="emitInputInfo"
+				/>
+			</v-col>
+		</v-row>
 		TODO 스탯 입력창 구현 - <br />생성 데이터 형식과 어디서 데이터를 보관할지...
 		결정 <br />{ playerSeq : 게임참가선수 식별자, statType : 스탯의 유형 -
 		자유투 시도인지, 성공인지, 리바운드인지 count : 횟수 mode : 추가인지
@@ -39,47 +121,78 @@
 </template>
 
 <script>
-	import StatType from '@/const/StatType.js';
+	import {
+		StatType,
+		RecordMode,
+	} from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
 
 	import AddModeBtn from '@/views/game/quarterRecordInputBoard/components/InputModeBtn.vue';
 	import CancelModeBtn from '@/views/game/quarterRecordInputBoard/components/InputModeBtn.vue';
 
+	import FreeThrowInputBtn from '@/components/game/stat/StatInputBtn.vue';
 	import TwoPointInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import TryTwoPointInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import ThreePointInputBtn from '@/components/game/stat/StatInputBtn.vue';
 
-	const ADD_MODE = 'add';
-	const CANCEl_MODE = 'cancel';
+	import TryFreeThrowInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import TryTwoPointInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import TryThreePointInputBtn from '@/components/game/stat/StatInputBtn.vue';
+
+	import AssistInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import ReboundInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import TurnoverInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import BlockInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import StealInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import FoulInputBtn from '@/components/game/stat/StatInputBtn.vue';
+
 	export default {
 		components: {
 			AddModeBtn,
 			CancelModeBtn,
+			FreeThrowInputBtn,
 			TwoPointInputBtn,
+			ThreePointInputBtn,
+			TryFreeThrowInputBtn,
 			TryTwoPointInputBtn,
+			TryThreePointInputBtn,
+			AssistInputBtn,
+			ReboundInputBtn,
+			TurnoverInputBtn,
+			BlockInputBtn,
+			StealInputBtn,
+			FoulInputBtn,
 		},
 		data() {
 			return {
 				addBtnInfo: {
 					btnName: '입력모드',
-					mode: ADD_MODE,
+					mode: RecordMode.ADD,
 				},
 				cancelBtnInfo: {
 					btnName: '취소모드',
-					mode: CANCEl_MODE,
+					mode: RecordMode.CANCEL,
 				},
-				activeMode: ADD_MODE,
+				activeMode: RecordMode.ADD,
 				type: {
+					freeThrow: StatType.FREE_THROW,
 					twoPoint: StatType.TWO_POINT,
+					threePoint: StatType.THREE_POINT,
+					tryFreeThrow: StatType.TRY_FREE_THROW,
 					tryTwoPoint: StatType.TRY_TWO_POINT,
+					tryThreePoint: StatType.TRY_THREE_POINT,
+					assist: StatType.ASSIST,
+					rebound: StatType.REBOUND,
+					turnover: StatType.TURNOVER,
+					block: StatType.BLOCK,
+					steal: StatType.STEAL,
+					foul: StatType.FOUL,
 				},
-				test: '',
 			};
 		},
 		methods: {
-			enableBtn(mode) {
+			changeActiveMode(mode) {
 				this.activeMode = mode;
 			},
 			emitInputInfo(statType) {
-				this.test = `===========테스트요 ${statType}`;
 				const inputInfo = {
 					statType: statType,
 					mode: this.activeMode,
