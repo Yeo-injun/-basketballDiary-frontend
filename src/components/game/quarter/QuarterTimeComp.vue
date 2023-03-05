@@ -2,8 +2,10 @@
 	<v-container>
 		<v-col align-self="center">
 			<v-row no-gutters justify="center">
-				{{ this.pQuarterCodeName }} /
-				{{ this.quarterTime }}
+				<h2>{{ this.pQuarterCodeName }}</h2>
+			</v-row>
+			<v-row no-gutters justify="center">
+				<h4>{{ this.quarterTime }}</h4>
 			</v-row>
 		</v-col>
 	</v-container>

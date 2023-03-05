@@ -1,6 +1,5 @@
 <template>
 	<div>
-		{{ this.pFoulCnt }}
 		<v-chip-group>
 			<v-chip
 				class="foulCnt"
@@ -24,6 +23,11 @@
 			return {
 				foulInfoList: this.generateFoulInfoList(),
 			};
+		},
+		watch: {
+			pFoulCnt() {
+				this.foulInfoList = this.generateFoulInfoList();
+			},
 		},
 		methods: {
 			generateFoulInfoList() {

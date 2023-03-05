@@ -1,22 +1,26 @@
 <template>
 	<v-container>
+		<h3>TODO 쿼터시간 입력창 - selectBox로 30초 단위 00:00 ~ 10:00</h3>
 		경기일자 : {{ this.pGameQuarterRecords.gameYmd }} / 경기시간 :
 		{{ this.pGameQuarterRecords.gameStartTime }} ~
 		{{ this.pGameQuarterRecords.gameEndTime }} / 쿼터시간 : 입력창 TODO
-		<!-- TODO 컴포넌트를 경량화 시켜야 함. 불필요한 이벤트가 들어가 있음...!-->
-		<GameQuarterComp
-			:pQuarterCode="this.pGameQuarterRecords.quarterCode"
-			:pTeamsQuarterRecords="this.pGameQuarterRecords"
-		/>
+		<v-container>
+			<GameQuarterInfoFrame
+				:pQuarterCodeName="this.pGameQuarterRecords.quarterCodeName"
+				:pQuarterTime="this.pGameQuarterRecords.quarterTime"
+				:pHomeTeamRecords="this.pGameQuarterRecords.homeTeamRecords"
+				:pAwayTeamRecords="this.pGameQuarterRecords.awayTeamRecords"
+			/>
+		</v-container>
 	</v-container>
 </template>
 
 <script>
-	import GameQuarterComp from '@/components/game/quarter/GameQuarterComp.vue';
+	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
 
 	export default {
 		components: {
-			GameQuarterComp,
+			GameQuarterInfoFrame,
 		},
 		props: {
 			pGameQuarterRecords: Object,
