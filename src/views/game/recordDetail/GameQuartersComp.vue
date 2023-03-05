@@ -34,7 +34,7 @@
 
 	import GameAPI from '@/api/GameAPI.js';
 
-	import GameQuarterComp from '@/components/game/quarter/GameQuarterComp.vue';
+	import GameQuarterComp from '@/views/game/recordDetail/components/GameQuarterComp.vue';
 
 	export default {
 		components: {

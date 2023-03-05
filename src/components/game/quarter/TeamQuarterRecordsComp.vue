@@ -8,23 +8,27 @@
 							<QuarterTeamFoulComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
 						</div>
 						<div v-else>
-							{{ this.pTeamQuarterRecords.score }}
+							<h2>{{ this.pTeamQuarterRecords.score }}</h2>
 						</div>
 					</v-row>
 				</v-col>
 
 				<v-col cols="12" sm="4">
-					<v-row no-gutters justify="center">{{ this.homeAwayCodeName }}</v-row>
-					<v-row no-gutters justify="center">{{ this.teamName }}</v-row>
+					<v-row no-gutters justify="center">{{
+						this.pTeamQuarterRecords.homeAwayCodeName
+					}}</v-row>
+					<v-row no-gutters justify="center">{{
+						this.pTeamQuarterRecords.teamName
+					}}</v-row>
 				</v-col>
 
 				<v-col cols="12" sm="4" align-self="center">
 					<v-row no-gutters justify="center">
 						<div v-if="this.isHomeTeam()">
-							{{ this.score }}
+							<h2>{{ this.pTeamQuarterRecords.score }}</h2>
 						</div>
 						<div v-else>
-							<QuarterTeamFoulComp :pFoulCnt="this.foulCnt" />
+							<QuarterTeamFoulComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
 						</div>
 					</v-row>
 				</v-col>
@@ -34,8 +38,6 @@
 </template>
 
 <script>
-	console.log('TeamQuarterRecords / created111???');
-
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	import QuarterTeamFoulComp from '@/components/game/quarter/QuarterTeamFoulComp.vue';
@@ -47,29 +49,13 @@
 		props: {
 			pTeamQuarterRecords: Object,
 		},
-		data() {
-			console.log('TeamQuarterRecords / data???');
-
-			return {
-				teamName: this.pTeamQuarterRecords.teamName,
-				homeAwayCode: this.pTeamQuarterRecords.homeAwayCode,
-				homeAwayCodeName: this.pTeamQuarterRecords.homeAwayCodeName,
-				score: this.pTeamQuarterRecords.score,
-				foulCnt: this.pTeamQuarterRecords.foul,
-			};
-		},
 		methods: {
 			isHomeTeam() {
-				console.log('TeamQuarterRecords / isHomeTeam???');
-
-				if (this.homeAwayCode == HomeAwayCode.HOME_TEAM) {
+				if (this.pTeamQuarterRecords.homeAwayCode == HomeAwayCode.HOME_TEAM) {
 					return true;
 				}
 				return false;
 			},
-		},
-		mounted() {
-			console.log('TeamQuarterRecords / mounted???');
 		},
 	};
 </script>

@@ -49,12 +49,14 @@ export default {
 			},
 		});
 	},
-	
+
 	/**
 	 * API048 경기쿼터기록 조회
 	 */
-getGameQuarterRecords(params) {
-		return axiosService.get(`/${params.gameSeq}/quarters/${params.quarterCode}`);
+	getGameQuarterRecords(params) {
+		return axiosService.get(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`
+		);
 	},
 
 	/**

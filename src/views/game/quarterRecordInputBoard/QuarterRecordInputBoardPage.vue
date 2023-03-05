@@ -1,6 +1,5 @@
 <template>
 	<div>
-		TODO 쿼터기록 입력창 - API048 게임쿼터기록조회 붙이기
 		<div v-if="this.isGetGameQuarterRecordsLoad">
 			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
 		</div>
@@ -9,17 +8,20 @@
 				<v-col>
 					<HomeTeamTitle
 						:pTitleInfo="homeTeamTitleInfo"
+						:pIsSelected="selectHomeTeam"
 						@click-title="changeRecordInputTeam"
 					/>
 				</v-col>
 				<v-col>
 					<AwayTeamTitle
 						:pTitleInfo="awayTeamTitleInfo"
+						:pIsSelected="selectAwayTeam"
 						@click-title="changeRecordInputTeam"
 					/>
 				</v-col>
 			</v-row>
 		</v-container>
+		<h3>// TODO 하단 버튼 - 저장 / 쿼터삭제 API 붙이기!!!</h3>
 		<div v-if="this.isGetGameEntryLoadOk">
 			<HomeTeamRecordInputBoardComp
 				v-if="this.isHomeTeamInputMode"
@@ -34,7 +36,6 @@
 				@get-clicked-record-info="processInputRecordStat"
 			/>
 		</div>
-		// 하단 버튼 - 저장 / 쿼터삭제
 	</div>
 </template>
 
@@ -69,6 +70,8 @@
 				isGetGameQuarterRecordsLoad: false,
 				isGetGameEntryLoadOk: false,
 				isHomeTeamInputMode: true,
+				selectHomeTeam: true,
+				selectAwayTeam: false,
 				gameQuarterRecords: {
 					gameSeq: '',
 					quarterCode: '',
@@ -112,6 +115,7 @@
 				this.isGetGameQuarterRecordsLoad = true;
 			},
 			async getGameEntry() {
+				// TODO 테스트 데이터 넣어놓기
 				const params = {
 					gameSeq: 2, //this.$route.params.gameSeq,
 					quarterCode: this.$route.params.quarterCode,
@@ -138,8 +142,12 @@
 				const homeAwayCode = params.homeAwayCode;
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					this.isHomeTeamInputMode = true;
+					this.selectHomeTeam = true;
+					this.selectAwayTeam = false;
 				} else {
 					this.isHomeTeamInputMode = false;
+					this.selectHomeTeam = false;
+					this.selectAwayTeam = true;
 				}
 			},
 			processInputRecordStat(record) {
@@ -176,7 +184,6 @@
 				})[0];
 			},
 			inputRecored(targetPlayer, record) {
-				// TODO 타겟 팀도 선정
 				const targetTeamRecords = this.getInputTargetTeamRecords(
 					record.homeAwayCode
 				);
@@ -216,9 +223,12 @@
 						targetPlayer.totalScore += 3;
 						targetTeamRecords.score += 3;
 						return true;
+					case StatType.FOUL:
+						targetTeamRecords.foul++;
 				}
+				return true;
 			},
-			cancelStatRecord(statType, targetPlayer) {
+			cancelStatRecord(statType, targetPlayer, targetTeamRecords) {
 				let targetStatCnt = targetPlayer[statType];
 				if (ValidationUtil.isNull(targetStatCnt)) {
 					return false;
@@ -233,15 +243,23 @@
 					case StatType.FREE_THROW:
 						targetPlayer.tryFreeThrow--;
 						targetPlayer.totalScore--;
+						targetTeamRecords.score--;
 						break;
 					case StatType.TWO_POINT:
 						targetPlayer.tryTwoPoint--;
 						targetPlayer.totalScore -= 2;
+						targetTeamRecords.score -= 2;
 						break;
 					case StatType.THREE_POINT:
 						targetPlayer.tryThreePoint--;
 						targetPlayer.totalScore -= 3;
+						targetTeamRecords.score -= 3;
 						break;
+
+					case StatType.FOUL:
+						targetTeamRecords.foul--;
+						break;
+
 					case StatType.TRY_FREE_THROW:
 						if (targetPlayer.freeThrow >= targetPlayer.tryFreeThrow) {
 							return false;

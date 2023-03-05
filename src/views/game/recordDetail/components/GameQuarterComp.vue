@@ -1,31 +1,19 @@
 <template>
 	<v-container @click="moveQuarterRecordInputBoardPage()">
-		<v-card>
-			<div v-if="hasQuarterRecords(this.pTeamsQuarterRecords)">
-				<v-row no-gutters>
-					<v-col cols="12" sm="5">
-						<TeamQuarterRecordsComp
-							:pTeamQuarterRecords="this.pTeamsQuarterRecords.homeTeamRecords"
-						/>
-					</v-col>
-					<v-col cols="12" sm="2">
-						<QuarterTimeComp
-							:pQuarterCodeName="this.pTeamsQuarterRecords.quarterCodeName"
-							:pQuarterTime="this.pTeamsQuarterRecords.quarterTime"
-						/>
-					</v-col>
-					<v-col cols="12" sm="5">
-						<TeamQuarterRecordsComp
-							:pTeamQuarterRecords="this.pTeamsQuarterRecords.awayTeamRecords"
-						/>
-					</v-col>
-				</v-row>
-			</div>
-			<!-- 쿼터 정보가 없을 경우에 보여지는 Components -->
-			<div v-else>
+		<div v-if="hasQuarterRecords(this.pTeamsQuarterRecords)">
+			<GameQuarterInfoFrame
+				:pQuarterCodeName="this.pTeamsQuarterRecords.quarterCodeName"
+				:pQuarterTime="this.pTeamsQuarterRecords.quarterTime"
+				:pHomeTeamRecords="this.pTeamsQuarterRecords.homeTeamRecords"
+				:pAwayTeamRecords="this.pTeamsQuarterRecords.awayTeamRecords"
+			/>
+		</div>
+		<!-- 쿼터 정보가 없을 경우에 보여지는 Components -->
+		<div v-else>
+			<v-card>
 				<v-btn>쿼터 기록하기</v-btn>
-			</div>
-		</v-card>
+			</v-card>
+		</div>
 	</v-container>
 </template>
 
@@ -36,13 +24,11 @@
 	/***********
 	 * 컴포넌트
 	 ***********/
-	import TeamQuarterRecordsComp from '@/components/game/quarter/TeamQuarterRecordsComp.vue';
-	import QuarterTimeComp from '@/components/game/quarter/QuarterTimeComp.vue';
+	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
 
 	export default {
 		components: {
-			TeamQuarterRecordsComp,
-			QuarterTimeComp,
+			GameQuarterInfoFrame,
 		},
 		props: {
 			pGameRecordStateCode: String,

@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<!-- TODO data-table-row에 클릭이벤트 emit시키기 -->
+		<!-- TODO 파울갯수가 실시간 재렌더링이 안되면 컴포넌트를 바꿔서 구현 검토  -->
 		<v-data-table
 			:headers="headers"
 			:items="pEntry"
@@ -9,13 +9,14 @@
 			hide-default-footer
 			class="elevation-1"
 		>
-			<!-- row별 버튼 -->
+			<!-- row별 버튼 TODO 파울 입력시 자동으로 재렌더링이 안됨... 버그해야함!! -->
 			<template v-slot:[`item.foul`]="{ item }">
 				<template>
 					<FoulCountComp :pFoulCnt="item.foul" />
 				</template>
 			</template>
 		</v-data-table>
+		<FoulCountComp :pFoulCnt="this.pEntry[0].foul" />
 	</v-container>
 </template>
 
@@ -39,10 +40,7 @@
 			};
 		},
 		methods: {
-			// TODO data-table-click시 이벤트 emit시키기
-			// 클릭한 row의 선수 정보를 파라미터로 올리기
-			// 해당 이벤트를 RecordInputBoardComp까지 emit하여 해당 컴포넌트에서 선택된 선수정보를 바꾸기
-			// 해당 선수정보는 PlayerRecordComp의 props로 내려감
+			// TODO 클릭한 선수 row 표시하기 구현
 			clickRowButton(targetPlayer) {
 				this.$emit('select-player', targetPlayer);
 				console.log(targetPlayer);

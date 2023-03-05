@@ -1,6 +1,6 @@
 <template>
 	<v-card>
-		<v-card-title :class="this.titleColor" @click="clickEmit()">
+		<v-card-title :class="this.getTitleColor()" @click="clickEmit()">
 			<div class="font-weight-bold">
 				{{ this.pTitleInfo.teamName }}
 				( {{ this.pTitleInfo.homeAwayCodeName }} )
@@ -16,27 +16,30 @@
 	export default {
 		props: {
 			pTitleInfo: Object,
-		},
-		computed: {
-			titleColor() {
-				if (ValidationUtil.isNull(this.pTitleInfo)) {
-					return '';
-				}
-				const homeAwayCode = this.pTitleInfo.homeAwayCode;
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					return 'red lighten-4';
-				}
-
-				if (HomeAwayCode.AWAY_TEAM == homeAwayCode) {
-					return 'blue lighten-4';
-				}
-				return '';
+			pIsSelected: {
+				default() {
+					return false;
+				},
+				Type: Boolean,
 			},
 		},
 		methods: {
+			getTitleColor() {
+				if (ValidationUtil.isNull(this.pTitleInfo)) {
+					return '';
+				}
+				const selectedState = this.pIsSelected ? '3' : '5';
+				const homeAwayCode = this.pTitleInfo.homeAwayCode;
+				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
+					return `red lighten-${selectedState}`;
+				}
+
+				if (HomeAwayCode.AWAY_TEAM == homeAwayCode) {
+					return `blue lighten-${selectedState}`;
+				}
+				return '';
+			},
 			clickEmit() {
-				console.log('``````````````` 이벤트 실행');
-				console.log(this.pTitleInfo);
 				this.$emit('click-title', {
 					homeAwayCode: this.pTitleInfo.homeAwayCode,
 				});
