@@ -5,10 +5,10 @@
 				<v-col cols="12" sm="4" align-self="center">
 					<v-row no-gutters align-content="center" justify="center">
 						<div v-if="this.isHomeTeam()">
-							<QuarterTeamFoulComp :pFoulCnt="this.foulCnt" />
+							<QuarterTeamFoulComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
 						</div>
 						<div v-else>
-							{{ this.score }}
+							{{ this.pTeamQuarterRecords.score }}
 						</div>
 					</v-row>
 				</v-col>

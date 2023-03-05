@@ -1,7 +1,9 @@
 <template>
 	<div>
 		TODO 쿼터기록 입력창 - API048 게임쿼터기록조회 붙이기
-		<GameQuarterInfoComp />
+		<div v-if="this.isGetGameQuarterRecordsLoad">
+			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
+		</div>
 		<v-container>
 			<v-row>
 				<v-col>
@@ -64,8 +66,20 @@
 		},
 		data() {
 			return {
+				isGetGameQuarterRecordsLoad: false,
 				isGetGameEntryLoadOk: false,
 				isHomeTeamInputMode: true,
+				gameQuarterRecords: {
+					gameSeq: '',
+					quarterCode: '',
+					quarterCodeName: '',
+					gameYmd: '',
+					gameStartTime: '',
+					gameEndTime: '',
+					quarterTime: '',
+					homeTeamRecords: {},
+					awayTeamRecords: {},
+				},
 				homeTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
@@ -85,6 +99,18 @@
 			};
 		},
 		methods: {
+			async getGameQuarterRecords() {
+				const params = {
+					gameSeq: 1,
+					quarterCode: this.$route.params.quarterCode,
+				};
+
+				const res = await GameAPI.getGameQuarterRecords(params);
+				const gameQuarterRecords = res.data;
+				this.gameQuarterRecords = gameQuarterRecords;
+
+				this.isGetGameQuarterRecordsLoad = true;
+			},
 			async getGameEntry() {
 				const params = {
 					gameSeq: 2, //this.$route.params.gameSeq,
@@ -150,14 +176,25 @@
 				})[0];
 			},
 			inputRecored(targetPlayer, record) {
+				// TODO 타겟 팀도 선정
+				const targetTeamRecords = this.getInputTargetTeamRecords(
+					record.homeAwayCode
+				);
+
 				const statType = record.statType;
 				if (record.mode == RecordMode.ADD) {
-					return this.addStatRecord(statType, targetPlayer);
+					return this.addStatRecord(statType, targetPlayer, targetTeamRecords);
 				}
-				return this.cancelStatRecord(statType, targetPlayer);
+				return this.cancelStatRecord(statType, targetPlayer, targetTeamRecords);
+			},
+			getInputTargetTeamRecords(homeAwayCode) {
+				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
+					return this.gameQuarterRecords.homeTeamRecords;
+				}
+				return this.gameQuarterRecords.awayTeamRecords;
 			},
 			// 스탯 올리기
-			addStatRecord(statType, targetPlayer) {
+			addStatRecord(statType, targetPlayer, targetTeamRecords) {
 				let targetStatCnt = targetPlayer[statType];
 				if (ValidationUtil.isNull(targetStatCnt)) {
 					return false;
@@ -167,14 +204,17 @@
 					case StatType.FREE_THROW:
 						targetPlayer.tryFreeThrow++;
 						targetPlayer.totalScore++;
+						targetTeamRecords.score++;
 						return true;
 					case StatType.TWO_POINT:
 						targetPlayer.tryTwoPoint++;
 						targetPlayer.totalScore += 2;
+						targetTeamRecords.score += 2;
 						return true;
 					case StatType.THREE_POINT:
 						targetPlayer.tryThreePoint++;
 						targetPlayer.totalScore += 3;
+						targetTeamRecords.score += 3;
 						return true;
 				}
 			},
@@ -225,6 +265,7 @@
 			},
 		},
 		mounted() {
+			this.getGameQuarterRecords();
 			this.getGameEntry();
 		},
 	};
