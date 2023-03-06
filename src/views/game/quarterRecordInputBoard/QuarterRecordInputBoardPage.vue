@@ -36,6 +36,19 @@
 				@get-clicked-record-info="processInputRecordStat"
 			/>
 		</div>
+		<v-container>
+			<v-row>
+				<v-col cols="6" justify="center">
+					<SaveGameQuarterBtn pBtnName="쿼터저장" @do-save="saveGameQuarter" />
+				</v-col>
+				<v-col cols="6" justify="center">
+					<DeleteGameQuarterBtn
+						pBtnName="쿼터삭제"
+						@do-delete="deleteGameQuarter"
+					/>
+				</v-col>
+			</v-row>
+		</v-container>
 	</div>
 </template>
 
@@ -57,6 +70,9 @@
 	import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
 	import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
 
+	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
+	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
+
 	export default {
 		components: {
 			GameQuarterInfoComp,
@@ -64,6 +80,8 @@
 			AwayTeamTitle,
 			HomeTeamRecordInputBoardComp,
 			AwayTeamRecordInputBoardComp,
+			SaveGameQuarterBtn,
+			DeleteGameQuarterBtn,
 		},
 		data() {
 			return {
@@ -137,6 +155,25 @@
 
 				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
 				this.isGetGameEntryLoadOk = true;
+			},
+			async saveGameQuarter() {
+				alert('saveGameQuarter() 구현중');
+
+				// const params = {
+				// 	gameSeq: 2, //this.$route.params.gameSeq,
+				// 	quarterCode: this.$route.params.quarterCode,
+				// };
+
+				// await GameAPI.deleteGameQuarter(params);
+			},
+			async deleteGameQuarter() {
+				const params = {
+					gameSeq: 2, //this.$route.params.gameSeq,
+					quarterCode: this.$route.params.quarterCode,
+				};
+
+				await GameAPI.deleteGameQuarter(params);
+				// TODO 화면이동처리하기
 			},
 			changeRecordInputTeam(params) {
 				const homeAwayCode = params.homeAwayCode;

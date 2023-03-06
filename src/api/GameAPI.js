@@ -26,7 +26,14 @@ export default {
 			}
 		);
 	},
-
+	/**
+	 * API041 게임쿼터삭제
+	 */
+	deleteGameQuarter(params) {
+		return axiosService.delete(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`
+		);
+	},
 	/**
 	 * API044 : 상대팀 찾기
 	 */
