@@ -16,7 +16,6 @@
 				</template>
 			</template>
 		</v-data-table>
-		<FoulCountComp :pFoulCnt="this.pEntry[0].foul" />
 	</v-container>
 </template>
 

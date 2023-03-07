@@ -1,23 +1,35 @@
 <template>
 	<div>
-		<h3>쿼터 엔트리</h3>
-		<h3>
-			// TODO 엔트리 관리 버튼 구현 ++ 엔트리에서 선택된 선수 표시 ++ 파울갯수
-			실시간으로 반영시키기
-		</h3>
+		<v-container>
+			<v-row>
+				<v-col><h3>쿼터 엔트리</h3></v-col>
+				<v-col>
+					<EntryManageModal
+						:pHomeAwayCode="this.pHomeAwayCode"
+						:pHomeAwayCodeName="this.pHomeAwayCodeName"
+					/>
+				</v-col>
+			</v-row>
+			<h3></h3>
+		</v-container>
+		// TODO 엔트리에서 선택된 선수 표시 ++ 파울갯수 실시간으로 반영시키기
 		<EntryTable :pEntry="pEntry" @select-player="selectPlayer" />
 	</div>
 </template>
 
 <script>
+	import EntryManageModal from '@/views/game/quarterRecordInputBoard/modal/EntryManageModal.vue';
 	import EntryTable from '@/views/game/quarterRecordInputBoard/components/EntryTable.vue';
 
 	const SELECT_PLAER_EVENT = 'select-player';
 	export default {
 		components: {
+			EntryManageModal,
 			EntryTable,
 		},
 		props: {
+			pHomeAwayCode: String,
+			pHomeAwayCodeName: String,
 			pEntry: Array,
 		},
 		methods: {

@@ -4,7 +4,12 @@
 		<PlayerRecordComp :pPlayerRecordInfo="this.selectedPlayer" />
 		<v-row>
 			<v-col cols="5">
-				<QuarterEntryComp :pEntry="this.pEntry" @select-player="selectPlayer" />
+				<QuarterEntryComp
+					:pHomeAwayCode="this.pHomeAwayCode"
+					:pHomeAwayCodeName="this.pHomeAwayCodeName"
+					:pEntry="this.pEntry"
+					@select-player="selectPlayer"
+				/>
 			</v-col>
 			<v-col cols="7">
 				<StatInputBoardComp @record-stat="recordStat" />
@@ -26,6 +31,7 @@
 		},
 		props: {
 			pHomeAwayCode: String,
+			pHomeAwayCodeName: String,
 			pEntry: Array,
 		},
 		data() {

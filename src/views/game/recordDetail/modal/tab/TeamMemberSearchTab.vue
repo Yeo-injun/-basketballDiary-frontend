@@ -10,7 +10,7 @@
 			v-if="isLoading"
 			pRowBtnName="추가"
 			:pPlayers="teamMembers"
-			@row-btn-click="addGameJoinPlayer"
+			@get-row-player-info="addGameJoinPlayer"
 		/>
 	</div>
 </template>
