@@ -17,7 +17,7 @@
 					v-if="isLoading"
 					:pPlayers="gameJoinPlayers"
 					pRowBtnName="삭제"
-					@row-btn-click="deleteGameJoinPlayer"
+					@get-row-player-info="deleteGameJoinPlayer"
 				/>
 			</v-container>
 
@@ -106,9 +106,8 @@
 			addGameJoinPlayer(targetPlayer) {
 				console.log(`게임참가선수 목록 Modal : ${targetPlayer}`);
 				console.log('addGameJoinPlayer');
-				// TODO userSeq로 중복 추가 방지 알림 구현
-				for (const players of this.gameJoinPlayers) {
-					const isAlreadyExistPlayer = players.userSeq == targetPlayer.userSeq;
+				for (const player of this.gameJoinPlayers) {
+					const isAlreadyExistPlayer = player.userSeq == targetPlayer.userSeq;
 					if (isAlreadyExistPlayer) {
 						alert('이미 등록되어 있는 선수입니다.');
 						return;

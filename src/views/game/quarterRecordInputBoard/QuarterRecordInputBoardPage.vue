@@ -21,17 +21,19 @@
 				</v-col>
 			</v-row>
 		</v-container>
-		<h3>// TODO 하단 버튼 - 저장 / 쿼터삭제 API 붙이기!!!</h3>
+		<h3>// TODO 하단 버튼 - 저장 API 붙이기!!!</h3>
 		<div v-if="this.isGetGameEntryLoadOk">
 			<HomeTeamRecordInputBoardComp
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
+				:pHomeAwayCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.homeTeamEntry"
 				@get-clicked-record-info="processInputRecordStat"
 			/>
 			<AwayTeamRecordInputBoardComp
 				v-else
 				:pHomeAwayCode="this.awayCode"
+				:pHomeAwayCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.awayTeamEntry"
 				@get-clicked-record-info="processInputRecordStat"
 			/>
@@ -122,7 +124,7 @@
 		methods: {
 			async getGameQuarterRecords() {
 				const params = {
-					gameSeq: 1,
+					gameSeq: this.$route.params.gameSeq,
 					quarterCode: this.$route.params.quarterCode,
 				};
 
@@ -133,9 +135,8 @@
 				this.isGetGameQuarterRecordsLoad = true;
 			},
 			async getGameEntry() {
-				// TODO 테스트 데이터 넣어놓기
 				const params = {
-					gameSeq: 2, //this.$route.params.gameSeq,
+					gameSeq: this.$route.params.gameSeq,
 					quarterCode: this.$route.params.quarterCode,
 				};
 
@@ -168,7 +169,7 @@
 			},
 			async deleteGameQuarter() {
 				const params = {
-					gameSeq: 2, //this.$route.params.gameSeq,
+					gameSeq: this.$route.params.gameSeq,
 					quarterCode: this.$route.params.quarterCode,
 				};
 
@@ -194,14 +195,18 @@
 					homeAwayCode,
 					record.gameJoinPlayerSeq
 				);
+				const targetTeamRecords = this.getInputTargetTeamRecords(homeAwayCode);
 
 				// 입력모드 체크
-				const isSuccessInput = this.inputRecored(targetPlayer, record);
+				const isSuccessInput = this.inputRecored(
+					record,
+					targetPlayer,
+					targetTeamRecords
+				);
 				if (!isSuccessInput) {
 					return;
 				}
 
-				// TODO 팀의 stat도 같이 올라가야함!! 추가 구현 예정
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					this.homeTeamRecords.push(record);
 				} else {
@@ -220,22 +225,18 @@
 					return player.gameJoinPlayerSeq == gameJoinPlayerSeq;
 				})[0];
 			},
-			inputRecored(targetPlayer, record) {
-				const targetTeamRecords = this.getInputTargetTeamRecords(
-					record.homeAwayCode
-				);
-
-				const statType = record.statType;
-				if (record.mode == RecordMode.ADD) {
-					return this.addStatRecord(statType, targetPlayer, targetTeamRecords);
-				}
-				return this.cancelStatRecord(statType, targetPlayer, targetTeamRecords);
-			},
 			getInputTargetTeamRecords(homeAwayCode) {
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					return this.gameQuarterRecords.homeTeamRecords;
 				}
 				return this.gameQuarterRecords.awayTeamRecords;
+			},
+			inputRecored(record, targetPlayer, targetTeamRecords) {
+				const statType = record.statType;
+				if (record.mode == RecordMode.ADD) {
+					return this.addStatRecord(statType, targetPlayer, targetTeamRecords);
+				}
+				return this.cancelStatRecord(statType, targetPlayer, targetTeamRecords);
 			},
 			// 스탯 올리기
 			addStatRecord(statType, targetPlayer, targetTeamRecords) {
