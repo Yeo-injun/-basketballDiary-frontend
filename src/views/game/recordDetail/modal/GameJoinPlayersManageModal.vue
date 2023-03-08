@@ -4,17 +4,21 @@
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
 			<div class="text-right" v-bind="attrs" v-on="on">
-				<GameJoinPlayerManageBtn />
+				<v-container>
+					<GameJoinPlayerManageBtn pBtnName="참가선수관리" />
+				</v-container>
 			</div>
 		</template>
 
 		<v-card>
 			<v-card-title> {{ pModalTitlePrefix }} 참가선수관리</v-card-title>
-			<GameJoinPlayerRegistrationBtn @register-players="registerPlayers" />
+			<div class="text-right">
+				<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
+			</div>
 			<v-container>
 				<div>참가선수 목록</div>
 				<PlayerDataTable
-					v-if="isLoading"
+					v-if="isGetGameJoinPlayersLoadOk"
 					:pPlayers="gameJoinPlayers"
 					pRowBtnName="삭제"
 					@get-row-player-info="deleteGameJoinPlayer"
@@ -31,14 +35,17 @@
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
-	import GameJoinPlayerRegistrationBtn from '@/views/game/recordDetail/button/GameJoinPlayerRegistrationBtn.vue';
-	import GameJoinPlayerManageBtn from '@/views/game/recordDetail/button/GameJoinPlayerManageBtn.vue';
+	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
+	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
 	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
 	export default {
+		mounted() {
+			this.getGameJoinPlayers();
+		},
 		components: {
-			GameJoinPlayerRegistrationBtn,
+			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
 			PlayerDataTable,
 			GameJoinPlayerSelectionComp,
@@ -50,7 +57,7 @@
 		data() {
 			return {
 				dialog: false,
-				isLoading: false,
+				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
 			};
 		},
@@ -77,7 +84,7 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
-				this.isLoading = true;
+				this.isGetGameJoinPlayersLoadOk = true;
 
 				switch (this.pGameJoinTeamInfo.homeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
@@ -115,9 +122,6 @@
 				}
 				this.gameJoinPlayers.unshift(targetPlayer);
 			},
-		},
-		mounted() {
-			this.getGameJoinPlayers();
 		},
 	};
 </script>

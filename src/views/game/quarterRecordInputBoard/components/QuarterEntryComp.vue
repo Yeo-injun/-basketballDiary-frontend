@@ -7,6 +7,7 @@
 					<EntryManageModal
 						:pHomeAwayCode="this.pHomeAwayCode"
 						:pHomeAwayCodeName="this.pHomeAwayCodeName"
+						@save-entry="emitSaveEntryEvent"
 					/>
 				</v-col>
 			</v-row>
@@ -23,6 +24,13 @@
 
 	const SELECT_PLAER_EVENT = 'select-player';
 	export default {
+		mounted() {
+			const hasEntryPlayers = this.pEntry.length > 0;
+			if (hasEntryPlayers) {
+				const defaultSelectedPlayer = this.pEntry[0];
+				this.$emit(SELECT_PLAER_EVENT, defaultSelectedPlayer);
+			}
+		},
 		components: {
 			EntryManageModal,
 			EntryTable,
@@ -36,13 +44,9 @@
 			selectPlayer(player) {
 				this.$emit(SELECT_PLAER_EVENT, player);
 			},
-		},
-		mounted() {
-			const hasEntryPlayers = this.pEntry.length > 0;
-			if (hasEntryPlayers) {
-				const defaultSelectedPlayer = this.pEntry[0];
-				this.$emit(SELECT_PLAER_EVENT, defaultSelectedPlayer);
-			}
+			emitSaveEntryEvent() {
+				this.$emit('save-entry');
+			},
 		},
 	};
 </script>

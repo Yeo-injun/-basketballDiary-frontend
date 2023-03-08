@@ -9,6 +9,7 @@
 					:pHomeAwayCodeName="this.pHomeAwayCodeName"
 					:pEntry="this.pEntry"
 					@select-player="selectPlayer"
+					@save-entry="emitSaveEntryEvent"
 				/>
 			</v-col>
 			<v-col cols="7">
@@ -42,6 +43,9 @@
 		methods: {
 			selectPlayer(player) {
 				this.selectedPlayer = player;
+			},
+			emitSaveEntryEvent() {
+				this.$emit('save-entry');
 			},
 			recordStat(inputInfo) {
 				const player = this.selectedPlayer;

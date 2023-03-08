@@ -86,6 +86,12 @@ export default {
 		return axiosService.post('', params);
 	},
 	/**
+	 * API060 엔트리 저장
+	 */
+	saveEntry(params) {
+		return axiosService.post(`/${params.gameSeq}/entry`, params);
+	},
+	/**
 	 * API061 경기참가선수 조회
 	 */
 	getGameJoinPlayers(params) {
