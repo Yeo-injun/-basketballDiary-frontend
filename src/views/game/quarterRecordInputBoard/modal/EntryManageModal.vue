@@ -11,7 +11,9 @@
 		<v-card>
 			<v-card-title>{{ this.pHomeAwayCodeName }} 엔트리 관리</v-card-title>
 			<v-container>
-				<div>TODO 저장버튼 구현</div>
+				<div class="text-right">
+					<SaveEntryBtn pBtnName="엔트리 저장" @do-save="saveEntry" />
+				</div>
 				<v-container>
 					<h4>엔트리 명단</h4>
 					<EntryTable
@@ -41,6 +43,7 @@
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	import EntryManageModalOpenBtn from '@/components/button/FrameOpenBtn.vue';
+	import SaveEntryBtn from '@/components/button/FrameSaveBtn.vue';
 
 	import EntryTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
@@ -51,6 +54,7 @@
 		},
 		components: {
 			EntryManageModalOpenBtn,
+			SaveEntryBtn,
 			EntryTable,
 			GameJoinPlayerTable,
 		},
@@ -70,7 +74,22 @@
 		methods: {
 			// TODO 엔트리 저장 API 붙이기 및 모달 닫기
 			async saveEntry() {
-				alert('saveEntry');
+				const routeParams = this.$route.params;
+				const params = {
+					gameSeq: routeParams.gameSeq,
+					homeAwayCode: this.pHomeAwayCode,
+					quarterCode: routeParams.quarterCode,
+					playerList: this.entry,
+				};
+				console.log(params);
+				const res = await GameAPI.saveEntry(params);
+				console.log(res);
+				// TODO API 리턴으로 저장한 엔트리 던져주기
+
+				this.$emit('save-entry');
+
+				// 모달창 닫기
+				this.dialog = false;
 			},
 			// TODO 엔트리 조회 API 구현
 			async getGameEntry() {

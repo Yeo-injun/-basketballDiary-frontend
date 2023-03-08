@@ -33,8 +33,11 @@
 		},
 		methods: {
 			async searchAllTeamMember() {
+				console.log(
+					'// TODO 동적처리 필요 - 현재 teamSeq 9로 하드코딩되어 있음'
+				);
 				const params = {
-					teamSeq: 7, // TODO 동적처리
+					teamSeq: 9,
 					playerName: this.playerName,
 					pageNo: 0,
 				};

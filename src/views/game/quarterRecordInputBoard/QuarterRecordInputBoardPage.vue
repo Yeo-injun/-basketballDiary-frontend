@@ -29,6 +29,7 @@
 				:pHomeAwayCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.homeTeamEntry"
 				@get-clicked-record-info="processInputRecordStat"
+				@save-entry="getGameEntry"
 			/>
 			<AwayTeamRecordInputBoardComp
 				v-else
@@ -36,6 +37,7 @@
 				:pHomeAwayCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.awayTeamEntry"
 				@get-clicked-record-info="processInputRecordStat"
+				@save-entry="getGameEntry"
 			/>
 		</div>
 		<v-container>
