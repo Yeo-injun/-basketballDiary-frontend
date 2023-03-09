@@ -117,4 +117,14 @@ export default {
 	getGameAllQuartersRecords(params) {
 		return axiosService.get(`/${params.gameSeq}/quarters`);
 	},
+
+	/**
+	 * API064 게임쿼터 기초정보생성
+	 */
+	createGameQuarterBasicInfo(params) {
+		return axiosService.post(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+			params
+		);
+	},
 };

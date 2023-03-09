@@ -1,6 +1,9 @@
 <template>
-	<v-container @click="moveQuarterRecordInputBoardPage()">
-		<div v-if="hasQuarterRecords(this.pTeamsQuarterRecords)">
+	<v-container>
+		<div
+			v-if="hasQuarterRecords(this.pTeamsQuarterRecords)"
+			@click="moveQuarterRecordInputBoardPage()"
+		>
 			<GameQuarterInfoFrame
 				:pQuarterCodeName="this.pTeamsQuarterRecords.quarterCodeName"
 				:pQuarterTime="this.pTeamsQuarterRecords.quarterTime"
@@ -11,7 +14,12 @@
 		<!-- 쿼터 정보가 없을 경우에 보여지는 Components -->
 		<div v-else>
 			<v-card>
-				<v-btn>쿼터 기록하기</v-btn>
+				<div class="text-center">
+					<QuarterCreateBtn
+						pBtnName="쿼터 입력"
+						@do-save="createGameQuarterBasicInfo"
+					/>
+				</div>
 			</v-card>
 		</div>
 	</v-container>
@@ -21,18 +29,22 @@
 	import { GameRecordStateCode } from '@/const/code/GameCode.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
+	import GameAPI from '@/api/GameAPI.js';
 	/***********
 	 * 컴포넌트
 	 ***********/
 	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
+	import QuarterCreateBtn from '@/components/button/FrameSaveBtn.vue';
 
 	export default {
 		components: {
 			GameQuarterInfoFrame,
+			QuarterCreateBtn,
 		},
 		props: {
-			pGameRecordStateCode: String,
 			pQuarterCode: String,
+			pGameRecordStateCode: String,
 			pTeamsQuarterRecords: Object,
 		},
 		methods: {
@@ -43,20 +55,27 @@
 				return true;
 			},
 			moveQuarterRecordInputBoardPage() {
-				if (
-					GameRecordStateCode.JOIN_TEAM_CONFIRMATION ==
-					this.pGameRecordStateCode
-				) {
-					this.$router.push({
-						name: 'QuarterRecordInputBoardPage',
-						params: {
-							gameSeq: this.$route.params.gameSeq,
-							quarterCode: this.pQuarterCode,
-						},
-					});
+				switch (this.pGameRecordStateCode) {
+					case GameRecordStateCode.JOIN_TEAM_CONFIRMATION:
+						this.$router.push({
+							name: 'QuarterRecordInputBoardPage',
+							params: {
+								gameSeq: this.$route.params.gameSeq,
+								quarterCode: this.pQuarterCode,
+							},
+						});
 				}
 				// TODO 농구게임 쿼터조회 화면으로 이동 - G005P01 화면으로
 				alert(this.pGameRecordStateCode);
+			},
+			async createGameQuarterBasicInfo() {
+				const params = {
+					gameSeq: this.$route.params.gameSeq,
+					quarterCode: this.pQuarterCode,
+				};
+
+				await GameAPI.createGameQuarterBasicInfo(params);
+				this.moveQuarterRecordInputBoardPage();
 			},
 		},
 	};
