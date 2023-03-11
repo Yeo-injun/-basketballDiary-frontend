@@ -16,12 +16,12 @@
 					</v-col>
 					<v-col>
 						<v-row>
-							<v-col>팀이름: {{ teamInfo.teamName }}</v-col>
-							<v-col>연고지: {{ teamInfo.hometown }}</v-col>
+							<v-col>팀이름: {{ pTeamInfo.teamName }}</v-col>
+							<v-col>연고지: {{ pTeamInfo.hometown }}</v-col>
 						</v-row>
 						<v-row>
-							<v-col>회원수: {{ teamInfo.totMember }}명</v-col>
-							<v-col>창단일: {{ teamInfo.foundationYmd }}</v-col>
+							<v-col>회원수: {{ pTeamInfo.totMember }}명</v-col>
+							<v-col>창단일: {{ pTeamInfo.foundationYmd }}</v-col>
 						</v-row>
 						<v-row>
 							<v-col>
@@ -32,7 +32,7 @@
 					</v-col>
 				</v-row>
 				<v-row no-gutters>
-					{{ teamInfo.introduction }}
+					{{ pTeamInfo.introduction }}
 				</v-row>
 			</v-container>
 
@@ -50,17 +50,21 @@
 <script>
 	export default {
 		props: {
-			teamInfo: Object,
+			pTeamInfo: Object,
 		},
 		methods: {
 			moveMyTeamDetailPage() {
 				this.$router.push({
 					name: 'MyTeamDetailPage',
 					params: {
-						pTeamSeq: this.teamInfo.teamSeq,
-						pTeamName: this.teamInfo.teamName,
-						teamSeq: this.teamInfo.teamSeq,
-						teamName: this.teamInfo.teamName,
+						pTeamSeq: this.pTeamInfo.teamSeq,
+						pTeamName: this.pTeamInfo.teamName,
+						teamSeq: this.pTeamInfo.teamSeq,
+						teamName: this.pTeamInfo.teamName,
+					},
+					query: {
+						teamSeq: this.pTeamInfo.teamSeq,
+						teamName: this.pTeamInfo.teamName,
 					},
 				});
 			},

@@ -10,7 +10,7 @@
 					프로필 수정
 				</v-btn>
 				<MyTeamProfileUpdateModal
-					:pTeamSeq="pTeamSeq"
+					:pTeamSeq="teamSeq"
 					:value="isActivatedMyTeamProfileModal"
 					@input="isActivatedMyTeamProfileModal = $event"
 				/>
@@ -26,7 +26,7 @@
 				<MyTeamInfoUpdateModal
 					v-model="dialog"
 					@input="dialog = $event"
-					:pTeamSeq="pTeamSeq"
+					:pTeamSeq="teamSeq"
 				/>
 			</div>
 
@@ -35,7 +35,7 @@
 
 			<v-subheader>운영진</v-subheader>
 			<div v-for="(manager, index) in managerList" v-bind:key="index">
-				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="pTeamSeq" />
+				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
 			</div>
 
 			<v-btn
@@ -50,7 +50,7 @@
 
 			<v-subheader>팀원 목록</v-subheader>
 			<div v-for="(member, index) in teamMembers" v-bind:key="'A' + index">
-				<MyTeamMemberComp :pTeamMember="member" :pTeamSeq="pTeamSeq" />
+				<MyTeamMemberComp :pTeamMember="member" :pTeamSeq="teamSeq" />
 			</div>
 
 			<!-- TODO 페이지네이션 공통 컴포넌트로 관리하기 -->
@@ -81,7 +81,7 @@
 		//data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
 		data() {
 			return {
-				teamSeq: this.$route.params.teamSeq,
+				teamSeq: this.$route.query.teamSeq,
 				profile: {},
 				managerList: [],
 				teamMembers: [],
@@ -95,13 +95,6 @@
 					totalPageCount: 1,
 				},
 			};
-		},
-		props: {
-			// TODO 걷어내기 >> 화면 패키지 정리하면서... 23.01.31일자
-			pTeamSeq: {
-				type: Number,
-				required: true,
-			},
 		},
 		components: {
 			MyTeamProfileComp,
@@ -141,7 +134,10 @@
 				const teamSeq = this.teamSeq;
 				this.$router.push({
 					name: 'MyTeamMemberManagePage',
+					// TODO 걷어내기
 					params: { pTeamSeq: teamSeq },
+					// TODO 적용하기
+					query: { teamSeq: teamSeq },
 				});
 			},
 			handlePage() {

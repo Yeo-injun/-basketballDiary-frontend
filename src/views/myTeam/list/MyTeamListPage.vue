@@ -5,7 +5,7 @@
 		<MyTeamComp
 			v-for="(team, index) in teamList"
 			:key="index"
-			v-bind:teamInfo="team"
+			:pTeamInfo="team"
 		/>
 
 		<v-pagination
