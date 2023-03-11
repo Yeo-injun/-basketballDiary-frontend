@@ -25,10 +25,7 @@
 		},
 		data() {
 			return {
-				searchCond: {
-					teamSeq: this.$route.params.pTeamSeq,
-					// TODO GameRecordSearchComp에서 이벤트가 발생할때마다 검색조건 세팅
-				},
+				teamSeq: this.$route.query.teamSeq,
 				games: [],
 				// TODO 페이지네이션 추가 필요
 				gameCount: 0,
@@ -38,7 +35,10 @@
 		methods: {
 			/* API052 : 소속팀 게임목록조회 */
 			async searchMyTeamGames() {
-				const response = await MyTeamAPI.searchMyTeamGames(this.searchCond);
+				const params = {
+					teamSeq: this.teamSeq,
+				};
+				const response = await MyTeamAPI.searchMyTeamGames(params);
 				this.games = response.data;
 				this.gameCount = response.data.length; // TODO API에서 페이징 처리를 하면 해당 값을 반영해야 함.
 			},
