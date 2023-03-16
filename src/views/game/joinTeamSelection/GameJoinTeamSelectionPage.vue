@@ -37,6 +37,7 @@
 			GameDeletionBtn,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
 				selectItems: [
 					{
@@ -49,7 +50,7 @@
 					},
 				],
 				selectedGameType: GameTypeCode.SELF_GAME,
-				gameSeq: this.$route.params.gameSeq,
+				gameSeq: query.gameSeq,
 				opponentTeamSeq: '',
 			};
 		},

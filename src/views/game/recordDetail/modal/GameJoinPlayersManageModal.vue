@@ -55,7 +55,10 @@
 			pGameJoinTeamInfo: Object,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
+				gameSeq: query.gameSeq,
+
 				dialog: false,
 				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
@@ -65,7 +68,7 @@
 			async registerPlayers() {
 				// TODO 선택한 선수들 등록하기 API035 호출
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
+					gameSeq: this.gameSeq,
 					gameJoinTeamSeq: this.pGameJoinTeamInfo.gameJoinTeamSeq, // TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
 					gameJoinPlayers: this.gameJoinPlayers,
 				};
@@ -79,7 +82,7 @@
 			},
 			async getGameJoinPlayers() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
+					gameSeq: this.gameSeq,
 					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
 				};
 

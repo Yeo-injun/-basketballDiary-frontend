@@ -49,6 +49,7 @@
 	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	export default {
 		mounted() {
+			// TODO 모달 호출시에 메소드 호출하도록 처리하기
 			this.getGameJoinPlayers();
 			this.getGameEntry();
 		},
@@ -63,7 +64,10 @@
 			pHomeAwayCodeName: String,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
+				gameSeq: query.gameSeq,
+				quarterCode: query.quarterCode,
 				dialog: false,
 				isGetEntryLoadOk: false,
 				entry: [],
@@ -74,11 +78,10 @@
 		methods: {
 			// TODO 엔트리 저장 API 붙이기 및 모달 닫기
 			async saveEntry() {
-				const routeParams = this.$route.params;
 				const params = {
-					gameSeq: routeParams.gameSeq,
+					gameSeq: this.gameSeq,
 					homeAwayCode: this.pHomeAwayCode,
-					quarterCode: routeParams.quarterCode,
+					quarterCode: this.quarterCode,
 					playerList: this.entry,
 				};
 				console.log(params);
@@ -99,7 +102,7 @@
 			async getGameJoinPlayers() {
 				const homeAwayCode = this.pHomeAwayCode;
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
+					gameSeq: this.gameSeq,
 					homeAwayCode: homeAwayCode,
 				};
 

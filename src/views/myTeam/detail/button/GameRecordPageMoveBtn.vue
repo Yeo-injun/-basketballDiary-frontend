@@ -33,7 +33,7 @@
 
 				this.$router.push({
 					name: this.pageName,
-					params: this.routeParams,
+					query: this.routeParams,
 				});
 			},
 			/** TODO API호출 후 성공할 시에 화면전환 함수 구현 */

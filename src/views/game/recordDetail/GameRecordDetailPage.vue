@@ -45,15 +45,18 @@
 			GameDeletionBtn,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
-				gameSeq: this.$route.params.gameSeq,
+				gameSeq: query.gameSeq,
+				gameRecordState: query.gameRecordState,
+				teamSeq: query.teamSeq,
+				teamName: query.teamName,
 			};
 		},
 		methods: {
 			isShowGameManageBtn() {
 				const isConfirmState =
-					GameRecordStateCode.CONFIRMATION ==
-					this.$route.params.gameRecordState;
+					GameRecordStateCode.CONFIRMATION == this.gameRecordState;
 				if (isConfirmState) {
 					return false;
 				}
@@ -62,12 +65,11 @@
 				return true;
 			},
 			moveMyTeamPage() {
-				const routeParams = this.$route.params;
 				this.$router.push({
 					name: 'MyTeamPage',
 					params: {
-						teamSeq: routeParams.teamSeq,
-						teamName: routeParams.teamName,
+						teamSeq: this.teamSeq,
+						teamName: this.teamName,
 					},
 				});
 			},
