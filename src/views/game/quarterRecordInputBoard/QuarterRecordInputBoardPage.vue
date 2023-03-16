@@ -88,7 +88,10 @@
 			DeleteGameQuarterBtn,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
+				gameSeq: query.gameSeq,
+				quarterCode: query.quarterCode,
 				isGetGameQuarterRecordsLoad: false,
 				isGetGameEntryLoadOk: false,
 				isHomeTeamInputMode: true,
@@ -126,8 +129,8 @@
 		methods: {
 			async getGameQuarterRecords() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					quarterCode: this.$route.params.quarterCode,
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);
@@ -138,8 +141,8 @@
 			},
 			async getGameEntry() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					quarterCode: this.$route.params.quarterCode,
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
 				};
 
 				const res = await GameAPI.getGameEntry(params);
@@ -161,22 +164,19 @@
 			},
 			async saveGameQuarter() {
 				alert('saveGameQuarter() 구현중');
-
-				// const params = {
-				// 	gameSeq: 2, //this.$route.params.gameSeq,
-				// 	quarterCode: this.$route.params.quarterCode,
-				// };
-
-				// await GameAPI.deleteGameQuarter(params);
 			},
 			async deleteGameQuarter() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					quarterCode: this.$route.params.quarterCode,
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
 				};
 
 				await GameAPI.deleteGameQuarter(params);
 				// TODO 화면이동처리하기
+				this.$router.push({
+					name: 'GameRecordDetailPage',
+					query: params,
+				});
 			},
 			changeRecordInputTeam(params) {
 				const homeAwayCode = params.homeAwayCode;

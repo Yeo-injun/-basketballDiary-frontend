@@ -47,6 +47,12 @@
 			pGameRecordStateCode: String,
 			pTeamsQuarterRecords: Object,
 		},
+		data() {
+			const query = this.$route.query;
+			return {
+				gameSeq: query.gameSeq,
+			};
+		},
 		methods: {
 			hasQuarterRecords(quarterRecords) {
 				if (ValidationUtil.isNull(quarterRecords)) {
@@ -59,18 +65,17 @@
 					case GameRecordStateCode.JOIN_TEAM_CONFIRMATION:
 						this.$router.push({
 							name: 'QuarterRecordInputBoardPage',
-							params: {
-								gameSeq: this.$route.params.gameSeq,
+							query: {
+								gameSeq: this.gameSeq,
 								quarterCode: this.pQuarterCode,
 							},
 						});
 				}
 				// TODO 농구게임 쿼터조회 화면으로 이동 - G005P01 화면으로
-				alert(this.pGameRecordStateCode);
 			},
 			async createGameQuarterBasicInfo() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
+					gameSeq: this.gameSeq,
 					quarterCode: this.pQuarterCode,
 				};
 

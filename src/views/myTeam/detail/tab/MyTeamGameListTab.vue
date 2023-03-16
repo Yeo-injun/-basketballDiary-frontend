@@ -24,12 +24,13 @@
 			MyTeamGameRecordComp,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
-				teamSeq: this.$route.query.teamSeq,
+				teamSeq: query.teamSeq,
+				teamName: query.pTeamName,
 				games: [],
 				// TODO 페이지네이션 추가 필요
 				gameCount: 0,
-				teamName: this.$route.params.pTeamName,
 			};
 		},
 		methods: {

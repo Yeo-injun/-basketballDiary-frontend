@@ -1,5 +1,6 @@
 <template>
 	<v-card class="ma-6 pa-2">
+		<!-- TODO 해당 버튼 바꾸기 -->
 		<GameRecordPageMoveBtn :pBtnInfo="this.getBtnInfo()" />
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
@@ -79,12 +80,12 @@
 				};
 			},
 			_getRouteParams() {
-				const routeParams = this.$route.params;
+				const routeQuery = this.$route.query;
 				return {
 					gameSeq: this.gameSeq,
 					gameRecordState: this.pGame.gameRecordStateCode,
-					teamSeq: routeParams.pTeamSeq,
-					teamName: routeParams.pTeamName,
+					teamSeq: routeQuery.teamSeq,
+					teamName: routeQuery.teamName,
 				};
 			},
 		},
