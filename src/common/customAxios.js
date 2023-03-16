@@ -34,11 +34,16 @@ export default {
 				'Content-Type': 'application/json',
 			},
 		});
-		// 인터셉터 등록
+
+		// Request 인터셉터 등록
 		axiosInstance.interceptors.request.use(function (config) {
+			const method = config.method.toUpperCase();
+			const targetUrl = `${config.baseURL}${config.url}`;
+			console.log(`${method} / ${targetUrl}`);
 			LoadingStateManager.mutations.loadingStart();
 			return config;
 		}),
+			// Response 인터셉터 등록
 			axiosInstance.interceptors.response.use(
 				function (response) {
 					LoadingStateManager.mutations.loadingEnd();

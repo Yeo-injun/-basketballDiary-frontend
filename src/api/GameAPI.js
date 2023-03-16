@@ -4,10 +4,127 @@ const axiosService = axios.createAxiosInstance('/games');
 
 export default {
 	/**
-	 * injun
+	 * API035 게임참가 선수등록하기
 	 */
-	// API053 : 게임생성하기
+	registerGameJoinPlayers(params) {
+		return axiosService.post(
+			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`,
+			{
+				gameJoinPlayers: params.gameJoinPlayers,
+			}
+		);
+	},
+
+	/**
+	 * API040 게임엔트리 조회
+	 */
+	getGameEntry(params) {
+		return axiosService.get(
+			`/${params.gameSeq}/quarters/${params.quarterCode}/entry`,
+			{
+				homeAwayCode: params.homeAwayCode,
+			}
+		);
+	},
+	/**
+	 * API041 게임쿼터삭제
+	 */
+	deleteGameQuarter(params) {
+		return axiosService.delete(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`
+		);
+	},
+	/**
+	 * API044 : 상대팀 찾기
+	 */
+	searchOpponents(params) {
+		return axiosService.get(`/opponents`, { params });
+	},
+	/**
+	 * API046 게임 기초정보 조회
+	 */
+	getGameBasicInfo(params) {
+		return axiosService.get(`/${params.gameSeq}/info`);
+	},
+	/**
+	 * API047 경기참가팀 조회
+	 */
+	getGameJoinTeamsInfo(params) {
+		return axiosService.get(`/${params.gameSeq}/teams`, {
+			params: {
+				homeAwayCode: params.homeAwayCode,
+			},
+		});
+	},
+
+	/**
+	 * API048 경기쿼터기록 조회
+	 */
+	getGameQuarterRecords(params) {
+		return axiosService.get(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`
+		);
+	},
+
+	/**
+	 * API050 경기 확정
+	 */
+	confirmGame(params) {
+		return axiosService.post(`/${params.gameSeq}/confirmation`);
+	},
+
+	/**
+	 * API051 게임 삭제
+	 */
+	deleteGame(params) {
+		return axiosService.delete(`/${params.gameSeq}`);
+	},
+	/**
+	 * API053 : 게임생성하기
+	 */
 	createGame(params) {
 		return axiosService.post('', params);
+	},
+	/**
+	 * API060 엔트리 저장
+	 */
+	saveEntry(params) {
+		return axiosService.post(`/${params.gameSeq}/entry`, params);
+	},
+	/**
+	 * API061 경기참가선수 조회
+	 */
+	getGameJoinPlayers(params) {
+		return axiosService.get(`/${params.gameSeq}/players`, {
+			params: {
+				homeAwayCode: params.homeAwayCode,
+			},
+		});
+	},
+
+	/**
+	 * API062 게임참가팀 확정
+	 */
+	confirmJoinTeam(params) {
+		return axiosService.post(
+			`/${params.gameSeq}/gameJoinTeams`,
+			params.gameJoinTeamInfo
+		);
+	},
+	/**
+	 * API063 게임전체쿼터 조회
+	 */
+	getGameAllQuartersRecords(params) {
+		return axiosService.get(`/${params.gameSeq}/quarters`);
+	},
+
+	/**
+	 * API064 게임쿼터 기초정보생성
+	 */
+	createGameQuarterBasicInfo(params) {
+		return axiosService.post(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+			params
+		);
 	},
 };

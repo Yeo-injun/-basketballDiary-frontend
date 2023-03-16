@@ -9,6 +9,7 @@ Vue.use(VueRouter);
  * -중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
  */
 export default new VueRouter({
+	// Named Router 사용 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
 	// 기본은 Hash모드지만 이경우 웹브라우저 url입력창에 #이 계속 붙음.
 	// 이를 방지하기 위해 history 모드로 변경.
 	// requires HTML5 History API and server config. See HTML5 History Mode.
@@ -28,23 +29,41 @@ export default new VueRouter({
 		 * game페이지
 		 */
 		createRoute(
-			'views/game/GameCreationPage',
+			'views/game/creation/GameCreationPage',
 			'/game/creation',
 			'GameCreationPage'
 		),
 		createRoute(
-			'views/game/GameJoinTeamSelectionPage',
+			'views/game/joinTeamSelection/GameJoinTeamSelectionPage',
 			'/game/joinTeam/selection',
 			'GameJoinTeamSelectionPage'
+		),
+		createRoute(
+			'views/game/recordDetail/GameRecordDetailPage',
+			'/game/record',
+			'GameRecordDetailPage'
+		),
+		createRoute(
+			'views/game/quarterRecordInputBoard/QuarterRecordInputBoardPage',
+			'/game/record/inputBoard',
+			'QuarterRecordInputBoardPage'
 		),
 
 		/**
 		 * myTeam페이지
 		 */
-		createRoute('views/myTeam/MyTeamListPage', '/myTeams', 'MyTeamListPage'),
-		createRoute('views/myTeam/MyTeamPage', '/myTeam', 'MyTeamPage'), // TODO Named Router 사용검토 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
 		createRoute(
-			'views/myTeam/MyTeamMemberManagePage',
+			'views/myTeam/list/MyTeamListPage',
+			'/myTeams',
+			'MyTeamListPage'
+		),
+		createRoute(
+			'views/myTeam/detail/MyTeamDetailPage',
+			'/myTeam',
+			'MyTeamDetailPage'
+		),
+		createRoute(
+			'views/myTeam/memeberManage/MyTeamMemberManagePage',
 			'/myTeam/teamMemberManage',
 			'MyTeamMemberManagePage'
 		),
@@ -52,9 +71,9 @@ export default new VueRouter({
 		/**
 		 * team페이지
 		 */
-		createRoute('views/team/TeamListPage', '/teams', 'TeamListPage'),
+		createRoute('views/team/list/TeamListPage', '/teams', 'TeamListPage'),
 		createRoute(
-			'views/team/TeamRegistrationPage',
+			'views/team/registration/TeamRegistrationPage',
 			'/team/registration',
 			'TeamRegistrationPage'
 		),
