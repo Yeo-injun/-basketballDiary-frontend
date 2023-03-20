@@ -113,16 +113,19 @@
 					homeAwayCode: '',
 					homeAwayCodeName: '',
 				},
-				homeCode: HomeAwayCode.HOME_TEAM,
-				homeTeamEntry: [],
-				homeTeamRecords: [],
 				awayTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
 					homeAwayCodeName: '',
 				},
+
+				homeCode: HomeAwayCode.HOME_TEAM,
 				awayCode: HomeAwayCode.AWAY_TEAM,
+
+				homeTeamEntry: [],
 				awayTeamEntry: [],
+
+				homeTeamRecords: [],
 				awayTeamRecords: [],
 			};
 		},
@@ -163,7 +166,16 @@
 				this.isGetGameEntryLoadOk = true;
 			},
 			async saveGameQuarter() {
-				alert('saveGameQuarter() 구현중');
+				const params = {
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
+					homeTeamPlayerRecords: this.homeTeamEntry,
+					awayTeamPlayerRecords: this.awayTeamEntry,
+				};
+
+				await GameAPI.saveQuarterRecords(params);
+
+				alert('저장완료되었습니다.');
 			},
 			async deleteGameQuarter() {
 				const params = {

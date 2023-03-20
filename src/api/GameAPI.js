@@ -14,6 +14,18 @@ export default {
 			}
 		);
 	},
+	/**
+	 * API038 쿼터기록 저장하기
+	 */
+	saveQuarterRecords(params) {
+		return axiosService.put(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+			{
+				homeTeamPlayerRecords: params.homeTeamPlayerRecords,
+				awayTeamPlayerRecords: params.awayTeamPlayerRecords,
+			}
+		);
+	},
 
 	/**
 	 * API040 게임엔트리 조회
