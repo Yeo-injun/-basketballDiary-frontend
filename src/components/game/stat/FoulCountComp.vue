@@ -29,7 +29,6 @@
 		// 참고자료 :  https://ui.toast.com/weekly-pick/ko_20190307
 		watch: {
 			pFoulCnt() {
-				alert('dd');
 				this.generateFoulInfoList();
 			},
 		},
