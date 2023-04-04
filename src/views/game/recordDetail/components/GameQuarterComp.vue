@@ -70,8 +70,16 @@
 								quarterCode: this.pQuarterCode,
 							},
 						});
+						break;
+					case GameRecordStateCode.CONFIRMATION:
+						this.$router.push({
+							name: 'QuarterRecordDetailPage',
+							query: {
+								gameSeq: this.gameSeq,
+								quarterCode: this.pQuarterCode,
+							},
+						});
 				}
-				// TODO 농구게임 쿼터조회 화면으로 이동 - G005P01 화면으로
 			},
 			async createGameQuarterBasicInfo() {
 				const params = {

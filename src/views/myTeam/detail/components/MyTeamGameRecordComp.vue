@@ -1,7 +1,12 @@
 <template>
 	<v-card class="ma-6 pa-2">
 		<!-- TODO 해당 버튼 바꾸기 -->
-		<GameRecordPageMoveBtn :pBtnInfo="this.getBtnInfo()" />
+		<GameRecordPageMoveBtn
+			:pBtnName="this.getPageMoveInfo().btnName"
+			:pRoutePageName="this.getPageMoveInfo().routePageName"
+			:pRouteParams="this.getPageMoveInfo().routeParams"
+			@do-post-move="alert('실행')"
+		/>
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
 			<div>경기일자 : {{ gameYmd }}</div>
@@ -15,7 +20,10 @@
 </template>
 
 <script>
-	import GameRecordPageMoveBtn from '@/views/myTeam/detail/button/GameRecordPageMoveBtn.vue';
+	// TODO FramPageMoveBtn으로 대체 검토 >>
+	// import GameRecordPageMoveBtn from '@/views/myTeam/detail/button/GameRecordPageMoveBtn.vue';
+	import GameRecordPageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
+
 	import ScoreBoardComp from '@/components/game/ScoreBoardComp.vue';
 	import QuarterScoreBoardComp from '@/components/game/QuarterScoreBoardComp.vue';
 
@@ -50,9 +58,9 @@
 			};
 		},
 		methods: {
-			getBtnInfo() {
+			getPageMoveInfo() {
 				if (this.gameRecordStateCode == GameRecordStateCode.CREATION) {
-					return this._getBtnInfo(
+					return this._getPageMoveInfo(
 						'참가팀선택하기',
 						'GameJoinTeamSelectionPage'
 					);
@@ -61,21 +69,24 @@
 				if (
 					this.gameRecordStateCode == GameRecordStateCode.JOIN_TEAM_CONFIRMATION
 				) {
-					return this._getBtnInfo('기록하기', 'GameRecordDetailPage');
+					return this._getPageMoveInfo('기록하기', 'GameRecordDetailPage');
 				}
 
 				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
-					return this._getBtnInfo('상세보기', 'GameRecordDetailPage');
+					return this._getBtnI_getPageMoveInfonfo(
+						'상세보기',
+						'GameRecordDetailPage'
+					);
 				}
 
 				throw new Error(
 					`존재하지 않는 코드입니다. 입력 코드 : ${this.gameRecordStateCode}`
 				);
 			},
-			_getBtnInfo(btnName, pageName) {
+			_getPageMoveInfo(btnName, movePageName) {
 				return {
 					btnName: btnName,
-					pageName: pageName,
+					routePageName: movePageName,
 					routeParams: this._getRouteParams(),
 				};
 			},
