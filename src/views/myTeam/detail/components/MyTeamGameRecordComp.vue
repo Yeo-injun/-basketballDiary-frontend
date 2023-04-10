@@ -5,7 +5,7 @@
 			:pBtnName="this.getPageMoveInfo().btnName"
 			:pRoutePageName="this.getPageMoveInfo().routePageName"
 			:pRouteParams="this.getPageMoveInfo().routeParams"
-			@do-post-move="alert('실행')"
+			@do-post-move="this.testFunc"
 		/>
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
@@ -73,10 +73,7 @@
 				}
 
 				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
-					return this._getBtnI_getPageMoveInfonfo(
-						'상세보기',
-						'GameRecordDetailPage'
-					);
+					return this._getPageMoveInfo('상세보기', 'QuarterRecordDetailPage');
 				}
 
 				throw new Error(
@@ -98,6 +95,9 @@
 					teamSeq: routeQuery.teamSeq,
 					teamName: routeQuery.teamName,
 				};
+			},
+			testFunc() {
+				alert('실행');
 			},
 		},
 	};
