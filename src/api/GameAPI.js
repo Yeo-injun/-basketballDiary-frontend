@@ -47,6 +47,17 @@ export default {
 		);
 	},
 	/**
+	 * API043 참가선수 쿼터기록조회
+	 */
+	getGameJoinPlayerRecordsByQuarter(params) {
+		return axiosService.delete(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+			{
+				homeAwayCode: params.homeAwayCode,
+			}
+		);
+	},
+	/**
 	 * API044 : 상대팀 찾기
 	 */
 	searchOpponents(params) {
