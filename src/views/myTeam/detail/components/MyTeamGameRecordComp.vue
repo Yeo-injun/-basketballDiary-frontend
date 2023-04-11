@@ -73,7 +73,7 @@
 				}
 
 				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
-					return this._getPageMoveInfo('상세보기', 'QuarterRecordDetailPage');
+					return this._getPageMoveInfo('상세보기', 'GameRecordDetailPage');
 				}
 
 				throw new Error(
