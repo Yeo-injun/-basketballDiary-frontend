@@ -4,22 +4,15 @@
 			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
 		</div>
 		<v-container>
-			<v-row>
-				<v-col>
-					<HomeTeamTitle
-						:pTitleInfo="homeTeamTitleInfo"
-						:pIsSelected="selectHomeTeam"
-						@click-title="changeRecordInputTeam"
-					/>
-				</v-col>
-				<v-col>
-					<AwayTeamTitle
-						:pTitleInfo="awayTeamTitleInfo"
-						:pIsSelected="selectAwayTeam"
-						@click-title="changeRecordInputTeam"
-					/>
-				</v-col>
-			</v-row>
+			<HomeAwayTeamToggle
+				:pHomeTeamName="this.homeTeamTitleInfo.teamName"
+				:pHomeTeamCode="this.homeTeamTitleInfo.homeAwayCode"
+				:pHomeTeamCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
+				:pAwayTeamName="this.awayTeamTitleInfo.teamName"
+				:pAwayTeamCode="this.awayTeamTitleInfo.homeAwayCode"
+				:pAwayTeamCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
+				@select-home-away-team="changeRecordInputTeam"
+			/>
 		</v-container>
 		<h3>// TODO 하단 버튼 - 저장 API 붙이기!!!</h3>
 		<div v-if="this.isGetGameEntryLoadOk">
@@ -68,8 +61,7 @@
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
-	import HomeTeamTitle from '@/components/game/gameJoinTeam/TeamTitleComp.vue';
-	import AwayTeamTitle from '@/components/game/gameJoinTeam/TeamTitleComp.vue';
+	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 
 	import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
 	import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
@@ -80,8 +72,7 @@
 	export default {
 		components: {
 			GameQuarterInfoComp,
-			HomeTeamTitle,
-			AwayTeamTitle,
+			HomeAwayTeamToggle,
 			HomeTeamRecordInputBoardComp,
 			AwayTeamRecordInputBoardComp,
 			SaveGameQuarterBtn,
@@ -95,8 +86,6 @@
 				isGetGameQuarterRecordsLoad: false,
 				isGetGameEntryLoadOk: false,
 				isHomeTeamInputMode: true,
-				selectHomeTeam: true,
-				selectAwayTeam: false,
 				gameQuarterRecords: {
 					gameSeq: '',
 					quarterCode: '',
@@ -108,6 +97,7 @@
 					homeTeamRecords: {},
 					awayTeamRecords: {},
 				},
+				// TODO 토글에 반영되는 props데이터 줄이기
 				homeTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
@@ -194,12 +184,8 @@
 				const homeAwayCode = params.homeAwayCode;
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					this.isHomeTeamInputMode = true;
-					this.selectHomeTeam = true;
-					this.selectAwayTeam = false;
 				} else {
 					this.isHomeTeamInputMode = false;
-					this.selectHomeTeam = false;
-					this.selectAwayTeam = true;
 				}
 			},
 			processInputRecordStat(record) {
