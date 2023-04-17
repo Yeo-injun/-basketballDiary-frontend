@@ -1,7 +1,7 @@
 <template>
 	<v-container>
 		<h3>선수기록</h3>
-		<PlayerRecordComp :pPlayerRecordInfo="this.selectedPlayer" />
+		<PlayerRecordComp :pPlayerRecord="this.selectedPlayer" />
 		<v-row>
 			<v-col cols="5">
 				<QuarterEntryComp
