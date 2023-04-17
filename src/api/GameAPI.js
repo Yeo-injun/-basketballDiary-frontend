@@ -50,8 +50,8 @@ export default {
 	 * API043 참가선수 쿼터기록조회
 	 */
 	getGameJoinPlayerRecordsByQuarter(params) {
-		return axiosService.delete(
-			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+		return axiosService.get(
+			`/${params.gameSeq}/quarters/${params.quarterCode}/players`,
 			{
 				homeAwayCode: params.homeAwayCode,
 			}

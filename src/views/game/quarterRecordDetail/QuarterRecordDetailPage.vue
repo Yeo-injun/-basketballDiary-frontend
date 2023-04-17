@@ -18,10 +18,13 @@
 				:pAwayTeamName="this.awayTeamRecords.teamName"
 				:pAwayTeamCode="this.awayTeamRecords.homeAwayCode"
 				:pAwayTeamCodeName="this.awayTeamRecords.homeAwayCodeName"
-				@select-home-away-team="showPlayersByHomeAwayCode"
+				@select-home-away-team="selectTargetPlayersByHomeAwayCode"
 			/>
 		</v-container>
-		{{ this.test }}
+		<h2>{{ this.targetTeamName }} 선수기록</h2>
+		<v-container>
+			<QuarterPlayerRecordsComp :pPlayersRecord="this.targetPlayersRecord" />
+		</v-container>
 	</v-container>
 </template>
 
@@ -34,23 +37,29 @@
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 	import { HomeAwayCode } from '@/const/code/GameCode';
 
+	import QuarterPlayerRecordsComp from '@/views/game/quarterRecordDetail/components/QuarterPlayerRecordComp.vue';
+
 	export default {
 		components: {
 			GameQuarterInfoFrame,
 			HomeAwayTeamToggle,
+			QuarterPlayerRecordsComp,
 		},
 		props: {
 			pGameQuarterRecords: Object,
 		},
 		data() {
 			return {
-				test: 'TODO API호출 붙이기',
 				gameYmd: '',
 				gameTime: '',
 				quarterCodeName: '',
 				quarterTime: '',
 				homeTeamRecords: {},
 				awayTeamRecords: {},
+				homeTeamPlayers: [],
+				awayTeamPlayers: [],
+				targetTeamName: '',
+				targetPlayersRecord: [],
 			};
 		},
 		methods: {
@@ -69,10 +78,8 @@
 				this.quarterCodeName = resMessage.quarterCodeName;
 				this.quarterTime = resMessage.quarterTime;
 
-				const homeTeamInfo = resMessage.homeTeamRecords;
-				const awayTeamInfo = resMessage.awayTeamRecords;
-				this.homeTeamRecords = homeTeamInfo;
-				this.awayTeamRecords = awayTeamInfo;
+				this.homeTeamRecords = resMessage.homeTeamRecords;
+				this.awayTeamRecords = resMessage.awayTeamRecords;
 			},
 			async getALLGameJoinPlayerRecordsByQuarter() {
 				const query = this.$route.query;
@@ -80,17 +87,24 @@
 					gameSeq: query.gameSeq,
 					quarterCode: query.quarterCode,
 				};
-				// TODO 값 제대로 할당하기
+
 				const res = await GameAPI.getGameJoinPlayerRecordsByQuarter(params);
-				this.test = res;
+				const resBody = res.data;
+				this.homeTeamPlayers = resBody.homeTeamPlayers;
+				this.awayTeamPlayers = resBody.awayTeamPlayers;
+				this.selectTargetPlayersByHomeAwayCode({
+					homeAwayCode: HomeAwayCode.HOME_TEAM,
+				});
 			},
-			showPlayersByHomeAwayCode(params) {
+			selectTargetPlayersByHomeAwayCode(params) {
 				const homeAwayCode = params.homeAwayCode;
-				// TODO 선수목록 컴포넌트 보여주기
+
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.test = '홈팀 선수 목록 보여주기';
+					this.targetTeamName = `${this.homeTeamRecords.teamName} ( ${this.homeTeamRecords.homeAwayCodeName} )`;
+					this.targetPlayersRecord = this.homeTeamPlayers;
 				} else {
-					this.test = '어웨이 선수 목록 보여주기';
+					this.targetTeamName = `${this.awayTeamRecords.teamName} ( ${this.awayTeamRecords.homeAwayCodeName} )`;
+					this.targetPlayersRecord = this.awayTeamPlayers;
 				}
 			},
 		},
