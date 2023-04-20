@@ -3,8 +3,8 @@
 		<v-col>
 			<HomeTeamTitle
 				:pTeamName="this.pHomeTeamName"
-				:pHomeAwayCode="this.pHomeTeamCode"
 				:pHomeAwayCodeName="this.pHomeTeamCodeName"
+				:pHomeAwayCode="this.homeTeamCode"
 				:pIsSelected="isSelectHomeTeam"
 				@click-title="clickTeamTitle"
 			/>
@@ -12,8 +12,8 @@
 		<v-col>
 			<AwayTeamTitle
 				:pTeamName="this.pAwayTeamName"
-				:pHomeAwayCode="this.pAwayTeamCode"
 				:pHomeAwayCodeName="this.pAwayTeamCodeName"
+				:pHomeAwayCode="this.awayTeamCode"
 				:pIsSelected="isSelectAwayTeam"
 				@click-title="clickTeamTitle"
 			/>
@@ -34,15 +34,15 @@
 		},
 		props: {
 			pHomeTeamName: String,
-			pHomeTeamCode: String,
 			pHomeTeamCodeName: String,
 
 			pAwayTeamName: String,
-			pAwayTeamCode: String,
 			pAwayTeamCodeName: String,
 		},
 		data() {
 			return {
+				homeTeamCode: HomeAwayCode.HOME_TEAM,
+				awayTeamCode: HomeAwayCode.AWAY_TEAM,
 				isSelectHomeTeam: true,
 				isSelectAwayTeam: false,
 			};
