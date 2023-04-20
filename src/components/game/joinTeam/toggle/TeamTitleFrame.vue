@@ -2,14 +2,15 @@
 	<v-card>
 		<v-card-title :class="this.getTitleColor()" @click="clickEmit()">
 			<div class="font-weight-bold">
-				{{ this.pTeamName }}
-				( {{ this.pHomeAwayCodeName }} )
+				{{ this.teamTitleText }}
 			</div>
 		</v-card-title>
 	</v-card>
 </template>
 
 <script>
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	export default {
@@ -24,7 +25,21 @@
 				Type: Boolean,
 			},
 		},
+		data() {
+			return {
+				teamTitleText: this.getTeamTitleText(
+					this.pTeamName,
+					this.pHomeAwayCodeName
+				),
+			};
+		},
 		methods: {
+			getTeamTitleText(teamName, homeAwayName) {
+				if (ValidationUtil.isNotNull(teamName)) {
+					return `${teamName} ( ${homeAwayName} )`;
+				}
+				return homeAwayName;
+			},
 			getTitleColor() {
 				const selectedState = this.pIsSelected ? '3' : '5';
 				const homeAwayCode = this.pHomeAwayCode;

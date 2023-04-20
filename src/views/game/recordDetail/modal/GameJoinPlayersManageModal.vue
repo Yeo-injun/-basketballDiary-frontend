@@ -53,6 +53,7 @@
 		props: {
 			pModalTitlePrefix: String,
 			pGameJoinTeamInfo: Object,
+			pHomeAwayCode: String,
 		},
 		data() {
 			const query = this.$route.query;
@@ -67,9 +68,10 @@
 		methods: {
 			async registerPlayers() {
 				// TODO 선택한 선수들 등록하기 API035 호출
+				// TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
 				const params = {
 					gameSeq: this.gameSeq,
-					gameJoinTeamSeq: this.pGameJoinTeamInfo.gameJoinTeamSeq, // TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
+					gameJoinTeamSeq: this.pGameJoinTeamInfo.gameJoinTeamSeq,
 					gameJoinPlayers: this.gameJoinPlayers,
 				};
 				await GameAPI.registerGameJoinPlayers(params);
