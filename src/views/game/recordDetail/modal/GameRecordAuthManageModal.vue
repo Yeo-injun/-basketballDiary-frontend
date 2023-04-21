@@ -2,6 +2,8 @@
 	<v-dialog v-model="dialog" max-width="800px">
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
+			<!-- TODO 모달이 활성화되는 이벤트를 버튼에다가만 걸기. 하지만 지금은
+				버튼에다 걸면 do-event가 실행안됨 ㅠ -->
 			<div class="text-right" v-bind="attrs" v-on="on">
 				<v-container>
 					<GameRecordAuthManageBtn
@@ -88,6 +90,12 @@
 				this.getGameJoinPlayers();
 			},
 			async getGameRecorders() {
+				const params = {
+					gameSeq: this.gameSeq,
+				};
+				const res = await GameAPI.getGameRecorders(params);
+
+				this.gameRecorders = res.data; // TODO API전문구조 바뀔 예정
 				this.isGetGameRecordersLoadOk = true;
 			},
 			async getGameJoinPlayers() {

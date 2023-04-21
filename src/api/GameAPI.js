@@ -109,6 +109,12 @@ export default {
 		return axiosService.post('', params);
 	},
 	/**
+	 * API055 : 경기기록 권한자 목록 조회
+	 */
+	getGameRecorders(params) {
+		return axiosService.get(`/${params.gameSeq}/gameRecorders`, params);
+	},
+	/**
 	 * API060 엔트리 저장
 	 */
 	saveEntry(params) {
