@@ -22,6 +22,7 @@
 				</div>
 				<v-container>
 					<div>권한자 목록</div>
+					// TODO 삭제 버튼 로직 구현
 					<GameRecordersTable
 						v-if="isGetGameRecordersLoadOk"
 						:pGameRecorders="gameRecorders"
@@ -34,6 +35,7 @@
 				/>
 				<v-container>
 					<div>참가선수 목록</div>
+					// TODO 추가 버튼 로직 구현
 					<PlayerDataTable
 						v-if="isGetGameJoinPlayersLoadOk"
 						:pPlayers="gameJoinPlayers"
@@ -95,7 +97,7 @@
 				};
 				const res = await GameAPI.getGameRecorders(params);
 
-				this.gameRecorders = res.data; // TODO API전문구조 바뀔 예정
+				this.gameRecorders = res.data.gameRecorders;
 				this.isGetGameRecordersLoadOk = true;
 			},
 			async getGameJoinPlayers() {

@@ -30,12 +30,11 @@
 		data() {
 			return {
 				headers: [
-					{ text: '선수구분', value: 'playerTypeCodeName' },
-					{ text: '이름', value: 'userName' },
-					{ text: '포지션', value: 'positionCodeName' },
+					{ text: '소속팀', value: 'teamName' },
+					{ text: '이름', value: 'name' },
 					{ text: '등번호', value: 'backNumber' },
 					{ text: '이메일', value: 'email' },
-					{ text: '권한구분', value: 'gameRecordAuthCode' },
+					{ text: '권한구분', value: 'gameRecordAuthCodeName' },
 					{ test: '버튼', value: 'button', sortable: false },
 				],
 			};
