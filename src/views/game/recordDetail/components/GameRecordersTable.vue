@@ -31,7 +31,7 @@
 			return {
 				headers: [
 					{ text: '소속팀', value: 'teamName' },
-					{ text: '이름', value: 'name' },
+					{ text: '이름', value: 'userName' },
 					{ text: '등번호', value: 'backNumber' },
 					{ text: '이메일', value: 'email' },
 					{ text: '권한구분', value: 'gameRecordAuthCodeName' },

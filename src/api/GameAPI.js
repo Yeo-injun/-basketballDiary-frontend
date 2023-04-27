@@ -115,6 +115,14 @@ export default {
 		return axiosService.get(`/${params.gameSeq}/gameRecorders`, params);
 	},
 	/**
+	 * API057 : 경기참가팀 팀원 조회
+	 */
+	getGameJoinTeamMembers(params) {
+		return axiosService.get(`/${params.gameSeq}/teamMembers`, {
+			homeAwayCode: params.homeAwayCode,
+		});
+	},
+	/**
 	 * API060 엔트리 저장
 	 */
 	saveEntry(params) {
