@@ -26,6 +26,9 @@
 			},
 		},
 		data() {
+			console.log(
+				` data()호출 : props 1 - ${this.pTeamName} / props 2 - ${this.pHomeAwayCode}`
+			);
 			return {
 				teamTitleText: this.getTeamTitleText(
 					this.pTeamName,
@@ -35,6 +38,10 @@
 		},
 		methods: {
 			getTeamTitleText(teamName, homeAwayName) {
+				console.log(
+					` getTeamTitleText()호출 : props 1 - ${this.pTeamName} / props 2 - ${this.pHomeAwayCode}`
+				);
+
 				if (ValidationUtil.isNotNull(teamName)) {
 					return `${teamName} ( ${homeAwayName} )`;
 				}

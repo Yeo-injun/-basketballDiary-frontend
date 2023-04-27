@@ -52,6 +52,8 @@
 	import GameAPI from '@/api/GameAPI.js';
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
 	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
 
 	import GameRecordersTable from '@/views/game/recordDetail/components/GameRecordersTable.vue';
@@ -89,7 +91,7 @@
 		methods: {
 			initModal() {
 				this.getGameRecorders();
-				this.getGameJoinPlayers();
+				this.getGameJoinTeamMembers();
 			},
 			async getGameRecorders() {
 				const params = {
@@ -100,23 +102,18 @@
 				this.gameRecorders = res.data.gameRecorders;
 				this.isGetGameRecordersLoadOk = true;
 			},
-			async getGameJoinPlayers() {
+			async getGameJoinTeamMembers() {
+				const homeAwayCode = ValidationUtil.isNull(this.pHomeAwayCode)
+					? HomeAwayCode.HOME_TEAM
+					: this.pHomeAwayCode;
 				const params = {
 					gameSeq: this.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
+					homeAwayCode: homeAwayCode,
 				};
 
-				const res = await GameAPI.getGameJoinPlayers(params);
+				const res = await GameAPI.getGameJoinTeamMembers(params);
+				this.gameJoinPlayers = res.data.gameJoinTeamMembers;
 				this.isGetGameJoinPlayersLoadOk = true;
-
-				switch (this.pHomeAwayCode) {
-					case HomeAwayCode.HOME_TEAM:
-						this.gameJoinPlayers = res.data.homeTeam.players;
-						break;
-					case HomeAwayCode.AWAY_TEAM:
-						this.gameJoinPlayers = res.data.awayTeam.players;
-						break;
-				}
 			},
 			saveGameRecorders() {},
 			addGameRecorder() {
