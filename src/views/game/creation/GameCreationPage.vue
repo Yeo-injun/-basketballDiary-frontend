@@ -122,7 +122,7 @@
 
 					this.$router.push({
 						name: this.routeCompName,
-						params: { gameSeq: resBody.gameSeq },
+						query: { gameSeq: resBody.gameSeq },
 					});
 				} catch (e) {
 					console.log(e);

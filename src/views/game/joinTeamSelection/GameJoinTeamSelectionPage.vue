@@ -15,7 +15,7 @@
 		/>
 		<!-- 상대팀 검색 화면 별도 컴포넌트로 분리 -->
 		<GameOpponentSearchComp
-			v-if="isMatchGame()"
+			v-if="isMatchUpGame()"
 			@select-opponent="setOpponentTeamSeq"
 		/>
 		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="moveMainPage" />
@@ -27,6 +27,7 @@
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import { GameTypeCode } from '@/const/code/GameCode.js';
+	import { GameRecordStateCode } from '@/const/code/GameCode.js';
 
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
@@ -55,7 +56,7 @@
 			};
 		},
 		methods: {
-			isMatchGame() {
+			isMatchUpGame() {
 				if (this.selectedGameType == GameTypeCode.MATCH_UP_GAME) {
 					return true;
 				}
@@ -74,8 +75,11 @@
 				await GameApi.confirmJoinTeam(params);
 				// TODO 이동할 화면 구현하기 - 게임기록 화면
 				this.$router.push({
-					name: 'LoginPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
-					params: { gameSeq: this.gameSeq },
+					name: 'GameRecordDetailPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
+					query: {
+						gameSeq: this.gameSeq,
+						gameRecordState: GameRecordStateCode.JOIN_TEAM_CONFIRMATION,
+					},
 				});
 			},
 			getGameJoinTeamInfo() {

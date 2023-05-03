@@ -52,7 +52,7 @@
 		},
 		props: {
 			pModalTitlePrefix: String,
-			pGameJoinTeamInfo: Object,
+			pGameJoinTeamInfo: Object, //  TODO 삭제 예정
 			pHomeAwayCode: String,
 		},
 		data() {
@@ -67,31 +67,33 @@
 		},
 		methods: {
 			async registerPlayers() {
-				// TODO 선택한 선수들 등록하기 API035 호출
-				// TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
-				const params = {
+				const pathVariables = {
 					gameSeq: this.gameSeq,
-					gameJoinTeamSeq: this.pGameJoinTeamInfo.gameJoinTeamSeq,
+					homeAwayCode: this.pHomeAwayCode,
+				};
+
+				const reqBody = {
 					gameJoinPlayers: this.gameJoinPlayers,
 				};
-				await GameAPI.registerGameJoinPlayers(params);
+
+				await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
 
 				this.dialog = false;
 				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
 				this.$emit('register-complete', {
-					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
+					homeAwayCode: this.pHomeAwayCode,
 				});
 			},
 			async getGameJoinPlayers() {
 				const params = {
 					gameSeq: this.gameSeq,
-					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
+					homeAwayCode: this.pHomeAwayCode,
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
 				this.isGetGameJoinPlayersLoadOk = true;
 
-				switch (this.pGameJoinTeamInfo.homeAwayCode) {
+				switch (this.pHomeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
 						this.gameJoinPlayers = res.data.homeTeam.players;
 						break;
@@ -117,7 +119,6 @@
 
 			addGameJoinPlayer(targetPlayer) {
 				console.log(`게임참가선수 목록 Modal : ${targetPlayer}`);
-				console.log('addGameJoinPlayer');
 				for (const player of this.gameJoinPlayers) {
 					const isAlreadyExistPlayer = player.userSeq == targetPlayer.userSeq;
 					if (isAlreadyExistPlayer) {

@@ -18,11 +18,13 @@
 			<v-card-title>경기기록 입력권한관리</v-card-title>
 			<v-container>
 				<div class="text-right">
-					<GameRecordAuthSaveBtn pBtnName="저장" @do-save="saveGameRecorders" />
+					<GameRecordAuthSaveBtn
+						pBtnName="저장"
+						@do-save="saveGameRecorders()"
+					/>
 				</div>
 				<v-container>
 					<div>권한자 목록</div>
-					// TODO 삭제 버튼 로직 구현
 					<GameRecordersTable
 						v-if="isGetGameRecordersLoadOk"
 						:pGameRecorders="gameRecorders"
@@ -35,7 +37,6 @@
 				/>
 				<v-container>
 					<div>참가선수 목록</div>
-					// TODO 추가 버튼 로직 구현
 					<PlayerDataTable
 						v-if="isGetGameJoinPlayersLoadOk"
 						:pPlayers="gameJoinPlayers"
@@ -51,8 +52,9 @@
 <script>
 	import GameAPI from '@/api/GameAPI.js';
 
-	import { HomeAwayCode } from '@/const/code/GameCode.js';
+	import { HomeAwayCode, GameRecordAuthCode } from '@/const/code/GameCode.js';
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
 
 	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
 
@@ -115,11 +117,61 @@
 				this.gameJoinPlayers = res.data.gameJoinTeamMembers;
 				this.isGetGameJoinPlayersLoadOk = true;
 			},
-			saveGameRecorders() {},
-			addGameRecorder() {
-				alert('가다나라');
+			async saveGameRecorders() {
+				// TODO 구현 예정
+				const pathVar = {
+					gameSeq: this.gameSeq,
+				};
+
+				const reqBody = {
+					gameRecorders: this.gameRecorders,
+				};
+
+				await GameAPI.saveGameRecorders(pathVar, reqBody);
 			},
-			deleteGameRecorder() {},
+			addGameRecorder(targetPlayer) {
+				console.log(targetPlayer);
+				const identifierName = 'userSeq';
+				if (
+					ArrayUtil.hasItem(
+						this.gameRecorders,
+						identifierName,
+						targetPlayer[identifierName]
+					)
+				) {
+					alert('이미 경기 기록권한을 가진 사람입니다.');
+					return;
+				}
+				// 경기기록권한 코드값 할당 후 목록에 추가
+				targetPlayer.gameRecordAuthCode = GameRecordAuthCode.ONLY_WRITER;
+				targetPlayer.gameRecordAuthCodeName = '경기기록자';
+				this.gameRecorders.push(targetPlayer);
+			},
+			deleteGameRecorder(targetPlayer) {
+				console.log(targetPlayer);
+				const identifierName = 'userSeq';
+				const deleteTarget = ArrayUtil.findItemById(
+					this.gameRecorders,
+					identifierName,
+					targetPlayer[identifierName]
+				);
+
+				const hasDeleteTarget = ValidationUtil.isNotNull(deleteTarget);
+				if (!hasDeleteTarget) {
+					return;
+				}
+
+				if (GameRecordAuthCode.CREATOR === deleteTarget.gameRecordAuthCode) {
+					alert('경기생성자는 삭제할 수 없습니다.');
+					return;
+				}
+
+				this.gameRecorders = ArrayUtil.deleteItemById(
+					this.gameRecorders,
+					targetPlayer,
+					identifierName
+				);
+			},
 		},
 	};
 </script>
