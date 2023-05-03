@@ -6,6 +6,7 @@
 				<v-col cols="6">
 					<HomeTeamPlayersManageModal
 						pModalTitlePrefix="홈팀"
+						:pHomeAwayCode="this.homeTeamCode"
 						:pGameJoinTeamInfo="this.homeTeamInfo"
 						@register-complete="setSelectedPlayers"
 					/>
@@ -14,6 +15,7 @@
 				<v-col cols="6">
 					<AwayTeamPlayersManageModal
 						pModalTitlePrefix="어웨이팀"
+						:pHomeAwayCode="this.awayTeamCode"
 						:pGameJoinTeamInfo="this.awayTeamInfo"
 						@register-complete="setSelectedPlayers"
 					/>
@@ -48,8 +50,10 @@
 		data() {
 			return {
 				isLoadingComplete: false,
-				homeTeamInfo: {},
-				awayTeamInfo: {},
+				homeTeamCode: HomeAwayCode.HOME_TEAM,
+				awayTeamCode: HomeAwayCode.AWAY_TEAM,
+				homeTeamInfo: {}, // TODO 삭제 예정
+				awayTeamInfo: {}, // TODO 삭제 예정
 				homeTeamPlayers: [],
 				awayTeamPlayers: [],
 			};

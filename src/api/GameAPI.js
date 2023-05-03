@@ -6,11 +6,11 @@ export default {
 	/**
 	 * API035 게임참가 선수등록하기
 	 */
-	registerGameJoinPlayers(params) {
+	registerGameJoinPlayers(pathVar, reqBody) {
 		return axiosService.post(
-			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`,
+			`/${pathVar.gameSeq}/homeAwayCode/${pathVar.homeAwayCode}/players`,
 			{
-				gameJoinPlayers: params.gameJoinPlayers,
+				gameJoinPlayers: reqBody.gameJoinPlayers,
 			}
 		);
 	},
@@ -113,6 +113,15 @@ export default {
 	 */
 	getGameRecorders(params) {
 		return axiosService.get(`/${params.gameSeq}/gameRecorders`, params);
+	},
+	/**
+	 * API056 : 경기기록 권한자 목록 저장
+	 */
+	saveGameRecorders(pathVar, reqBody) {
+		return axiosService.post(`/${pathVar.gameSeq}/gameRecorders`, {
+			gameSeq: pathVar.gameSeq,
+			gameRecorders: reqBody.gameRecorders,
+		});
 	},
 	/**
 	 * API057 : 경기참가팀 팀원 조회
