@@ -1,7 +1,11 @@
 <template>
 	<v-container>
 		<v-tabs centered v-model="tab">
-			<v-tab v-for="title in tabTitles" :key="title">
+			<v-tab
+				v-for="title in tabTitles"
+				:key="title"
+				@click="changeActivatedTabName(title)"
+			>
 				{{ title }}
 			</v-tab>
 		</v-tabs>
@@ -10,15 +14,20 @@
 				<TeamMemberSearchTab
 					v-if="idx == 0"
 					@add-game-join-player="addGameJoinPlayer"
+					:pActivatedTabName="activatedTabName"
 				/>
 				<GuestMemberSearchTab v-if="idx == 1" />
-				<GuestRegistrationTab v-if="idx == 2" />
+				<GuestRegistrationTab
+					v-if="idx == 2"
+					@regist-guest-not-member="addGameJoinPlayer"
+				/>
 			</v-tab-item>
 		</v-tabs-items>
 	</v-container>
 </template>
 
 <script>
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompNameConst.js';
 	import TeamMemberSearchTab from '@/views/game/recordDetail/modal/tab/TeamMemberSearchTab.vue';
 	import GuestMemberSearchTab from '@/views/game/recordDetail/modal/tab/GuestMemberSearchTab.vue';
 	import GuestRegistrationTab from '@/views/game/recordDetail/modal/tab/GuestRegistrationTab.vue';
@@ -32,10 +41,18 @@
 		data() {
 			return {
 				tab: null,
-				tabTitles: ['팀원', '게스트(회원)', '게스트(비회원)'],
+				tabTitles: [
+					GameJoinPlayerManageTabs.TEAM_MEMBER,
+					GameJoinPlayerManageTabs.GUEST_MEMBER,
+					GameJoinPlayerManageTabs.GUEST_NON_MEMBER,
+				],
+				activatedTabName: GameJoinPlayerManageTabs.TEAM_MEMBER,
 			};
 		},
 		methods: {
+			changeActivatedTabName(title) {
+				this.activatedTabName = title;
+			},
 			addGameJoinPlayer(targetPlayer) {
 				this.$emit('add-game-join-player', targetPlayer);
 			},

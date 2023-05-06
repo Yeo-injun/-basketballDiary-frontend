@@ -16,6 +16,8 @@
 </template>
 
 <script>
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompNameConst.js';
+
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
@@ -24,7 +26,20 @@
 		components: {
 			PlayerDataTable,
 		},
+		props: {
+			pActivatedTabName: String,
+		},
+		watch: {
+			/** 활성화된 탭이 자기자신이면 다시 서버를 호출한다. */
+			pActivatedTabName(newTabName) {
+				const VueComp = this;
+				if (newTabName == GameJoinPlayerManageTabs.TEAM_MEMBER) {
+					VueComp.searchAllTeamMember();
+				}
+			},
+		},
 		data() {
+			console.log('TeamMemberSearchTab = Data ');
 			return {
 				isLoading: false,
 				playerName: '',
@@ -33,11 +48,9 @@
 		},
 		methods: {
 			async searchAllTeamMember() {
-				console.log(
-					'// TODO 동적처리 필요 - 현재 teamSeq 9로 하드코딩되어 있음'
-				);
+				const queryParams = this.$route.query;
 				const params = {
-					teamSeq: 9,
+					teamSeq: queryParams.teamSeq,
 					playerName: this.playerName,
 					pageNo: 0,
 				};
@@ -53,6 +66,8 @@
 			},
 		},
 		mounted() {
+			console.log('TeamMemberSearchTab = MOUNTED ');
+
 			this.searchAllTeamMember();
 		},
 	};
