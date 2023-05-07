@@ -31,7 +31,7 @@
 </template>
 
 <script>
-	import userApi from '../api/UserAPI.js';
+	import AuthAPI from '@/api/AuthAPI.js';
 	import LoadingStateManager from '@/common/state/LoadingStateManager';
 	import AuthStateManager from '@/common/state/AuthStateManager';
 
@@ -58,7 +58,7 @@
 				}
 
 				try {
-					await userApi.logout();
+					await AuthAPI.logout();
 					AuthStateManager.mutations.processLogout();
 					this.$router.go();
 				} catch (e) {
