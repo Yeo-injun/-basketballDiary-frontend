@@ -125,6 +125,7 @@
 						alert('이미 등록되어 있는 선수입니다.');
 						return;
 					}
+					// TODO 등번호 중복 여부 판단
 				}
 				this.gameJoinPlayers.unshift(targetPlayer);
 			},

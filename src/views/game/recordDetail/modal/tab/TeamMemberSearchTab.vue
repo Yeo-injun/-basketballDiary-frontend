@@ -7,7 +7,7 @@
 			검색
 		</v-btn>
 		<PlayerDataTable
-			v-if="isLoading"
+			v-if="isLoadingOk"
 			pRowBtnName="추가"
 			:pPlayers="teamMembers"
 			@get-row-player-info="addGameJoinPlayer"
@@ -41,7 +41,7 @@
 		data() {
 			console.log('TeamMemberSearchTab = Data ');
 			return {
-				isLoading: false,
+				isLoadingOk: false,
 				playerName: '',
 				teamMembers: [],
 			};
@@ -57,8 +57,6 @@
 
 				const res = await MyTeamAPI.searchAllTeamMembers(params);
 				console.log(res);
-
-				this.isLoading = true;
 				this.teamMembers = res.data.teamMembers;
 			},
 			addGameJoinPlayer(targetPlayer) {
@@ -69,6 +67,7 @@
 			console.log('TeamMemberSearchTab = MOUNTED ');
 
 			this.searchAllTeamMember();
+			this.isLoadingOk = true;
 		},
 	};
 </script>

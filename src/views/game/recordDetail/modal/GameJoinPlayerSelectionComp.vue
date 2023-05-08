@@ -16,7 +16,11 @@
 					@add-game-join-player="addGameJoinPlayer"
 					:pActivatedTabName="activatedTabName"
 				/>
-				<GuestMemberSearchTab v-if="idx == 1" />
+				<GuestMemberSearchTab
+					v-if="idx == 1"
+					@add-game-join-player="addGameJoinPlayer"
+					:pActivatedTabName="activatedTabName"
+				/>
 				<GuestRegistrationTab
 					v-if="idx == 2"
 					@regist-guest-not-member="addGameJoinPlayer"
