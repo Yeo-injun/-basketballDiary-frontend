@@ -13,17 +13,17 @@
 			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
 				<TeamMemberSearchTab
 					v-if="idx == 0"
-					@add-game-join-player="addGameJoinPlayer"
+					@add-game-join-player-01="addGameJoinPlayer"
 					:pActivatedTabName="activatedTabName"
 				/>
 				<GuestMemberSearchTab
 					v-if="idx == 1"
-					@add-game-join-player="addGameJoinPlayer"
+					@add-game-join-player-02="addGameJoinPlayer"
 					:pActivatedTabName="activatedTabName"
 				/>
 				<GuestRegistrationTab
 					v-if="idx == 2"
-					@regist-guest-not-member="addGameJoinPlayer"
+					@add-game-join-player-03="addGameJoinPlayer"
 				/>
 			</v-tab-item>
 		</v-tabs-items>
@@ -31,7 +31,9 @@
 </template>
 
 <script>
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompNameConst.js';
+	import { GameJoinPlayerSelectionEvent } from '@/views/game/recordDetail/const/EventConst.js';
+
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 	import TeamMemberSearchTab from '@/views/game/recordDetail/modal/tab/TeamMemberSearchTab.vue';
 	import GuestMemberSearchTab from '@/views/game/recordDetail/modal/tab/GuestMemberSearchTab.vue';
 	import GuestRegistrationTab from '@/views/game/recordDetail/modal/tab/GuestRegistrationTab.vue';
@@ -58,7 +60,10 @@
 				this.activatedTabName = title;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				this.$emit('add-game-join-player', targetPlayer);
+				this.$emit(
+					GameJoinPlayerSelectionEvent.ADD_GAME_JOIN_PLAYER,
+					targetPlayer
+				);
 			},
 		},
 	};

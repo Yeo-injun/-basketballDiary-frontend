@@ -31,10 +31,16 @@
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
 
+	/** CODE */
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
+	/** Utils */
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
+
+	/** Components */
 	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
@@ -105,28 +111,19 @@
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deleteGameJoinPlayer(targetPlayer) {
 				console.log(targetPlayer);
-
-				const newPlayers = [];
-
-				for (const player of this.gameJoinPlayers) {
-					if (targetPlayer.userSeq == player.userSeq) {
-						continue;
-					}
-					newPlayers.push(player);
-				}
-				this.gameJoinPlayers = newPlayers;
+				this.gameJoinPlayers = ArrayUtil.deleteItemById(
+					this.gameJoinPlayers,
+					targetPlayer,
+					'userSeq'
+				);
 			},
-
 			addGameJoinPlayer(targetPlayer) {
 				console.log(`게임참가선수 목록 Modal : ${targetPlayer}`);
-				for (const player of this.gameJoinPlayers) {
-					const isAlreadyExistPlayer = player.userSeq == targetPlayer.userSeq;
-					if (isAlreadyExistPlayer) {
-						alert('이미 등록되어 있는 선수입니다.');
-						return;
-					}
-					// TODO 등번호 중복 여부 판단
+				if (ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'userSeq')) {
+					alert('이미 등록되어 있는 선수입니다.');
+					return;
 				}
+				// TODO 등번호 중복 여부 판단
 				this.gameJoinPlayers.unshift(targetPlayer);
 			},
 		},

@@ -38,6 +38,8 @@
 </template>
 
 <script>
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
+
 	import GameAPI from '@/api/GameAPI.js';
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
@@ -126,27 +128,18 @@
 					return;
 				}
 
-				// TODO 리스트에서 중복체크 로직 공통화 >> Util클래스로 구현 - ArrayUtil.checkDuplicate(targetArray, targetItem, callback() )
-				for (const player of entry) {
-					const isAlreadyExistPlayer = player.userSeq == targetPlayer.userSeq;
-					if (isAlreadyExistPlayer) {
-						alert('이미 등록되어 있는 선수입니다.');
-						return;
-					}
+				if (ArrayUtil.hasItem(entry, targetPlayer, 'userSeq')) {
+					alert('이미 등록되어 있는 선수입니다.');
+					return;
 				}
 				this.entry.push(targetPlayer);
 			},
 			deletePlayerFromEntry(targetPlayer) {
-				console.log(targetPlayer);
-				// TODO 리스트에서 삭제 로직 공통화
-				const newEntry = [];
-				for (const player of this.entry) {
-					if (targetPlayer.userSeq == player.userSeq) {
-						continue;
-					}
-					newEntry.push(player);
-				}
-				this.entry = newEntry;
+				this.entry = ArrayUtil.deleteItemById(
+					this.entry,
+					targetPlayer,
+					'userSeq'
+				);
 			},
 		},
 	};

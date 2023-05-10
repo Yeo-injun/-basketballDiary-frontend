@@ -16,7 +16,9 @@
 </template>
 
 <script>
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompNameConst.js';
+	import { TeamMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
+
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
@@ -60,7 +62,7 @@
 				this.teamMembers = res.data.teamMembers;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				this.$emit('add-game-join-player', targetPlayer);
+				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, targetPlayer);
 			},
 		},
 		mounted() {

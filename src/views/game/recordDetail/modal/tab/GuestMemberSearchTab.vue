@@ -12,7 +12,9 @@
 </template>
 
 <script>
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompNameConst.js';
+	import { GuestMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
+
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
 	import UserAPI from '@/api/UserAPI.js';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
@@ -71,10 +73,17 @@
 			},
 			addGameJoinPlayer(targetPlayer) {
 				const backNumber = prompt('해당 선수의 등번호를 입력해주세요.');
+				if (backNumber >= 10000) {
+					alert('선수의 등번호는 4자리까지만 입력가능합니다.');
+					return;
+				}
 				targetPlayer.backNumber = backNumber;
 				targetPlayer.playerTypeCode = PlayerTypeCode.AUTH_GUEST.code;
 				targetPlayer.playerTypeCodeName = PlayerTypeCode.AUTH_GUEST.name;
-				this.$emit('add-game-join-player', targetPlayer);
+				this.$emit(
+					GuestMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER,
+					targetPlayer
+				);
 			},
 		},
 		mounted() {
