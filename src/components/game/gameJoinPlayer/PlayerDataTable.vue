@@ -1,7 +1,7 @@
 <template>
 	<v-container>
 		<v-data-table
-			:headers="headers"
+			:headers="this.getHeaders()"
 			:items="pPlayers"
 			item-key="userSeq"
 			class="elevation-1"
@@ -19,9 +19,10 @@
 </template>
 
 <script>
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	export default {
 		props: {
-			pHomeAwayCode: String,
+			pHeaders: Array,
 			pPlayers: Array,
 			pRowBtnName: {
 				type: String,
@@ -30,7 +31,7 @@
 		},
 		data() {
 			return {
-				headers: [
+				defaultHeaders: [
 					{ text: '선수구분', value: 'playerTypeCodeName' },
 					{ text: '이름', value: 'userName' },
 					{ text: '포지션', value: 'positionCodeName' },
@@ -41,6 +42,15 @@
 			};
 		},
 		methods: {
+			getHeaders() {
+				if (ValidationUtil.isNull(this.pHeaders)) {
+					return this.defaultHeaders;
+				}
+				if (this.pHeaders.length > 0) {
+					return this.pHeaders;
+				}
+				return this.defaultHeaders;
+			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			emitClickedPlayerInfo(targetPlayer) {
 				this.$emit('get-row-player-info', targetPlayer);

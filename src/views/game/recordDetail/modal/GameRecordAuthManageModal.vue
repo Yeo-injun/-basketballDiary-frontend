@@ -133,11 +133,7 @@
 				console.log(targetPlayer);
 				const identifierName = 'userSeq';
 				if (
-					ArrayUtil.hasItem(
-						this.gameRecorders,
-						identifierName,
-						targetPlayer[identifierName]
-					)
+					ArrayUtil.hasItem(this.gameRecorders, targetPlayer, identifierName)
 				) {
 					alert('이미 경기 기록권한을 가진 사람입니다.');
 					return;
@@ -152,8 +148,8 @@
 				const identifierName = 'userSeq';
 				const deleteTarget = ArrayUtil.findItemById(
 					this.gameRecorders,
-					identifierName,
-					targetPlayer[identifierName]
+					targetPlayer,
+					identifierName
 				);
 
 				const hasDeleteTarget = ValidationUtil.isNotNull(deleteTarget);

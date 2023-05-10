@@ -17,3 +17,22 @@ export const PositionCode = {
 	SMALL_FORWARD: '23',
 	POWER_FORWARD: '24',
 };
+
+/**
+ * 선수유형코드
+ * 10 : "가드",
+ * 20 : "포워드",
+ * 30 : "센터",
+ */
+export const PlayerTypeCode = {
+	TEAM_MEMBER: createCodeObj('팀원', '01'),
+	AUTH_GUEST: createCodeObj('게스트(회원)', '02'),
+	UNAUTH_GUEST: createCodeObj('게스트(비회원)', '03'),
+};
+
+function createCodeObj(codeName, codeValue) {
+	return {
+		name: codeName,
+		value: codeValue,
+	};
+}

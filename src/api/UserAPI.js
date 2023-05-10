@@ -4,7 +4,7 @@ import axios from '../common/CustomAxios';
 const axiosService = axios.createAxiosInstance('/users');
 
 export default {
-	findUserInfo(params) {
-		return axiosService.get('', { params });
+	searchUsersExcludingTeamMember(pathVar, queryString) {
+		return axiosService.get(`/exclusion/team/${pathVar.teamSeq}`, queryString);
 	},
 };
