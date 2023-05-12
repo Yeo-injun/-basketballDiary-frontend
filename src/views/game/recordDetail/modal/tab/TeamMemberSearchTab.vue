@@ -16,6 +16,7 @@
 </template>
 
 <script>
+	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
 	import { TeamMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
 	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
@@ -62,6 +63,9 @@
 				this.teamMembers = res.data.teamMembers;
 			},
 			addGameJoinPlayer(targetPlayer) {
+				targetPlayer.playerTypeCode = PlayerTypeCode.TEAM_MEMBER.code;
+				targetPlayer.playerTypeCodeName = PlayerTypeCode.TEAM_MEMBER.name;
+
 				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, targetPlayer);
 			},
 		},

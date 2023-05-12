@@ -33,6 +33,6 @@ export const PlayerTypeCode = {
 function createCodeObj(codeName, codeValue) {
 	return {
 		name: codeName,
-		value: codeValue,
+		code: codeValue,
 	};
 }
