@@ -1,11 +1,9 @@
 <template>
 	<div>
-		<div>팀원검색</div>
+		<h4>팀원검색</h4>
 		<!-- 검색창 -->
 		<v-text-field label="이름" v-model="playerName" />
-		<v-btn class="mb-2 mr-2" width="100" @click="searchAllTeamMember">
-			검색
-		</v-btn>
+		<TeamMemberSearchBtn @do-search="searchAllTeamMember" />
 		<PlayerDataTable
 			v-if="isLoadingOk"
 			pRowBtnName="추가"
@@ -24,10 +22,11 @@
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
-
+	import TeamMemberSearchBtn from '@/components/button/FrameSearchBtn.vue';
 	export default {
 		components: {
 			PlayerDataTable,
+			TeamMemberSearchBtn,
 		},
 		props: {
 			pActivatedTabName: String,

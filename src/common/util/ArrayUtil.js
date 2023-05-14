@@ -25,6 +25,14 @@ export default {
 		}
 		return false;
 	},
+	convertObjectToArray(srcObj) {
+		const targetArr = [];
+		const props = Object.keys(srcObj);
+		props.forEach(function (prop) {
+			targetArr.push(srcObj[prop]);
+		});
+		return targetArr;
+	},
 };
 
 function checkValidArrayType(arr) {
