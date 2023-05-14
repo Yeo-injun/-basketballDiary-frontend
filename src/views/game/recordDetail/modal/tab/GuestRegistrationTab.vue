@@ -1,7 +1,17 @@
 <template>
 	<div>
-		<div>비회원 게스트 등록</div>
-		서비스 준비중입니다.
+		<h3>비회원 게스트 등록</h3>
+		<v-text-field label="이름" v-model="userName" />
+		<v-text-field label="이메일" v-model="email" />
+		<v-text-field label="등번호" v-model="backNumber" />
+		<v-select
+			v-model="selectPosition"
+			:items="this.selectPositionItems"
+			item-text="name"
+			item-value="code"
+			label="포지션"
+			return-object
+		/>
 		<NonMemberGuestAddBtn
 			@do-add="addGameJoinPlayer()"
 			:pBtnName="this.addBtnName"
@@ -10,10 +20,11 @@
 </template>
 
 <script>
-	import { GuestMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
+	import { GuestRegistrationTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
 	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
-	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
+	import { PlayerTypeCode, PositionCode } from '@/const/code/PlayerCode.js';
 
 	import NonMemberGuestAddBtn from '@/components/button/FrameAddBtn.vue';
 	export default {
@@ -26,6 +37,7 @@
 				 * 컴포넌트 제어용
 				 *-------------------*/
 				addBtnName: '선수추가',
+				selectPositionItems: ArrayUtil.convertObjectToArray(PositionCode),
 				/*-------------------
 				 * 검색 조건
 				 *-------------------*/
@@ -33,8 +45,10 @@
 				 * Input 데이터
 				 *-------------------*/
 				userName: '',
-				positionCode: '',
-				positionCodeName: '',
+				selectPosition: {
+					code: PositionCode.POINT_GUARD.code,
+					name: PositionCode.POINT_GUARD.name,
+				},
 				backNumber: '',
 				email: '',
 			};
@@ -52,18 +66,17 @@
 		},
 		methods: {
 			addGameJoinPlayer() {
-				alert('테스트중');
 				const targetPlayer = {
 					userName: this.userName,
 					email: this.email,
-					positionCode: this.positionCode,
-					positionCodeName: this.positionCodeName,
 					backNumber: this.backNumber,
+					positionCode: this.selectPosition.code,
+					positionCodeName: this.selectPosition.name,
 					playerTypeCode: PlayerTypeCode.UNAUTH_GUEST.code,
 					playerTypeCodeName: PlayerTypeCode.UNAUTH_GUEST.name,
 				};
 				this.$emit(
-					GuestMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER,
+					GuestRegistrationTabEvent.ADD_GAME_JOIN_PLAYER,
 					targetPlayer
 				);
 			},

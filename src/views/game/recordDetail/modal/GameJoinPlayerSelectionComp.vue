@@ -9,24 +9,26 @@
 				{{ title }}
 			</v-tab>
 		</v-tabs>
-		<v-tabs-items v-model="tab">
-			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
-				<TeamMemberSearchTab
-					v-if="idx == 0"
-					@add-game-join-player-01="addGameJoinPlayer"
-					:pActivatedTabName="activatedTabName"
-				/>
-				<GuestMemberSearchTab
-					v-if="idx == 1"
-					@add-game-join-player-02="addGameJoinPlayer"
-					:pActivatedTabName="activatedTabName"
-				/>
-				<GuestRegistrationTab
-					v-if="idx == 2"
-					@add-game-join-player-03="addGameJoinPlayer"
-				/>
-			</v-tab-item>
-		</v-tabs-items>
+		<v-container>
+			<v-tabs-items v-model="tab">
+				<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
+					<TeamMemberSearchTab
+						v-if="idx == 0"
+						@add-game-join-player-01="addGameJoinPlayer"
+						:pActivatedTabName="activatedTabName"
+					/>
+					<GuestMemberSearchTab
+						v-if="idx == 1"
+						@add-game-join-player-02="addGameJoinPlayer"
+						:pActivatedTabName="activatedTabName"
+					/>
+					<GuestRegistrationTab
+						v-if="idx == 2"
+						@add-game-join-player-03="addGameJoinPlayer"
+					/>
+				</v-tab-item>
+			</v-tabs-items>
+		</v-container>
 	</v-container>
 </template>
 
@@ -60,6 +62,7 @@
 				this.activatedTabName = title;
 			},
 			addGameJoinPlayer(targetPlayer) {
+				console.log(targetPlayer);
 				this.$emit(
 					GameJoinPlayerSelectionEvent.ADD_GAME_JOIN_PLAYER,
 					targetPlayer
