@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div>게스트(회원) 검색</div>
+		<h3>게스트(회원) 검색</h3>
 		<PlayerDataTable
 			v-if="isLoadingOk"
 			pRowBtnName="추가"

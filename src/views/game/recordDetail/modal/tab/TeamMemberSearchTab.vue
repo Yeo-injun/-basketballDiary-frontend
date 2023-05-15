@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h4>팀원검색</h4>
+		<h3>팀원 검색</h3>
 		<!-- 검색창 -->
 		<v-text-field label="이름" v-model="playerName" />
 		<TeamMemberSearchBtn @do-search="searchAllTeamMember" />
