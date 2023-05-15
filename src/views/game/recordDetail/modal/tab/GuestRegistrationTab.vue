@@ -57,14 +57,23 @@
 			pActivatedTabName: String,
 		},
 		watch: {
-			/** 활성화된 탭이 자기자신이면 다시 서버를 호출한다. */
+			/** 활성화된 탭이 다른 탭인 경우 input을 초기화시킨다. */
 			pActivatedTabName(newTabName) {
-				if (newTabName == GameJoinPlayerManageTabs.GUEST_NON_MEMBER) {
-					// TODO 호출할 함수 구현
+				if (newTabName != GameJoinPlayerManageTabs.GUEST_NON_MEMBER) {
+					this.initInput();
 				}
 			},
 		},
 		methods: {
+			initInput() {
+				this.userName = '';
+				this.selectPosition = {
+					code: PositionCode.POINT_GUARD.code,
+					name: PositionCode.POINT_GUARD.name,
+				};
+				this.backNumber = '';
+				this.email = '';
+			},
 			addGameJoinPlayer() {
 				const targetPlayer = {
 					userName: this.userName,
