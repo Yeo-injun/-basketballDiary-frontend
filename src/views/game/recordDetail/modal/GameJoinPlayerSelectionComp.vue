@@ -25,6 +25,7 @@
 					<GuestRegistrationTab
 						v-if="idx == 2"
 						@add-game-join-player-03="addGameJoinPlayer"
+						:pActivatedTabName="activatedTabName"
 					/>
 				</v-tab-item>
 			</v-tabs-items>
