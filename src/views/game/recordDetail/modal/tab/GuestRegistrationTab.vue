@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h3>비회원 게스트 등록</h3>
+		<h3>게스트(비회원) 등록</h3>
 		<v-text-field label="이름" v-model="userName" />
 		<v-text-field label="이메일" v-model="email" />
 		<v-text-field label="등번호" v-model="backNumber" />
@@ -89,11 +89,6 @@
 					targetPlayer
 				);
 			},
-		},
-		mounted() {
-			this.searchUsersExcludingTeamMember();
-
-			this.isLoadingOk = true;
 		},
 	};
 </script>

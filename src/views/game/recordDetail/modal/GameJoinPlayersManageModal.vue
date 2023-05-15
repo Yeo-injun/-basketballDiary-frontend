@@ -46,6 +46,7 @@
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
 	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
+	import { PlayerTypeCode } from '@/const/code/PlayerCode';
 	export default {
 		mounted() {
 			this.getGameJoinPlayers();
@@ -110,21 +111,69 @@
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deleteGameJoinPlayer(targetPlayer) {
-				console.log(targetPlayer);
-				this.gameJoinPlayers = ArrayUtil.deleteItemById(
-					this.gameJoinPlayers,
-					targetPlayer,
-					'userSeq'
-				);
+				// 비회원일떄는 email로 지우고
+				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
+					this.gameJoinPlayers = ArrayUtil.deleteItemById(
+						this.gameJoinPlayers,
+						targetPlayer,
+						'email'
+					);
+					// 회원일떄는 userSeq로 지우기
+				} else {
+					this.gameJoinPlayers = ArrayUtil.deleteItemById(
+						this.gameJoinPlayers,
+						targetPlayer,
+						'userSeq'
+					);
+				}
 			},
 			addGameJoinPlayer(targetPlayer) {
-				console.log(`게임참가선수 목록 Modal : ${targetPlayer}`);
-				if (ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'userSeq')) {
-					alert('이미 등록되어 있는 선수입니다.');
+				if (this.checkDuplicate(targetPlayer)) {
 					return;
 				}
-				// TODO 등번호 중복 여부 판단
+
+				if (!this.validateDataFormat(targetPlayer)) {
+					return;
+				}
+
 				this.gameJoinPlayers.unshift(targetPlayer);
+			},
+			checkDuplicate(targetPlayer) {
+				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
+					if (ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'email')) {
+						alert('선수 등록시 이메일이 중복되면 안됩니다.');
+						return true;
+					}
+				} else {
+					if (
+						ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'userSeq')
+					) {
+						alert('이미 등록되어 있는 선수입니다.');
+						return true;
+					}
+				}
+
+				if (
+					ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'backNumber')
+				) {
+					alert('등번호가 중복됩니다. 등번호를 수정해주세요.');
+					return true;
+				}
+
+				return false;
+			},
+			isUnauthGuest(playerTypeCode) {
+				return PlayerTypeCode.UNAUTH_GUEST.code == playerTypeCode;
+			},
+			validateDataFormat(targetPlayer) {
+				// 등번호는 3자리수까지만 허용
+				const backNumber = targetPlayer.backNumber;
+				if (backNumber >= 1000) {
+					alert('선수의 등번호는 3자리까지만 입력가능합니다.');
+					return false;
+				}
+
+				return true;
 			},
 		},
 	};
