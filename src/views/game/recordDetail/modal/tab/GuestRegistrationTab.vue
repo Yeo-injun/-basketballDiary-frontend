@@ -1,9 +1,17 @@
 <template>
 	<div>
 		<h3>게스트(비회원) 등록</h3>
-		<v-text-field label="이름" v-model="userName" />
-		<v-text-field label="이메일" v-model="email" />
-		<v-text-field label="등번호" v-model="backNumber" />
+		<v-text-field
+			label="이름"
+			v-model="userName"
+			:rules="this.rules.userName"
+		/>
+		<v-text-field label="이메일" v-model="email" :rules="this.rules.email" />
+		<v-text-field
+			label="등번호"
+			v-model="backNumber"
+			:rules="this.rules.backNumber"
+		/>
 		<v-select
 			v-model="selectPosition"
 			:items="this.selectPositionItems"
@@ -20,6 +28,7 @@
 </template>
 
 <script>
+	import ValidationUtil from '@/common/util/ValidationUtil';
 	import ArrayUtil from '@/common/util/ArrayUtil.js';
 	import { GuestRegistrationTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
@@ -51,6 +60,26 @@
 				},
 				backNumber: '',
 				email: '',
+				/*-------------------
+				 * Validate 데이터
+				 *-------------------*/
+				rules: {
+					userName: [
+						(value) =>
+							ValidationUtil.input.checkMaxLength(value, {
+								maxLength: 10,
+							}),
+					],
+					email: [(value) => ValidationUtil.input.checkEmailPattern(value)],
+					backNumber: [
+						(value) =>
+							ValidationUtil.input.checkMaxLength(value, {
+								maxLength: 3,
+								message: '등번호는 3자리수까지 입력 가능합니다.',
+							}),
+						// TODO 숫자만 기록 가능
+					],
+				},
 			};
 		},
 		props: {
@@ -65,6 +94,11 @@
 			},
 		},
 		methods: {
+			testValidate(srcVal) {
+				console.log(srcVal);
+				console.log('------------++++++++++++++');
+				return (srcVal || '').length <= 5 || '길이 초과했음';
+			},
 			initInput() {
 				this.userName = '';
 				this.selectPosition = {
