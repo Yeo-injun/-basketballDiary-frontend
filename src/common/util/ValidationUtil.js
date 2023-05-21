@@ -1,28 +1,25 @@
 export default {
 	/** null체크 */
 	isNull(val) {
-		if (
-			val == null ||
-			val == undefined ||
-			(typeof val == 'string' && val == '') ||
-			(Array.isArray(val) && val.length == 0) ||
-			(typeof val == 'object' && Object.keys(val).length == 0)
-		) {
-			return true;
-		}
-		return false;
+		return _isNull(val);
 	},
 	isNotNull(val) {
-		return !this.isNull(val);
+		return !_isNull(val);
 	},
 	ifNullToEmptyString(val) {
-		if (this.isNull(val)) {
+		if (_isNull(val)) {
 			return '';
 		}
 		return val;
 	},
 	// 입력값 검증
 	input: {
+		checkNotEmpty(value) {
+			return !_isNull(value) || `필수입력 항목입니다.`;
+		},
+		checkNumberType(value) {
+			return !isNaN(value) || `숫자만 입력가능합니다.`;
+		},
 		checkMaxLength(value, restrictions) {
 			const targetVal = value || '';
 			const maxLen = restrictions?.maxLength || 5;
@@ -39,3 +36,17 @@ export default {
 		},
 	},
 };
+
+// ValidationUtils내에서만 접근할 수 있는 전역함수
+function _isNull(val) {
+	if (
+		val == null ||
+		val == undefined ||
+		(typeof val == 'string' && val == '') ||
+		(Array.isArray(val) && val.length == 0) ||
+		(typeof val == 'object' && Object.keys(val).length == 0)
+	) {
+		return true;
+	}
+	return false;
+}

@@ -1,25 +1,28 @@
 <template>
 	<div>
 		<h3>게스트(비회원) 등록</h3>
-		<v-text-field
-			label="이름"
-			v-model="userName"
-			:rules="this.rules.userName"
-		/>
-		<v-text-field label="이메일" v-model="email" :rules="this.rules.email" />
-		<v-text-field
-			label="등번호"
-			v-model="backNumber"
-			:rules="this.rules.backNumber"
-		/>
-		<v-select
-			v-model="selectPosition"
-			:items="this.selectPositionItems"
-			item-text="name"
-			item-value="code"
-			label="포지션"
-			return-object
-		/>
+		<v-form ref="form">
+			<v-text-field
+				label="이름"
+				v-model="userName"
+				required
+				:rules="this.rules.userName"
+			/>
+			<v-text-field label="이메일" v-model="email" :rules="this.rules.email" />
+			<v-text-field
+				label="등번호"
+				v-model="backNumber"
+				:rules="this.rules.backNumber"
+			/>
+			<v-select
+				v-model="selectPosition"
+				:items="this.selectPositionItems"
+				item-text="name"
+				item-value="code"
+				label="포지션"
+				return-object
+			/>
+		</v-form>
 		<NonMemberGuestAddBtn
 			@do-add="addGameJoinPlayer()"
 			:pBtnName="this.addBtnName"
@@ -62,22 +65,28 @@
 				email: '',
 				/*-------------------
 				 * Validate 데이터
+				 * 관련 참고자료 : https://sundries-in-myidea.tistory.com/130
 				 *-------------------*/
 				rules: {
 					userName: [
+						(value) => ValidationUtil.input.checkNotEmpty(value),
 						(value) =>
 							ValidationUtil.input.checkMaxLength(value, {
 								maxLength: 10,
 							}),
 					],
-					email: [(value) => ValidationUtil.input.checkEmailPattern(value)],
+					email: [
+						(value) => ValidationUtil.input.checkNotEmpty(value),
+						(value) => ValidationUtil.input.checkEmailPattern(value),
+					],
 					backNumber: [
+						(value) => ValidationUtil.input.checkNotEmpty(value),
+						(value) => ValidationUtil.input.checkNumberType(value),
 						(value) =>
 							ValidationUtil.input.checkMaxLength(value, {
 								maxLength: 3,
 								message: '등번호는 3자리수까지 입력 가능합니다.',
 							}),
-						// TODO 숫자만 기록 가능
 					],
 				},
 			};
@@ -94,11 +103,6 @@
 			},
 		},
 		methods: {
-			testValidate(srcVal) {
-				console.log(srcVal);
-				console.log('------------++++++++++++++');
-				return (srcVal || '').length <= 5 || '길이 초과했음';
-			},
 			initInput() {
 				this.userName = '';
 				this.selectPosition = {
@@ -109,6 +113,11 @@
 				this.email = '';
 			},
 			addGameJoinPlayer() {
+				const isValidPlayerInfo = this.$refs.form.validate();
+				if (!isValidPlayerInfo) {
+					return;
+				}
+
 				const targetPlayer = {
 					userName: this.userName,
 					email: this.email,
