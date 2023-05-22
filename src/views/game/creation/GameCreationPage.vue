@@ -8,47 +8,47 @@
 	-->
 	<v-container>
 		<h2>경기 정보</h2>
-		<v-btn @click="createGame()">게임생성</v-btn>
+		<GameCreationBtn @do-save="createGame()" pBtnName="게임생성" />
 
 		<!-- 경기시작시간 및 종료시간 셀렉트박스로 만드는거 검토 -->
-		<tr>
-			<td>
-				<CustomDatePickerComp
-					p-label-name="경기일자"
-					:p-init-value="gameCreationInfo.gameYmd"
-					@pickup-date="setGameYmd"
-				/>
-			</td>
-			<td>
-				<GameTimeSelect
-					p-label-name="경기시작시간"
-					@select-value="setGameStartTime"
-				/>
-			</td>
-			<td>~</td>
-			<td>
-				<GameTimeSelect
-					p-label-name="경기종료시간"
-					@select-value="setGameEndTime"
-				/>
-			</td>
-		</tr>
+		<v-form ref="gameCreationInfo">
+			<CustomDatePickerComp
+				p-label-name="경기일자"
+				:p-init-value="gameYmd"
+				@pickup-date="setGameYmd"
+			/>
+			<tr>
+				<td>
+					<GameStartTimeSelectbox
+						p-label-name="경기시작시간"
+						@select-value="setGameStartTime"
+					/>
+				</td>
+				<td>~</td>
+				<td>
+					<GameEndTimeSelectbox
+						p-label-name="경기종료시간"
+						@select-value="setGameEndTime"
+					/>
+				</td>
+			</tr>
 
-		<!-- TODO 공통컴포넌트로 AddressInputComp.vue -->
-		<tr>
-			<td>
-				<v-text-field
-					label="주소"
-					v-model="gameCreationInfo.gamePlaceAddress"
-					disabled
-				/>
-			</td>
-			<td>
-				<v-btn @click="popupAddressSearch()">주소검색</v-btn>
-			</td>
-		</tr>
+			<!-- TODO 공통컴포넌트로 AddressInputComp.vue -->
 
-		<v-text-field label="경기장명" v-model="gameCreationInfo.gamePlaceName" />
+			<v-text-field
+				label="주소"
+				v-model="gamePlaceAddress"
+				:rules="this.rules.gamePlaceAddress"
+				disabled
+			/>
+			<v-btn @click="popupAddressSearch()">주소검색</v-btn>
+
+			<v-text-field
+				label="경기장명"
+				:rules="this.rules.gamePlaceName"
+				v-model="gamePlaceName"
+			/>
+		</v-form>
 	</v-container>
 </template>
 
@@ -56,77 +56,107 @@
 	import gameApi from '@/api/GameAPI.js';
 	import AddressOpenApi from '@/common/address/AddressOpenApi.js';
 
-	import GameTimeSelect from '@/components/selectbox/GameTimeSelect.vue';
+	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
+	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 
 	import DateUtil from '@/common/DateUtil.js';
+	import ValidationUtil from '@/common/util/ValidationUtil';
 
 	export default {
 		components: {
-			GameTimeSelect,
+			GameCreationBtn,
+			GameStartTimeSelectbox,
+			GameEndTimeSelectbox,
 			CustomDatePickerComp,
-		},
-		props: {
-			pTeamSeq: {
-				type: Number,
-				required: true,
-			},
 		},
 		data() {
 			return {
 				routeCompName: 'GameJoinTeamSelectionPage',
-				// TODO 파라미터값 정리 / rule부여해서 필수값 체크
-				gameCreationInfo: {
-					teamSeq: this.pTeamSeq, // TODO 파라미터 값으로 가져오기...
-					gameYmd: DateUtil.getCurrentYmd(),
-					gameStartTime: '',
-					gameEndTime: '',
-					gamePlaceAddress: '',
-					gamePlaceName: '',
-					sidoCode: '',
-					sigunguCode: '',
+				/**-------------------
+				 * 경기생성 정보
+				 *--------------------*/
+				gameYmd: DateUtil.getCurrentYmd(),
+				gameStartTime: '',
+				gameEndTime: '',
+				gamePlaceAddress: '',
+				sidoCode: '',
+				sigunguCode: '',
+				gamePlaceName: '',
+				/**-------------------
+				 * 경기생성 정보 (Validation)
+				 *--------------------*/
+				rules: {
+					gamePlaceAddress: [
+						(value) => ValidationUtil.input.checkNotEmpty(value),
+					],
+					gamePlaceName: [
+						(value) => ValidationUtil.input.checkNotEmpty(value),
+						(value) =>
+							ValidationUtil.input.checkMaxLength(value, {
+								maxLength: 5,
+							}),
+					],
 				},
 			};
 		},
 		methods: {
 			popupAddressSearch() {
-				const gameCreationInfo = this.gameCreationInfo;
+				const vueInstance = this;
 				AddressOpenApi.open(function (data) {
-					gameCreationInfo.gamePlaceAddress = data.address;
+					vueInstance.gamePlaceAddress = data.address;
 
 					const sidoSigunguCode = data.sigunguCode;
-					gameCreationInfo.sidoCode = sidoSigunguCode.substr(0, 2);
-					gameCreationInfo.sigunguCode = sidoSigunguCode.substr(2, 3);
+					vueInstance.sidoCode = sidoSigunguCode.substr(0, 2);
+					vueInstance.sigunguCode = sidoSigunguCode.substr(2, 3);
 				});
-			},
-			getCurrentYmd() {
-				return DateUtil.getCurrentYmd();
 			},
 			setGameYmd(ymd) {
 				this.reqBody.gameYmd = DateUtil.Format.toString(ymd);
 			},
 			setGameStartTime(time) {
-				this.gameCreationInfo.gameStartTime = time;
+				this.gameStartTime = time;
 			},
 			setGameEndTime(time) {
-				this.gameCreationInfo.gameEndTime = time;
+				this.gameEndTime = time;
 			},
 			async createGame() {
+				if (!this.checkValidGameCreationInfo()) {
+					alert('입력값을 확인해주시기 바랍니다.');
+					return;
+				}
+				const query = this.$route.query;
+
 				const reqBody = {
-					gameCreationInfo: this.gameCreationInfo,
+					gameCreationInfo: {
+						teamSeq: query.teamSeq,
+						gameYmd: this.gameYmd,
+						gameStartTime: this.gameStartTime,
+						gameEndTime: this.gameEndTime,
+						gamePlaceAddress: this.gamePlaceAddress,
+						gamePlaceName: this.sidoCode,
+						sidoCode: this.sigunguCode,
+						sigunguCode: this.gamePlaceName,
+					},
 				};
 
-				try {
-					const res = await gameApi.createGame(reqBody);
-					const resBody = res.data;
+				const res = await gameApi.createGame(reqBody);
+				const resBody = res.data;
 
-					this.$router.push({
-						name: this.routeCompName,
-						query: { gameSeq: resBody.gameSeq },
-					});
-				} catch (e) {
-					console.log(e);
+				this.$router.push({
+					name: this.routeCompName,
+					query: { gameSeq: resBody.gameSeq },
+				});
+			},
+			checkValidGameCreationInfo() {
+				const isValidGameInfo = this.$refs.gameCreationInfo.validate();
+				if (!isValidGameInfo) {
+					return false;
 				}
+
+				// TODO 시작시간이 종료시간보다 늦을 수 없음
 			},
 		},
 	};
