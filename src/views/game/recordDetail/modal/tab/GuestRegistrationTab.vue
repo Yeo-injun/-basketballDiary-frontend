@@ -72,7 +72,7 @@
 						(value) => ValidationUtil.input.checkNotEmpty(value),
 						(value) =>
 							ValidationUtil.input.checkMaxLength(value, {
-								maxLength: 10,
+								maxLength: 20,
 							}),
 					],
 					email: [
