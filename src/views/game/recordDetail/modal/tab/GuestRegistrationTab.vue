@@ -5,7 +5,6 @@
 			<v-text-field
 				label="이름"
 				v-model="userName"
-				required
 				:rules="this.rules.userName"
 			/>
 			<v-text-field label="이메일" v-model="email" :rules="this.rules.email" />
