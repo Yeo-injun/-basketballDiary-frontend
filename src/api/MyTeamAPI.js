@@ -1,4 +1,4 @@
-import axios from '@/common/CustomAxios.js';
+import axios from '@/http/CustomAxios.js';
 const axiosService = axios.createAxiosInstance('/myTeams');
 
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config

@@ -1,12 +1,10 @@
-import test from '@/common/AuthUtil.js';
-import axios from '../common/CustomAxios.js';
+import axios from '../http/CustomAxios.js';
 
 // API설정 공통화
 const axiosService = axios.createAxiosInstance('/user');
 
 export default {
 	login(params) {
-		test.isLeader();
 		return axiosService.post('/login', params);
 	},
 	logout() {

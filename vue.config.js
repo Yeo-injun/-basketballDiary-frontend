@@ -5,5 +5,5 @@ module.exports = defineConfig({
 		devtool: 'source-map',
 	},
 	// 빌드시 상대경로로 변경하기 위함
-	publicPath: '',
+	publicPath: './',
 });
