@@ -21,7 +21,7 @@ jobs:
       # npm ci(clean install)을 통해 package.json에 명시된 모든 의존성을 설치
       # 해당 명령을 수행하지 않을 경우 vue실행에 필요한 의존성이 설치되지 않아 vue-cli-service 명령어를 실행할 수 없음.
       - run: 'npm ci'
-      - run: 'pwd && cd ./src/common && ls && cd ../ && cd ../'
+      - run: 'pwd && cd ./src/http && ls && cd ../ && cd ../'
       - run: 'npm run build'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

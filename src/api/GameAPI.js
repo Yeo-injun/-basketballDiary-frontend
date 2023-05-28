@@ -1,4 +1,4 @@
-import axios from '@/common/CustomAxios.js';
+import axios from '@/http/CustomAxios.js';
 
 const axiosService = axios.createAxiosInstance('/games');
 
