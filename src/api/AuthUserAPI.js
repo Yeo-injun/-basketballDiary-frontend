@@ -1,4 +1,4 @@
-import axios from 'src/common/CustomAxios';
+import axios from '@/common/CustomAxios.js';
 
 const axiosService = axios.createAxiosInstance('/loginUser');
 
