@@ -23,6 +23,7 @@ jobs:
       - run: 'npm ci'
       - run: 'pwd && cd ./src/http && ls && cd ../ && cd ../'
       - run: 'npm run build'
+      # .env.produnction 파일을 기준으로 배포됨
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

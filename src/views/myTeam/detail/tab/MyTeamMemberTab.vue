@@ -34,7 +34,7 @@
 			<MyTeamProfileComp :pMyProfile="profile" />
 
 			<v-subheader>운영진</v-subheader>
-			<div v-for="(manager, index) in managerList" v-bind:key="index">
+			<div v-for="(manager, index) in managers" v-bind:key="index">
 				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
 			</div>
 
@@ -83,7 +83,7 @@
 			return {
 				teamSeq: this.$route.query.teamSeq,
 				profile: {},
-				managerList: [],
+				managers: [],
 				teamMembers: [],
 				teamInfo: {},
 				dialog: false,
@@ -108,21 +108,20 @@
 			async onLoad() {
 				// TODO 새로고침시 props값이 날라가는 것을 제어해야함...(제어할 수 있는지 검토 필요)
 				await this.getProflie();
-				await this.getListManager();
-				await this.getListMember();
+				await this.getManagers();
+				await this.getTeamMembers();
 			},
 			async getProflie() {
-				var response = await myTeamApi.findMyTeamsProfile(this.teamSeq);
+				const response = await myTeamApi.findMyTeamsProfile(this.teamSeq);
 				const { data } = response;
 				this.profile = data;
 			},
-			async getListManager() {
-				var response = await myTeamApi.searchManagers(this.teamSeq);
-				const { data } = response;
-				this.managerList = data;
+			async getManagers() {
+				const response = await myTeamApi.getManagers(this.teamSeq);
+				this.managers = response.data.managers;
 			},
-			async getListMember() {
-				const response = await myTeamApi.searchMembers(
+			async getTeamMembers() {
+				const response = await myTeamApi.getTeamMembers(
 					this.teamSeq,
 					this.pager.pageNo - 1
 				);
@@ -141,7 +140,7 @@
 				});
 			},
 			handlePage() {
-				this.getListMember();
+				this.getTeamMembers();
 			},
 			isManager() {
 				return authUtil.isManager(this.teamSeq);
