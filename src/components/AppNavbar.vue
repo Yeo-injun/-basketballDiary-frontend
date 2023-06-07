@@ -14,9 +14,6 @@
 		</router-link>
 
 		<v-spacer></v-spacer>
-		<v-btn class="ma-1" :to="{ name: 'GameCreationPage' }"
-			>게임생성(임시)</v-btn
-		>
 		<v-btn class="ma-1" :to="{ name: 'MyTeamListPage' }">소속팀</v-btn>
 		<v-btn class="ma-1" :to="{ name: 'TeamListPage' }">농구팀</v-btn>
 		<v-btn class="ma-1" :to="{ name: 'MyProfilePage' }">내정보</v-btn>
