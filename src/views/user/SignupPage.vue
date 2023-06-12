@@ -79,7 +79,7 @@
 </template>
 
 <script>
-	import userApi from '@/api/UserAPI';
+	import AuthAPI from '@/api/AuthAPI';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 	import router from '@/router';
 
@@ -125,7 +125,7 @@
 					userId: this.userRegInfo.userId,
 				};
 				try {
-					await userApi.checkDuplicateUserId(params);
+					await AuthAPI.checkDuplicateUserId(params);
 					this.isNotDuplicateUserId = true;
 					alert('사용할 수 있는 ID입니다!');
 				} catch (e) {
@@ -161,7 +161,7 @@
 				let params = this.userRegInfo;
 				console.log(params);
 				try {
-					await userApi.createUser(params);
+					await AuthAPI.createUser(params);
 					alert('회원가입이 완료되었습니다.');
 					router.push('/login');
 				} catch (e) {

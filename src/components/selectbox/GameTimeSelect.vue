@@ -1,27 +1,29 @@
 <template>
-	<v-container>
-		<v-select
-			v-model="selected"
-			:items="selectItems"
-			item-text="text"
-			item-value="value"
-			:label="pLabelName"
-			@change="selectValue"
-		/>
-	</v-container>
+	<v-select
+		v-model="selected"
+		:rules="rules"
+		:items="selectOptions"
+		item-text="text"
+		item-value="value"
+		:label="pLabelName"
+		@change="selectValue"
+	/>
 </template>
 
 <script>
 	import DateUtil from '@/common/DateUtil.js';
+	import ValidationUtil from '@/common/util/ValidationUtil';
 
 	export default {
 		props: {
 			pLabelName: String,
+			pRules: Array,
 		},
 		data() {
 			return {
-				selectItems: DateUtil.Times.getOptions(10),
+				selectOptions: DateUtil.Times.getOptions(10),
 				selected: '',
+				rules: [(value) => ValidationUtil.input.checkNotEmpty(value)],
 			};
 		},
 		methods: {

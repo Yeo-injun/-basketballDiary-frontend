@@ -4,22 +4,15 @@
 			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
 		</div>
 		<v-container>
-			<v-row>
-				<v-col>
-					<HomeTeamTitle
-						:pTitleInfo="homeTeamTitleInfo"
-						:pIsSelected="selectHomeTeam"
-						@click-title="changeRecordInputTeam"
-					/>
-				</v-col>
-				<v-col>
-					<AwayTeamTitle
-						:pTitleInfo="awayTeamTitleInfo"
-						:pIsSelected="selectAwayTeam"
-						@click-title="changeRecordInputTeam"
-					/>
-				</v-col>
-			</v-row>
+			<HomeAwayTeamToggle
+				:pHomeTeamName="this.homeTeamTitleInfo.teamName"
+				:pHomeTeamCode="this.homeTeamTitleInfo.homeAwayCode"
+				:pHomeTeamCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
+				:pAwayTeamName="this.awayTeamTitleInfo.teamName"
+				:pAwayTeamCode="this.awayTeamTitleInfo.homeAwayCode"
+				:pAwayTeamCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
+				@select-home-away-team="changeRecordInputTeam"
+			/>
 		</v-container>
 		<h3>// TODO 하단 버튼 - 저장 API 붙이기!!!</h3>
 		<div v-if="this.isGetGameEntryLoadOk">
@@ -68,8 +61,7 @@
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
-	import HomeTeamTitle from '@/components/game/gameJoinTeam/TeamTitleComp.vue';
-	import AwayTeamTitle from '@/components/game/gameJoinTeam/TeamTitleComp.vue';
+	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 
 	import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
 	import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
@@ -80,20 +72,20 @@
 	export default {
 		components: {
 			GameQuarterInfoComp,
-			HomeTeamTitle,
-			AwayTeamTitle,
+			HomeAwayTeamToggle,
 			HomeTeamRecordInputBoardComp,
 			AwayTeamRecordInputBoardComp,
 			SaveGameQuarterBtn,
 			DeleteGameQuarterBtn,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
+				gameSeq: query.gameSeq,
+				quarterCode: query.quarterCode,
 				isGetGameQuarterRecordsLoad: false,
 				isGetGameEntryLoadOk: false,
 				isHomeTeamInputMode: true,
-				selectHomeTeam: true,
-				selectAwayTeam: false,
 				gameQuarterRecords: {
 					gameSeq: '',
 					quarterCode: '',
@@ -105,29 +97,33 @@
 					homeTeamRecords: {},
 					awayTeamRecords: {},
 				},
+				// TODO 토글에 반영되는 props데이터 줄이기
 				homeTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
 					homeAwayCodeName: '',
 				},
-				homeCode: HomeAwayCode.HOME_TEAM,
-				homeTeamEntry: [],
-				homeTeamRecords: [],
 				awayTeamTitleInfo: {
 					teamName: '',
 					homeAwayCode: '',
 					homeAwayCodeName: '',
 				},
+
+				homeCode: HomeAwayCode.HOME_TEAM,
 				awayCode: HomeAwayCode.AWAY_TEAM,
+
+				homeTeamEntry: [],
 				awayTeamEntry: [],
+
+				homeTeamRecords: [],
 				awayTeamRecords: [],
 			};
 		},
 		methods: {
 			async getGameQuarterRecords() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					quarterCode: this.$route.params.quarterCode,
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);
@@ -138,8 +134,8 @@
 			},
 			async getGameEntry() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					quarterCode: this.$route.params.quarterCode,
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
 				};
 
 				const res = await GameAPI.getGameEntry(params);
@@ -160,34 +156,36 @@
 				this.isGetGameEntryLoadOk = true;
 			},
 			async saveGameQuarter() {
-				alert('saveGameQuarter() 구현중');
+				const params = {
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
+					homeTeamPlayerRecords: this.homeTeamEntry,
+					awayTeamPlayerRecords: this.awayTeamEntry,
+				};
 
-				// const params = {
-				// 	gameSeq: 2, //this.$route.params.gameSeq,
-				// 	quarterCode: this.$route.params.quarterCode,
-				// };
+				await GameAPI.saveQuarterRecords(params);
 
-				// await GameAPI.deleteGameQuarter(params);
+				alert('저장완료되었습니다.');
 			},
 			async deleteGameQuarter() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					quarterCode: this.$route.params.quarterCode,
+					gameSeq: this.gameSeq,
+					quarterCode: this.quarterCode,
 				};
 
 				await GameAPI.deleteGameQuarter(params);
 				// TODO 화면이동처리하기
+				this.$router.push({
+					name: 'GameRecordDetailPage',
+					query: params,
+				});
 			},
 			changeRecordInputTeam(params) {
 				const homeAwayCode = params.homeAwayCode;
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					this.isHomeTeamInputMode = true;
-					this.selectHomeTeam = true;
-					this.selectAwayTeam = false;
 				} else {
 					this.isHomeTeamInputMode = false;
-					this.selectHomeTeam = false;
-					this.selectAwayTeam = true;
 				}
 			},
 			processInputRecordStat(record) {

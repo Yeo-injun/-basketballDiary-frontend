@@ -1,4 +1,4 @@
-import axios from '../common/CustomAxios';
+import axios from '@/http/CustomAxios.js';
 
 const axiosService = axios.createAxiosInstance('/games');
 
@@ -6,11 +6,23 @@ export default {
 	/**
 	 * API035 게임참가 선수등록하기
 	 */
-	registerGameJoinPlayers(params) {
+	registerGameJoinPlayers(pathVar, reqBody) {
 		return axiosService.post(
-			`/${params.gameSeq}/gameJoinTeams/${params.gameJoinTeamSeq}/players`,
+			`/${pathVar.gameSeq}/homeAwayCode/${pathVar.homeAwayCode}/players`,
 			{
-				gameJoinPlayers: params.gameJoinPlayers,
+				gameJoinPlayers: reqBody.gameJoinPlayers,
+			}
+		);
+	},
+	/**
+	 * API038 쿼터기록 저장하기
+	 */
+	saveQuarterRecords(params) {
+		return axiosService.put(
+			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+			{
+				homeTeamPlayerRecords: params.homeTeamPlayerRecords,
+				awayTeamPlayerRecords: params.awayTeamPlayerRecords,
 			}
 		);
 	},
@@ -32,6 +44,17 @@ export default {
 	deleteGameQuarter(params) {
 		return axiosService.delete(
 			`/${params.gameSeq}/quarters/${params.quarterCode}`
+		);
+	},
+	/**
+	 * API043 참가선수 쿼터기록조회
+	 */
+	getGameJoinPlayerRecordsByQuarter(params) {
+		return axiosService.get(
+			`/${params.gameSeq}/quarters/${params.quarterCode}/players`,
+			{
+				homeAwayCode: params.homeAwayCode,
+			}
 		);
 	},
 	/**
@@ -84,6 +107,29 @@ export default {
 	 */
 	createGame(params) {
 		return axiosService.post('', params);
+	},
+	/**
+	 * API055 : 경기기록 권한자 목록 조회
+	 */
+	getGameRecorders(params) {
+		return axiosService.get(`/${params.gameSeq}/gameRecorders`, params);
+	},
+	/**
+	 * API056 : 경기기록 권한자 목록 저장
+	 */
+	saveGameRecorders(pathVar, reqBody) {
+		return axiosService.post(`/${pathVar.gameSeq}/gameRecorders`, {
+			gameSeq: pathVar.gameSeq,
+			gameRecorders: reqBody.gameRecorders,
+		});
+	},
+	/**
+	 * API057 : 경기참가팀 팀원 조회
+	 */
+	getGameJoinTeamMembers(params) {
+		return axiosService.get(`/${params.gameSeq}/teamMembers`, {
+			homeAwayCode: params.homeAwayCode,
+		});
 	},
 	/**
 	 * API060 엔트리 저장

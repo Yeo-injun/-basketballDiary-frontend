@@ -17,7 +17,7 @@
 				headers: [
 					{ text: '등번호', value: 'backNumber' },
 					{ text: '포지션', value: 'positionCodeName' },
-					{ text: '이름', value: 'name' },
+					{ text: '이름', value: 'userName' },
 					{ text: '팀원 구분', value: 'playerTypeCodeName' },
 				],
 			};

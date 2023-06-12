@@ -1,9 +1,7 @@
 <template>
 	<v-container>
 		<h2>경기기록</h2>
-		<v-container>
-			<v-btn>입력권한관리 - 별도 컴포넌트로 분리(Layer포함)</v-btn>
-		</v-container>
+		<GameRecordAuthManageModal />
 		<div v-if="this.isLoadingComplete">
 			<GameQuarterComp
 				:pGameRecordStateCode="this.gameRecordStateCode"
@@ -34,10 +32,12 @@
 
 	import GameAPI from '@/api/GameAPI.js';
 
+	import GameRecordAuthManageModal from '@/views/game/recordDetail/modal/GameRecordAuthManageModal.vue';
 	import GameQuarterComp from '@/views/game/recordDetail/components/GameQuarterComp.vue';
 
 	export default {
 		components: {
+			GameRecordAuthManageModal,
 			GameQuarterComp,
 		},
 		props: {

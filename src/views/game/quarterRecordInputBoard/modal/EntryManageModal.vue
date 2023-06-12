@@ -38,6 +38,8 @@
 </template>
 
 <script>
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
+
 	import GameAPI from '@/api/GameAPI.js';
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
@@ -49,6 +51,7 @@
 	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	export default {
 		mounted() {
+			// TODO 모달 호출시에 메소드 호출하도록 처리하기
 			this.getGameJoinPlayers();
 			this.getGameEntry();
 		},
@@ -63,7 +66,10 @@
 			pHomeAwayCodeName: String,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
+				gameSeq: query.gameSeq,
+				quarterCode: query.quarterCode,
 				dialog: false,
 				isGetEntryLoadOk: false,
 				entry: [],
@@ -74,11 +80,10 @@
 		methods: {
 			// TODO 엔트리 저장 API 붙이기 및 모달 닫기
 			async saveEntry() {
-				const routeParams = this.$route.params;
 				const params = {
-					gameSeq: routeParams.gameSeq,
+					gameSeq: this.gameSeq,
 					homeAwayCode: this.pHomeAwayCode,
-					quarterCode: routeParams.quarterCode,
+					quarterCode: this.quarterCode,
 					playerList: this.entry,
 				};
 				console.log(params);
@@ -99,7 +104,7 @@
 			async getGameJoinPlayers() {
 				const homeAwayCode = this.pHomeAwayCode;
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
+					gameSeq: this.gameSeq,
 					homeAwayCode: homeAwayCode,
 				};
 
@@ -123,27 +128,18 @@
 					return;
 				}
 
-				// TODO 리스트에서 중복체크 로직 공통화 >> Util클래스로 구현 - ArrayUtil.checkDuplicate(targetArray, targetItem, callback() )
-				for (const player of entry) {
-					const isAlreadyExistPlayer = player.userSeq == targetPlayer.userSeq;
-					if (isAlreadyExistPlayer) {
-						alert('이미 등록되어 있는 선수입니다.');
-						return;
-					}
+				if (ArrayUtil.hasItem(entry, targetPlayer, 'userSeq')) {
+					alert('이미 등록되어 있는 선수입니다.');
+					return;
 				}
 				this.entry.push(targetPlayer);
 			},
 			deletePlayerFromEntry(targetPlayer) {
-				console.log(targetPlayer);
-				// TODO 리스트에서 삭제 로직 공통화
-				const newEntry = [];
-				for (const player of this.entry) {
-					if (targetPlayer.userSeq == player.userSeq) {
-						continue;
-					}
-					newEntry.push(player);
-				}
-				this.entry = newEntry;
+				this.entry = ArrayUtil.deleteItemById(
+					this.entry,
+					targetPlayer,
+					'userSeq'
+				);
 			},
 		},
 	};

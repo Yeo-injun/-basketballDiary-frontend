@@ -31,15 +31,22 @@
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
 
+	/** CODE */
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
+	/** Utils */
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
+
+	/** Components */
 	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
 	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
+	import { PlayerTypeCode } from '@/const/code/PlayerCode';
 	export default {
 		mounted() {
 			this.getGameJoinPlayers();
@@ -52,10 +59,14 @@
 		},
 		props: {
 			pModalTitlePrefix: String,
-			pGameJoinTeamInfo: Object,
+			pGameJoinTeamInfo: Object, //  TODO 삭제 예정
+			pHomeAwayCode: String,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
+				gameSeq: query.gameSeq,
+
 				dialog: false,
 				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
@@ -63,30 +74,33 @@
 		},
 		methods: {
 			async registerPlayers() {
-				// TODO 선택한 선수들 등록하기 API035 호출
-				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					gameJoinTeamSeq: this.pGameJoinTeamInfo.gameJoinTeamSeq, // TODO API url 변경 검토 - 홈어웨이 코드로 식별하는 방식검토
+				const pathVariables = {
+					gameSeq: this.gameSeq,
+					homeAwayCode: this.pHomeAwayCode,
+				};
+
+				const reqBody = {
 					gameJoinPlayers: this.gameJoinPlayers,
 				};
-				await GameAPI.registerGameJoinPlayers(params);
+
+				await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
 
 				this.dialog = false;
 				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
 				this.$emit('register-complete', {
-					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
+					homeAwayCode: this.pHomeAwayCode,
 				});
 			},
 			async getGameJoinPlayers() {
 				const params = {
-					gameSeq: this.$route.params.gameSeq,
-					homeAwayCode: this.pGameJoinTeamInfo.homeAwayCode,
+					gameSeq: this.gameSeq,
+					homeAwayCode: this.pHomeAwayCode,
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
 				this.isGetGameJoinPlayersLoadOk = true;
 
-				switch (this.pGameJoinTeamInfo.homeAwayCode) {
+				switch (this.pHomeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
 						this.gameJoinPlayers = res.data.homeTeam.players;
 						break;
@@ -97,30 +111,69 @@
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deleteGameJoinPlayer(targetPlayer) {
-				console.log(targetPlayer);
-
-				const newPlayers = [];
-
-				for (const player of this.gameJoinPlayers) {
-					if (targetPlayer.userSeq == player.userSeq) {
-						continue;
-					}
-					newPlayers.push(player);
+				// 비회원일떄는 email로 지우고
+				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
+					this.gameJoinPlayers = ArrayUtil.deleteItemById(
+						this.gameJoinPlayers,
+						targetPlayer,
+						'email'
+					);
+					// 회원일떄는 userSeq로 지우기
+				} else {
+					this.gameJoinPlayers = ArrayUtil.deleteItemById(
+						this.gameJoinPlayers,
+						targetPlayer,
+						'userSeq'
+					);
 				}
-				this.gameJoinPlayers = newPlayers;
 			},
-
 			addGameJoinPlayer(targetPlayer) {
-				console.log(`게임참가선수 목록 Modal : ${targetPlayer}`);
-				console.log('addGameJoinPlayer');
-				for (const player of this.gameJoinPlayers) {
-					const isAlreadyExistPlayer = player.userSeq == targetPlayer.userSeq;
-					if (isAlreadyExistPlayer) {
+				if (this.checkDuplicate(targetPlayer)) {
+					return;
+				}
+
+				if (!this.validateDataFormat(targetPlayer)) {
+					return;
+				}
+
+				this.gameJoinPlayers.unshift(targetPlayer);
+			},
+			checkDuplicate(targetPlayer) {
+				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
+					if (ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'email')) {
+						alert('선수 등록시 이메일이 중복되면 안됩니다.');
+						return true;
+					}
+				} else {
+					if (
+						ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'userSeq')
+					) {
 						alert('이미 등록되어 있는 선수입니다.');
-						return;
+						return true;
 					}
 				}
-				this.gameJoinPlayers.unshift(targetPlayer);
+
+				if (
+					ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'backNumber')
+				) {
+					alert('등번호가 중복됩니다. 등번호를 수정해주세요.');
+					return true;
+				}
+
+				return false;
+			},
+			isUnauthGuest(playerTypeCode) {
+				return PlayerTypeCode.UNAUTH_GUEST.code == playerTypeCode;
+			},
+			validateDataFormat(targetPlayer) {
+				// 등번호는 3자리수까지만 허용
+				const backNumber = targetPlayer.backNumber;
+				if (backNumber >= 1000) {
+					alert('선수의 등번호는 3자리까지만 입력가능합니다.');
+					return false;
+				}
+
+				return true;
 			},
 		},
 	};

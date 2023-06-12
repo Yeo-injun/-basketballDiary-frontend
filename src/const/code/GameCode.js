@@ -45,3 +45,13 @@ export const QuarterCode = {
 	QUARTER_3RD: '03',
 	QUARTER_4TH: '04',
 };
+
+/**
+ * 경기 기록권한 코드
+ * 01 : CREATOR(경기생성자)
+ * 02 : ONLY_WRITER(경기기록자)
+ */
+export const GameRecordAuthCode = {
+	CREATOR: '01',
+	ONLY_WRITER: '02',
+};

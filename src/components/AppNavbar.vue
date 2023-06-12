@@ -14,9 +14,6 @@
 		</router-link>
 
 		<v-spacer></v-spacer>
-		<v-btn class="ma-1" :to="{ name: 'GameCreationPage' }"
-			>게임생성(임시)</v-btn
-		>
 		<v-btn class="ma-1" :to="{ name: 'MyTeamListPage' }">소속팀</v-btn>
 		<v-btn class="ma-1" :to="{ name: 'TeamListPage' }">농구팀</v-btn>
 		<v-btn class="ma-1" :to="{ name: 'MyProfilePage' }">내정보</v-btn>
@@ -31,7 +28,7 @@
 </template>
 
 <script>
-	import userApi from '../api/UserAPI.js';
+	import AuthAPI from '@/api/AuthAPI.js';
 	import LoadingStateManager from '@/common/state/LoadingStateManager';
 	import AuthStateManager from '@/common/state/AuthStateManager';
 
@@ -58,7 +55,7 @@
 				}
 
 				try {
-					await userApi.logout();
+					await AuthAPI.logout();
 					AuthStateManager.mutations.processLogout();
 					this.$router.go();
 				} catch (e) {
