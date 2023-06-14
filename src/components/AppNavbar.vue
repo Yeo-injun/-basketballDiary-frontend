@@ -7,7 +7,7 @@
 			absolute
 			color="teal darken-4"
 		/>
-		<router-link to="/">
+		<router-link :to="{ name: 'MainPage' }">
 			<div class="d-flex align-center font-weight-bold white--text">
 				<h3>농구일기</h3>
 			</div>
