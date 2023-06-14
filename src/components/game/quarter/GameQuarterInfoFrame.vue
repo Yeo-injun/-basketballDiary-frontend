@@ -5,10 +5,7 @@
 				<TeamQuarterRecordsComp :pTeamQuarterRecords="this.pHomeTeamRecords" />
 			</v-col>
 			<v-col cols="12" sm="2">
-				<QuarterTimeComp
-					:pQuarterCodeName="this.pQuarterCodeName"
-					:pQuarterTime="this.pQuarterTime"
-				/>
+				<QuarterTimeComp :pQuarterCodeName="this.pQuarterCodeName" />
 			</v-col>
 			<v-col cols="12" sm="5">
 				<TeamQuarterRecordsComp :pTeamQuarterRecords="this.pAwayTeamRecords" />
