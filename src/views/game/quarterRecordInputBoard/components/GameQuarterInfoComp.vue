@@ -1,13 +1,18 @@
 <template>
 	<v-container>
-		<h3>TODO 쿼터시간 입력창 - selectBox로 30초 단위 00:00 ~ 10:00</h3>
-		경기일자 : {{ this.pGameQuarterRecords.gameYmd }} / 경기시간 :
-		{{ this.pGameQuarterRecords.gameStartTime }} ~
-		{{ this.pGameQuarterRecords.gameEndTime }} / 쿼터시간 : 입력창 TODO
+		<h4>경기일자 : {{ this.gameYmd }}</h4>
+		<h4>경기시간 : {{ this.gameStartTime }} ~{{ this.gameEndTime }}</h4>
+		<GameTimeSelect
+			pLabelName="쿼터시간"
+			pUnitType="min"
+			:pMaxTime="10"
+			@select-value="selectQuarterTime"
+		/>
+
 		<v-container>
 			<GameQuarterInfoFrame
 				:pQuarterCodeName="this.pGameQuarterRecords.quarterCodeName"
-				:pQuarterTime="this.pGameQuarterRecords.quarterTime"
+				:pQuarterTime="this.quarterTime"
 				:pHomeTeamRecords="this.pGameQuarterRecords.homeTeamRecords"
 				:pAwayTeamRecords="this.pGameQuarterRecords.awayTeamRecords"
 			/>
@@ -16,14 +21,48 @@
 </template>
 
 <script>
+	import GameTimeSelect from '@/components/selectbox/GameTimeSelect.vue';
 	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
+
+	import ValidationUtil from '@/common/util/ValidationUtil';
+	import DateUtil from '@/common/DateUtil';
 
 	export default {
 		components: {
+			GameTimeSelect,
 			GameQuarterInfoFrame,
 		},
 		props: {
 			pGameQuarterRecords: Object,
+		},
+		data() {
+			return {
+				gameYmd: this.intlGameYmd(),
+				gameStartTime: this.intlGameStartTime(),
+				gameEndTime: this.intlGameEndTime(),
+				quarterTime: this.intlQuarterTime(),
+			};
+		},
+		methods: {
+			intlGameYmd() {
+				return DateUtil.Format.toYmd(this.pGameQuarterRecords.gameYmd);
+			},
+			intlGameStartTime() {
+				return DateUtil.Format.toTime(this.pGameQuarterRecords.gameStartTime);
+			},
+			intlGameEndTime() {
+				return DateUtil.Format.toTime(this.pGameQuarterRecords.gameEndTime);
+			},
+			intlQuarterTime() {
+				if (ValidationUtil.isNull(this.pGameQuarterRecords.quarterTime)) {
+					return '';
+				}
+				return this.pGameQuarterRecords.quarterTime;
+			},
+			selectQuarterTime(val) {
+				this.quarterTime = val;
+				this.$emit('select-quarter-time', val);
+			},
 		},
 	};
 </script>
