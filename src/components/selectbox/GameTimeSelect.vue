@@ -42,18 +42,19 @@
 				const intlTimeInfo = this._getIntlTimeInfo();
 				const options = [];
 
-				let firstUnit = 0;
-				let secondUnit = 0;
-				options.push(this._genOptionFormat(firstUnit, secondUnit));
-				while (firstUnit < intlTimeInfo.maxTime) {
-					secondUnit += intlTimeInfo.interval;
-					if (secondUnit < 60) {
-						options.push(this._genOptionFormat(firstUnit, secondUnit));
-						continue;
-					}
-					secondUnit -= 60;
-					firstUnit += 1;
-					options.push(this._genOptionFormat(firstUnit, secondUnit));
+				const DEFAULT_UNIT = 60;
+				const totalMaxTimes = intlTimeInfo.maxTime * DEFAULT_UNIT;
+				const interval = intlTimeInfo.interval;
+
+				let accumualtedTimes = 0;
+				while (accumualtedTimes <= totalMaxTimes) {
+					options.push(
+						this._genOptionFormat(
+							Math.floor(accumualtedTimes / DEFAULT_UNIT),
+							accumualtedTimes % DEFAULT_UNIT
+						)
+					);
+					accumualtedTimes += interval;
 				}
 				return options;
 			},
@@ -81,9 +82,13 @@
 						};
 				}
 			},
-			_genOptionFormat(hour, minute) {
+			_genOptionFormat(parentTimes, childTimes) {
+				const times =
+					String(parentTimes).padStart(2, '0') +
+					String(childTimes).padStart(2, '0');
+
 				let result = {};
-				result.text = DateUtil.Format.toTime(hour, minute);
+				result.text = DateUtil.Format.toTime(times);
 				result.value = result.text.replace(':', '');
 				return result;
 			},

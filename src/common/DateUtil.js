@@ -45,6 +45,7 @@ export default {
 			return SUN;
 		},
 	},
+	// TODO 삭제 예정
 	Times: {
 		getOptions(intervalMinutes) {
 			if (typeof intervalMinutes == 'undefined') {
@@ -135,6 +136,8 @@ const Formatter = {
 		}
 		return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
 	},
+
+	// TODO 삭제 예정
 	toHHmm(hour, minute) {
 		if (typeof hour == 'number') {
 			hour = String(hour);
