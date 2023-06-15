@@ -45,7 +45,7 @@ export default new VueRouter({
 		),
 		createRoute(
 			'views/game/quarterRecordInputBoard/QuarterRecordInputBoardPage',
-			'/game/record/inputBoard',
+			'/game/quarter/record/inputBoard',
 			'QuarterRecordInputBoardPage'
 		),
 		createRoute(
