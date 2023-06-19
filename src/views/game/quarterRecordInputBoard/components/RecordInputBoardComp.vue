@@ -6,7 +6,6 @@
 			<v-col cols="5">
 				<QuarterEntryComp
 					:pHomeAwayCode="this.pHomeAwayCode"
-					:pHomeAwayCodeName="this.pHomeAwayCodeName"
 					:pEntry="this.pEntry"
 					@select-player="selectPlayer"
 					@save-entry="emitSaveEntryEvent"
@@ -32,7 +31,6 @@
 		},
 		props: {
 			pHomeAwayCode: String,
-			pHomeAwayCodeName: String,
 			pEntry: Array,
 		},
 		data() {
@@ -48,6 +46,7 @@
 				this.$emit('save-entry');
 			},
 			recordStat(inputInfo) {
+				// TODO 선택된 선수가 없을때 예외처리
 				const player = this.selectedPlayer;
 				const record = {
 					homeAwayCode: this.pHomeAwayCode,

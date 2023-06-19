@@ -1,25 +1,28 @@
 <template>
 	<div>
-		<div v-if="this.isGetGameQuarterRecordsLoad">
+		<div v-if="this.isInit.gameQuarterRecords">
 			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
+			<v-container>
+				<HomeAwayTeamToggle
+					:pHomeTeamName="this.gameQuarterRecords.homeTeamRecords.teamName"
+					:pHomeTeamCode="this.gameQuarterRecords.homeTeamRecords.homeAwayCode"
+					:pHomeTeamCodeName="
+						this.gameQuarterRecords.homeTeamRecords.homeAwayCodeName
+					"
+					:pAwayTeamName="this.gameQuarterRecords.awayTeamRecords.teamName"
+					:pAwayTeamCode="this.gameQuarterRecords.awayTeamRecords.homeAwayCode"
+					:pAwayTeamCodeName="
+						this.gameQuarterRecords.awayTeamRecords.homeAwayCodeName
+					"
+					@select-home-away-team="changeRecordInputTeam"
+				/>
+			</v-container>
 		</div>
-		<v-container>
-			<HomeAwayTeamToggle
-				:pHomeTeamName="this.homeTeamTitleInfo.teamName"
-				:pHomeTeamCode="this.homeTeamTitleInfo.homeAwayCode"
-				:pHomeTeamCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
-				:pAwayTeamName="this.awayTeamTitleInfo.teamName"
-				:pAwayTeamCode="this.awayTeamTitleInfo.homeAwayCode"
-				:pAwayTeamCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
-				@select-home-away-team="changeRecordInputTeam"
-			/>
-		</v-container>
-		<h3>// TODO 하단 버튼 - 저장 API 붙이기!!!</h3>
-		<div v-if="this.isGetGameEntryLoadOk">
+
+		<div v-if="this.isInit.gameEntry">
 			<HomeTeamRecordInputBoardComp
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
-				:pHomeAwayCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.homeTeamEntry"
 				@get-clicked-record-info="processInputRecordStat"
 				@save-entry="getGameEntry"
@@ -27,7 +30,6 @@
 			<AwayTeamRecordInputBoardComp
 				v-else
 				:pHomeAwayCode="this.awayCode"
-				:pHomeAwayCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.awayTeamEntry"
 				@get-clicked-record-info="processInputRecordStat"
 				@save-entry="getGameEntry"
@@ -83,8 +85,10 @@
 			return {
 				gameSeq: query.gameSeq,
 				quarterCode: query.quarterCode,
-				isGetGameQuarterRecordsLoad: false,
-				isGetGameEntryLoadOk: false,
+				isInit: {
+					gameQuarterRecords: false,
+					gameEntry: false,
+				},
 				isHomeTeamInputMode: true,
 				gameQuarterRecords: {
 					gameSeq: '',
@@ -97,18 +101,6 @@
 					homeTeamRecords: {},
 					awayTeamRecords: {},
 				},
-				// TODO 토글에 반영되는 props데이터 줄이기
-				homeTeamTitleInfo: {
-					teamName: '',
-					homeAwayCode: '',
-					homeAwayCodeName: '',
-				},
-				awayTeamTitleInfo: {
-					teamName: '',
-					homeAwayCode: '',
-					homeAwayCodeName: '',
-				},
-
 				homeCode: HomeAwayCode.HOME_TEAM,
 				awayCode: HomeAwayCode.AWAY_TEAM,
 
@@ -118,6 +110,10 @@
 				homeTeamRecords: [],
 				awayTeamRecords: [],
 			};
+		},
+		mounted() {
+			this.getGameQuarterRecords();
+			this.getGameEntry();
 		},
 		methods: {
 			async getGameQuarterRecords() {
@@ -130,7 +126,7 @@
 				const gameQuarterRecords = res.data;
 				this.gameQuarterRecords = gameQuarterRecords;
 
-				this.isGetGameQuarterRecordsLoad = true;
+				this.isInit.gameQuarterRecords = true;
 			},
 			async getGameEntry() {
 				const params = {
@@ -141,19 +137,13 @@
 				const res = await GameAPI.getGameEntry(params);
 
 				const homeTeamInfo = res.data.homeTeamEntry;
-				this.homeTeamTitleInfo.teamName = homeTeamInfo.teamName;
-				this.homeTeamTitleInfo.homeAwayCode = HomeAwayCode.HOME_TEAM;
-				this.homeTeamTitleInfo.homeAwayCodeName = homeTeamInfo.homeAwayCodeName;
 				this.homeTeamEntry = homeTeamInfo.entry;
 
 				const awayTeamInfo = res.data.awayTeamEntry;
-				this.awayTeamTitleInfo.teamName = awayTeamInfo.teamName;
-				this.awayTeamTitleInfo.homeAwayCode = HomeAwayCode.AWAY_TEAM;
-				this.awayTeamTitleInfo.homeAwayCodeName = awayTeamInfo.homeAwayCodeName;
-				this.awayTeamEntry = res.data.awayTeamEntry.entry;
+				this.awayTeamEntry = awayTeamInfo.entry;
 
 				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
-				this.isGetGameEntryLoadOk = true;
+				this.isInit.gameEntry = true;
 			},
 			async saveGameQuarter() {
 				const params = {
@@ -319,10 +309,6 @@
 				targetPlayer[statType]--;
 				return true;
 			},
-		},
-		mounted() {
-			this.getGameQuarterRecords();
-			this.getGameEntry();
 		},
 	};
 </script>

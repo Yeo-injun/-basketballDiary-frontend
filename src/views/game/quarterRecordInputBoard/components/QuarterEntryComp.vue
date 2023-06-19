@@ -6,7 +6,6 @@
 				<v-col>
 					<EntryManageModal
 						:pHomeAwayCode="this.pHomeAwayCode"
-						:pHomeAwayCodeName="this.pHomeAwayCodeName"
 						@save-entry="emitSaveEntryEvent"
 					/>
 				</v-col>
@@ -37,7 +36,6 @@
 		},
 		props: {
 			pHomeAwayCode: String,
-			pHomeAwayCodeName: String,
 			pEntry: Array,
 		},
 		methods: {
