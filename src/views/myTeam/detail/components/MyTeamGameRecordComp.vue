@@ -5,7 +5,6 @@
 			:pBtnName="this.getPageMoveInfo().btnName"
 			:pRoutePageName="this.getPageMoveInfo().routePageName"
 			:pRouteParams="this.getPageMoveInfo().routeParams"
-			@do-post-move="this.testFunc"
 		/>
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
@@ -95,9 +94,6 @@
 					teamSeq: routeQuery.teamSeq,
 					teamName: routeQuery.teamName,
 				};
-			},
-			testFunc() {
-				alert('실행');
 			},
 		},
 	};
