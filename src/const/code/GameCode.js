@@ -1,3 +1,6 @@
+import CodeUtil from '@/const/code/CodeUtil.js';
+// TODO CodeUtil적용시키기...
+
 /**
  * 게임유형코드
  * 01 : 자체전
