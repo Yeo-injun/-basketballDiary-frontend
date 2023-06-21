@@ -8,9 +8,9 @@ import CodeUtil from '@/const/code/CodeUtil.js';
  * 03 : 대회
  */
 export const GameTypeCode = {
-	SELF_GAME: '01',
-	MATCH_UP_GAME: '02',
-	COMPETITION: '03',
+	SELF_GAME: CodeUtil.createCodeNameObj('자체전', '01'),
+	MATCH_UP_GAME: CodeUtil.createCodeNameObj('교류전', '02'),
+	COMPETITION: CodeUtil.createCodeNameObj('대회', '03'),
 };
 
 /**
@@ -20,9 +20,9 @@ export const GameTypeCode = {
  * 03 : CONFIRMATION(게임확정)
  */
 export const GameRecordStateCode = {
-	CREATION: '01',
-	JOIN_TEAM_CONFIRMATION: '02',
-	CONFIRMATION: '03',
+	CREATION: CodeUtil.createCodeNameObj('게임생성', '01'),
+	JOIN_TEAM_CONFIRMATION: CodeUtil.createCodeNameObj('참가팀확정', '02'),
+	GAME_CONFIRMATION: CodeUtil.createCodeNameObj('게임확정', '03'),
 };
 
 /**
@@ -55,6 +55,6 @@ export const QuarterCode = {
  * 02 : ONLY_WRITER(경기기록자)
  */
 export const GameRecordAuthCode = {
-	CREATOR: '01',
-	ONLY_WRITER: '02',
+	CREATOR: CodeUtil.createCodeNameObj('경기생성자', '01'),
+	ONLY_WRITER: CodeUtil.createCodeNameObj('경기기록자', '02'),
 };

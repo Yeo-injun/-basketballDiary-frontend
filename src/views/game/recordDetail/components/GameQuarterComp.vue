@@ -37,6 +37,13 @@
 	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
 	import QuarterCreateBtn from '@/components/button/FrameSaveBtn.vue';
 
+	/*-----------------------------
+	/*	코드값 
+	/*-----------------------------*/
+	const JOIN_TEAM_CONFIRMATION_CODE =
+		GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
+	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;
+
 	export default {
 		components: {
 			GameQuarterInfoFrame,
@@ -62,7 +69,7 @@
 			},
 			moveQuarterRecordInputBoardPage() {
 				switch (this.pGameRecordStateCode) {
-					case GameRecordStateCode.JOIN_TEAM_CONFIRMATION:
+					case JOIN_TEAM_CONFIRMATION_CODE:
 						this.$router.push({
 							name: 'QuarterRecordInputBoardPage',
 							query: {
@@ -71,7 +78,7 @@
 							},
 						});
 						break;
-					case GameRecordStateCode.CONFIRMATION:
+					case GAME_CONFIRMATION_CODE:
 						this.$router.push({
 							name: 'QuarterRecordDetailPage',
 							query: {

@@ -32,6 +32,11 @@
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
+	const SELF_GAME_CODE = GameTypeCode.SELF_GAME.code;
+	const MATCH_UP_GAME_CODE = GameTypeCode.MATCH_UP_GAME.code;
+
+	const JOIN_TEAM_CONFIRMATION_CODE =
+		GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
 	export default {
 		components: {
 			GameOpponentSearchComp,
@@ -43,21 +48,21 @@
 				selectItems: [
 					{
 						gameTypeCodeName: '자체전',
-						gameTypeCode: GameTypeCode.SELF_GAME,
+						gameTypeCode: SELF_GAME_CODE,
 					},
 					{
 						gameTypeCodeName: '교류전',
-						gameTypeCode: GameTypeCode.MATCH_UP_GAME,
+						gameTypeCode: MATCH_UP_GAME_CODE,
 					},
 				],
-				selectedGameType: GameTypeCode.SELF_GAME,
+				selectedGameType: SELF_GAME_CODE,
 				gameSeq: query.gameSeq,
 				opponentTeamSeq: '',
 			};
 		},
 		methods: {
 			isMatchUpGame() {
-				if (this.selectedGameType == GameTypeCode.MATCH_UP_GAME) {
+				if (this.selectedGameType == MATCH_UP_GAME_CODE) {
 					return true;
 				}
 				return false;
@@ -78,14 +83,14 @@
 					name: 'GameRecordDetailPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
 					query: {
 						gameSeq: this.gameSeq,
-						gameRecordState: GameRecordStateCode.JOIN_TEAM_CONFIRMATION,
+						gameRecordState: JOIN_TEAM_CONFIRMATION_CODE,
 					},
 				});
 			},
 			getGameJoinTeamInfo() {
-				if (this.selectedGameType == GameTypeCode.SELF_GAME) {
+				if (this.selectedGameType == SELF_GAME_CODE) {
 					const gameJoinTeamInfo = {
-						gameTypeCode: GameTypeCode.SELF_GAME,
+						gameTypeCode: SELF_GAME_CODE,
 					};
 					return gameJoinTeamInfo;
 				}
@@ -96,7 +101,7 @@
 					throw new Error(message);
 				}
 				const gameJoinTeamInfo = {
-					gameTypeCode: GameTypeCode.MATCH_UP_GAME,
+					gameTypeCode: MATCH_UP_GAME_CODE,
 					opponentTeamSeq: this.opponentTeamSeq,
 				};
 				return gameJoinTeamInfo;

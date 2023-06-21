@@ -64,6 +64,10 @@
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
+	const CREATOR_CODE = GameRecordAuthCode.CREATOR.code;
+	const ONLY_WRITER_CODE = GameRecordAuthCode.ONLY_WRITER.code;
+	const ONLY_WRITER_CODE_NAME = GameRecordAuthCode.ONLY_WRITER.name;
+
 	export default {
 		components: {
 			GameRecordAuthManageBtn,
@@ -139,8 +143,8 @@
 					return;
 				}
 				// 경기기록권한 코드값 할당 후 목록에 추가
-				targetPlayer.gameRecordAuthCode = GameRecordAuthCode.ONLY_WRITER;
-				targetPlayer.gameRecordAuthCodeName = '경기기록자';
+				targetPlayer.gameRecordAuthCode = ONLY_WRITER_CODE;
+				targetPlayer.gameRecordAuthCodeName = ONLY_WRITER_CODE_NAME;
 				this.gameRecorders.push(targetPlayer);
 			},
 			deleteGameRecorder(targetPlayer) {
@@ -157,7 +161,7 @@
 					return;
 				}
 
-				if (GameRecordAuthCode.CREATOR === deleteTarget.gameRecordAuthCode) {
+				if (deleteTarget.gameRecordAuthCode === CREATOR_CODE) {
 					alert('경기생성자는 삭제할 수 없습니다.');
 					return;
 				}

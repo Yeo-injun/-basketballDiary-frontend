@@ -35,6 +35,7 @@
 	import GameConfirmBtn from '@/views/game/recordDetail/button/GameConfirmBtn.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
+	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;
 	export default {
 		components: {
 			GameInfoComp,
@@ -55,8 +56,7 @@
 		},
 		methods: {
 			isShowGameManageBtn() {
-				const isConfirmState =
-					GameRecordStateCode.CONFIRMATION == this.gameRecordState;
+				const isConfirmState = this.gameRecordState == GAME_CONFIRMATION_CODE;
 				if (isConfirmState) {
 					return false;
 				}
