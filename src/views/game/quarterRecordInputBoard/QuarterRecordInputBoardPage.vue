@@ -1,7 +1,10 @@
 <template>
 	<div>
 		<div v-if="this.isInit.gameQuarterRecords">
-			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
+			<GameQuarterInfoComp
+				:pGameQuarterRecords="this.gameQuarterRecords"
+				@select-quarter-time="setQuarterTime"
+			/>
 			<v-container>
 				<HomeAwayTeamToggle
 					:pHomeTeamName="this.gameQuarterRecords.homeTeamRecords.teamName"
@@ -145,10 +148,14 @@
 				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
 				this.isInit.gameEntry = true;
 			},
+			setQuarterTime(targetVal) {
+				this.gameQuarterRecords.quarterTime = targetVal;
+			},
 			async saveGameQuarter() {
 				const params = {
 					gameSeq: this.gameSeq,
 					quarterCode: this.quarterCode,
+					quarterTime: this.gameQuarterRecords.quarterTime,
 					homeTeamPlayerRecords: this.homeTeamEntry,
 					awayTeamPlayerRecords: this.awayTeamEntry,
 				};

@@ -21,6 +21,7 @@ export default {
 		return axiosService.put(
 			`/${params.gameSeq}/quarters/${params.quarterCode}`,
 			{
+				quarterTime: params.quarterTime,
 				homeTeamPlayerRecords: params.homeTeamPlayerRecords,
 				awayTeamPlayerRecords: params.awayTeamPlayerRecords,
 			}

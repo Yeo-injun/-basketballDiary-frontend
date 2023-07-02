@@ -59,7 +59,6 @@
 		},
 		props: {
 			pModalTitlePrefix: String,
-			pGameJoinTeamInfo: Object, //  TODO 삭제 예정
 			pHomeAwayCode: String,
 		},
 		data() {
@@ -98,7 +97,6 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
-				this.isGetGameJoinPlayersLoadOk = true;
 
 				switch (this.pHomeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
@@ -108,6 +106,7 @@
 						this.gameJoinPlayers = res.data.awayTeam.players;
 						break;
 				}
+				this.isGetGameJoinPlayersLoadOk = true;
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deleteGameJoinPlayer(targetPlayer) {
@@ -118,14 +117,14 @@
 						targetPlayer,
 						'email'
 					);
-					// 회원일떄는 userSeq로 지우기
-				} else {
-					this.gameJoinPlayers = ArrayUtil.deleteItemById(
-						this.gameJoinPlayers,
-						targetPlayer,
-						'userSeq'
-					);
+					return;
 				}
+				// 회원일떄는 userSeq로 지우기
+				this.gameJoinPlayers = ArrayUtil.deleteItemById(
+					this.gameJoinPlayers,
+					targetPlayer,
+					'userSeq'
+				);
 			},
 			addGameJoinPlayer(targetPlayer) {
 				if (this.checkDuplicate(targetPlayer)) {
