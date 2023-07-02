@@ -6,6 +6,7 @@
 			pLabelName="쿼터시간"
 			pUnitType="min"
 			:pMaxTime="10"
+			:pInitVal="this.quarterTime"
 			@select-value="selectQuarterTime"
 		/>
 

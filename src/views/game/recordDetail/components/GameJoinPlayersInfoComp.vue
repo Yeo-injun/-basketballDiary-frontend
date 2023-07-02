@@ -7,7 +7,6 @@
 					<HomeTeamPlayersManageModal
 						pModalTitlePrefix="홈팀"
 						:pHomeAwayCode="this.homeTeamCode"
-						:pGameJoinTeamInfo="this.homeTeamInfo"
 						@register-complete="setSelectedPlayers"
 					/>
 					<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
@@ -16,7 +15,6 @@
 					<AwayTeamPlayersManageModal
 						pModalTitlePrefix="어웨이팀"
 						:pHomeAwayCode="this.awayTeamCode"
-						:pGameJoinTeamInfo="this.awayTeamInfo"
 						@register-complete="setSelectedPlayers"
 					/>
 					<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />

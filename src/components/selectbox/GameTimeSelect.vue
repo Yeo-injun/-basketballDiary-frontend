@@ -28,12 +28,13 @@
 			pMaxTime: Number,
 			pInterval: Number,
 			pLabelName: String,
+			pInitVal: String,
 			pRules: Array,
 		},
 		data() {
 			return {
 				selectOptions: this.intlOptions(),
-				selected: '',
+				selected: this.pInitVal,
 				rules: [(value) => ValidationUtil.input.checkNotEmpty(value)],
 			};
 		},
