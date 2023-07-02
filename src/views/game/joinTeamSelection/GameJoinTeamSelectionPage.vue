@@ -23,7 +23,7 @@
 </template>
 
 <script>
-	import GameApi from '@/api/GameAPI.js';
+	import GameAPI from '@/api/GameAPI.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import { GameTypeCode } from '@/const/code/GameCode.js';
@@ -77,7 +77,7 @@
 					gameJoinTeamInfo: this.getGameJoinTeamInfo(),
 				};
 
-				await GameApi.confirmJoinTeam(params);
+				await GameAPI.confirmJoinTeam(params);
 				// TODO 이동할 화면 구현하기 - 게임기록 화면
 				this.$router.push({
 					name: 'GameRecordDetailPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
@@ -89,10 +89,9 @@
 			},
 			getGameJoinTeamInfo() {
 				if (this.selectedGameType == SELF_GAME_CODE) {
-					const gameJoinTeamInfo = {
+					return {
 						gameTypeCode: SELF_GAME_CODE,
 					};
-					return gameJoinTeamInfo;
 				}
 
 				if (ValidationUtil.isNull(this.opponentTeamSeq)) {
@@ -100,11 +99,10 @@
 					alert(message);
 					throw new Error(message);
 				}
-				const gameJoinTeamInfo = {
+				return {
 					gameTypeCode: MATCH_UP_GAME_CODE,
 					opponentTeamSeq: this.opponentTeamSeq,
 				};
-				return gameJoinTeamInfo;
 			},
 			moveMainPage() {
 				// TODO 메인페이지로 이동하는 라우터 등록
