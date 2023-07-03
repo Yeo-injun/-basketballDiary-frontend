@@ -192,7 +192,7 @@
 					homeAwayCode,
 					record.gameJoinPlayerSeq
 				);
-				const targetTeamRecords = this.getInputTargetTeamRecords(homeAwayCode);
+				const targetTeamRecords = this.getTargetTeamRecords(homeAwayCode);
 
 				// 입력모드 체크
 				const isSuccessInput = this.inputRecored(
@@ -222,7 +222,7 @@
 					return player.gameJoinPlayerSeq == gameJoinPlayerSeq;
 				})[0];
 			},
-			getInputTargetTeamRecords(homeAwayCode) {
+			getTargetTeamRecords(homeAwayCode) {
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					return this.gameQuarterRecords.homeTeamRecords;
 				}
