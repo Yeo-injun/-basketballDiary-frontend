@@ -12,7 +12,6 @@
 			</v-row>
 			<h3></h3>
 		</v-container>
-		// TODO 엔트리에서 선택된 선수 표시 ++ 파울갯수 실시간으로 반영시키기
 		<EntryTable :pEntry="pEntry" @select-player="selectPlayer" />
 	</div>
 </template>
