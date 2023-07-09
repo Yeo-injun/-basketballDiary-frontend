@@ -31,6 +31,7 @@ export default {
 			baseURL: `${process.env.VUE_APP_API_URI}${apiUrl}`,
 			withCredentials: true,
 			headers: {
+				// 'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'application/json',
 			},
 		});
