@@ -41,7 +41,6 @@
 			},
 		},
 		data() {
-			console.log('TeamMemberSearchTab = Data ');
 			return {
 				isLoadingOk: false,
 				playerName: '',
@@ -69,8 +68,6 @@
 			},
 		},
 		mounted() {
-			console.log('TeamMemberSearchTab = MOUNTED ');
-
 			this.searchAllTeamMember();
 			this.isLoadingOk = true;
 		},
