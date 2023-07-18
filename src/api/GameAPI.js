@@ -129,7 +129,9 @@ export default {
 	 */
 	getGameJoinTeamMembers(params) {
 		return axiosService.get(`/${params.gameSeq}/teamMembers`, {
-			homeAwayCode: params.homeAwayCode,
+			params: {
+				homeAwayCode: params.homeAwayCode,
+			},
 		});
 	},
 	/**

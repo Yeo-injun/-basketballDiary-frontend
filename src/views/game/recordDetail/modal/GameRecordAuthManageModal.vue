@@ -34,6 +34,7 @@
 				<HomeAwayTeamToggle
 					:pHomeTeamCodeName="this.homeTeamCodeName"
 					:pAwayTeamCodeName="this.awayTeamCodeName"
+					@select-home-away-team="getOneSideTeamMembers"
 				/>
 				<v-container>
 					<div>참가선수 목록</div>
@@ -97,7 +98,7 @@
 		methods: {
 			initModal() {
 				this.getGameRecorders();
-				this.getGameJoinTeamMembers();
+				this.initGameJoinTeamMembers();
 			},
 			async getGameRecorders() {
 				const params = {
@@ -108,7 +109,7 @@
 				this.gameRecorders = res.data.gameRecorders;
 				this.isGetGameRecordersLoadOk = true;
 			},
-			async getGameJoinTeamMembers() {
+			initGameJoinTeamMembers() {
 				const homeAwayCode = ValidationUtil.isNull(this.pHomeAwayCode)
 					? HomeAwayCode.HOME_TEAM
 					: this.pHomeAwayCode;
@@ -116,7 +117,16 @@
 					gameSeq: this.gameSeq,
 					homeAwayCode: homeAwayCode,
 				};
-
+				this.getGameJoinTeamMembers(params);
+			},
+			getOneSideTeamMembers(emitParams) {
+				const params = {
+					gameSeq: this.gameSeq,
+					homeAwayCode: emitParams.homeAwayCode,
+				};
+				this.getGameJoinTeamMembers(params);
+			},
+			async getGameJoinTeamMembers(params) {
 				const res = await GameAPI.getGameJoinTeamMembers(params);
 				this.gameJoinPlayers = res.data.gameJoinTeamMembers;
 				this.isGetGameJoinPlayersLoadOk = true;
