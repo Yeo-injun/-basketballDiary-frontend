@@ -7,20 +7,20 @@
 		<DatePickerComp pLabelName="검색 종료일" />
 		<v-text-field label="경기장주소" />
 		<v-text-field label="경기장명" />
-		<SearchBtn />
+		<MyTeamGameSearchBtn @do-search="onSearchMyTeamGames()" />
 	</v-container>
 </template>
 
 <script>
 	import DatePickerComp from '@/components/common/CustomDatePickerComp.vue';
-	import SearchBtn from '@/components/button/SearcheBtn.vue';
+	import MyTeamGameSearchBtn from '@/components/button/FrameSearchBtn.vue';
 	import GameTypeSelect from '@/components/selectbox/GameTypeSelect.vue';
 	import HomeAwaySelect from '@/components/selectbox/HomeAwaySelect.vue';
 
 	export default {
 		components: {
 			DatePickerComp,
-			SearchBtn,
+			MyTeamGameSearchBtn,
 			GameTypeSelect,
 			HomeAwaySelect,
 		},
@@ -36,6 +36,10 @@
 			},
 			setHomeAwayCode(value) {
 				this.homeAwayCode = value;
+			},
+			onSearchMyTeamGames() {
+				console.log('adsf');
+				alert('TODO 검색 API붙이기');
 			},
 		},
 	};
