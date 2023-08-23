@@ -2,30 +2,24 @@
 	<div>
 		<v-container class="px-15">
 			<div class="d-flex">
-				<v-btn
-					color="black white--text"
-					small
-					@click.stop="isActivatedMyTeamProfileModal = true"
-				>
-					프로필 수정
-				</v-btn>
+				<ProfileUpdateBtn
+					@do-open="isActivatedProfileModal = true"
+					pBtnName="프로필 수정"
+				/>
 				<MyTeamProfileUpdateModal
 					:pTeamSeq="teamSeq"
-					:value="isActivatedMyTeamProfileModal"
-					@input="isActivatedMyTeamProfileModal = $event"
+					:value="isActivatedProfileModal"
+					@input="isActivatedProfileModal = $event"
 				/>
 
-				<v-btn
+				<TeamInfoUpdateBtn
 					v-if="this.isManager()"
-					color="black white--text"
-					small
-					@click.stop="dialog = true"
-				>
-					팀정보 수정
-				</v-btn>
+					@do-open="isActivatedTeamInfoModal = true"
+					pBtnName="팀정보 수정"
+				/>
 				<MyTeamInfoUpdateModal
-					v-model="dialog"
-					@input="dialog = $event"
+					v-model="isActivatedTeamInfoModal"
+					@input="isActivatedTeamInfoModal = $event"
 					:pTeamSeq="teamSeq"
 				/>
 			</div>
@@ -38,15 +32,12 @@
 				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
 			</div>
 
-			<v-btn
+			<TeamMemberAddBtn
 				v-if="this.isManager()"
-				class="ml-auto"
-				small
-				color="black white--text"
-				@click="clickAddTeamMember"
+				@do-add="clickAddTeamMember"
+				pBtnName="팀원 추가"
 			>
-				팀원 추가
-			</v-btn>
+			</TeamMemberAddBtn>
 
 			<v-subheader>팀원 목록</v-subheader>
 			<div v-for="(member, index) in teamMembers" v-bind:key="'A' + index">
@@ -75,7 +66,13 @@
 	import MyTeamInfoUpdateModal from '@/components/myTeam/modal/MyTeamInfoUpdateModal.vue';
 	import MyTeamProfileUpdateModal from '@/components/myTeam/modal/MyTeamProfileUpdateModal.vue';
 
-	import authUtil from '@/common/AuthUtil.js';
+	import ProfileUpdateBtn from '@/components/button/FrameOpenBtn.vue';
+	import TeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
+	// TODO 팀원추가 화면을 Layer로 구현하는 것을 고민... FrameOpenBtn 으로 대체 예정
+	// ( FrameAddBtn은 API를 호출해서 데이터가 추가되는 동작일 경우 사용 )
+	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
+
+	import AuthUtil from '@/common/AuthUtil.js';
 
 	export default {
 		//data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
@@ -86,8 +83,8 @@
 				managers: [],
 				teamMembers: [],
 				teamInfo: {},
-				dialog: false,
-				isActivatedMyTeamProfileModal: false,
+				isActivatedTeamInfoModal: false,
+				isActivatedProfileModal: false,
 				// TODO 페이지네이션 공통 처리 적용
 				pager: {
 					pageNo: 1,
@@ -103,6 +100,10 @@
 			// eslint-disable-next-line
 			MyTeamInfoUpdateModal,
 			MyTeamProfileUpdateModal,
+			// 버튼 컴포넌트
+			ProfileUpdateBtn,
+			TeamInfoUpdateBtn,
+			TeamMemberAddBtn,
 		},
 		methods: {
 			async onLoad() {
@@ -143,13 +144,14 @@
 				this.getTeamMembers();
 			},
 			isManager() {
-				return authUtil.isManager(this.teamSeq);
+				return AuthUtil.isManager(this.teamSeq);
 			},
 			isLeader() {
-				return authUtil.isLeader(this.teamSeq);
+				return AuthUtil.isLeader(this.teamSeq);
 			},
 		},
 		mounted() {
+			// TODO 순서를 바꾸면 화면 렌더링 제대로 안됨.
 			this.onLoad();
 		},
 	};
