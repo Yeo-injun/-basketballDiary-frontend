@@ -22,7 +22,7 @@
 		},
 		methods: {
 			getLoginUserInfo() {
-				if (this.isLogin) {
+				if (!this.isLogin) {
 					return;
 				}
 				this.loginUserInfo = AuthStateManager.getters.authUserInfo();
