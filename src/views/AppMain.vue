@@ -11,25 +11,16 @@
 </template>
 
 <script>
-	import AuthStateManager from '@/common/state/AuthStateManager';
+	import AuthUtil from '@/common/AuthUtil.js';
 
 	export default {
-		data() {
-			return {
-				isLogin: AuthStateManager.getters.isLogin(),
-				loginUserInfo: {},
-			};
-		},
-		methods: {
-			getLoginUserInfo() {
-				if (!this.isLogin) {
-					return;
-				}
-				this.loginUserInfo = AuthStateManager.getters.authUserInfo();
+		computed: {
+			isLogin() {
+				return AuthUtil.isLogin();
 			},
-		},
-		mounted() {
-			this.getLoginUserInfo();
+			loginUserInfo() {
+				return AuthUtil.getAuthUserInfo();
+			},
 		},
 	};
 </script>
