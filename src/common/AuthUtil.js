@@ -1,4 +1,5 @@
 import AuthStateManager from '@/common/state/AuthStateManager';
+import ValidationUtil from '@/common/util/ValidationUtil.js';
 // TODO AuthStateManager는 AuthUtil에서만 호출하게끔 수정하기
 
 const UNAUTH_USER = '0';
@@ -8,9 +9,8 @@ const MANAGER = '2';
 const LEADER = '3';
 
 export default {
-	// TODO 소스코드 대체하기
-	login() {
-		AuthStateManager.mutations.processLogin();
+	login(authInfo) {
+		AuthStateManager.mutations.processLogin(authInfo);
 	},
 	logout() {
 		AuthStateManager.mutations.processLogout();
@@ -19,10 +19,19 @@ export default {
 		return AuthStateManager.getters.authUserInfo();
 	},
 	getUserAuth() {
+		// TODO 소스코드 대체하기
 		return this.getAuthUserInfo().userAuth;
 	},
-	// TODO 소스코드 대체하기
 
+	isLogin() {
+		return AuthStateManager.getters.isLogin();
+	},
+	setAuthInfo(authInfo) {
+		if (ValidationUtil.isNull(authInfo)) {
+			return;
+		}
+		AuthStateManager.mutations.processLogin(authInfo);
+	},
 	isTeamMemeber(targetTeamSeq) {
 		const targetTeamAuth = this.getTeamAuth(targetTeamSeq);
 		if (targetTeamAuth >= TEAM_MEMBER) {
