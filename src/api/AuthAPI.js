@@ -5,7 +5,7 @@ const axiosService = axios.createAxiosInstance('/user');
 
 export default {
 	getAuthInfo() {
-		return axiosService.get('/');
+		return axiosService.get('');
 	},
 	login(params) {
 		return axiosService.post('/login', params);
