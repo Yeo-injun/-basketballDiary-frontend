@@ -1,4 +1,7 @@
 import axios from '@/http/CustomAxios.js';
+import HttpBodyUtil from '@/http/util/HttpBodyUtil.js';
+import HttpHeaderUtil from '@/http/util/HttpHeaderUtil.js';
+
 const axiosService = axios.createAxiosInstance('/myTeams');
 
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config
@@ -14,12 +17,12 @@ export default {
 		return axiosService.get('', { params });
 	},
 	/* API012 소속팀 개인프로필 수정 */
-	modifyMyTeamsProfile(teamSeq, formData) {
-		return axiosService.post(`/${teamSeq}/profile`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			},
-		});
+	modifyMyTeamsProfile(msg) {
+		return axiosService.post(
+			`/${msg.teamSeq}/profile`,
+			HttpBodyUtil.toFormData(msg),
+			HttpHeaderUtil.createMultipartHeader()
+		);
 	},
 	/**
 	 * changgi
