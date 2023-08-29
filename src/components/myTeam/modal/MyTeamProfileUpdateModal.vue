@@ -1,118 +1,84 @@
 <template>
-        <v-dialog 
-            :value="dialog" 
-            @input="dialog = $event"
-            width="1200">
-            <v-card>
-                <v-card-title class="text-h5 grey lighten-2">
-                    프로필 수정
-                </v-card-title>
-                
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="4">이름</v-col>
-                            <v-col cols="4">
-                                <v-text-field v-model="name" outlined clearable>{{name}}</v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="4">소속팀</v-col>
-                            <v-col cols="4">
-                                <v-text-field v-model="teamName" outlined clearable>{{teamName}}</v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="4">등번호</v-col>
-                            <v-col cols="4">
-                                <v-text-field v-model="backNumber" outlined clearable>{{backNumber}}</v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>       
-                            <v-card-text>
-                                <v-file-input
-                                show-size
-                                label="Select Image"
-                                accept="image/*"
-                                outlined
-                                @change="selectImage"
-                                ></v-file-input>    
-                            </v-card-text>               
-                        </v-row>
-                        <v-card-actions>
-                            <v-btn position: absolute right bottom v-on:click="updateProfile">수정</v-btn>          
-                        </v-card-actions>       
-                    </v-container>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
+	<v-dialog :value="dialog" @input="dialog = $event" width="1200">
+		<v-card>
+			<v-card-title class="text-h5 grey lighten-2"> 프로필 수정 </v-card-title>
+
+			<v-card-text>
+				<v-container>
+					<v-text-field label="등번호" v-model="backNumber" />
+					<v-file-input
+						show-size
+						label="소속팀 프로필 사진"
+						accept="image/*"
+						@change="selectImage"
+					/>
+				</v-container>
+			</v-card-text>
+			<v-card-actions>
+				<MyTeamProfileUpdateBtn pBtnName="수정" @do-update="updateProfile" />
+			</v-card-actions>
+		</v-card>
+	</v-dialog>
 </template>
 
 <script>
-import MyTeamApi from '@/api/MyTeamAPI';
+	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
+	import MyTeamApi from '@/api/MyTeamAPI';
 
-export default {
-  data: ()=>{
-    return {
-        name: undefined,
-        teamName: undefined,
-        backNumber: undefined,
-        image: undefined,
-    }
-  },
-  props: {
-    pTeamSeq: {
-        type: Number,
-        required: true
-    },
-    value: {
-        type: Boolean,
-        required: true
-    }
-  },
-  computed: {
-    dialog: {
-        get() {
-            return this.value;
-        },
-        set(value) {
-            this.$emit('input', value);
-        }
-    }
-  },
-  methods: {
-    async load(){
-        const response = (await MyTeamApi.findMyTeamsProfile(this.pTeamSeq)).data;
-        this.name = response.userName;
-        this.teamName = response.teamName;
-        this.backNumber = response.backNumber;
-        this.image = response.image;
-        console.log(response);
-    },
-    selectImage(image){
-        this.image = image;
-    },
-    async updateProfile(){
-        // const headers = "Content-Type: multipart/form-data";
-        const formData = new FormData();
+	export default {
+		components: {
+			MyTeamProfileUpdateBtn,
+		},
+		data() {
+			return {
+				backNumber: '',
+				image: '',
+			};
+		},
+		props: {
+			pTeamSeq: {
+				type: Number,
+				required: true,
+			},
+			// TODO 어떤 값인지 확인 필요
+			value: {
+				type: Boolean,
+				required: true,
+			},
+		},
+		computed: {
+			dialog: {
+				get() {
+					return this.value;
+				},
+				set(value) {
+					this.$emit('input', value);
+				},
+			},
+		},
+		methods: {
+			async load() {
+				const { data } = await MyTeamApi.findMyTeamsProfile(this.pTeamSeq);
+				this.backNumber = data.backNumber;
+				this.image = data.image;
+			},
+			selectImage(image) {
+				this.image = image;
+			},
+			async updateProfile() {
+				const msg = {
+					teamSeq: this.pTeamSeq,
+					backNumber: this.backNumber,
+					imageFile: this.image,
+				};
 
-        formData.append("backNumber",this.backNumber);
-        formData.append("imageFile",this.image);      
-        
-        try{
-            const response = await MyTeamApi.modifyMyTeamsProfile(this.pTeamSeq,formData);
-            console.log("response: "+response);
-        }catch(error){
-            console.log(error);
-        }
-    }
-  },
-  mounted () {
-    this.load();
-  }
-}
+				await MyTeamApi.modifyMyTeamsProfile(msg);
+			},
+		},
+		mounted() {
+			this.load();
+		},
+	};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

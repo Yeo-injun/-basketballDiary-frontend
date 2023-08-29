@@ -14,7 +14,11 @@ export default {
 		return axiosService.post('/logout');
 	},
 	createUser(params) {
-		return axiosService.post('/registration', params);
+		return axiosService.post(
+			'/registration',
+			params,
+			axios.getFileUploadConfing()
+		);
 	},
 	checkDuplicateUserId(params) {
 		return axiosService.post('/duplicationCheck', params);

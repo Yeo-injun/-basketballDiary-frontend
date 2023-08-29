@@ -76,6 +76,11 @@ export default {
 			);
 		return axiosInstance;
 	},
+	getFileUploadConfing() {
+		return {
+			'Content-Type': 'multipart/form-data',
+		};
+	},
 };
 
 function routeErrorPage(responseStutsCode, errorCodeName) {
