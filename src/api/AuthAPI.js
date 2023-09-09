@@ -7,20 +7,16 @@ export default {
 	getAuthInfo() {
 		return axiosService.get('');
 	},
-	login(params) {
-		return axiosService.post('/login', params);
+	login(messge) {
+		return axiosService.post('/login', messge);
 	},
 	logout() {
 		return axiosService.post('/logout');
 	},
-	createUser(params) {
-		return axiosService.post(
-			'/registration',
-			params,
-			axios.getFileUploadConfing()
-		);
+	createUser(messge) {
+		return axiosService.postWithMultipart('/registration', messge);
 	},
-	checkDuplicateUserId(params) {
-		return axiosService.post('/duplicationCheck', params);
+	checkDuplicateUserId(messge) {
+		return axiosService.post('/duplicationCheck', messge);
 	},
 };
