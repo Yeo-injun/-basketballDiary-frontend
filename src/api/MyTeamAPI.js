@@ -1,28 +1,22 @@
 import axios from '@/http/CustomAxios.js';
-import HttpBodyUtil from '@/http/util/HttpBodyUtil.js';
-import HttpHeaderUtil from '@/http/util/HttpHeaderUtil.js';
 
 const axiosService = axios.createAxiosInstance('/myTeams');
 
 // http get 요청에 query string 추가하는 방법 : https://axios-http.com/docs/req_config
 /**
- * axios.get('url',config[]) : config 스팩 속정중 params 정의
+ * axios.get('url',config[]) : config 스팩 속정중 messge 정의
  */
 export default {
 	/**
 	 * seongju
 	 */
 	/* API014 : 소속팀 목록 조회 */
-	searchTeams(params) {
-		return axiosService.get('', { params });
+	searchTeams(messge) {
+		return axiosService.get('', { messge });
 	},
 	/* API012 소속팀 개인프로필 수정 */
-	modifyMyTeamsProfile(msg) {
-		return axiosService.post(
-			`/${msg.teamSeq}/profile`,
-			HttpBodyUtil.toFormData(msg),
-			HttpHeaderUtil.createMultipartHeader()
-		);
+	modifyMyTeamsProfile(messge) {
+		return axiosService.postWithMultipart(`/${messge.teamSeq}/profile`, messge);
 	},
 	/**
 	 * changgi
@@ -38,7 +32,7 @@ export default {
 	/* API002 : 소속팀 팀원목록 조회 */
 	getTeamMembers(teamSeq, pageNo) {
 		return axiosService.get(`/${teamSeq}/members`, {
-			params: {
+			messge: {
 				pageNo: pageNo,
 			},
 		});
@@ -55,64 +49,64 @@ export default {
 	 * injun
 	 */
 	/* API005 : 소속팀의 초대한 선수목록 조회 */
-	searchInvitedPlayer(params) {
+	searchInvitedPlayer(messge) {
 		// TODO 왜 2번째 인자를 {}로 감싸야만 하는지 확인 -> 2번째 파라미터 자체가 객체여야 하고, 쿼리스트링으로 사용하기 위해서는 params속성의 값이 쿼리스트링이 됨
-		return axiosService.get(`/${params.teamSeq}/joinRequestsTo`, {
-			params: { state: params.state },
+		return axiosService.get(`/${messge.teamSeq}/joinRequestsTo`, {
+			messge: { state: messge.state },
 		});
 	},
 	/* API007 : 소속팀의 선수초대 */
-	inviteTeamMember(params) {
+	inviteTeamMember(messge) {
 		return axiosService.post(
-			`/${params.teamSeq}/joinRequestTo/${params.userSeq}`
+			`/${messge.teamSeq}/joinRequestTo/${messge.userSeq}`
 		);
 	},
 	/* API008 : 소속팀이 받은 가입요청목록 조회 */
-	searchJoinRequestPlayer(params) {
-		return axiosService.get(`/${params.teamSeq}/joinRequestsFrom`, {
-			params: { state: params.state },
+	searchJoinRequestPlayer(messge) {
+		return axiosService.get(`/${messge.teamSeq}/joinRequestsFrom`, {
+			messge: { state: messge.state },
 		});
 	},
 	/* API009 : 소속팀이 사용자의 가입요청 승인 */
-	approveJoinRequest(params) {
+	approveJoinRequest(messge) {
 		return axiosService.patch(
-			`/${params.teamSeq}/joinRequestFrom/${params.teamJoinRequestSeq}/approval`
+			`/${messge.teamSeq}/joinRequestFrom/${messge.teamJoinRequestSeq}/approval`
 		);
 	},
 	/* API010 : 소속팀의 가입요청 거절 */
-	rejectJoinRequest(params) {
+	rejectJoinRequest(messge) {
 		return axiosService.patch(
-			`/${params.teamSeq}/joinRequestFrom/${params.teamJoinRequestSeq}/rejection`
+			`/${messge.teamSeq}/joinRequestFrom/${messge.teamJoinRequestSeq}/rejection`
 		);
 	},
 	/* API003 : 소속팀 관리자임명 */
-	appointManager(params) {
+	appointManager(messge) {
 		return axiosService.patch(
-			`/${params.teamSeq}/members/${params.teamMemberSeq}/manager`
+			`/${messge.teamSeq}/members/${messge.teamMemberSeq}/manager`
 		);
 	},
 	/* API015 : 소속팀 관리자 제명 */
-	dismissManager(params) {
+	dismissManager(messge) {
 		return axiosService.delete(
-			`/${params.teamSeq}/members/${params.teamMemberSeq}/manager`
+			`/${messge.teamSeq}/members/${messge.teamMemberSeq}/manager`
 		);
 	},
 	/* API004 : 소속팀 회원 강퇴시키기 */
-	dischargeTeamMember(params) {
+	dischargeTeamMember(messge) {
 		return axiosService.delete(
-			`/${params.teamSeq}/members/${params.teamMemberSeq}`
+			`/${messge.teamSeq}/members/${messge.teamMemberSeq}`
 		);
 	},
 	/* API052 : 소속팀 게임목록조회 */
-	searchMyTeamGames(params) {
-		return axiosService.get(`/${params.teamSeq}/games`);
+	searchMyTeamGames(messge) {
+		return axiosService.get(`/${messge.teamSeq}/games`);
 	},
 	/* API036 : 소속팀 전체 팀원 검색 */
-	searchAllTeamMembers(params) {
-		return axiosService.get(`/${params.teamSeq}/allTeamMembers`, {
-			params: {
-				pageNo: params.pageNo,
-				playerName: params.playerName,
+	searchAllTeamMembers(messge) {
+		return axiosService.get(`/${messge.teamSeq}/allTeamMembers`, {
+			messge: {
+				pageNo: messge.pageNo,
+				playerName: messge.playerName,
 			},
 		});
 	},
