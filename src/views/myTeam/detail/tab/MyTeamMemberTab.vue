@@ -114,12 +114,12 @@
 				await this.getTeamMembers();
 			},
 			async getProflie() {
-				const response = await myTeamApi.findMyTeamsProfile(this.teamSeq);
-				const { data } = response;
-				this.profile = data;
-				// TODO 실행환경별 Host처리 API에서 처리하기...
-				this.profile.imageUrl =
-					'http://127.0.0.1:18080/images' + this.profile.memberImagePath;
+				this.profile = await myTeamApi.findMyTeamsProfile(this.teamSeq);
+				// const { data } = response;
+				// this.profile = data;
+				// // TODO 실행환경별 Host처리 API에서 처리하기...
+				// this.profile.imageUrl =
+				// 	'http://127.0.0.1:18080/images' + this.profile.memberImagePath;
 			},
 			async getManagers() {
 				const response = await myTeamApi.getManagers(this.teamSeq);

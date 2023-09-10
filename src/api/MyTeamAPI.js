@@ -1,4 +1,5 @@
 import axios from '@/http/CustomAxios.js';
+import ImageClient from '@/http/ImageClient';
 
 const axiosService = axios.createAxiosInstance('/myTeams');
 
@@ -22,8 +23,10 @@ export default {
 	 * changgi
 	 */
 	/* API011 소속팀 개인프로필 조회 */
-	findMyTeamsProfile(teamSeq) {
-		return axiosService.get(`/${teamSeq}/profile`);
+	async findMyTeamsProfile(teamSeq) {
+		const { data } = await axiosService.get(`/${teamSeq}/profile`);
+		data.imageUrl = ImageClient.toImageServerUrl(data.memberImagePath);
+		return data;
 	},
 	/* API001 : 소속팀 운영진 조회 */
 	getManagers(teamSeq) {

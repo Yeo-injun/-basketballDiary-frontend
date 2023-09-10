@@ -25,12 +25,20 @@ const ERROR_CODE = {
 };
 
 const API_SERVER_BASE_URI = process.env.VUE_APP_API_URI;
-// const IMAGE_SERVER_BASE_URI = process.env.VUE_APP_IMAGE_SERVER_URI;
+
 export default {
 	// 실행모드에 따라 환경변수 동적으로 반영하기
 	// 참고자료 : https://velog.io/@skyepodium/vue-%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%93%9C%EC%99%80-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95
 	// .env환경변수 파일 만들기, 실행모드 스크립트 작성하기 -> package.json
+	/**
+	 * HTTP API 통신을 위한 Axios Client 설정
+	 * - WAS에 만들어놓은 API들을 호출하고자하는 용도
+	 * >> 향후 이름 변경 createAPIClient() -- 내부 구현은 Axios로
+	 * @param {String} apiUrl
+	 * @returns
+	 */
 	createAxiosInstance(apiUrl) {
+		// Axios 기본 Instance 생성
 		const axiosInstance = axios.create({
 			baseURL: `${API_SERVER_BASE_URI}${apiUrl}`,
 			withCredentials: true,
