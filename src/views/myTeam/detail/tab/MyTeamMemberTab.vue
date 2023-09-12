@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="this.isAsyncComplete">
 		<v-container class="px-15">
 			<div class="d-flex">
 				<ProfileUpdateBtn
@@ -8,8 +8,10 @@
 				/>
 				<MyTeamProfileUpdateModal
 					:pTeamSeq="teamSeq"
-					:value="isActivatedProfileModal"
-					@input="isActivatedProfileModal = $event"
+					:pIsActivated="isActivatedProfileModal"
+					:pBackNumber="this.profile.backNumber"
+					:pImageUrl="profile.imageUrl"
+					@modal-close="isActivatedProfileModal = $event"
 				/>
 
 				<TeamInfoUpdateBtn
@@ -57,14 +59,19 @@
 </template>
 
 <script>
-	import myTeamApi from '@/api/MyTeamAPI';
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+	/** CODE */
+	/** Utils */
+	import AuthUtil from '@/common/AuthUtil.js';
 
+	/** Components */
 	import MyTeamProfileComp from '@/components/myTeam/MyTeamProfileComp.vue';
 	import MyTeamManagerComp from '@/components/myTeam/MyTeamManagerComp.vue';
 	import MyTeamMemberComp from '@/components/myTeam/MyTeamMemberComp.vue';
 
 	import MyTeamInfoUpdateModal from '@/components/myTeam/modal/MyTeamInfoUpdateModal.vue';
-	import MyTeamProfileUpdateModal from '@/components/myTeam/modal/MyTeamProfileUpdateModal.vue';
+	import MyTeamProfileUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamProfileUpdateModal.vue';
 
 	import ProfileUpdateBtn from '@/components/button/FrameOpenBtn.vue';
 	import TeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
@@ -72,12 +79,23 @@
 	// ( FrameAddBtn은 API를 호출해서 데이터가 추가되는 동작일 경우 사용 )
 	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
 
-	import AuthUtil from '@/common/AuthUtil.js';
-
 	export default {
+		components: {
+			MyTeamProfileComp,
+			MyTeamManagerComp,
+			MyTeamMemberComp,
+			// eslint-disable-next-line
+			MyTeamInfoUpdateModal,
+			MyTeamProfileUpdateModal,
+			// 버튼 컴포넌트
+			ProfileUpdateBtn,
+			TeamInfoUpdateBtn,
+			TeamMemberAddBtn,
+		},
 		//data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
 		data() {
 			return {
+				isAsyncComplete: false,
 				teamSeq: this.$route.query.teamSeq,
 				profile: {},
 				managers: [],
@@ -93,34 +111,21 @@
 				},
 			};
 		},
-		components: {
-			MyTeamProfileComp,
-			MyTeamManagerComp,
-			MyTeamMemberComp,
-			// eslint-disable-next-line
-			MyTeamInfoUpdateModal,
-			MyTeamProfileUpdateModal,
-			// 버튼 컴포넌트
-			ProfileUpdateBtn,
-			TeamInfoUpdateBtn,
-			TeamMemberAddBtn,
-		},
 		methods: {
 			async onLoad() {
-				// TODO 새로고침시 props값이 날라가는 것을 제어해야함...(제어할 수 있는지 검토 필요)
 				await this.getProflie();
 				await this.getManagers();
 				await this.getTeamMembers();
 			},
 			async getProflie() {
-				this.profile = await myTeamApi.findMyTeamsProfile(this.teamSeq);
+				this.profile = await MyTeamAPI.findMyTeamsProfile(this.teamSeq);
 			},
 			async getManagers() {
-				const response = await myTeamApi.getManagers(this.teamSeq);
+				const response = await MyTeamAPI.getManagers(this.teamSeq);
 				this.managers = response.data.managers;
 			},
 			async getTeamMembers() {
-				const response = await myTeamApi.getTeamMembers(
+				const response = await MyTeamAPI.getTeamMembers(
 					this.teamSeq,
 					this.pager.pageNo - 1
 				);
@@ -148,9 +153,11 @@
 				return AuthUtil.isLeader(this.teamSeq);
 			},
 		},
-		mounted() {
+		async mounted() {
 			// TODO 순서를 바꾸면 화면 렌더링 제대로 안됨.
-			this.onLoad();
+			await this.onLoad();
+			debugger;
+			this.isAsyncComplete = true;
 		},
 	};
 </script>

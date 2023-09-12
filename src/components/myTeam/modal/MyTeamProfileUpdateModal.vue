@@ -1,3 +1,4 @@
+<!-- TODO 삭제 예정 디렉토리 대체 -->
 <template>
 	<v-dialog :value="dialog" @input="dialog = $event" width="1200">
 		<v-card>
@@ -40,7 +41,7 @@
 				type: Number,
 				required: true,
 			},
-			// TODO 어떤 값인지 확인 필요
+			// TODO isActivated로 대체 예정
 			value: {
 				type: Boolean,
 				required: true,
