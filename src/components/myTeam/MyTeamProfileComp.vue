@@ -5,13 +5,11 @@
 				<v-row align="center">
 					<v-col cols="2">
 						<v-img
-							max-height="100"
-							max-width="100"
+							max-height="120"
+							max-width="120"
 							class="ms-5"
 							:src="pMyProfile.imageUrl"
 						/>
-
-						{{ pMyProfile.imageUrl }}
 					</v-col>
 					<v-col cols="10">
 						<v-row justify="space-between">
