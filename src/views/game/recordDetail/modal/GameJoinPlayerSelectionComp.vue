@@ -14,18 +14,20 @@
 				<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
 					<TeamMemberSearchTab
 						v-if="idx == 0"
-						@add-game-join-player-01="addGameJoinPlayer"
+						:pTeamSeq="pTeamSeq"
 						:pActivatedTabName="activatedTabName"
+						@add-game-join-player-01="addGameJoinPlayer"
 					/>
 					<GuestMemberSearchTab
 						v-if="idx == 1"
-						@add-game-join-player-02="addGameJoinPlayer"
+						:pTeamSeq="pTeamSeq"
 						:pActivatedTabName="activatedTabName"
+						@add-game-join-player-02="addGameJoinPlayer"
 					/>
 					<GuestRegistrationTab
 						v-if="idx == 2"
-						@add-game-join-player-03="addGameJoinPlayer"
 						:pActivatedTabName="activatedTabName"
+						@add-game-join-player-03="addGameJoinPlayer"
 					/>
 				</v-tab-item>
 			</v-tabs-items>
@@ -46,6 +48,9 @@
 			TeamMemberSearchTab,
 			GuestMemberSearchTab,
 			GuestRegistrationTab,
+		},
+		props: {
+			pTeamSeq: Number,
 		},
 		data() {
 			return {

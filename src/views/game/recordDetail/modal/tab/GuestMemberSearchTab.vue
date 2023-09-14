@@ -42,6 +42,7 @@
 			};
 		},
 		props: {
+			pTeamSeq: Number,
 			pActivatedTabName: String,
 		},
 		watch: {
@@ -55,9 +56,8 @@
 		},
 		methods: {
 			async searchUsersExcludingTeamMember() {
-				const queryParams = this.$route.query;
 				const pathVar = {
-					teamSeq: queryParams.teamSeq,
+					teamSeq: this.pTeamSeq,
 				};
 
 				const queryString = {

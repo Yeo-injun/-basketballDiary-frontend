@@ -11,7 +11,9 @@
 		</template>
 
 		<v-card>
-			<v-card-title> {{ pModalTitlePrefix }} 참가선수관리</v-card-title>
+			<v-card-title class="text-h5 grey lighten-2">
+				{{ pModalTitlePrefix }} 참가선수관리</v-card-title
+			>
 			<div class="text-right">
 				<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
 			</div>
@@ -25,7 +27,11 @@
 				/>
 			</v-container>
 
-			<GameJoinPlayerSelectionComp @add-game-join-player="addGameJoinPlayer" />
+			<GameJoinPlayerSelectionComp
+				v-if="isGetGameJoinPlayersLoadOk"
+				:pTeamSeq="this.teamSeq"
+				@add-game-join-player="addGameJoinPlayer"
+			/>
 		</v-card>
 	</v-dialog>
 </template>
@@ -65,7 +71,7 @@
 			const query = this.$route.query;
 			return {
 				gameSeq: query.gameSeq,
-
+				teamSeq: '',
 				dialog: false,
 				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
@@ -100,9 +106,11 @@
 
 				switch (this.pHomeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
+						this.teamSeq = res.data.homeTeam.teamSeq;
 						this.gameJoinPlayers = res.data.homeTeam.players;
 						break;
 					case HomeAwayCode.AWAY_TEAM:
+						this.teamSeq = res.data.awayTeam.teamSeq;
 						this.gameJoinPlayers = res.data.awayTeam.players;
 						break;
 				}

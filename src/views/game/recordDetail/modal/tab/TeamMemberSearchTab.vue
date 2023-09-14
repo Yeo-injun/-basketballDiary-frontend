@@ -29,6 +29,7 @@
 			TeamMemberSearchBtn,
 		},
 		props: {
+			pTeamSeq: Number,
 			pActivatedTabName: String,
 		},
 		watch: {
@@ -49,9 +50,8 @@
 		},
 		methods: {
 			async searchAllTeamMember() {
-				const queryParams = this.$route.query;
 				const params = {
-					teamSeq: queryParams.teamSeq,
+					teamSeq: this.pTeamSeq,
 					playerName: this.playerName,
 					pageNo: 0,
 				};

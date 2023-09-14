@@ -93,12 +93,9 @@
 				};
 			},
 			_getRouteParams() {
-				const routeQuery = this.$route.query;
 				return {
 					gameSeq: this.gameSeq,
 					gameRecordState: this.pGame.gameRecordStateCode,
-					teamSeq: routeQuery.teamSeq,
-					teamName: routeQuery.teamName,
 				};
 			},
 		},
