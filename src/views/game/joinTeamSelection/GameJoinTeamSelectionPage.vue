@@ -78,9 +78,8 @@
 				};
 
 				await GameAPI.confirmJoinTeam(params);
-				// TODO 이동할 화면 구현하기 - 게임기록 화면
 				this.$router.push({
-					name: 'GameRecordDetailPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
+					name: 'GameRecordDetailPage',
 					query: {
 						gameSeq: this.gameSeq,
 						gameRecordState: JOIN_TEAM_CONFIRMATION_CODE,
