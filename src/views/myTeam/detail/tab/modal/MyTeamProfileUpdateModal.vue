@@ -16,7 +16,11 @@
 					/>
 
 					<!-- TODO 입력 오류 해결 필요 -->
-					<v-text-field label="등번호" v-model="this.backNumber" />
+					<v-text-field
+						label="등번호"
+						v-model="this.backNumber"
+						:rules="this.rules.backNumber"
+					/>
 				</v-container>
 			</v-card-text>
 			<v-card-actions>
@@ -29,8 +33,12 @@
 <script>
 	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI';
-	/** CODE */
+
+	/** Code/Const */
+
 	/** Utils */
+	import InputRule from '@/common/input/InputRule.js';
+
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/myTeam/MyTeamProfileImageComp.vue';
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
@@ -43,8 +51,17 @@
 		data() {
 			console.log('data()');
 			return {
+				/*-------------------
+				 * Input 데이터
+				 *-------------------*/
 				backNumber: this.pBackNumber,
 				imageUrl: this.pImageUrl,
+				/*-------------------
+				 * Input RULE 정책
+				 *-------------------*/
+				rules: {
+					backNumber: InputRule.backNumber,
+				},
 			};
 		},
 		props: {
