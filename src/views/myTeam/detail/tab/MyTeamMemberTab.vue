@@ -156,7 +156,6 @@
 		async mounted() {
 			// TODO 순서를 바꾸면 화면 렌더링 제대로 안됨.
 			await this.onLoad();
-			debugger;
 			this.isAsyncComplete = true;
 		},
 	};

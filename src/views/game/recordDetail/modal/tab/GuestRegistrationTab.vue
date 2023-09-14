@@ -30,13 +30,18 @@
 </template>
 
 <script>
-	import ValidationUtil from '@/common/util/ValidationUtil';
-	import ArrayUtil from '@/common/util/ArrayUtil.js';
+	/** Backend API */
+
+	/** Code/Const */
 	import { GuestRegistrationTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
-
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 	import { PlayerTypeCode, PositionCode } from '@/const/code/PlayerCode.js';
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 
+	/** Utils */
+	import ArrayUtil from '@/common/util/ArrayUtil.js';
+	import InputRule from '@/common/input/InputRule';
+
+	/** Components */
 	import NonMemberGuestAddBtn from '@/components/button/FrameAddBtn.vue';
 	export default {
 		components: {
@@ -63,30 +68,13 @@
 				backNumber: '',
 				email: '',
 				/*-------------------
-				 * Validate 데이터
+				 * Input RULE 정책
 				 * 관련 참고자료 : https://sundries-in-myidea.tistory.com/130
 				 *-------------------*/
 				rules: {
-					userName: [
-						(value) => ValidationUtil.input.checkNotEmpty(value),
-						(value) =>
-							ValidationUtil.input.checkMaxLength(value, {
-								maxLength: 20,
-							}),
-					],
-					email: [
-						(value) => ValidationUtil.input.checkNotEmpty(value),
-						(value) => ValidationUtil.input.checkEmailPattern(value),
-					],
-					backNumber: [
-						(value) => ValidationUtil.input.checkNotEmpty(value),
-						(value) => ValidationUtil.input.checkNumberType(value),
-						(value) =>
-							ValidationUtil.input.checkMaxLength(value, {
-								maxLength: 3,
-								message: '등번호는 3자리수까지 입력 가능합니다.',
-							}),
-					],
+					userName: InputRule.userName,
+					email: InputRule.email,
+					backNumber: InputRule.backNumber,
 				},
 			};
 		},

@@ -1,3 +1,4 @@
+<!-- 모달 Template을 만들 필요가 있어 보임 -->
 <template>
 	<v-dialog v-model="isActivated" width="1200px">
 		<v-card>
@@ -5,14 +6,20 @@
 
 			<v-card-text>
 				<v-container>
-					<v-text-field label="등번호" v-model="this.backNumber" />
-
+					<h3>프로필 사진</h3>
 					<MyTeamProfileImageComp :pImageUrl="this.imageUrl" />
 					<v-file-input
 						show-size
-						label="소속팀 프로필 사진"
+						label="수정할 프로필 사진 업로드"
 						accept="image/*"
 						@change="selectImage"
+					/>
+
+					<!-- TODO 입력 오류 해결 필요 -->
+					<v-text-field
+						label="등번호"
+						v-model="this.backNumber"
+						:rules="this.rules.backNumber"
 					/>
 				</v-container>
 			</v-card-text>
@@ -26,8 +33,12 @@
 <script>
 	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI';
-	/** CODE */
+
+	/** Code/Const */
+
 	/** Utils */
+	import InputRule from '@/common/input/InputRule.js';
+
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/myTeam/MyTeamProfileImageComp.vue';
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
@@ -40,8 +51,17 @@
 		data() {
 			console.log('data()');
 			return {
+				/*-------------------
+				 * Input 데이터
+				 *-------------------*/
 				backNumber: this.pBackNumber,
 				imageUrl: this.pImageUrl,
+				/*-------------------
+				 * Input RULE 정책
+				 *-------------------*/
+				rules: {
+					backNumber: InputRule.backNumber,
+				},
 			};
 		},
 		props: {
@@ -63,6 +83,7 @@
 			},
 		},
 		computed: {
+			// TODO 모달이 열리는 시점에 props 데이터로 모달 데이터 업데이트하기
 			isActivated: {
 				get() {
 					console.log('isActiveGET()');
@@ -81,6 +102,7 @@
 			},
 		},
 		mounted() {
+			// 소스코드 정리 필요
 			console.log('mounted()');
 			this.backNumber = this.pBackNumber;
 			this.imageUrl = this.pImageUrl;
