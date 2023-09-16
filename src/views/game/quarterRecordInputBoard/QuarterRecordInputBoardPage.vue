@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="this.isInit.gameQuarterRecords">
+		<div v-if="this.isInitData.gameQuarterRecords">
 			<GameQuarterInfoComp
 				:pGameQuarterRecords="this.gameQuarterRecords"
 				@select-quarter-time="setQuarterTime"
@@ -22,7 +22,7 @@
 			</v-container>
 		</div>
 
-		<div v-if="this.isInit.gameEntry">
+		<div v-if="this.isInitData.gameEntry">
 			<HomeTeamRecordInputBoardComp
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
@@ -88,7 +88,7 @@
 			return {
 				gameSeq: query.gameSeq,
 				quarterCode: query.quarterCode,
-				isInit: {
+				isInitData: {
 					gameQuarterRecords: false,
 					gameEntry: false,
 				},
@@ -129,7 +129,7 @@
 				const gameQuarterRecords = res.data;
 				this.gameQuarterRecords = gameQuarterRecords;
 
-				this.isInit.gameQuarterRecords = true;
+				this.isInitData.gameQuarterRecords = true;
 			},
 			async getGameEntry() {
 				const params = {
@@ -146,7 +146,7 @@
 				this.awayTeamEntry = awayTeamInfo.entry;
 
 				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
-				this.isInit.gameEntry = true;
+				this.isInitData.gameEntry = true;
 			},
 			setQuarterTime(targetVal) {
 				this.gameQuarterRecords.quarterTime = targetVal;
