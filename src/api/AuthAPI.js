@@ -14,7 +14,7 @@ export default {
 		return axiosService.post('/logout');
 	},
 	createUser(messge) {
-		return axiosService.postWithMultipart('/registration', messge);
+		return axiosService.post('/registration', messge);
 	},
 	checkDuplicateUserId(messge) {
 		return axiosService.post('/duplicationCheck', messge);
