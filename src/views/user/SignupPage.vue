@@ -54,11 +54,11 @@
 				<v-radio label="여성" value="02" />
 			</v-radio-group>
 			<v-text-field
-				label="신장(kg)"
+				label="신장(cm)"
 				v-model="userRegInfo.height"
 			></v-text-field>
 			<v-text-field
-				label="몸무게(cm)"
+				label="몸무게(kg)"
 				v-model="userRegInfo.weight"
 			></v-text-field>
 
@@ -79,8 +79,10 @@
 </template>
 
 <script>
-	import AuthAPI from '@/api/AuthAPI';
+	import AuthAPI from '@/api/AuthAPI.js';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
+
+	import InputRule from '@/common/input/InputRule.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil';
 
@@ -112,17 +114,13 @@
 				 * 회원가입 정보 (Validation)
 				 *--------------------*/
 				rules: {
-					userId: [(value) => ValidationUtil.input.checkNotEmpty(value)],
-					password: [(value) => ValidationUtil.input.checkNotEmpty(value)],
-					name: [(value) => ValidationUtil.input.checkNotEmpty(value)],
-					email: [
-						(value) => ValidationUtil.input.checkNotEmpty(value),
-						// TODO 이메일 패턴 체크하기
-					],
-					// birthYmd: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+					userId: InputRule.userId,
+					password: InputRule.password,
+					name: InputRule.userName,
+					email: InputRule.email,
 					gender: [(value) => ValidationUtil.input.checkNotEmpty(value)],
-					// height: [(value) => ValidationUtil.input.checkNotEmpty(value)],
-					// weight: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+					height: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+					weight: [(value) => ValidationUtil.input.checkNotEmpty(value)],
 					positionCode: [(value) => ValidationUtil.input.checkNotEmpty(value)],
 				},
 			};
