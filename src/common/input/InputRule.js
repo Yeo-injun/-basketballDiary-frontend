@@ -4,6 +4,14 @@ import ValidationUtil from '@/common/util/ValidationUtil.js';
  * INPUT 항목별 Validion 정책 정의
  **-----------------------------------*/
 export default {
+	userId: [
+		(value) => ValidationUtil.input.checkNotEmpty(value),
+		// TODO userId 패턴 정규식으로 검증하는 로직 추가
+	],
+	password: [
+		(value) => ValidationUtil.input.checkNotEmpty(value),
+		// TODO password 패턴 정규식으로 검증하는 로직 추가
+	],
 	userName: [
 		(value) => ValidationUtil.input.checkNotEmpty(value),
 		(value) =>
