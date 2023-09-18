@@ -12,8 +12,8 @@
 
 		<v-card>
 			<v-card-title class="text-h5 grey lighten-2">
-				{{ pModalTitlePrefix }} 참가선수관리</v-card-title
-			>
+				{{ pModalTitlePrefix }} 참가선수관리
+			</v-card-title>
 			<div class="text-right">
 				<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
 			</div>
