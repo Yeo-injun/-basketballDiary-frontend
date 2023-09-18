@@ -12,11 +12,23 @@
 </template>
 
 <script>
+	/** Backend API */
+	import UserAPI from '@/api/UserAPI.js';
+
+	/** Javasript */
+	import { ObjectFactory } from '@/views/game/recordDetail/GameRecordDetail.js';
+
+	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
+	/** Code */
+	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
+
+	/** Constant */
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 	import { GuestMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
-	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
-	import UserAPI from '@/api/UserAPI.js';
+	/** Components */
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
 	export default {
@@ -72,14 +84,14 @@
 				this.users = res.data.users;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				const backNumber = prompt('해당 선수의 등번호를 입력해주세요.');
-				targetPlayer.backNumber = backNumber;
-				targetPlayer.playerTypeCode = PlayerTypeCode.AUTH_GUEST.code;
-				targetPlayer.playerTypeCodeName = PlayerTypeCode.AUTH_GUEST.name;
-				this.$emit(
-					GuestMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER,
-					targetPlayer
+				const player = ObjectFactory.gameJoinPlayer(
+					targetPlayer,
+					PlayerTypeCode.AUTH_GUEST
 				);
+				if (ValidationUtil.isNull(player)) {
+					return;
+				}
+				this.$emit(GuestMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, player);
 			},
 		},
 		mounted() {

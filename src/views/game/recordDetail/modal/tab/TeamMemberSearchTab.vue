@@ -14,15 +14,26 @@
 </template>
 
 <script>
-	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
-	import { TeamMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
-
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
-
+	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
+	/** Javasript */
+	import { ObjectFactory } from '@/views/game/recordDetail/GameRecordDetail.js';
+
+	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil';
+
+	/** Code */
+	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
+
+	/** Constant */
+	import { TeamMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
+
+	/** Components */
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	import TeamMemberSearchBtn from '@/components/button/FrameSearchBtn.vue';
+
 	export default {
 		components: {
 			PlayerDataTable,
@@ -61,15 +72,23 @@
 				this.teamMembers = res.data.teamMembers;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				targetPlayer.playerTypeCode = PlayerTypeCode.TEAM_MEMBER.code;
-				targetPlayer.playerTypeCodeName = PlayerTypeCode.TEAM_MEMBER.name;
-
-				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, targetPlayer);
+				const player = ObjectFactory.gameJoinPlayer(
+					targetPlayer,
+					PlayerTypeCode.TEAM_MEMBER
+				);
+				if (ValidationUtil.isNull(player)) {
+					return;
+				}
+				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, player);
 			},
 		},
-		mounted() {
+		beforeMount() {
 			this.searchAllTeamMember();
 			this.isLoadingOk = true;
+		},
+		mounted() {
+			// this.searchAllTeamMember();
+			// this.isLoadingOk = true;
 		},
 	};
 </script>

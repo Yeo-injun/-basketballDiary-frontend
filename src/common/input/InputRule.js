@@ -2,6 +2,7 @@ import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 /**-----------------------------------
  * INPUT 항목별 Validion 정책 정의
+ * - 정의된 함수를 모두 충족시켜야 유효한 입력값이다.
  **-----------------------------------*/
 export default {
 	userId: [
