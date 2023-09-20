@@ -1,8 +1,9 @@
 <template>
 	<v-card>
 		<v-card-title :class="this.btnColor" @click="emitStatTypeInfo()">
-			<div class="font-weight-bold">
-				{{ this.statBtnName }}
+			<!-- <p>{{ this.statBtnName }}</p> -->
+			<div class="font-bold">
+				{{ this.pCount }}
 			</div>
 		</v-card-title>
 	</v-card>
@@ -17,6 +18,7 @@
 	export default {
 		props: {
 			pType: String,
+			pCount: Number,
 			pActiveMode: String,
 		},
 		data() {
@@ -56,7 +58,7 @@
 				const statType = this.pType;
 				switch (statType) {
 					case StatType.FREE_THROW:
-						return '자유투 성공';
+						return '자유투';
 					case StatType.TWO_POINT:
 						return '2점 성공';
 					case StatType.THREE_POINT:
