@@ -16,7 +16,10 @@
 	import UserAPI from '@/api/UserAPI.js';
 
 	/** Javasript */
-	import { ObjectFactory } from '@/views/game/recordDetail/GameRecordDetail.js';
+	import {
+		ObjectFactory,
+		UIPrompter,
+	} from '@/views/game/recordDetail/GameRecordDetail.js';
 
 	/** Utils */
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
@@ -84,13 +87,17 @@
 				this.users = res.data.users;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				const player = ObjectFactory.gameJoinPlayer(
-					targetPlayer,
-					PlayerTypeCode.AUTH_GUEST
-				);
-				if (ValidationUtil.isNull(player)) {
+				const backNumber = UIPrompter.backNumber(targetPlayer.backNumber);
+				if (ValidationUtil.isNull(backNumber)) {
 					return;
 				}
+
+				const player = ObjectFactory.gameJoinPlayerWithBackNumber(
+					targetPlayer,
+					PlayerTypeCode.AUTH_GUEST,
+					backNumber
+				);
+
 				this.$emit(GuestMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, player);
 			},
 		},

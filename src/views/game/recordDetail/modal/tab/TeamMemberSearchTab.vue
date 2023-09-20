@@ -18,7 +18,10 @@
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
 	/** Javasript */
-	import { ObjectFactory } from '@/views/game/recordDetail/GameRecordDetail.js';
+	import {
+		ObjectFactory,
+		UIPrompter,
+	} from '@/views/game/recordDetail/GameRecordDetail.js';
 
 	/** Utils */
 	import ValidationUtil from '@/common/util/ValidationUtil';
@@ -72,13 +75,17 @@
 				this.teamMembers = res.data.teamMembers;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				const player = ObjectFactory.gameJoinPlayer(
-					targetPlayer,
-					PlayerTypeCode.TEAM_MEMBER
-				);
-				if (ValidationUtil.isNull(player)) {
+				const backNumber = UIPrompter.backNumber(targetPlayer.backNumber);
+				if (ValidationUtil.isNull(backNumber)) {
 					return;
 				}
+
+				const player = ObjectFactory.gameJoinPlayerWithBackNumber(
+					targetPlayer,
+					PlayerTypeCode.TEAM_MEMBER,
+					backNumber
+				);
+
 				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, player);
 			},
 		},

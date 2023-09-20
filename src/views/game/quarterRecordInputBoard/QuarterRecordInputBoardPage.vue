@@ -23,18 +23,18 @@
 		</div>
 
 		<div v-if="this.isInitData.gameEntry">
-			<HomeTeamRecordInputBoardComp
+			<HomeTeamRecordTableSheet
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
 				:pEntry="this.homeTeamEntry"
-				@get-clicked-record-info="processInputRecordStat"
+				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
-			<AwayTeamRecordInputBoardComp
+			<AwayTeamRecordTableSheet
 				v-else
 				:pHomeAwayCode="this.awayCode"
 				:pEntry="this.awayTeamEntry"
-				@get-clicked-record-info="processInputRecordStat"
+				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
 		</div>
@@ -68,8 +68,10 @@
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 
-	import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
-	import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
+	// import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
+	// import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
+	import HomeTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
+	import AwayTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 
 	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
 	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
@@ -78,8 +80,10 @@
 		components: {
 			GameQuarterInfoComp,
 			HomeAwayTeamToggle,
-			HomeTeamRecordInputBoardComp,
-			AwayTeamRecordInputBoardComp,
+			// HomeTeamRecordInputBoardComp,
+			// AwayTeamRecordInputBoardComp,
+			HomeTeamRecordTableSheet,
+			AwayTeamRecordTableSheet,
 			SaveGameQuarterBtn,
 			DeleteGameQuarterBtn,
 		},
