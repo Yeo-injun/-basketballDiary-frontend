@@ -1,4 +1,4 @@
-const IMAGE_SERVER_BASE_URI = process.env.VUE_APP_IMAGE_SERVER_URI;
+// const IMAGE_SERVER_BASE_URI = process.env.VUE_APP_IMAGE_SERVER_URI;
 
 export default {
 	/**
