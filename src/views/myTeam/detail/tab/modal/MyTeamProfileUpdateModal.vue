@@ -8,19 +8,21 @@
 				<v-container>
 					<h3>프로필 사진</h3>
 					<MyTeamProfileImageComp :pImageUrl="this.imageUrl" />
-					<v-file-input
-						show-size
-						label="수정할 프로필 사진 업로드"
-						accept="image/*"
-						@change="selectImage"
-					/>
+					<v-form ref="updateProfileInputs">
+						<v-file-input
+							show-size
+							label="수정할 프로필 사진 업로드"
+							accept="image/*"
+							@change="setImageFile"
+						/>
 
-					<!-- TODO 입력 오류 해결 필요 -->
-					<v-text-field
-						label="등번호"
-						v-model="this.backNumber"
-						:rules="this.rules.backNumber"
-					/>
+						<!-- TODO 입력 오류 해결 필요 -->
+						<v-text-field
+							label="등번호"
+							v-model="backNumber"
+							:rules="this.rules.backNumber"
+						/>
+					</v-form>
 				</v-container>
 			</v-card-text>
 			<v-card-actions>
@@ -49,13 +51,13 @@
 			MyTeamProfileUpdateBtn,
 		},
 		data() {
-			console.log('data()');
 			return {
 				/*-------------------
 				 * Input 데이터
 				 *-------------------*/
 				backNumber: this.pBackNumber,
 				imageUrl: this.pImageUrl,
+				imageFile: null,
 				/*-------------------
 				 * Input RULE 정책
 				 *-------------------*/
@@ -86,41 +88,30 @@
 			// TODO 모달이 열리는 시점에 props 데이터로 모달 데이터 업데이트하기
 			isActivated: {
 				get() {
-					console.log('isActiveGET()');
-
 					return this.pIsActivated;
 				},
-				set(isActivated) {
-					console.log('isActiveSET()');
-					if (isActivated) {
-						this.backNumber = this.pBackNumber;
-						this.imageUrl = this.pImageUrl;
-						return;
-					}
+				set() {
 					this.$emit('modal-close', false);
 				},
 			},
 		},
-		mounted() {
-			// 소스코드 정리 필요
-			console.log('mounted()');
-			this.backNumber = this.pBackNumber;
-			this.imageUrl = this.pImageUrl;
-			console.log(this);
-			// this.load();
-		},
 		methods: {
-			selectImage(imageUrl) {
-				this.imageUrl = imageUrl;
+			setImageFile(imageFile) {
+				this.imageFile = imageFile;
 			},
 			async updateProfile() {
+				if (!this.$refs.updateProfileInputs.validate()) {
+					return;
+				}
+
 				const msg = {
 					teamSeq: this.pTeamSeq,
 					backNumber: this.backNumber,
-					imageFile: this.imageUrl,
+					imageFile: this.imageFile,
 				};
-
+				// TODO 사진 파일이 없는 경우 수정 처리되도록 백엔드 수정하기
 				await MyTeamAPI.modifyMyTeamsProfile(msg);
+				this.$emit('modal-close', false);
 			},
 		},
 	};

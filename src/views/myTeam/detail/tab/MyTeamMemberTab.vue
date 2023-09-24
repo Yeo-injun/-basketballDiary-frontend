@@ -3,7 +3,7 @@
 		<v-container class="px-15">
 			<div class="d-flex">
 				<ProfileUpdateBtn
-					@do-open="isActivatedProfileModal = true"
+					@do-open="openProfileUpdateModal()"
 					pBtnName="프로필 수정"
 				/>
 				<MyTeamProfileUpdateModal
@@ -11,7 +11,7 @@
 					:pIsActivated="isActivatedProfileModal"
 					:pBackNumber="this.profile.backNumber"
 					:pImageUrl="profile.imageUrl"
-					@modal-close="isActivatedProfileModal = $event"
+					@modal-close="closeProfileUpdateModal()"
 				/>
 
 				<TeamInfoUpdateBtn
@@ -151,6 +151,15 @@
 			},
 			isLeader() {
 				return AuthUtil.isLeader(this.teamSeq);
+			},
+			/**-----------------------------
+			 * Modal 제어
+			 **-----------------------------*/
+			openProfileUpdateModal() {
+				this.isActivatedProfileModal = true;
+			},
+			closeProfileUpdateModal() {
+				this.isActivatedProfileModal = false;
 			},
 		},
 		async mounted() {
