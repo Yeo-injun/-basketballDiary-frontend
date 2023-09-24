@@ -21,6 +21,7 @@ export default {
 		return axiosService.put(
 			`/${params.gameSeq}/quarters/${params.quarterCode}`,
 			{
+				quarterTime: params.quarterTime,
 				homeTeamPlayerRecords: params.homeTeamPlayerRecords,
 				awayTeamPlayerRecords: params.awayTeamPlayerRecords,
 			}
@@ -128,7 +129,9 @@ export default {
 	 */
 	getGameJoinTeamMembers(params) {
 		return axiosService.get(`/${params.gameSeq}/teamMembers`, {
-			homeAwayCode: params.homeAwayCode,
+			params: {
+				homeAwayCode: params.homeAwayCode,
+			},
 		});
 	},
 	/**

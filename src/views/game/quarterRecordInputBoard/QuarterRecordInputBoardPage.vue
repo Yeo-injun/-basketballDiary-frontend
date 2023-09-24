@@ -1,35 +1,40 @@
 <template>
 	<div>
-		<div v-if="this.isGetGameQuarterRecordsLoad">
-			<GameQuarterInfoComp :pGameQuarterRecords="this.gameQuarterRecords" />
-		</div>
-		<v-container>
-			<HomeAwayTeamToggle
-				:pHomeTeamName="this.homeTeamTitleInfo.teamName"
-				:pHomeTeamCode="this.homeTeamTitleInfo.homeAwayCode"
-				:pHomeTeamCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
-				:pAwayTeamName="this.awayTeamTitleInfo.teamName"
-				:pAwayTeamCode="this.awayTeamTitleInfo.homeAwayCode"
-				:pAwayTeamCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
-				@select-home-away-team="changeRecordInputTeam"
+		<div v-if="this.isInitData.gameQuarterRecords">
+			<GameQuarterInfoComp
+				:pGameQuarterRecords="this.gameQuarterRecords"
+				@select-quarter-time="setQuarterTime"
 			/>
-		</v-container>
-		<h3>// TODO 하단 버튼 - 저장 API 붙이기!!!</h3>
-		<div v-if="this.isGetGameEntryLoadOk">
-			<HomeTeamRecordInputBoardComp
+			<v-container>
+				<HomeAwayTeamToggle
+					:pHomeTeamName="this.gameQuarterRecords.homeTeamRecords.teamName"
+					:pHomeTeamCode="this.gameQuarterRecords.homeTeamRecords.homeAwayCode"
+					:pHomeTeamCodeName="
+						this.gameQuarterRecords.homeTeamRecords.homeAwayCodeName
+					"
+					:pAwayTeamName="this.gameQuarterRecords.awayTeamRecords.teamName"
+					:pAwayTeamCode="this.gameQuarterRecords.awayTeamRecords.homeAwayCode"
+					:pAwayTeamCodeName="
+						this.gameQuarterRecords.awayTeamRecords.homeAwayCodeName
+					"
+					@select-home-away-team="changeRecordInputTeam"
+				/>
+			</v-container>
+		</div>
+
+		<div v-if="this.isInitData.gameEntry">
+			<HomeTeamRecordTableSheet
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
-				:pHomeAwayCodeName="this.homeTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.homeTeamEntry"
-				@get-clicked-record-info="processInputRecordStat"
+				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
-			<AwayTeamRecordInputBoardComp
+			<AwayTeamRecordTableSheet
 				v-else
 				:pHomeAwayCode="this.awayCode"
-				:pHomeAwayCodeName="this.awayTeamTitleInfo.homeAwayCodeName"
 				:pEntry="this.awayTeamEntry"
-				@get-clicked-record-info="processInputRecordStat"
+				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
 		</div>
@@ -63,8 +68,10 @@
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 
-	import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
-	import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
+	// import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
+	// import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
+	import HomeTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
+	import AwayTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 
 	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
 	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
@@ -73,8 +80,10 @@
 		components: {
 			GameQuarterInfoComp,
 			HomeAwayTeamToggle,
-			HomeTeamRecordInputBoardComp,
-			AwayTeamRecordInputBoardComp,
+			// HomeTeamRecordInputBoardComp,
+			// AwayTeamRecordInputBoardComp,
+			HomeTeamRecordTableSheet,
+			AwayTeamRecordTableSheet,
 			SaveGameQuarterBtn,
 			DeleteGameQuarterBtn,
 		},
@@ -83,8 +92,10 @@
 			return {
 				gameSeq: query.gameSeq,
 				quarterCode: query.quarterCode,
-				isGetGameQuarterRecordsLoad: false,
-				isGetGameEntryLoadOk: false,
+				isInitData: {
+					gameQuarterRecords: false,
+					gameEntry: false,
+				},
 				isHomeTeamInputMode: true,
 				gameQuarterRecords: {
 					gameSeq: '',
@@ -97,18 +108,6 @@
 					homeTeamRecords: {},
 					awayTeamRecords: {},
 				},
-				// TODO 토글에 반영되는 props데이터 줄이기
-				homeTeamTitleInfo: {
-					teamName: '',
-					homeAwayCode: '',
-					homeAwayCodeName: '',
-				},
-				awayTeamTitleInfo: {
-					teamName: '',
-					homeAwayCode: '',
-					homeAwayCodeName: '',
-				},
-
 				homeCode: HomeAwayCode.HOME_TEAM,
 				awayCode: HomeAwayCode.AWAY_TEAM,
 
@@ -118,6 +117,10 @@
 				homeTeamRecords: [],
 				awayTeamRecords: [],
 			};
+		},
+		mounted() {
+			this.getGameQuarterRecords();
+			this.getGameEntry();
 		},
 		methods: {
 			async getGameQuarterRecords() {
@@ -130,7 +133,7 @@
 				const gameQuarterRecords = res.data;
 				this.gameQuarterRecords = gameQuarterRecords;
 
-				this.isGetGameQuarterRecordsLoad = true;
+				this.isInitData.gameQuarterRecords = true;
 			},
 			async getGameEntry() {
 				const params = {
@@ -141,24 +144,22 @@
 				const res = await GameAPI.getGameEntry(params);
 
 				const homeTeamInfo = res.data.homeTeamEntry;
-				this.homeTeamTitleInfo.teamName = homeTeamInfo.teamName;
-				this.homeTeamTitleInfo.homeAwayCode = HomeAwayCode.HOME_TEAM;
-				this.homeTeamTitleInfo.homeAwayCodeName = homeTeamInfo.homeAwayCodeName;
 				this.homeTeamEntry = homeTeamInfo.entry;
 
 				const awayTeamInfo = res.data.awayTeamEntry;
-				this.awayTeamTitleInfo.teamName = awayTeamInfo.teamName;
-				this.awayTeamTitleInfo.homeAwayCode = HomeAwayCode.AWAY_TEAM;
-				this.awayTeamTitleInfo.homeAwayCodeName = awayTeamInfo.homeAwayCodeName;
-				this.awayTeamEntry = res.data.awayTeamEntry.entry;
+				this.awayTeamEntry = awayTeamInfo.entry;
 
 				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
-				this.isGetGameEntryLoadOk = true;
+				this.isInitData.gameEntry = true;
+			},
+			setQuarterTime(targetVal) {
+				this.gameQuarterRecords.quarterTime = targetVal;
 			},
 			async saveGameQuarter() {
 				const params = {
 					gameSeq: this.gameSeq,
 					quarterCode: this.quarterCode,
+					quarterTime: this.gameQuarterRecords.quarterTime,
 					homeTeamPlayerRecords: this.homeTeamEntry,
 					awayTeamPlayerRecords: this.awayTeamEntry,
 				};
@@ -195,7 +196,7 @@
 					homeAwayCode,
 					record.gameJoinPlayerSeq
 				);
-				const targetTeamRecords = this.getInputTargetTeamRecords(homeAwayCode);
+				const targetTeamRecords = this.getTargetTeamRecords(homeAwayCode);
 
 				// 입력모드 체크
 				const isSuccessInput = this.inputRecored(
@@ -225,7 +226,7 @@
 					return player.gameJoinPlayerSeq == gameJoinPlayerSeq;
 				})[0];
 			},
-			getInputTargetTeamRecords(homeAwayCode) {
+			getTargetTeamRecords(homeAwayCode) {
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
 					return this.gameQuarterRecords.homeTeamRecords;
 				}
@@ -319,10 +320,6 @@
 				targetPlayer[statType]--;
 				return true;
 			},
-		},
-		mounted() {
-			this.getGameQuarterRecords();
-			this.getGameEntry();
 		},
 	};
 </script>

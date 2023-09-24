@@ -28,13 +28,15 @@
 <script>
 	import { GameRecordStateCode } from '@/const/code/GameCode.js';
 
-	import GameInfoComp from '@/views/game/recordDetail/GameInfoComp.vue';
-	import GameJoinTeamsInfoComp from '@/views/game/recordDetail/GameJoinTeamsInfoComp.vue';
-	import GameJoinPlayersInfoComp from '@/views/game/recordDetail/GameJoinPlayersInfoComp.vue';
-	import GameQuartersComp from '@/views/game/recordDetail/GameQuartersComp.vue';
+	import GameInfoComp from '@/views/game/recordDetail/components/GameInfoComp.vue';
+	import GameJoinTeamsInfoComp from '@/views/game/recordDetail/components/GameJoinTeamsInfoComp.vue';
+	import GameJoinPlayersInfoComp from '@/views/game/recordDetail/components/GameJoinPlayersInfoComp.vue';
+	import GameQuartersComp from '@/views/game/recordDetail/components/GameQuartersComp.vue';
+
 	import GameConfirmBtn from '@/views/game/recordDetail/button/GameConfirmBtn.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
+	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;
 	export default {
 		components: {
 			GameInfoComp,
@@ -47,7 +49,7 @@
 		data() {
 			const query = this.$route.query;
 			return {
-				gameSeq: query.gameSeq,
+				gameSeq: Number(query.gameSeq),
 				gameRecordState: query.gameRecordState,
 				teamSeq: query.teamSeq,
 				teamName: query.teamName,
@@ -55,8 +57,7 @@
 		},
 		methods: {
 			isShowGameManageBtn() {
-				const isConfirmState =
-					GameRecordStateCode.CONFIRMATION == this.gameRecordState;
+				const isConfirmState = this.gameRecordState == GAME_CONFIRMATION_CODE;
 				if (isConfirmState) {
 					return false;
 				}

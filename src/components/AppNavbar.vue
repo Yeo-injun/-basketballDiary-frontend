@@ -7,7 +7,7 @@
 			absolute
 			color="teal darken-4"
 		/>
-		<router-link to="/">
+		<router-link :to="{ name: 'MainPage' }">
 			<div class="d-flex align-center font-weight-bold white--text">
 				<h3>농구일기</h3>
 			</div>
@@ -30,18 +30,15 @@
 <script>
 	import AuthAPI from '@/api/AuthAPI.js';
 	import LoadingStateManager from '@/common/state/LoadingStateManager';
-	import AuthStateManager from '@/common/state/AuthStateManager';
+	import AuthUtil from '@/common/AuthUtil.js';
 
 	export default {
-		data() {
-			return {};
-		},
 		computed: {
 			isLoading() {
 				return LoadingStateManager.getters.isLoading();
 			},
 			isLogin() {
-				return AuthStateManager.getters.isLogin();
+				return AuthUtil.isLogin();
 			},
 		},
 		/**상위컴포넌트에서 데이터 받기 : props 사용하기
@@ -56,7 +53,7 @@
 
 				try {
 					await AuthAPI.logout();
-					AuthStateManager.mutations.processLogout();
+					AuthUtil.logout();
 					this.$router.go();
 				} catch (e) {
 					console.log(e);

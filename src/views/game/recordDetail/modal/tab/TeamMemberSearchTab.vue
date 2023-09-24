@@ -14,21 +14,36 @@
 </template>
 
 <script>
-	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
-	import { TeamMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
-
-	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
-
+	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 
+	/** Javasript */
+	import {
+		ObjectFactory,
+		UIPrompter,
+	} from '@/views/game/recordDetail/GameRecordDetail.js';
+
+	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil';
+
+	/** Code */
+	import { PlayerTypeCode } from '@/const/code/PlayerCode.js';
+
+	/** Constant */
+	import { TeamMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
+	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
+
+	/** Components */
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	import TeamMemberSearchBtn from '@/components/button/FrameSearchBtn.vue';
+
 	export default {
 		components: {
 			PlayerDataTable,
 			TeamMemberSearchBtn,
 		},
 		props: {
+			pTeamSeq: Number,
 			pActivatedTabName: String,
 		},
 		watch: {
@@ -41,7 +56,6 @@
 			},
 		},
 		data() {
-			console.log('TeamMemberSearchTab = Data ');
 			return {
 				isLoadingOk: false,
 				playerName: '',
@@ -50,9 +64,8 @@
 		},
 		methods: {
 			async searchAllTeamMember() {
-				const queryParams = this.$route.query;
 				const params = {
-					teamSeq: queryParams.teamSeq,
+					teamSeq: this.pTeamSeq,
 					playerName: this.playerName,
 					pageNo: 0,
 				};
@@ -62,17 +75,27 @@
 				this.teamMembers = res.data.teamMembers;
 			},
 			addGameJoinPlayer(targetPlayer) {
-				targetPlayer.playerTypeCode = PlayerTypeCode.TEAM_MEMBER.code;
-				targetPlayer.playerTypeCodeName = PlayerTypeCode.TEAM_MEMBER.name;
+				const backNumber = UIPrompter.backNumber(targetPlayer.backNumber);
+				if (ValidationUtil.isNull(backNumber)) {
+					return;
+				}
 
-				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, targetPlayer);
+				const player = ObjectFactory.gameJoinPlayerWithBackNumber(
+					targetPlayer,
+					PlayerTypeCode.TEAM_MEMBER,
+					backNumber
+				);
+
+				this.$emit(TeamMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, player);
 			},
 		},
-		mounted() {
-			console.log('TeamMemberSearchTab = MOUNTED ');
-
+		beforeMount() {
 			this.searchAllTeamMember();
 			this.isLoadingOk = true;
+		},
+		mounted() {
+			// this.searchAllTeamMember();
+			// this.isLoadingOk = true;
 		},
 	};
 </script>

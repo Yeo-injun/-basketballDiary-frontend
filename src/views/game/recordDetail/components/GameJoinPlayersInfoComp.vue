@@ -7,7 +7,6 @@
 					<HomeTeamPlayersManageModal
 						pModalTitlePrefix="홈팀"
 						:pHomeAwayCode="this.homeTeamCode"
-						:pGameJoinTeamInfo="this.homeTeamInfo"
 						@register-complete="setSelectedPlayers"
 					/>
 					<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
@@ -16,7 +15,6 @@
 					<AwayTeamPlayersManageModal
 						pModalTitlePrefix="어웨이팀"
 						:pHomeAwayCode="this.awayTeamCode"
-						:pGameJoinTeamInfo="this.awayTeamInfo"
 						@register-complete="setSelectedPlayers"
 					/>
 					<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
@@ -31,10 +29,10 @@
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
-	import HomeTeamPlayerList from '@/views/game/recordDetail/GameJoinPlayerListComp.vue';
+	import HomeTeamPlayerList from '@/views/game/recordDetail/components/GameJoinPlayerListComp.vue';
 	import HomeTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
-	import AwayTeamPlayerList from '@/views/game/recordDetail/GameJoinPlayerListComp.vue';
+	import AwayTeamPlayerList from '@/views/game/recordDetail/components/GameJoinPlayerListComp.vue';
 	import AwayTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
 	export default {

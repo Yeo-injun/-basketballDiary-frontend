@@ -23,7 +23,7 @@
 </template>
 
 <script>
-	import GameApi from '@/api/GameAPI.js';
+	import GameAPI from '@/api/GameAPI.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import { GameTypeCode } from '@/const/code/GameCode.js';
@@ -32,6 +32,11 @@
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
+	const SELF_GAME_CODE = GameTypeCode.SELF_GAME.code;
+	const MATCH_UP_GAME_CODE = GameTypeCode.MATCH_UP_GAME.code;
+
+	const JOIN_TEAM_CONFIRMATION_CODE =
+		GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
 	export default {
 		components: {
 			GameOpponentSearchComp,
@@ -43,21 +48,21 @@
 				selectItems: [
 					{
 						gameTypeCodeName: '자체전',
-						gameTypeCode: GameTypeCode.SELF_GAME,
+						gameTypeCode: SELF_GAME_CODE,
 					},
 					{
 						gameTypeCodeName: '교류전',
-						gameTypeCode: GameTypeCode.MATCH_UP_GAME,
+						gameTypeCode: MATCH_UP_GAME_CODE,
 					},
 				],
-				selectedGameType: GameTypeCode.SELF_GAME,
+				selectedGameType: SELF_GAME_CODE,
 				gameSeq: query.gameSeq,
 				opponentTeamSeq: '',
 			};
 		},
 		methods: {
 			isMatchUpGame() {
-				if (this.selectedGameType == GameTypeCode.MATCH_UP_GAME) {
+				if (this.selectedGameType == MATCH_UP_GAME_CODE) {
 					return true;
 				}
 				return false;
@@ -72,22 +77,20 @@
 					gameJoinTeamInfo: this.getGameJoinTeamInfo(),
 				};
 
-				await GameApi.confirmJoinTeam(params);
-				// TODO 이동할 화면 구현하기 - 게임기록 화면
+				await GameAPI.confirmJoinTeam(params);
 				this.$router.push({
-					name: 'GameRecordDetailPage', // TODO 이동할 화면명으로 변경 - 게임기록 상세조회화면
+					name: 'GameRecordDetailPage',
 					query: {
 						gameSeq: this.gameSeq,
-						gameRecordState: GameRecordStateCode.JOIN_TEAM_CONFIRMATION,
+						gameRecordState: JOIN_TEAM_CONFIRMATION_CODE,
 					},
 				});
 			},
 			getGameJoinTeamInfo() {
-				if (this.selectedGameType == GameTypeCode.SELF_GAME) {
-					const gameJoinTeamInfo = {
-						gameTypeCode: GameTypeCode.SELF_GAME,
+				if (this.selectedGameType == SELF_GAME_CODE) {
+					return {
+						gameTypeCode: SELF_GAME_CODE,
 					};
-					return gameJoinTeamInfo;
 				}
 
 				if (ValidationUtil.isNull(this.opponentTeamSeq)) {
@@ -95,11 +98,10 @@
 					alert(message);
 					throw new Error(message);
 				}
-				const gameJoinTeamInfo = {
-					gameTypeCode: GameTypeCode.MATCH_UP_GAME,
+				return {
+					gameTypeCode: MATCH_UP_GAME_CODE,
 					opponentTeamSeq: this.opponentTeamSeq,
 				};
-				return gameJoinTeamInfo;
 			},
 			moveMainPage() {
 				// TODO 메인페이지로 이동하는 라우터 등록

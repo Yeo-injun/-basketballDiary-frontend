@@ -6,17 +6,17 @@
 			<v-text-field
 				label="아이디"
 				v-model="userRegInfo.userId"
-				:rules="requiredRules"
+				:rules="this.rules.userId"
 				required
-				v-on:change="initDuplicationCheckStatus"
+				@change="initDuplicationCheckStatus"
 			></v-text-field>
-			<v-btn block v-on:click="checkDuplicateUserId">ID중복확인</v-btn>
+			<v-btn block @click="checkDuplicateUserId">ID중복확인</v-btn>
 
 			<v-text-field
 				label="비밀번호"
 				type="password"
 				v-model="userRegInfo.password"
-				:rules="requiredRules"
+				:rules="this.rules.password"
 				required
 			></v-text-field>
 			<v-text-field
@@ -28,13 +28,13 @@
 			<v-text-field
 				label="이름"
 				v-model="userRegInfo.name"
-				:rules="requiredRules"
+				:rules="this.rules.name"
 				required
 			></v-text-field>
 			<v-text-field
 				label="이메일"
 				v-model="userRegInfo.email"
-				:rules="requiredRules"
+				:rules="this.rules.email"
 				required
 			></v-text-field>
 
@@ -47,18 +47,18 @@
 			<v-radio-group
 				v-model="userRegInfo.gender"
 				row
-				:rules="requiredRules"
+				:rules="this.rules.gender"
 				required
 			>
 				<v-radio label="남성" value="01" />
 				<v-radio label="여성" value="02" />
 			</v-radio-group>
 			<v-text-field
-				label="신장(kg)"
+				label="신장(cm)"
 				v-model="userRegInfo.height"
 			></v-text-field>
 			<v-text-field
-				label="몸무게(cm)"
+				label="몸무게(kg)"
 				v-model="userRegInfo.weight"
 			></v-text-field>
 
@@ -72,16 +72,19 @@
 					<v-radio label="센터" value="30" color="primary" />
 				</v-radio-group>
 			</v-container>
-			시도, 시군구 코드
+			<!-- 시도, 시군구 코드 -->
 		</v-form>
 		<v-btn block color="primary" v-on:click="createUser">회원가입</v-btn>
 	</v-container>
 </template>
 
 <script>
-	import AuthAPI from '@/api/AuthAPI';
+	import AuthAPI from '@/api/AuthAPI.js';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
-	import router from '@/router';
+
+	import InputRule from '@/common/input/InputRule.js';
+
+	import ValidationUtil from '@/common/util/ValidationUtil';
 
 	// id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 	// 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
@@ -93,7 +96,6 @@
 			return {
 				pPickerLabelName: '생년월일',
 				pInitValue: '',
-				requiredRules: [(v) => !!v || '필수 입력값입니다.'],
 				isModalOpen: '',
 				isNotDuplicateUserId: false,
 				passwordCheck: '',
@@ -106,9 +108,20 @@
 					gender: '',
 					height: 0,
 					weight: 0,
-					sidoCode: '',
-					sigunguCode: '',
 					positionCode: '', // TODO 현재는 포지션을 하나만 선택하. 향후에는 포지션 2개이상 선택 가능
+				},
+				/**-------------------
+				 * 회원가입 정보 (Validation)
+				 *--------------------*/
+				rules: {
+					userId: InputRule.userId,
+					password: InputRule.password,
+					name: InputRule.userName,
+					email: InputRule.email,
+					gender: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+					height: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+					weight: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+					positionCode: [(value) => ValidationUtil.input.checkNotEmpty(value)],
 				},
 			};
 		}, // data
@@ -157,13 +170,10 @@
 					return;
 				}
 
-				// TODO 요청이 보내지고 400에러를 반환하는데 백엔드에서는 요청이력이 없음... 확인요망
-				let params = this.userRegInfo;
-				console.log(params);
 				try {
-					await AuthAPI.createUser(params);
+					await AuthAPI.createUser(this.userRegInfo);
 					alert('회원가입이 완료되었습니다.');
-					router.push('/login');
+					this.$router.push('/login');
 				} catch (e) {
 					console.log(e);
 				}

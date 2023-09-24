@@ -1,31 +1,27 @@
 <template>
-	<div>
+	<div v-if="this.isAsyncComplete">
 		<v-container class="px-15">
 			<div class="d-flex">
-				<v-btn
-					color="black white--text"
-					small
-					@click.stop="isActivatedMyTeamProfileModal = true"
-				>
-					프로필 수정
-				</v-btn>
+				<ProfileUpdateBtn
+					@do-open="isActivatedProfileModal = true"
+					pBtnName="프로필 수정"
+				/>
 				<MyTeamProfileUpdateModal
 					:pTeamSeq="teamSeq"
-					:value="isActivatedMyTeamProfileModal"
-					@input="isActivatedMyTeamProfileModal = $event"
+					:pIsActivated="isActivatedProfileModal"
+					:pBackNumber="this.profile.backNumber"
+					:pImageUrl="profile.imageUrl"
+					@modal-close="isActivatedProfileModal = $event"
 				/>
 
-				<v-btn
+				<TeamInfoUpdateBtn
 					v-if="this.isManager()"
-					color="black white--text"
-					small
-					@click.stop="dialog = true"
-				>
-					팀정보 수정
-				</v-btn>
+					@do-open="isActivatedTeamInfoModal = true"
+					pBtnName="팀정보 수정"
+				/>
 				<MyTeamInfoUpdateModal
-					v-model="dialog"
-					@input="dialog = $event"
+					v-model="isActivatedTeamInfoModal"
+					@input="isActivatedTeamInfoModal = $event"
 					:pTeamSeq="teamSeq"
 				/>
 			</div>
@@ -38,15 +34,12 @@
 				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
 			</div>
 
-			<v-btn
+			<TeamMemberAddBtn
 				v-if="this.isManager()"
-				class="ml-auto"
-				small
-				color="black white--text"
-				@click="clickAddTeamMember"
+				@do-add="clickAddTeamMember"
+				pBtnName="팀원 추가"
 			>
-				팀원 추가
-			</v-btn>
+			</TeamMemberAddBtn>
 
 			<v-subheader>팀원 목록</v-subheader>
 			<div v-for="(member, index) in teamMembers" v-bind:key="'A' + index">
@@ -66,28 +59,50 @@
 </template>
 
 <script>
-	import myTeamApi from '@/api/MyTeamAPI';
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+	/** CODE */
+	/** Utils */
+	import AuthUtil from '@/common/AuthUtil.js';
 
+	/** Components */
 	import MyTeamProfileComp from '@/components/myTeam/MyTeamProfileComp.vue';
 	import MyTeamManagerComp from '@/components/myTeam/MyTeamManagerComp.vue';
 	import MyTeamMemberComp from '@/components/myTeam/MyTeamMemberComp.vue';
 
 	import MyTeamInfoUpdateModal from '@/components/myTeam/modal/MyTeamInfoUpdateModal.vue';
-	import MyTeamProfileUpdateModal from '@/components/myTeam/modal/MyTeamProfileUpdateModal.vue';
+	import MyTeamProfileUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamProfileUpdateModal.vue';
 
-	import authUtil from '@/common/AuthUtil.js';
+	import ProfileUpdateBtn from '@/components/button/FrameOpenBtn.vue';
+	import TeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
+	// TODO 팀원추가 화면을 Layer로 구현하는 것을 고민... FrameOpenBtn 으로 대체 예정
+	// ( FrameAddBtn은 API를 호출해서 데이터가 추가되는 동작일 경우 사용 )
+	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
 
 	export default {
+		components: {
+			MyTeamProfileComp,
+			MyTeamManagerComp,
+			MyTeamMemberComp,
+			// eslint-disable-next-line
+			MyTeamInfoUpdateModal,
+			MyTeamProfileUpdateModal,
+			// 버튼 컴포넌트
+			ProfileUpdateBtn,
+			TeamInfoUpdateBtn,
+			TeamMemberAddBtn,
+		},
 		//data: {} // Component끼리 data를 공유하면 안되므로 다음과 같이 사용하면 안됨.
 		data() {
 			return {
+				isAsyncComplete: false,
 				teamSeq: this.$route.query.teamSeq,
 				profile: {},
 				managers: [],
 				teamMembers: [],
 				teamInfo: {},
-				dialog: false,
-				isActivatedMyTeamProfileModal: false,
+				isActivatedTeamInfoModal: false,
+				isActivatedProfileModal: false,
 				// TODO 페이지네이션 공통 처리 적용
 				pager: {
 					pageNo: 1,
@@ -96,32 +111,21 @@
 				},
 			};
 		},
-		components: {
-			MyTeamProfileComp,
-			MyTeamManagerComp,
-			MyTeamMemberComp,
-			// eslint-disable-next-line
-			MyTeamInfoUpdateModal,
-			MyTeamProfileUpdateModal,
-		},
 		methods: {
 			async onLoad() {
-				// TODO 새로고침시 props값이 날라가는 것을 제어해야함...(제어할 수 있는지 검토 필요)
 				await this.getProflie();
 				await this.getManagers();
 				await this.getTeamMembers();
 			},
 			async getProflie() {
-				const response = await myTeamApi.findMyTeamsProfile(this.teamSeq);
-				const { data } = response;
-				this.profile = data;
+				this.profile = await MyTeamAPI.findMyTeamsProfile(this.teamSeq);
 			},
 			async getManagers() {
-				const response = await myTeamApi.getManagers(this.teamSeq);
+				const response = await MyTeamAPI.getManagers(this.teamSeq);
 				this.managers = response.data.managers;
 			},
 			async getTeamMembers() {
-				const response = await myTeamApi.getTeamMembers(
+				const response = await MyTeamAPI.getTeamMembers(
 					this.teamSeq,
 					this.pager.pageNo - 1
 				);
@@ -143,14 +147,16 @@
 				this.getTeamMembers();
 			},
 			isManager() {
-				return authUtil.isManager(this.teamSeq);
+				return AuthUtil.isManager(this.teamSeq);
 			},
 			isLeader() {
-				return authUtil.isLeader(this.teamSeq);
+				return AuthUtil.isLeader(this.teamSeq);
 			},
 		},
-		mounted() {
-			this.onLoad();
+		async mounted() {
+			// TODO 순서를 바꾸면 화면 렌더링 제대로 안됨.
+			await this.onLoad();
+			this.isAsyncComplete = true;
 		},
 	};
 </script>

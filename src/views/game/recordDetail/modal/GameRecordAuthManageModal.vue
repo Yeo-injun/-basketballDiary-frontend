@@ -34,6 +34,7 @@
 				<HomeAwayTeamToggle
 					:pHomeTeamCodeName="this.homeTeamCodeName"
 					:pAwayTeamCodeName="this.awayTeamCodeName"
+					@select-home-away-team="getOneSideTeamMembers"
 				/>
 				<v-container>
 					<div>참가선수 목록</div>
@@ -64,6 +65,10 @@
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
+	const CREATOR_CODE = GameRecordAuthCode.CREATOR.code;
+	const ONLY_WRITER_CODE = GameRecordAuthCode.ONLY_WRITER.code;
+	const ONLY_WRITER_CODE_NAME = GameRecordAuthCode.ONLY_WRITER.name;
+
 	export default {
 		components: {
 			GameRecordAuthManageBtn,
@@ -93,7 +98,7 @@
 		methods: {
 			initModal() {
 				this.getGameRecorders();
-				this.getGameJoinTeamMembers();
+				this.initGameJoinTeamMembers();
 			},
 			async getGameRecorders() {
 				const params = {
@@ -104,7 +109,7 @@
 				this.gameRecorders = res.data.gameRecorders;
 				this.isGetGameRecordersLoadOk = true;
 			},
-			async getGameJoinTeamMembers() {
+			initGameJoinTeamMembers() {
 				const homeAwayCode = ValidationUtil.isNull(this.pHomeAwayCode)
 					? HomeAwayCode.HOME_TEAM
 					: this.pHomeAwayCode;
@@ -112,7 +117,16 @@
 					gameSeq: this.gameSeq,
 					homeAwayCode: homeAwayCode,
 				};
-
+				this.getGameJoinTeamMembers(params);
+			},
+			getOneSideTeamMembers(emitParams) {
+				const params = {
+					gameSeq: this.gameSeq,
+					homeAwayCode: emitParams.homeAwayCode,
+				};
+				this.getGameJoinTeamMembers(params);
+			},
+			async getGameJoinTeamMembers(params) {
 				const res = await GameAPI.getGameJoinTeamMembers(params);
 				this.gameJoinPlayers = res.data.gameJoinTeamMembers;
 				this.isGetGameJoinPlayersLoadOk = true;
@@ -139,8 +153,8 @@
 					return;
 				}
 				// 경기기록권한 코드값 할당 후 목록에 추가
-				targetPlayer.gameRecordAuthCode = GameRecordAuthCode.ONLY_WRITER;
-				targetPlayer.gameRecordAuthCodeName = '경기기록자';
+				targetPlayer.gameRecordAuthCode = ONLY_WRITER_CODE;
+				targetPlayer.gameRecordAuthCodeName = ONLY_WRITER_CODE_NAME;
 				this.gameRecorders.push(targetPlayer);
 			},
 			deleteGameRecorder(targetPlayer) {
@@ -157,7 +171,7 @@
 					return;
 				}
 
-				if (GameRecordAuthCode.CREATOR === deleteTarget.gameRecordAuthCode) {
+				if (deleteTarget.gameRecordAuthCode === CREATOR_CODE) {
 					alert('경기생성자는 삭제할 수 없습니다.');
 					return;
 				}

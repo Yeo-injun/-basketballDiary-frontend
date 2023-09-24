@@ -151,12 +151,13 @@
 				});
 			},
 			checkValidGameCreationInfo() {
-				const isValidGameInfo = this.$refs.gameCreationInfo.validate();
-				if (!isValidGameInfo) {
-					return false;
-				}
-
 				// TODO 시작시간이 종료시간보다 늦을 수 없음
+
+				const isValidGameInfo = this.$refs.gameCreationInfo.validate();
+				if (isValidGameInfo) {
+					return true;
+				}
+				return false;
 			},
 		},
 	};

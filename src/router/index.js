@@ -16,9 +16,9 @@ export default new VueRouter({
 	mode: 'history',
 	// routes: Vue router에 의해서 컨트롤되는 페이지 정보를 담는 array객체
 	routes: [
-		createRoute('views/AppMain', '/'),
+		createRoute('views/AppMain', '/', 'MainPage'),
 		createRoute('views/user/LoginPage', '/login', 'LoginPage'),
-		createRoute('views/user/SignupPage', '/signup'),
+		createRoute('views/user/SignupPage', '/signup', 'SignUpPage'),
 
 		/**
 		 * error페이지
@@ -45,7 +45,7 @@ export default new VueRouter({
 		),
 		createRoute(
 			'views/game/quarterRecordInputBoard/QuarterRecordInputBoardPage',
-			'/game/record/inputBoard',
+			'/game/quarter/record/inputBoard',
 			'QuarterRecordInputBoardPage'
 		),
 		createRoute(

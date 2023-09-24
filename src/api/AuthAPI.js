@@ -4,16 +4,19 @@ import axios from '../http/CustomAxios.js';
 const axiosService = axios.createAxiosInstance('/user');
 
 export default {
-	login(params) {
-		return axiosService.post('/login', params);
+	getAuthInfo() {
+		return axiosService.get('');
+	},
+	login(messge) {
+		return axiosService.post('/login', messge);
 	},
 	logout() {
 		return axiosService.post('/logout');
 	},
-	createUser(params) {
-		return axiosService.post('/registration', params);
+	createUser(messge) {
+		return axiosService.post('/registration', messge);
 	},
-	checkDuplicateUserId(params) {
-		return axiosService.post('/duplicationCheck', params);
+	checkDuplicateUserId(messge) {
+		return axiosService.post('/duplicationCheck', messge);
 	},
 };

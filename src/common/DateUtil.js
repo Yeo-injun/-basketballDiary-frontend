@@ -1,3 +1,5 @@
+import ValidationUtil from './util/ValidationUtil';
+
 const MON = '1';
 const TUE = '2';
 const WED = '3';
@@ -43,6 +45,7 @@ export default {
 			return SUN;
 		},
 	},
+	// TODO 삭제 예정
 	Times: {
 		getOptions(intervalMinutes) {
 			if (typeof intervalMinutes == 'undefined') {
@@ -84,17 +87,28 @@ export default {
 	Format: {
 		/* @return yyyy-mm-dd */
 		toYmd(strYmd) {
+			if (ValidationUtil.isNull(strYmd)) {
+				return '';
+			}
 			return Formatter.toYmd(strYmd);
 		},
 		/* @return yyyyMMdd */
 		toString(ymd) {
+			if (ValidationUtil.isNull(ymd)) {
+				return '';
+			}
 			return Formatter.toString(ymd);
 		},
 		/* @return hh:mm */
 		toTime(time) {
+			if (ValidationUtil.isNull(time)) {
+				return Formatter.toTimes('00', '00');
+			}
+
 			if (typeof time == 'number') {
 				time = String(time);
 			}
+
 			const hour = time.substr(0, 2);
 			const minute = time.substr(2, 2);
 			return Formatter.toTimes(hour, minute);
@@ -122,6 +136,8 @@ const Formatter = {
 		}
 		return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
 	},
+
+	// TODO 삭제 예정
 	toHHmm(hour, minute) {
 		if (typeof hour == 'number') {
 			hour = String(hour);

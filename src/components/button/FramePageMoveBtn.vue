@@ -52,6 +52,9 @@
 					query: this.pRouteParams,
 				});
 
+				// 버튼 클릭 후
+				// 페이지 전환하면서 후처리가 필요한 경우
+				// 상위 컴포넌트에서 @do-post-move 이벤트 처리하기
 				this.$emit(this.eventEmitName);
 			},
 		},

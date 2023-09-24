@@ -5,7 +5,7 @@
 				<v-col cols="12" sm="4" align-self="center">
 					<v-row no-gutters align-content="center" justify="center">
 						<div v-if="this.isHomeTeam()">
-							<QuarterTeamFoulComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
+							<FoulCountComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
 						</div>
 						<div v-else>
 							<h2>{{ this.pTeamQuarterRecords.score }}</h2>
@@ -28,7 +28,7 @@
 							<h2>{{ this.pTeamQuarterRecords.score }}</h2>
 						</div>
 						<div v-else>
-							<QuarterTeamFoulComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
+							<FoulCountComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
 						</div>
 					</v-row>
 				</v-col>
@@ -39,12 +39,11 @@
 
 <script>
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
-
-	import QuarterTeamFoulComp from '@/components/game/quarter/QuarterTeamFoulComp.vue';
+	import FoulCountComp from '@/components/game/stat/FoulCountComp.vue';
 
 	export default {
 		components: {
-			QuarterTeamFoulComp,
+			FoulCountComp,
 		},
 		props: {
 			pTeamQuarterRecords: Object,

@@ -9,7 +9,7 @@
 		</template>
 
 		<v-card>
-			<v-card-title>{{ this.pHomeAwayCodeName }} 엔트리 관리</v-card-title>
+			<v-card-title>{{ this.homeAwayCodeName }} 엔트리 관리</v-card-title>
 			<v-container>
 				<div class="text-right">
 					<SaveEntryBtn pBtnName="엔트리 저장" @do-save="saveEntry" />
@@ -17,7 +17,7 @@
 				<v-container>
 					<h4>엔트리 명단</h4>
 					<EntryTable
-						v-if="isGetEntryLoadOk"
+						v-if="isInit.gameEntry"
 						:pPlayers="entry"
 						pRowBtnName="삭제"
 						@get-row-player-info="deletePlayerFromEntry"
@@ -26,7 +26,7 @@
 				<v-container>
 					<h4>게임참가선수 목록</h4>
 					<GameJoinPlayerTable
-						v-if="isGetGameJoinPlayersLoadOk"
+						v-if="isInit.gameJoinPlayers"
 						:pPlayers="gameJoinPlayers"
 						pRowBtnName="추가"
 						@get-row-player-info="addPlayerToEntry"
@@ -51,9 +51,18 @@
 	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	export default {
 		mounted() {
+			alert('Modal Mounted');
+
 			// TODO 모달 호출시에 메소드 호출하도록 처리하기
 			this.getGameJoinPlayers();
 			this.getGameEntry();
+		},
+		created() {
+			alert('Modal Create');
+		},
+
+		beforeDestroy() {
+			alert('Modal Distroy');
 		},
 		components: {
 			EntryManageModalOpenBtn,
@@ -63,17 +72,20 @@
 		},
 		props: {
 			pHomeAwayCode: String,
-			pHomeAwayCodeName: String,
+			pModalState: Boolean,
 		},
 		data() {
 			const query = this.$route.query;
 			return {
 				gameSeq: query.gameSeq,
 				quarterCode: query.quarterCode,
+				homeAwayCodeName: this.getHomeAwayCodeName(),
+				isInit: {
+					gameEntry: false,
+					gameJoinPlayers: false,
+				},
 				dialog: false,
-				isGetEntryLoadOk: false,
 				entry: [],
-				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
 			};
 		},
@@ -98,7 +110,7 @@
 			},
 			// TODO 엔트리 조회 API 구현
 			async getGameEntry() {
-				this.isGetEntryLoadOk = true;
+				this.isInit.gameEntry = true;
 			},
 			// 게임참가선수 목록 조회
 			async getGameJoinPlayers() {
@@ -109,7 +121,7 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
-				this.isGetGameJoinPlayersLoadOk = true;
+				this.isInit.gameJoinPlayers = true;
 
 				switch (homeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
@@ -128,7 +140,7 @@
 					return;
 				}
 
-				if (ArrayUtil.hasItem(entry, targetPlayer, 'userSeq')) {
+				if (ArrayUtil.hasItem(entry, targetPlayer, 'gameJoinPlayerSeq')) {
 					alert('이미 등록되어 있는 선수입니다.');
 					return;
 				}
@@ -140,6 +152,17 @@
 					targetPlayer,
 					'userSeq'
 				);
+			},
+			getHomeAwayCodeName() {
+				const homeAwayCode = this.pHomeAwayCode;
+				switch (homeAwayCode) {
+					case HomeAwayCode.HOME_TEAM:
+						return '홈팀';
+					case HomeAwayCode.AWAY_TEAM:
+						return '어웨이팀';
+					default:
+						return '';
+				}
 			},
 		},
 	};

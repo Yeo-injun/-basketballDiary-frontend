@@ -11,7 +11,9 @@
 		</template>
 
 		<v-card>
-			<v-card-title> {{ pModalTitlePrefix }} 참가선수관리</v-card-title>
+			<v-card-title class="text-h5 grey lighten-2">
+				{{ pModalTitlePrefix }} 참가선수관리
+			</v-card-title>
 			<div class="text-right">
 				<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
 			</div>
@@ -25,7 +27,11 @@
 				/>
 			</v-container>
 
-			<GameJoinPlayerSelectionComp @add-game-join-player="addGameJoinPlayer" />
+			<GameJoinPlayerSelectionComp
+				v-if="isGetGameJoinPlayersLoadOk"
+				:pTeamSeq="this.teamSeq"
+				@add-game-join-player="addGameJoinPlayer"
+			/>
 		</v-card>
 	</v-dialog>
 </template>
@@ -59,14 +65,13 @@
 		},
 		props: {
 			pModalTitlePrefix: String,
-			pGameJoinTeamInfo: Object, //  TODO 삭제 예정
 			pHomeAwayCode: String,
 		},
 		data() {
 			const query = this.$route.query;
 			return {
 				gameSeq: query.gameSeq,
-
+				teamSeq: '',
 				dialog: false,
 				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
@@ -98,16 +103,18 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
-				this.isGetGameJoinPlayersLoadOk = true;
 
 				switch (this.pHomeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
+						this.teamSeq = res.data.homeTeam.teamSeq;
 						this.gameJoinPlayers = res.data.homeTeam.players;
 						break;
 					case HomeAwayCode.AWAY_TEAM:
+						this.teamSeq = res.data.awayTeam.teamSeq;
 						this.gameJoinPlayers = res.data.awayTeam.players;
 						break;
 				}
+				this.isGetGameJoinPlayersLoadOk = true;
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deleteGameJoinPlayer(targetPlayer) {
@@ -118,14 +125,14 @@
 						targetPlayer,
 						'email'
 					);
-					// 회원일떄는 userSeq로 지우기
-				} else {
-					this.gameJoinPlayers = ArrayUtil.deleteItemById(
-						this.gameJoinPlayers,
-						targetPlayer,
-						'userSeq'
-					);
+					return;
 				}
+				// 회원일떄는 userSeq로 지우기
+				this.gameJoinPlayers = ArrayUtil.deleteItemById(
+					this.gameJoinPlayers,
+					targetPlayer,
+					'userSeq'
+				);
 			},
 			addGameJoinPlayer(targetPlayer) {
 				if (this.checkDuplicate(targetPlayer)) {

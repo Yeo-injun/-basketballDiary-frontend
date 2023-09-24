@@ -5,7 +5,6 @@
 			:pBtnName="this.getPageMoveInfo().btnName"
 			:pRoutePageName="this.getPageMoveInfo().routePageName"
 			:pRouteParams="this.getPageMoveInfo().routeParams"
-			@do-post-move="this.testFunc"
 		/>
 		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
@@ -28,6 +27,14 @@
 	import QuarterScoreBoardComp from '@/components/game/QuarterScoreBoardComp.vue';
 
 	import { GameRecordStateCode } from '@/const/code/GameCode.js';
+
+	/*-----------------------------
+	/*	코드값 
+	/*-----------------------------*/
+	const CREATION_CODE = GameRecordStateCode.CREATION.code;
+	const JOIN_TEAM_CONFIRMATION_CODE =
+		GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
+	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;
 
 	export default {
 		components: {
@@ -59,20 +66,18 @@
 		},
 		methods: {
 			getPageMoveInfo() {
-				if (this.gameRecordStateCode == GameRecordStateCode.CREATION) {
+				if (this.gameRecordStateCode == CREATION_CODE) {
 					return this._getPageMoveInfo(
 						'참가팀선택하기',
 						'GameJoinTeamSelectionPage'
 					);
 				}
 
-				if (
-					this.gameRecordStateCode == GameRecordStateCode.JOIN_TEAM_CONFIRMATION
-				) {
+				if (this.gameRecordStateCode == JOIN_TEAM_CONFIRMATION_CODE) {
 					return this._getPageMoveInfo('기록하기', 'GameRecordDetailPage');
 				}
 
-				if (this.gameRecordStateCode == GameRecordStateCode.CONFIRMATION) {
+				if (this.gameRecordStateCode == GAME_CONFIRMATION_CODE) {
 					return this._getPageMoveInfo('상세보기', 'GameRecordDetailPage');
 				}
 
@@ -88,16 +93,10 @@
 				};
 			},
 			_getRouteParams() {
-				const routeQuery = this.$route.query;
 				return {
 					gameSeq: this.gameSeq,
 					gameRecordState: this.pGame.gameRecordStateCode,
-					teamSeq: routeQuery.teamSeq,
-					teamName: routeQuery.teamName,
 				};
-			},
-			testFunc() {
-				alert('실행');
 			},
 		},
 	};
