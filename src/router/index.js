@@ -68,7 +68,7 @@ export default new VueRouter({
 			'MyTeamDetailPage'
 		),
 		createRoute(
-			'views/myTeam/memeberManage/MyTeamMemberManagePage',
+			'views/myTeam/memberManage/MyTeamMemberManagePage',
 			'/myTeam/teamMemberManage',
 			'MyTeamMemberManagePage'
 		),
