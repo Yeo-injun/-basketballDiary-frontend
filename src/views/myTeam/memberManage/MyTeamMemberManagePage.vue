@@ -20,8 +20,8 @@
 </template>
 
 <script>
-	import JoinRequestPlayerListTab from '@/views/myTeam/memeberManage/tab/JoinRequestPlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
-	import InvitePlayerListTab from '@/views/myTeam/memeberManage/tab/InvitePlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
+	import JoinRequestPlayerListTab from '@/views/myTeam/memberManage/tab/JoinRequestPlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
+	import InvitePlayerListTab from '@/views/myTeam/memberManage/tab/InvitePlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
 
 	export default {
 		components: {

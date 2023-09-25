@@ -29,7 +29,7 @@
 
 <script>
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
-	import PlayerInviteModal from '@/components/myTeam/modal/PlayerInviteModal.vue';
+	import PlayerInviteModal from '@/views/myTeam/memberManage/tab/modal/PlayerInviteModal.vue';
 
 	export default {
 		components: {
