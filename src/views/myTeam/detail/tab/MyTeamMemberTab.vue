@@ -137,9 +137,6 @@
 				const teamSeq = this.teamSeq;
 				this.$router.push({
 					name: 'MyTeamMemberManagePage',
-					// TODO 걷어내기
-					params: { pTeamSeq: teamSeq },
-					// TODO 적용하기
 					query: { teamSeq: teamSeq },
 				});
 			},
