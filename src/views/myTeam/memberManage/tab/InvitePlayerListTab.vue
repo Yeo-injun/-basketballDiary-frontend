@@ -5,7 +5,10 @@
 				<v-row>
 					<v-col> 초대한 선수 목록 </v-col>
 					<v-col>
-						<PlayerInviteModal :pTeamSeq="pTeamSeq" />
+						<PlayerInviteModal
+							@close="searchInvitedPlayer"
+							:pTeamSeq="pTeamSeq"
+						/>
 					</v-col>
 				</v-row>
 			</v-card-title>

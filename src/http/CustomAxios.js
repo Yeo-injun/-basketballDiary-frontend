@@ -63,9 +63,6 @@ export default {
 			},
 			function (error) {
 				LoadingStateManager.mutations.loadingEnd();
-				/** Promise.reject() return의 효과
-				 *  에러를 API를 호출한 Axios에게 넘겨줌 - API를 호출한 곳에서 try ~ catch문으로 예외처리
-				 **/
 				console.log('======= 인터셉터 진입 : 에러 발생 =======');
 				const isNotConectNetwork = typeof error.response == 'undefined';
 				if (isNotConectNetwork) {
@@ -75,11 +72,19 @@ export default {
 
 				// 예외에 따라 메세지 알림창 호출
 				const errorMessage = error.response.data.message;
-				alert(errorMessage);
+				if (undefined !== errorMessage && null !== errorMessage) {
+					alert(errorMessage);
+				}
 
+				// HTTP STATUS CODE에 따라서 페이지 라우팅
 				const statusCode = error.response.status;
 				const errorCodeName = error.response.data.code;
 				routeErrorPage(statusCode, errorCodeName);
+				/**-------------------------------------
+				 * Promise.reject() return의 효과
+				 * - 에러를 API를 호출한 Axios에게 넘겨줌
+				 * - API를 호출한 곳에서 try ~ catch문으로 예외처리 할 수 있음
+				 **------------------------------------*/
 				return Promise.reject(error);
 			}
 		);

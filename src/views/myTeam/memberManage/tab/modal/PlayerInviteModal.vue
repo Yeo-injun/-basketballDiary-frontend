@@ -99,6 +99,7 @@
 				}
 				// 팝업창이 닫히면 검색조건 초기화
 				this.clearSearchCondAndKeyword();
+				this.$emit('close');
 			},
 		},
 		methods: {
@@ -149,20 +150,8 @@
 					teamSeq: this.pTeamSeq,
 					userSeq: e.userSeq,
 				};
-				const response = await this.inviteTeamMember(params);
-				if (response.status == '200') {
-					alert('초대 완료했습니다. 선수의 승인을 기다리세요.');
-					return;
-				}
-				alert(response.message);
-			},
-			async inviteTeamMember(params) {
-				try {
-					const res = await MyTeamAPI.inviteTeamMember(params);
-					return res;
-				} catch (error) {
-					return error.response.data;
-				}
+				await MyTeamAPI.inviteTeamMember(params);
+				alert('초대 완료했습니다. 선수의 승인을 기다리세요.');
 			},
 		},
 	};
