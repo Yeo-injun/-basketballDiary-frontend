@@ -67,11 +67,10 @@
 		},
 		methods: {
 			async searchInvitedPlayer() {
-				const params = {
-					teamSeq: this.pTeamSeq,
-					state: this.filterCond,
-				};
-				const res = await MyTeamAPI.searchInvitedPlayer(params);
+				const res = await MyTeamAPI.searchInvitedPlayer(
+					this.pTeamSeq,
+					this.filterCond
+				);
 				this.invitedPlayers = res.data;
 			},
 		},
