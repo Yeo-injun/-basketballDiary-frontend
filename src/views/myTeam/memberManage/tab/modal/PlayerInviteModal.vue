@@ -25,7 +25,7 @@
 						item-text="text"
 						item-value="value"
 						label="검색조건을 선택해주세요."
-					></v-select>
+					/>
 
 					<v-text-field label="검색어" v-model="searchKeyword" />
 
@@ -55,15 +55,9 @@
 </template>
 
 <script>
-	/**
-	 * TODO
-	 * 1. 모달창 꺼지면 검색어 input된 데이터 초기화하기
-	 * 2. 사용자 선택해서 초대보내기
-	 *
-	 */
-
 	import UserAPI from '@/api/UserAPI.js';
-	import MyTeamAPI from '@/api/MyTeamAPI';
+	import MyTeamAPI from '@/api/MyTeamAPI.js';
+
 	export default {
 		props: {
 			pTeamSeq: Number,

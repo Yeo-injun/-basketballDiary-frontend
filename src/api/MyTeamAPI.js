@@ -35,7 +35,7 @@ export default {
 	/* API002 : 소속팀 팀원목록 조회 */
 	getTeamMembers(teamSeq, pageNo) {
 		return axiosService.get(`/${teamSeq}/members`, {
-			messge: {
+			params: {
 				pageNo: pageNo,
 			},
 		});
@@ -52,10 +52,10 @@ export default {
 	 * injun
 	 */
 	/* API005 : 소속팀의 초대한 선수목록 조회 */
-	searchInvitedPlayer(messge) {
+	searchInvitedPlayer(teamSeq, inviteState) {
 		// TODO 왜 2번째 인자를 {}로 감싸야만 하는지 확인 -> 2번째 파라미터 자체가 객체여야 하고, 쿼리스트링으로 사용하기 위해서는 params속성의 값이 쿼리스트링이 됨
-		return axiosService.get(`/${messge.teamSeq}/joinRequestsTo`, {
-			messge: { state: messge.state },
+		return axiosService.get(`/${teamSeq}/joinRequestsTo`, {
+			params: { state: inviteState },
 		});
 	},
 	/* API007 : 소속팀의 선수초대 */
@@ -67,7 +67,7 @@ export default {
 	/* API008 : 소속팀이 받은 가입요청목록 조회 */
 	searchJoinRequestPlayer(messge) {
 		return axiosService.get(`/${messge.teamSeq}/joinRequestsFrom`, {
-			messge: { state: messge.state },
+			params: { state: messge.state },
 		});
 	},
 	/* API009 : 소속팀이 사용자의 가입요청 승인 */
@@ -107,7 +107,7 @@ export default {
 	/* API036 : 소속팀 전체 팀원 검색 */
 	searchAllTeamMembers(messge) {
 		return axiosService.get(`/${messge.teamSeq}/allTeamMembers`, {
-			messge: {
+			params: {
 				pageNo: messge.pageNo,
 				playerName: messge.playerName,
 			},
