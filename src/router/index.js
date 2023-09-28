@@ -106,7 +106,7 @@ export default new VueRouter({
 
 // TODO  클래스로 만들어서 생성자로 객체 만들기
 function createRoute(componentPath, urlPath, componentName, childernList) {
-	var route = {
+	return {
 		path: urlPath,
 		/**
 		 * https://jess2.xyz/vue/vue-tip/ 의 2. Router&컴포넌트 설계 참고
@@ -118,5 +118,4 @@ function createRoute(componentPath, urlPath, componentName, childernList) {
 		name: componentName,
 		props: true,
 	};
-	return route;
 }
