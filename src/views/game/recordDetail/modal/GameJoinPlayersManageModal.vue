@@ -27,7 +27,7 @@
 				/>
 			</v-container>
 
-			<GameJoinPlayerSelectionComp
+			<GameJoinPlayerSelectionTabs
 				v-if="isGetGameJoinPlayersLoadOk"
 				:pTeamSeq="this.teamSeq"
 				@add-game-join-player="addGameJoinPlayer"
@@ -51,7 +51,7 @@
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
-	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
+	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 	import { PlayerTypeCode } from '@/const/code/PlayerCode';
 	export default {
 		mounted() {
@@ -61,7 +61,7 @@
 			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
 			PlayerDataTable,
-			GameJoinPlayerSelectionComp,
+			GameJoinPlayerSelectionTabs,
 		},
 		props: {
 			pModalTitlePrefix: String,
