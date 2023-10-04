@@ -1,6 +1,11 @@
 <template>
 	<v-card>
-		<v-card-title :class="this.btnColor" @click="emitStatTypeInfo()">
+		<v-card-title
+			:class="this.btnColor"
+			@click="emitAddStatInfo"
+			@mouseout="emitCancelStatInfo"
+		>
+			<!-- TODO 취소 이벤트를 어떤 것을 적용할지 고민이 필요 -->
 			<!-- <p>{{ this.statBtnName }}</p> -->
 			<div class="font-bold">
 				{{ this.pCount }}
@@ -20,6 +25,7 @@
 			pType: String,
 			pCount: Number,
 			pActiveMode: String,
+			pGameJoinPlayerSeq: Number,
 		},
 		data() {
 			return {
@@ -38,8 +44,20 @@
 			},
 		},
 		methods: {
-			emitStatTypeInfo() {
-				this.$emit('get-stat-type', this.pType);
+			emitAddStatInfo() {
+				console.log(this.pGameJoinPlayerSeq);
+				this.$emit('add-stat', {
+					gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+					statType: this.pType,
+					mode: RecordMode.ADD,
+				});
+			},
+			emitCancelStatInfo() {
+				this.$emit('cancel-stat', {
+					gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+					statType: this.pType,
+					mode: RecordMode.CANCEL,
+				});
 			},
 			isNegativeStat(statType) {
 				if (
