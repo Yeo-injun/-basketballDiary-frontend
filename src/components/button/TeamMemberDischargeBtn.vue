@@ -14,7 +14,10 @@
 
 	export default {
 		props: {
-			pTeamSeq: String,
+			pTeamSeq: {
+				type: Number,
+				required: true,
+			},
 			pTeamMemberSeq: Number,
 		},
 		methods: {
@@ -23,13 +26,9 @@
 					teamSeq: this.pTeamSeq,
 					teamMemberSeq: this.pTeamMemberSeq,
 				};
-				try {
-					const res = await MyTeamAPI.dischargeTeamMember(params);
-					if (res.status == '200') {
-						alert('강퇴 되었습니다.');
-					}
-				} catch (e) {
-					console.log(e);
+				const res = await MyTeamAPI.dischargeTeamMember(params);
+				if (res.status == '200') {
+					alert('강퇴 되었습니다.');
 				}
 			},
 		},

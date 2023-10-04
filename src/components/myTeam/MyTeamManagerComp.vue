@@ -57,7 +57,10 @@
 		},
 		props: {
 			pTeamManager: Object,
-			pTeamSeq: String,
+			pTeamSeq: {
+				type: Number,
+				required: true,
+			},
 		},
 		methods: {
 			isLeaderAuth() {

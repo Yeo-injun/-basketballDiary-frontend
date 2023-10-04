@@ -96,7 +96,7 @@
 		data() {
 			return {
 				isAsyncComplete: false,
-				teamSeq: this.$route.query.teamSeq,
+				teamSeq: Number(this.$route.query.teamSeq),
 				profile: {},
 				managers: [],
 				teamMembers: [],
