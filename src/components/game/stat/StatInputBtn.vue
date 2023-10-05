@@ -3,7 +3,7 @@
 		<v-card-title
 			:class="this.btnColor"
 			@click="emitAddStatInfo"
-			@mouseout="emitCancelStatInfo"
+			v-touch:swipe="emitCancelStatInfo"
 		>
 			<!-- TODO 취소 이벤트를 어떤 것을 적용할지 고민이 필요 -->
 			<!-- <p>{{ this.statBtnName }}</p> -->

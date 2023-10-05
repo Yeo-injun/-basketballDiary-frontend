@@ -7,6 +7,7 @@
 			<h1>환영합니다. {{ loginUserInfo.userId }}님</h1>
 		</div>
 		<!-- 새로고침하면 Vue Store에서 가지고 있는 세션정보들이 날라감. 화면에서 세션상태를 유지할 수 있는 방법 고민...  -->
+		<v-btn v-touch="test"> TOUCH MANY VERY </v-btn>
 	</v-container>
 </template>
 
@@ -20,6 +21,11 @@
 			},
 			loginUserInfo() {
 				return AuthUtil.getAuthUserInfo();
+			},
+		},
+		methods: {
+			test() {
+				alert('TEST');
 			},
 		},
 	};
