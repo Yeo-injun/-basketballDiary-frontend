@@ -51,18 +51,9 @@
 	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	export default {
 		mounted() {
-			alert('Modal Mounted');
-
 			// TODO 모달 호출시에 메소드 호출하도록 처리하기
 			this.getGameJoinPlayers();
 			this.getGameEntry();
-		},
-		created() {
-			alert('Modal Create');
-		},
-
-		beforeDestroy() {
-			alert('Modal Distroy');
 		},
 		components: {
 			EntryManageModalOpenBtn,
