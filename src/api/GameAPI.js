@@ -1,7 +1,18 @@
 import axios from '@/http/CustomAxios.js';
+import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 const axiosService = axios.createAxiosInstance('/games');
-
+/**
+ * API 메소드 생성 규칙
+ * 1. 메소드의 파라미터는 사용되는 용도에 맞게 분리한다.
+ * 	- PathVariable
+ * 	- QueryString
+ * 	- RequestBody
+ *
+ * 2. 메소드 내부에서 API 메세지 규약을 체크한다.
+ * 	- 필수값 여부
+ * 	- 값의 Type, 길이 등
+ */
 export default {
 	/**
 	 * API035 게임참가 선수등록하기
@@ -17,13 +28,16 @@ export default {
 	/**
 	 * API038 쿼터기록 저장하기
 	 */
-	saveQuarterRecords(params) {
+	saveQuarterRecords(pathVar, reqBody) {
+		if (ValidationUtil.isNull(reqBody.quarterTime)) {
+			throw new Error('쿼터시간은 필수 입력항목입니다.');
+		}
 		return axiosService.put(
-			`/${params.gameSeq}/quarters/${params.quarterCode}`,
+			`/${pathVar.gameSeq}/quarters/${pathVar.quarterCode}`,
 			{
-				quarterTime: params.quarterTime,
-				homeTeamPlayerRecords: params.homeTeamPlayerRecords,
-				awayTeamPlayerRecords: params.awayTeamPlayerRecords,
+				quarterTime: reqBody.quarterTime,
+				homeTeamPlayerRecords: reqBody.homeTeamPlayerRecords,
+				awayTeamPlayerRecords: reqBody.awayTeamPlayerRecords,
 			}
 		);
 	},
