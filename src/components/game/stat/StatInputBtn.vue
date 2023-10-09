@@ -1,20 +1,30 @@
 <template>
-	<v-card>
-		<v-card-title
-			:class="this.btnColor"
-			@click="emitAddStatInfo"
-			v-touch:swipe="emitCancelStatInfo"
-		>
-			<!-- TODO 취소 이벤트를 어떤 것을 적용할지 고민이 필요 -->
-			<!-- <p>{{ this.statBtnName }}</p> -->
-			<div class="font-bold">
-				{{ this.pCount }}
-			</div>
-		</v-card-title>
-	</v-card>
+	<v-btn
+		:class="this.btnColor"
+		@touchstart="initTouches"
+		@touchmove="clasifyGesture"
+		@touchend="emitStatInfoByGesture"
+	>
+		{{ this.pCount }}</v-btn
+	>
 </template>
 
 <script>
+	// <v-card>
+	// 	<v-card-title
+	// 		:class="this.btnColor"
+	// 		@click="emitAddStatInfo"
+	// 		@touchstart="saveStartPosition"
+	// 		@touchmove="clasifyGesture"
+	// 		@touchEnd="emitStatInfoByGesture"
+	// 	>
+	// 		<!-- TODO 취소 이벤트를 어떤 것을 적용할지 고민이 필요 -->
+	// 		<!-- <p>{{ this.statBtnName }}</p> -->
+	// 		<div class="font-bold">
+	// 			{{ this.pCount }}
+	// 		</div>
+	// 	</v-card-title>
+	// </v-card>
 	import {
 		StatType,
 		RecordMode,
@@ -30,6 +40,10 @@
 		data() {
 			return {
 				statBtnName: this.getStatBtnName(),
+				touches: {
+					startX: 0,
+					gestureType: 'touch',
+				},
 			};
 		},
 		computed: {
@@ -44,8 +58,36 @@
 			},
 		},
 		methods: {
+			initTouches(e) {
+				this.touches.gestureType = 'touch';
+				this.touches.startX = e.touches[0].screenX;
+			},
+			clasifyGesture(e) {
+				const gestureDistance = 10;
+				const moveDistance = this.touches.startX - e.touches[0].screenX;
+				if (moveDistance + gestureDistance < 0) {
+					this.touches.gestureType = 'rightSwipe';
+				}
+			},
+			emitStatInfoByGesture() {
+				switch (this.touches.gestureType) {
+					case 'rightSwipe':
+						this.$emit('cancel-stat', {
+							gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+							statType: this.pType,
+							mode: RecordMode.CANCEL,
+						});
+						return;
+					case 'touch':
+						this.$emit('add-stat', {
+							gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+							statType: this.pType,
+							mode: RecordMode.ADD,
+						});
+						return;
+				}
+			},
 			emitAddStatInfo() {
-				console.log(this.pGameJoinPlayerSeq);
 				this.$emit('add-stat', {
 					gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
 					statType: this.pType,
