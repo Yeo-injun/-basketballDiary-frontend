@@ -16,9 +16,27 @@
 			return {
 				lastTapTime: 0,
 				timeSinceLastTap: 0,
+				touchPositions: {
+					startX: 0,
+					startY: 0,
+					endX: 0,
+					endY: 0,
+				},
+				isRightSwipe: false,
 			};
 		},
 		methods: {
+			isDoubleTap() {
+				const currentTime = new Date().getTime();
+				this.timeSinceLastTap = currentTime - this.lastTapTime;
+
+				if (this.timeSinceLastTap < 300) {
+					return true;
+				}
+				this.lastTapTime = currentTime;
+
+				return false;
+			},
 			onRightButtonClick(e) {
 				console.log(e);
 				console.log(
@@ -26,31 +44,34 @@
 				);
 				e.preventDefault();
 			},
-			onTouchStart() {
-				const currentTime = new Date().getTime();
-				this.timeSinceLastTap = currentTime - this.lastTapTime;
-				if (this.timeSinceLastTap < 300) {
-					console.log('DobleTab');
-					// console.log(this.lastTapTime);
-				}
-				// else {
-				// 	console.log('Tab');
-				// 	// console.log(this.lastTapTime);
-				// }
+			onTouchStart(e) {
+				console.log('TouchStart');
+				console.log(e);
+				this.touchPositions.startX = e.touches[0].screenX;
+				this.touchPositions.startY = e.touches[0].screenY;
 
-				this.lastTapTime = currentTime;
+				if (this.isDoubleTap()) {
+					console.log('DobleTab');
+				}
 			},
-			onTouchEnd() {
-				if (this.timeSinceLastTap < 300) {
-					// console.log('DobleTab');
-					// console.log(this.lastTapTime);
-				} else {
-					console.log('TouchEnd');
-				} // console.log(this.lastTapTime);
+			onTouchEnd(e) {
+				console.log('TouchEnd');
+				console.log(e);
+				if (this.isRightSwipe) {
+					console.log('RightSwipeDone');
+					alert('RightSwipeDone');
+					this.isRightSwipe = false;
+				}
 			},
 			onTouchMove(e) {
-				console.log('MOVE');
-				console.log(e);
+				// console.log('MOVE');
+				console.log(this.touchPositions.startX - e.touches[0].screenX);
+				const distance = 10;
+				const isEnoughMoveToRight =
+					this.touchPositions.startX - e.touches[0].screenX + distance < 0;
+				if (isEnoughMoveToRight) {
+					this.isRightSwipe = true;
+				}
 			},
 			onClick() {
 				console.log('CLICK');
