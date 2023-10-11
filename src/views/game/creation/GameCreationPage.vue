@@ -136,9 +136,9 @@
 						gameStartTime: this.gameStartTime,
 						gameEndTime: this.gameEndTime,
 						gamePlaceAddress: this.gamePlaceAddress,
-						gamePlaceName: this.sidoCode,
-						sidoCode: this.sigunguCode,
-						sigunguCode: this.gamePlaceName,
+						gamePlaceName: this.gamePlaceName,
+						sidoCode: this.sidoCode,
+						sigunguCode: this.sigunguCode,
 					},
 				};
 

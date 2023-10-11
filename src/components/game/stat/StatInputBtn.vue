@@ -1,30 +1,15 @@
 <template>
 	<v-btn
 		:class="this.btnColor"
-		@touchstart="initTouches"
-		@touchmove="clasifyGesture"
-		@touchend="emitStatInfoByGesture"
+		@touchstart="onInitTouches"
+		@touchmove="onClasifyGesture"
+		@touchend="onEmitStatInfoByGesture"
 	>
 		{{ this.pCount }}</v-btn
 	>
 </template>
 
 <script>
-	// <v-card>
-	// 	<v-card-title
-	// 		:class="this.btnColor"
-	// 		@click="emitAddStatInfo"
-	// 		@touchstart="saveStartPosition"
-	// 		@touchmove="clasifyGesture"
-	// 		@touchEnd="emitStatInfoByGesture"
-	// 	>
-	// 		<!-- TODO 취소 이벤트를 어떤 것을 적용할지 고민이 필요 -->
-	// 		<!-- <p>{{ this.statBtnName }}</p> -->
-	// 		<div class="font-bold">
-	// 			{{ this.pCount }}
-	// 		</div>
-	// 	</v-card-title>
-	// </v-card>
 	import {
 		StatType,
 		RecordMode,
@@ -58,18 +43,18 @@
 			},
 		},
 		methods: {
-			initTouches(e) {
+			onInitTouches(e) {
 				this.touches.gestureType = 'touch';
 				this.touches.startX = e.touches[0].screenX;
 			},
-			clasifyGesture(e) {
+			onClasifyGesture(e) {
 				const gestureDistance = 10;
 				const moveDistance = this.touches.startX - e.touches[0].screenX;
 				if (moveDistance + gestureDistance < 0) {
 					this.touches.gestureType = 'rightSwipe';
 				}
 			},
-			emitStatInfoByGesture() {
+			onEmitStatInfoByGesture() {
 				switch (this.touches.gestureType) {
 					case 'rightSwipe':
 						this.$emit('cancel-stat', {
