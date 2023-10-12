@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container v-if="this.init.isDone">
 		<h2>농구게임 쿼터조회</h2>
 		<v-container>
 			경기일자 : {{ this.gameYmd }} / 경기시간 : {{ this.gameTime }}
@@ -50,6 +50,9 @@
 		},
 		data() {
 			return {
+				init: {
+					isDone: false,
+				},
 				gameYmd: '',
 				gameTime: '',
 				quarterCodeName: '',
@@ -71,6 +74,7 @@
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);
+				console.log('getGameQuarterRecords@@@@@@@@@@@@');
 				const resMessage = res.data;
 				this.gameYmd = DateUtil.Format.toYmd(resMessage.gameYmd);
 				this.gameTime = `${DateUtil.Format.toTime(resMessage.gameStartTime)} 
@@ -89,6 +93,7 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayerRecordsByQuarter(params);
+				console.log('getALLGameJoinPlayerRecordsByQuarter@@@@@@@@@@@@');
 				const resBody = res.data;
 				this.homeTeamPlayers = resBody.homeTeamPlayers;
 				this.awayTeamPlayers = resBody.awayTeamPlayers;
@@ -108,9 +113,10 @@
 				}
 			},
 		},
-		mounted() {
-			this.getGameQuarterRecords();
-			this.getALLGameJoinPlayerRecordsByQuarter();
+		async mounted() {
+			await this.getGameQuarterRecords();
+			await this.getALLGameJoinPlayerRecordsByQuarter();
+			this.init.isDone = true;
 		},
 	};
 </script>

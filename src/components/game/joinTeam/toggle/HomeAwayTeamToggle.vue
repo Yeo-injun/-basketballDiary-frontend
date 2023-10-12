@@ -40,6 +40,9 @@
 			pAwayTeamCodeName: String,
 		},
 		data() {
+			console.log('HomeAwayTeamToggle=====================');
+			console.log(this.pHomeTeamName);
+			console.log(this.pAwayTeamName);
 			return {
 				homeTeamCode: HomeAwayCode.HOME_TEAM,
 				awayTeamCode: HomeAwayCode.AWAY_TEAM,
