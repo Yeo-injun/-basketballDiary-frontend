@@ -134,17 +134,18 @@
 			},
 			// 아이디 중복체크  API - 중복체크 후 다시 아이디를 고쳤을때
 			async checkDuplicateUserId() {
-				const params = {
+				const { isDuplicated } = await AuthAPI.checkDuplicateUserId({
 					userId: this.userRegInfo.userId,
-				};
-				try {
-					await AuthAPI.checkDuplicateUserId(params);
-					this.isNotDuplicateUserId = true;
-					alert('사용할 수 있는 ID입니다!');
-				} catch (e) {
-					// 중복 오류메세지는 CustomAxios.js의 언터셉터에서 처리
+				});
+
+				if (isDuplicated) {
 					this.isNotDuplicateUserId = false;
+					alert('중복된 ID가 존재합니다.');
+					return;
 				}
+
+				this.isNotDuplicateUserId = true;
+				alert('사용할 수 있는 ID입니다!');
 			},
 			// 비밀번호 확인 로직
 			checkPassword() {
