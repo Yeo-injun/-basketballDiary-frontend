@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="dialog" max-width="800px">
+	<v-dialog v-model="isModalOpen" max-width="800px">
 		<!-- activator 영역 : 팝업이 뜨기전에 보여줄 컴포넌트들 -->
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
@@ -50,11 +50,6 @@
 	import EntryTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 	export default {
-		mounted() {
-			// TODO 모달 호출시에 메소드 호출하도록 처리하기
-			this.getGameJoinPlayers();
-			this.getGameEntry();
-		},
 		components: {
 			EntryManageModalOpenBtn,
 			SaveEntryBtn,
@@ -68,43 +63,54 @@
 		data() {
 			const query = this.$route.query;
 			return {
-				gameSeq: query.gameSeq,
-				quarterCode: query.quarterCode,
-				homeAwayCodeName: this.getHomeAwayCodeName(),
+				isModalOpen: false,
 				isInit: {
 					gameEntry: false,
 					gameJoinPlayers: false,
 				},
-				dialog: false,
+				gameSeq: query.gameSeq,
+				quarterCode: query.quarterCode,
+				homeAwayCodeName: this.getHomeAwayCodeName(),
 				entry: [],
 				gameJoinPlayers: [],
 			};
 		},
+		// TODO 모달 공통 컴포넌트 만들기... 공통 동작 반영
+		watch: {
+			isModalOpen(isOpen) {
+				// 모달이 OPEN됐을때 동작
+				if (isOpen) {
+					this.loadSavedEntry();
+					this.loadGameJoinPlayers();
+					return;
+				}
+				// 모달이 닫혔을때 동작
+			},
+		},
 		methods: {
-			// TODO 엔트리 저장 API 붙이기 및 모달 닫기
-			async saveEntry() {
+			async loadSavedEntry() {
 				const params = {
 					gameSeq: this.gameSeq,
 					homeAwayCode: this.pHomeAwayCode,
 					quarterCode: this.quarterCode,
-					playerList: this.entry,
 				};
-				console.log(params);
-				const res = await GameAPI.saveEntry(params);
-				console.log(res);
-				// TODO API 리턴으로 저장한 엔트리 던져주기
 
-				this.$emit('save-entry');
+				const res = await GameAPI.getGameEntry(params);
 
-				// 모달창 닫기
-				this.dialog = false;
-			},
-			// TODO 엔트리 조회 API 구현
-			async getGameEntry() {
+				switch (params.homeAwayCode) {
+					case HomeAwayCode.HOME_TEAM:
+						this.entry = res.data.homeTeamEntry.entry;
+						break;
+					case HomeAwayCode.AWAY_TEAM:
+						this.entry = res.data.awayTeamEntry.entry;
+						break;
+				}
+
+				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
 				this.isInit.gameEntry = true;
 			},
 			// 게임참가선수 목록 조회
-			async getGameJoinPlayers() {
+			async loadGameJoinPlayers() {
 				const homeAwayCode = this.pHomeAwayCode;
 				const params = {
 					gameSeq: this.gameSeq,
@@ -112,7 +118,6 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayers(params);
-				this.isInit.gameJoinPlayers = true;
 
 				switch (homeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
@@ -122,7 +127,25 @@
 						this.gameJoinPlayers = res.data.awayTeam.players;
 						break;
 				}
+
+				this.isInit.gameJoinPlayers = true;
 			},
+			// 엔트리 저장 및 모달 닫기
+			async saveEntry() {
+				const params = {
+					gameSeq: this.gameSeq,
+					homeAwayCode: this.pHomeAwayCode,
+					quarterCode: this.quarterCode,
+					playerList: this.entry,
+				};
+
+				await GameAPI.saveEntry(params);
+				this.$emit('save-entry');
+
+				// 모달창 닫기
+				this.isModalOpen = false;
+			},
+
 			addPlayerToEntry(targetPlayer) {
 				const entry = this.entry;
 				const MAX_PLAYRERS = 5;
@@ -141,7 +164,8 @@
 				this.entry = ArrayUtil.deleteItemById(
 					this.entry,
 					targetPlayer,
-					'userSeq'
+					// 'userSeq'
+					'email' // TODO 참가선수 등록할때 key가 email임. 맞는지 재확인 필요
 				);
 			},
 			getHomeAwayCodeName() {
