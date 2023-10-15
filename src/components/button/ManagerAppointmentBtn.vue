@@ -9,7 +9,10 @@
 
 	export default {
 		props: {
-			pTeamSeq: String,
+			pTeamSeq: {
+				type: Number,
+				required: true,
+			},
 			pTeamMemberSeq: Number,
 		},
 		methods: {

@@ -4,7 +4,7 @@
 <template>
 	<v-container>
 		<h2>게임참가팀 선택</h2>
-		<v-btn @click="confirmGameJoinTeam">참가팀 확정</v-btn>
+		<v-btn @click="onConfirmGameJoinTeam">참가팀 확정</v-btn>
 
 		<v-select
 			v-model="selectedGameType"
@@ -18,7 +18,7 @@
 			v-if="isMatchUpGame()"
 			@select-opponent="setOpponentTeamSeq"
 		/>
-		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="moveMainPage" />
+		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="onMovePage" />
 	</v-container>
 </template>
 
@@ -70,8 +70,7 @@
 			setOpponentTeamSeq(opponentTeamSeq) {
 				this.opponentTeamSeq = opponentTeamSeq;
 			},
-			/* API062 게임참가팀 확정 */
-			async confirmGameJoinTeam() {
+			async onConfirmGameJoinTeam() {
 				const params = {
 					gameSeq: this.gameSeq,
 					gameJoinTeamInfo: this.getGameJoinTeamInfo(),
@@ -83,6 +82,15 @@
 					query: {
 						gameSeq: this.gameSeq,
 						gameRecordState: JOIN_TEAM_CONFIRMATION_CODE,
+					},
+				});
+			},
+			onMovePage() {
+				this.$router.push({
+					name: 'MyTeamDetailPage',
+					query: {
+						gameSeq: this.gameSeq,
+						teamSeq: this.$route.query.teamSeq,
 					},
 				});
 			},
@@ -102,10 +110,6 @@
 					gameTypeCode: MATCH_UP_GAME_CODE,
 					opponentTeamSeq: this.opponentTeamSeq,
 				};
-			},
-			moveMainPage() {
-				// TODO 메인페이지로 이동하는 라우터 등록
-				alert('메인페이지 이동 구현');
 			},
 		},
 	};

@@ -5,50 +5,31 @@
 				<h3>선수기록지</h3>
 			</v-col>
 			<v-col>
-				<!-- <div class="text-right" v-bind="attrs" v-on="on">
-					<EntryManageModalOpenBtn
-						@do-open="openEntryManageModal"
-						pBtnName="엔트리관리"
-					/>
-				</div> -->
-				<!-- <EntryManageModal
-					v-if="this.modalState.isOpenEntryManage"
-					:pModalState="this.modalState.isOpenEntryManage"
-					:pHomeAwayCode="this.pHomeAwayCode"
-					@save-entry="emitSaveEntryEvent"
-				/> -->
 				<EntryManageModal
 					:pHomeAwayCode="this.pHomeAwayCode"
 					@save-entry="emitSaveEntryEvent"
 				/>
 			</v-col>
 		</v-row>
-		<!-- Stat이 Input되면 input-stat이벤트가 먼저 실행되고, 그다음 select-player 이벤트가 실행된다. Stack으로 기록 데이터를 관리 -->
-		<InGameRecordSheet
-			:pEntry="pEntry"
-			@emit-stat-info="createRecord"
-			@post-emit-stat-info="emitPlayerRecord"
-		/>
+		<InGameRecordSheet :pEntry="pEntry" @emit-stat-info="createRecord" />
 	</v-container>
 </template>
 
 <script>
-	// import EntryManageModalOpenBtn from '@/components/button/FrameOpenBtn.vue';
 	import EntryManageModal from '@/views/game/quarterRecordInputBoard/modal/EntryManageModal.vue';
 	import InGameRecordSheet from '@/views/game/quarterRecordInputBoard/components/InGameRecordSheetComp.vue';
 
 	export default {
-		created() {
-			alert('RecordTableSheet CREATED!!!');
-		},
-		mounted() {
-			alert('RecordTableSheet MOUNTED!!!');
-		},
-		destroy() {
-			alert('RecordTableSheet Destroy!!!');
-		},
+		// created() {
+		// 	alert('RecordTableSheet CREATED!!!');
+		// },
+		// mounted() {
+		// 	alert('RecordTableSheet MOUNTED!!!');
+		// },
+		// destroy() {
+		// 	alert('RecordTableSheet Destroy!!!');
+		// },
 		components: {
-			// EntryManageModalOpenBtn,
 			EntryManageModal,
 			InGameRecordSheet,
 		},
@@ -58,37 +39,42 @@
 		},
 		data() {
 			return {
-				modalState: {
-					isOpenEntryManage: false,
-				},
-				latestRecord: {},
+				latestAddStat: {},
 			};
 		},
 		methods: {
-			openEntryManageModal() {
-				this.modalState.isOpenEntryManage = true;
-			},
 			emitSaveEntryEvent() {
 				this.$emit('save-entry');
 			},
 			createRecord(statInfo) {
-				this.latestRecord = {
+				this.$emit('add-player-record', {
+					gameJoinPlayerSeq: statInfo.gameJoinPlayerSeq,
+					homeAwayCode: this.pHomeAwayCode,
 					statType: statInfo.statType,
 					mode: statInfo.mode,
 					timeStamp: new Date(),
-				};
-			},
-			emitPlayerRecord(player) {
-				this.$emit('add-player-record', {
-					gameJoinPlayerSeq: player.gameJoinPlayerSeq,
-					homeAwayCode: this.pHomeAwayCode,
-					statType: this.latestRecord.statType,
-					mode: this.latestRecord.mode,
-					timeStamp: this.latestRecord.timeStamp,
 				});
-				// 새로운 객체로 초기화
-				this.latestRecord = {};
 			},
+			// emitPlayerRecord(player) {
+			// 	this.$emit('add-player-record', {
+			// 		gameJoinPlayerSeq: player.gameJoinPlayerSeq,
+			// 		homeAwayCode: this.pHomeAwayCode,
+			// 		statType: this.latestAddStat.statType,
+			// 		mode: this.latestAddStat.mode,
+			// 		timeStamp: this.latestAddStat.timeStamp,
+			// 	});
+			// 	// 새로운 객체로 초기화
+			// 	this.latestAddStat = {};
+			// },
+			// emitCancelPlayerRecord(cancelInfo) {
+			// 	this.$emit('cancel-player-record', {
+			// 		gameJoinPlayerSeq: cancelInfo.gameJoinPlayerSeq,
+			// 		homeAwayCode: this.pHomeAwayCode,
+			// 		statType: cancelInfo.statType,
+			// 		mode: cancelInfo.mode,
+			// 		timeStamp: new Date(),
+			// 	});
+			// },
 		},
 	};
 </script>

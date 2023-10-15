@@ -74,7 +74,6 @@
 		},
 		data() {
 			return {
-				routeCompName: 'GameJoinTeamSelectionPage',
 				/**-------------------
 				 * 경기생성 정보
 				 *--------------------*/
@@ -96,7 +95,7 @@
 						(value) => ValidationUtil.input.checkNotEmpty(value),
 						(value) =>
 							ValidationUtil.input.checkMaxLength(value, {
-								maxLength: 5,
+								maxLength: 10,
 							}),
 					],
 				},
@@ -117,9 +116,11 @@
 				this.reqBody.gameYmd = DateUtil.Format.toString(ymd);
 			},
 			setGameStartTime(time) {
+				// TODO 입력값이 정상값인지 확인
 				this.gameStartTime = time;
 			},
 			setGameEndTime(time) {
+				// TODO 입력값이 정상값인지 확인
 				this.gameEndTime = time;
 			},
 			async createGame() {
@@ -136,18 +137,20 @@
 						gameStartTime: this.gameStartTime,
 						gameEndTime: this.gameEndTime,
 						gamePlaceAddress: this.gamePlaceAddress,
-						gamePlaceName: this.sidoCode,
-						sidoCode: this.sigunguCode,
-						sigunguCode: this.gamePlaceName,
+						gamePlaceName: this.gamePlaceName,
+						sidoCode: this.sidoCode,
+						sigunguCode: this.sigunguCode,
 					},
 				};
 
-				const res = await gameApi.createGame(reqBody);
-				const resBody = res.data;
+				const { data } = await gameApi.createGame(reqBody);
 
 				this.$router.push({
-					name: this.routeCompName,
-					query: { gameSeq: resBody.gameSeq },
+					name: 'GameJoinTeamSelectionPage',
+					query: {
+						gameSeq: data.gameSeq,
+						teamSeq: query.teamSeq,
+					},
 				});
 			},
 			checkValidGameCreationInfo() {

@@ -34,7 +34,7 @@
 				required: true,
 			},
 			pTeamSeq: {
-				type: String,
+				type: Number,
 				required: true,
 			},
 		},

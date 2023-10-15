@@ -3,7 +3,6 @@
 		<v-data-table
 			:headers="headers"
 			:items="pEntry"
-			@click:row="postEmitStatInfo"
 			item-key="quarterPlayerRecordsSeq"
 			hide-default-footer
 			class="elevation-1"
@@ -11,92 +10,116 @@
 			<!-- TODO 스와이프 이벤트로 이전 동작이 취소되도록 구현 / http://www.mins01.com/mh/tech/read/1529  -->
 			<template v-slot:[`item.freeThrow`]="{ item }">
 				<FreeThrowInput
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="freeThrow"
 					:pCount="item.freeThrow"
 					pActiveMode="add"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 				<TryFreeThrowInput
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="tryFreeThrow"
 					:pCount="item.tryFreeThrow"
 					pActiveMode="add"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.twoPoint`]="{ item }">
 				<TwoPointInput
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="twoPoint"
 					:pCount="item.twoPoint"
 					pActiveMode="add"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 				<TryTwoPointInput
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="tryTwoPoint"
 					:pCount="item.tryTwoPoint"
 					pActiveMode="add"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.threePoint`]="{ item }">
 				<ThreePointInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="threePoint"
 					pActiveMode="add"
 					:pCount="item.threePoint"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 				<TryThreePointInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="tryThreePoint"
 					pActiveMode="add"
 					:pCount="item.tryThreePoint"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.turnover`]="{ item }">
 				<TurnoverInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="turnover"
 					pActiveMode="add"
 					:pCount="item.turnover"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.assist`]="{ item }">
 				<AssistInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="assist"
 					pActiveMode="add"
 					:pCount="item.assist"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.rebound`]="{ item }">
 				<ReboundInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="rebound"
 					pActiveMode="add"
 					:pCount="item.rebound"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.block`]="{ item }">
 				<BlockInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="block"
 					pActiveMode="add"
 					:pCount="item.block"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.steal`]="{ item }">
 				<StealInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="steal"
 					pActiveMode="add"
 					:pCount="item.steal"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 			</template>
 			<template v-slot:[`item.foul`]="{ item }">
 				<FoulInputBtn
+					:pGameJoinPlayerSeq="item.gameJoinPlayerSeq"
 					pType="foul"
 					pActiveMode="add"
 					:pCount="item.foul"
-					@get-stat-type="emitStatInfo"
+					@add-stat="emitStatInfo"
+					@cancel-stat="emitStatInfo"
 				/>
 				<FoulCountComp :pFoulCnt="item.foul" />
 			</template>
@@ -105,10 +128,7 @@
 </template>
 
 <script>
-	import {
-		StatType,
-		RecordMode,
-	} from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
+	import { StatType } from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
 
 	import FreeThrowInput from '@/components/game/stat/StatInputBtn.vue';
 	import TryFreeThrowInput from '@/components/game/stat/StatInputBtn.vue';
@@ -181,15 +201,8 @@
 			};
 		},
 		methods: {
-			postEmitStatInfo(targetPlayer) {
-				this.$emit('post-emit-stat-info', targetPlayer);
-			},
-			emitStatInfo(statType) {
-				const inputInfo = {
-					statType: statType,
-					mode: RecordMode.ADD,
-				};
-				this.$emit('emit-stat-info', inputInfo);
+			emitStatInfo(statInfo) {
+				this.$emit('emit-stat-info', statInfo);
 			},
 		},
 	};

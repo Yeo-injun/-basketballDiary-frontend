@@ -1,12 +1,12 @@
 <template>
-	<v-card>
-		<v-card-title :class="this.btnColor" @click="emitStatTypeInfo()">
-			<!-- <p>{{ this.statBtnName }}</p> -->
-			<div class="font-bold">
-				{{ this.pCount }}
-			</div>
-		</v-card-title>
-	</v-card>
+	<v-btn
+		:class="this.btnColor"
+		@touchstart="onInitTouches"
+		@touchmove="onClasifyGesture"
+		@touchend="onEmitStatInfoByGesture"
+	>
+		{{ this.pCount }}</v-btn
+	>
 </template>
 
 <script>
@@ -20,10 +20,15 @@
 			pType: String,
 			pCount: Number,
 			pActiveMode: String,
+			pGameJoinPlayerSeq: Number,
 		},
 		data() {
 			return {
 				statBtnName: this.getStatBtnName(),
+				touches: {
+					startX: 0,
+					gestureType: 'touch',
+				},
 			};
 		},
 		computed: {
@@ -38,8 +43,48 @@
 			},
 		},
 		methods: {
-			emitStatTypeInfo() {
-				this.$emit('get-stat-type', this.pType);
+			onInitTouches(e) {
+				this.touches.gestureType = 'touch';
+				this.touches.startX = e.touches[0].screenX;
+			},
+			onClasifyGesture(e) {
+				const gestureDistance = 10;
+				const moveDistance = this.touches.startX - e.touches[0].screenX;
+				if (moveDistance + gestureDistance < 0) {
+					this.touches.gestureType = 'rightSwipe';
+				}
+			},
+			onEmitStatInfoByGesture() {
+				switch (this.touches.gestureType) {
+					case 'rightSwipe':
+						this.$emit('cancel-stat', {
+							gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+							statType: this.pType,
+							mode: RecordMode.CANCEL,
+						});
+						return;
+					case 'touch':
+						this.$emit('add-stat', {
+							gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+							statType: this.pType,
+							mode: RecordMode.ADD,
+						});
+						return;
+				}
+			},
+			emitAddStatInfo() {
+				this.$emit('add-stat', {
+					gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+					statType: this.pType,
+					mode: RecordMode.ADD,
+				});
+			},
+			emitCancelStatInfo() {
+				this.$emit('cancel-stat', {
+					gameJoinPlayerSeq: this.pGameJoinPlayerSeq,
+					statType: this.pType,
+					mode: RecordMode.CANCEL,
+				});
 			},
 			isNegativeStat(statType) {
 				if (

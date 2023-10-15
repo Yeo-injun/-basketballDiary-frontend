@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="dialog" max-width="800px">
+	<v-dialog v-model="isModalOpen" max-width="800px">
 		<!-- activator 영역 : 팝업이 뜨기전에 보여줄 컴포넌트들 -->
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
@@ -27,7 +27,7 @@
 				/>
 			</v-container>
 
-			<GameJoinPlayerSelectionComp
+			<GameJoinPlayerSelectionTabs
 				v-if="isGetGameJoinPlayersLoadOk"
 				:pTeamSeq="this.teamSeq"
 				@add-game-join-player="addGameJoinPlayer"
@@ -51,7 +51,7 @@
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
 
-	import GameJoinPlayerSelectionComp from '@/views/game/recordDetail/modal/GameJoinPlayerSelectionComp.vue';
+	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 	import { PlayerTypeCode } from '@/const/code/PlayerCode';
 	export default {
 		mounted() {
@@ -61,7 +61,7 @@
 			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
 			PlayerDataTable,
-			GameJoinPlayerSelectionComp,
+			GameJoinPlayerSelectionTabs,
 		},
 		props: {
 			pModalTitlePrefix: String,
@@ -70,12 +70,26 @@
 		data() {
 			const query = this.$route.query;
 			return {
+				isModalOpen: false,
 				gameSeq: query.gameSeq,
 				teamSeq: '',
-				dialog: false,
 				isGetGameJoinPlayersLoadOk: false,
 				gameJoinPlayers: [],
 			};
+		},
+		// 참고자료 : https://velog.io/@yeoonnii/Vue.js-watch-%EC%86%8D%EC%84%B1
+		// watch 객체의 속성은 감시하고자 하는 속성을 함수로 선언. 함수의 인자는 <새로운 값> 과 <이전값> 이 들어옴
+		// 모달이 OPEN됐을때 초기화하기
+		// TODO 모달을 공통 컴포넌트로 구현하고 대체하기
+		watch: {
+			isModalOpen(isOpen) {
+				// 모달이 OPEN됐을때 동작
+				if (isOpen) {
+					this.getGameJoinPlayers();
+					return;
+				}
+				// 모달이 닫혔을때 동작
+			},
 		},
 		methods: {
 			async registerPlayers() {
@@ -90,7 +104,7 @@
 
 				await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
 
-				this.dialog = false;
+				this.isModalOpen = false;
 				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
 				this.$emit('register-complete', {
 					homeAwayCode: this.pHomeAwayCode,
