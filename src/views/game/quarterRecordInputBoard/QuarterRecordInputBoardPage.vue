@@ -68,8 +68,6 @@
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 
-	// import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
-	// import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
 	import HomeTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 	import AwayTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 
@@ -80,8 +78,6 @@
 		components: {
 			GameQuarterInfoComp,
 			HomeAwayTeamToggle,
-			// HomeTeamRecordInputBoardComp,
-			// AwayTeamRecordInputBoardComp,
 			HomeTeamRecordTableSheet,
 			AwayTeamRecordTableSheet,
 			SaveGameQuarterBtn,
