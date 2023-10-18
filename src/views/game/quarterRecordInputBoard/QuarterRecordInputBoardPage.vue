@@ -27,6 +27,7 @@
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
 				:pEntry="this.homeTeamEntry"
+				@open-entry-manage-modal="saveGameQuarter"
 				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
@@ -34,6 +35,7 @@
 				v-else
 				:pHomeAwayCode="this.awayCode"
 				:pEntry="this.awayTeamEntry"
+				@open-entry-manage-modal="saveGameQuarter"
 				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
@@ -41,7 +43,10 @@
 		<v-container>
 			<v-row>
 				<v-col cols="6" justify="center">
-					<SaveGameQuarterBtn pBtnName="쿼터저장" @do-save="saveGameQuarter" />
+					<SaveGameQuarterBtn
+						pBtnName="쿼터저장"
+						@do-save="saveGameQuarterWithSuccessAlert"
+					/>
 				</v-col>
 				<v-col cols="6" justify="center">
 					<DeleteGameQuarterBtn
@@ -151,6 +156,14 @@
 			setQuarterTime(targetVal) {
 				this.gameQuarterRecords.quarterTime = targetVal;
 			},
+			// 게임쿼터 저장API 호출 후 성공하면 alert창 호출
+			async saveGameQuarterWithSuccessAlert() {
+				const isSuccess = await this.saveGameQuarter();
+				if (isSuccess) {
+					alert('저장완료되었습니다.');
+				}
+			},
+			// 게임쿼터 저장API 호출 ( 정상저장시 true 리턴 )
 			async saveGameQuarter() {
 				await GameAPI.saveQuarterRecords(
 					{
@@ -163,7 +176,7 @@
 						awayTeamPlayerRecords: this.awayTeamEntry,
 					}
 				);
-				alert('저장완료되었습니다.');
+				return true;
 			},
 			async deleteGameQuarter() {
 				const params = {
