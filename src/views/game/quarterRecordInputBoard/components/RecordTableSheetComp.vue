@@ -7,6 +7,7 @@
 			<v-col>
 				<EntryManageModal
 					:pHomeAwayCode="this.pHomeAwayCode"
+					@post-open-handle="emitOpenEntryManageModal"
 					@save-entry="emitSaveEntryEvent"
 				/>
 			</v-col>
@@ -34,6 +35,9 @@
 			};
 		},
 		methods: {
+			emitOpenEntryManageModal() {
+				this.$emit('open-entry-manage-modal');
+			},
 			emitSaveEntryEvent() {
 				this.$emit('save-entry');
 			},
