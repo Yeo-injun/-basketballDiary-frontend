@@ -152,22 +152,18 @@
 				this.gameQuarterRecords.quarterTime = targetVal;
 			},
 			async saveGameQuarter() {
-				try {
-					await GameAPI.saveQuarterRecords(
-						{
-							gameSeq: this.gameSeq,
-							quarterCode: this.quarterCode,
-						},
-						{
-							quarterTime: this.gameQuarterRecords.quarterTime,
-							homeTeamPlayerRecords: this.homeTeamEntry,
-							awayTeamPlayerRecords: this.awayTeamEntry,
-						}
-					);
-					alert('저장완료되었습니다.');
-				} catch (e) {
-					alert(e.message);
-				}
+				await GameAPI.saveQuarterRecords(
+					{
+						gameSeq: this.gameSeq,
+						quarterCode: this.quarterCode,
+					},
+					{
+						quarterTime: this.gameQuarterRecords.quarterTime,
+						homeTeamPlayerRecords: this.homeTeamEntry,
+						awayTeamPlayerRecords: this.awayTeamEntry,
+					}
+				);
+				alert('저장완료되었습니다.');
 			},
 			async deleteGameQuarter() {
 				const params = {
