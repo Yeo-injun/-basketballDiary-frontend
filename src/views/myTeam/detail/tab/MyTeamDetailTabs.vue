@@ -8,7 +8,7 @@
 		<v-tabs-items v-model="tabIndex">
 			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
 				<MyTeamMembersTab v-if="idx == 0" />
-				<MyTeamGamesTab v-if="idx == 1" />
+				<MyTeamGamesTab v-if="idx == 1" :pTeamSeq="pTeamSeq" />
 				<GameCreationPage v-if="idx == 2" :pTeamSeq="pTeamSeq" />
 			</v-tab-item>
 		</v-tabs-items>

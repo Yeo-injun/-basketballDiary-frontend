@@ -17,7 +17,6 @@
 		},
 		data() {
 			return {
-				gameSeq: this.pGameSeq,
 				eventEmitName: 'confirm-game',
 			};
 		},
@@ -31,12 +30,9 @@
 				) {
 					return;
 				}
-				const params = {
-					gameSeq: this.gameSeq,
-				};
-
-				// TODO 게임확정 API붙이기
-				await GameAPI.confirmGame(params);
+				await GameAPI.confirmGame({
+					gameSeq: this.pGameSeq,
+				});
 				this.$emit(this.eventEmitName);
 			},
 		},
