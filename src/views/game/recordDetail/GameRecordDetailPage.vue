@@ -67,10 +67,11 @@
 			},
 			moveMyTeamPage() {
 				this.$router.push({
-					name: 'MyTeamPage',
+					name: 'MyTeamDetailPage',
 					params: {
 						teamSeq: this.teamSeq,
 						teamName: this.teamName,
+						tabName: 'MyTeamGamesTab',
 					},
 				});
 			},
