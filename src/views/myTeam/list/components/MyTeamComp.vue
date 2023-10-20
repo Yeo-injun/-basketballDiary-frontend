@@ -56,12 +56,6 @@
 			moveMyTeamDetailPage() {
 				this.$router.push({
 					name: 'MyTeamDetailPage',
-					// params: {
-					// 	pTeamSeq: this.pTeamInfo.teamSeq,
-					// 	pTeamName: this.pTeamInfo.teamName,
-					// 	teamSeq: this.pTeamInfo.teamSeq,
-					// 	teamName: this.pTeamInfo.teamName,
-					// },
 					query: {
 						teamSeq: this.pTeamInfo.teamSeq,
 						teamName: this.pTeamInfo.teamName,

@@ -44,6 +44,7 @@
 		},
 		props: {
 			pGame: Object,
+			pTeamSeq: Number,
 		},
 		data() {
 			return {
@@ -96,6 +97,7 @@
 				return {
 					gameSeq: this.gameSeq,
 					gameRecordState: this.pGame.gameRecordStateCode,
+					teamSeq: this.pTeamSeq,
 				};
 			},
 		},

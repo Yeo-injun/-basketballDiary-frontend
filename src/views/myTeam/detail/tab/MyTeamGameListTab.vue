@@ -7,7 +7,7 @@
 		<!-- 목록영역 컴포넌트 : 소제목 포함 / item 반복문 -->
 		<div>총 {{ gameCount }}개</div>
 		<v-container v-for="game in games" :key="game.gameSeq">
-			<MyTeamGameRecordComp :pGame="game" />
+			<MyTeamGameRecordComp :pGame="game" :pTeamSeq="pTeamSeq" />
 		</v-container>
 	</v-container>
 </template>
@@ -32,6 +32,9 @@
 				// TODO 페이지네이션 추가 필요
 				gameCount: 0,
 			};
+		},
+		props: {
+			pTeamSeq: Number,
 		},
 		methods: {
 			/* API052 : 소속팀 게임목록조회 */

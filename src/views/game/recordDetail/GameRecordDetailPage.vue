@@ -48,11 +48,10 @@
 		},
 		data() {
 			const query = this.$route.query;
+
 			return {
 				gameSeq: Number(query.gameSeq),
 				gameRecordState: query.gameRecordState,
-				teamSeq: query.teamSeq,
-				teamName: query.teamName,
 			};
 		},
 		methods: {
@@ -66,11 +65,13 @@
 				return true;
 			},
 			moveMyTeamPage() {
+				const query = this.$route.query;
+
 				this.$router.push({
 					name: 'MyTeamDetailPage',
-					params: {
-						teamSeq: this.teamSeq,
-						teamName: this.teamName,
+					query: {
+						teamSeq: Number(query.teamSeq),
+						teamName: query.teamName,
 						tabName: 'MyTeamGamesTab',
 					},
 				});

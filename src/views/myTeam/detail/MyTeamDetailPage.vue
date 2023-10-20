@@ -10,9 +10,10 @@
 			MyTeamDetailTabs,
 		},
 		data() {
+			const query = this.$route.query;
 			return {
-				tabName: 'MyTeamMembersTab',
-				teamSeq: Number(this.$route.query.teamSeq),
+				tabName: query.tabName,
+				teamSeq: Number(query.teamSeq),
 			};
 		},
 	};
