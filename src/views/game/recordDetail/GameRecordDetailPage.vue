@@ -6,7 +6,7 @@
 		<GameInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
-		<GameQuartersComp :pGameSeq="this.gameSeq" />
+		<GameQuartersComp :pGameSeq="this.gameSeq" :pTeamSeq="this.teamSeq" />
 		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
 		<v-row v-if="isShowGameManageBtn()">
 			<v-col>
@@ -51,6 +51,8 @@
 
 			return {
 				gameSeq: Number(query.gameSeq),
+				teamSeq: Number(query.teamSeq),
+				teamName: query.teamName,
 				gameRecordState: query.gameRecordState,
 			};
 		},
@@ -65,13 +67,11 @@
 				return true;
 			},
 			moveMyTeamPage() {
-				const query = this.$route.query;
-
 				this.$router.push({
 					name: 'MyTeamDetailPage',
 					query: {
-						teamSeq: Number(query.teamSeq),
-						teamName: query.teamName,
+						teamSeq: this.teamSeq,
+						teamName: this.teamName,
 						tabName: 'MyTeamGamesTab',
 					},
 				});

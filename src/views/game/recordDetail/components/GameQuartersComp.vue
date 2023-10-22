@@ -4,6 +4,8 @@
 		<GameRecordAuthManageModal />
 		<div v-if="this.isLoadingComplete">
 			<GameQuarterComp
+				:pGameSeq="pGameSeq"
+				:pTeamSeq="pTeamSeq"
 				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter1st"
 				:pTeamsQuarterRecords="this.teamsRecords1stQuarter"
@@ -42,6 +44,7 @@
 		},
 		props: {
 			pGameSeq: Number,
+			pTeamSeq: Number,
 		},
 		data() {
 			return {
