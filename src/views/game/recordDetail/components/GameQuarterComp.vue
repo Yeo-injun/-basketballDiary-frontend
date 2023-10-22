@@ -50,15 +50,11 @@
 			QuarterCreateBtn,
 		},
 		props: {
+			pGameSeq: Number,
+			pTeamSeq: Number,
 			pQuarterCode: String,
 			pGameRecordStateCode: String,
 			pTeamsQuarterRecords: Object,
-		},
-		data() {
-			const query = this.$route.query;
-			return {
-				gameSeq: query.gameSeq,
-			};
 		},
 		methods: {
 			hasQuarterRecords(quarterRecords) {
@@ -73,7 +69,8 @@
 						this.$router.push({
 							name: 'QuarterRecordInputBoardPage',
 							query: {
-								gameSeq: this.gameSeq,
+								gameSeq: this.pGameSeq,
+								teamSeq: this.pTeamSeq,
 								quarterCode: this.pQuarterCode,
 							},
 						});
@@ -82,19 +79,18 @@
 						this.$router.push({
 							name: 'QuarterRecordDetailPage',
 							query: {
-								gameSeq: this.gameSeq,
+								gameSeq: this.pGameSeq,
+								teamSeq: this.pTeamSeq,
 								quarterCode: this.pQuarterCode,
 							},
 						});
 				}
 			},
 			async createGameQuarterBasicInfo() {
-				const params = {
-					gameSeq: this.gameSeq,
+				await GameAPI.createGameQuarterBasicInfo({
+					gameSeq: this.pGameSeq,
 					quarterCode: this.pQuarterCode,
-				};
-
-				await GameAPI.createGameQuarterBasicInfo(params);
+				});
 				this.moveQuarterRecordInputBoardPage();
 			},
 		},

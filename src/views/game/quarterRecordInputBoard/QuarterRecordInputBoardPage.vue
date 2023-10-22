@@ -45,7 +45,7 @@
 				<v-col cols="6" justify="center">
 					<SaveGameQuarterBtn
 						pBtnName="쿼터저장"
-						@do-save="saveGameQuarterWithSuccessAlert"
+						@do-save="saveGameQuarterWithMessageAlert"
 					/>
 				</v-col>
 				<v-col cols="6" justify="center">
@@ -92,6 +92,7 @@
 			const query = this.$route.query;
 			return {
 				gameSeq: query.gameSeq,
+				teamSeq: query.teamSeq,
 				quarterCode: query.quarterCode,
 				isInitData: {
 					gameQuarterRecords: false,
@@ -156,27 +157,35 @@
 			setQuarterTime(targetVal) {
 				this.gameQuarterRecords.quarterTime = targetVal;
 			},
-			// 게임쿼터 저장API 호출 후 성공하면 alert창 호출
-			async saveGameQuarterWithSuccessAlert() {
-				const isSuccess = await this.saveGameQuarter();
-				if (isSuccess) {
-					alert('저장완료되었습니다.');
-				}
+			// 게임쿼터 저장API 호출 후 성공여부에 따라 메세지 alert창 호출
+			async saveGameQuarterWithMessageAlert() {
+				const result = await this.saveGameQuarter();
+				alert(result.message);
 			},
-			// 게임쿼터 저장API 호출 ( 정상저장시 true 리턴 )
+			// 게임쿼터 저장API 호출
 			async saveGameQuarter() {
-				await GameAPI.saveQuarterRecords(
-					{
-						gameSeq: this.gameSeq,
-						quarterCode: this.quarterCode,
-					},
-					{
-						quarterTime: this.gameQuarterRecords.quarterTime,
-						homeTeamPlayerRecords: this.homeTeamEntry,
-						awayTeamPlayerRecords: this.awayTeamEntry,
-					}
-				);
-				return true;
+				try {
+					await GameAPI.saveQuarterRecords(
+						{
+							gameSeq: this.gameSeq,
+							quarterCode: this.quarterCode,
+						},
+						{
+							quarterTime: this.gameQuarterRecords.quarterTime,
+							homeTeamPlayerRecords: this.homeTeamEntry,
+							awayTeamPlayerRecords: this.awayTeamEntry,
+						}
+					);
+				} catch (e) {
+					return {
+						success: false,
+						message: e.message,
+					};
+				}
+				return {
+					success: true,
+					message: '저장완료되었습니다.',
+				};
 			},
 			async deleteGameQuarter() {
 				const params = {
@@ -185,10 +194,12 @@
 				};
 
 				await GameAPI.deleteGameQuarter(params);
-				// TODO 화면이동처리하기
 				this.$router.push({
 					name: 'GameRecordDetailPage',
-					query: params,
+					query: {
+						gameSeq: this.gameSeq,
+						teamSeq: this.teamSeq,
+					},
 				});
 			},
 			changeRecordInputTeam(params) {
