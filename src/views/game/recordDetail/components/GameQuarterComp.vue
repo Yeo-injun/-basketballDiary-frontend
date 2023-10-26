@@ -13,7 +13,7 @@
 		</div>
 		<!-- 쿼터 정보가 없을 경우에 보여지는 Components -->
 		<div v-else>
-			<v-card>
+			<v-card v-if="!isGameConfirmed()">
 				<div class="text-center">
 					<QuarterCreateBtn
 						pBtnName="쿼터 입력"
@@ -62,6 +62,12 @@
 					return false;
 				}
 				return true;
+			},
+			isGameConfirmed() {
+				if (GAME_CONFIRMATION_CODE == this.pGameRecordStateCode) {
+					return true;
+				}
+				return false;
 			},
 			moveQuarterRecordInputBoardPage() {
 				switch (this.pGameRecordStateCode) {
