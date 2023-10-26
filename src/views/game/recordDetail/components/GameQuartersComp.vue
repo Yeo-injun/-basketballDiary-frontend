@@ -11,16 +11,22 @@
 				:pTeamsQuarterRecords="this.teamsRecords1stQuarter"
 			/>
 			<GameQuarterComp
+				:pGameSeq="pGameSeq"
+				:pTeamSeq="pTeamSeq"
 				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter2nd"
 				:pTeamsQuarterRecords="this.teamsRecords2ndQuarter"
 			/>
 			<GameQuarterComp
+				:pGameSeq="pGameSeq"
+				:pTeamSeq="pTeamSeq"
 				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter3rd"
 				:pTeamsQuarterRecords="this.teamsRecords3rdQuarter"
 			/>
 			<GameQuarterComp
+				:pGameSeq="pGameSeq"
+				:pTeamSeq="pTeamSeq"
 				:pGameRecordStateCode="this.gameRecordStateCode"
 				:pQuarterCode="this.quarter4th"
 				:pTeamsQuarterRecords="this.teamsRecords4thQuarter"
