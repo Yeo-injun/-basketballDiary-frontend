@@ -58,8 +58,8 @@
 		},
 		methods: {
 			isShowGameManageBtn() {
-				const isConfirmState = this.gameRecordState == GAME_CONFIRMATION_CODE;
-				if (isConfirmState) {
+				const isGameConfirmed = this.gameRecordState == GAME_CONFIRMATION_CODE;
+				if (isGameConfirmed) {
 					return false;
 				}
 
