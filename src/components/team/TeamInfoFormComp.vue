@@ -97,6 +97,12 @@
 			</v-row>
 			<v-row>
 				<v-col cols="4">
+					<v-file-input
+						show-size
+						label="팀사진"
+						accept="image/*"
+						@change="setImageFile"
+					/>
 					<MyTeamImage :pMaxHeight="250" />
 				</v-col>
 				<v-col cols="8">
@@ -129,6 +135,7 @@
 					hometown: '',
 					foundationYmd: '',
 					introduction: '',
+					teamLogoImage: null,
 					teamRegularExercises: [{}],
 				},
 				rules: [
@@ -217,6 +224,11 @@
 					return;
 				}
 				this.teamInfo.teamRegularExercises.splice(idx, 1);
+			},
+			setImageFile(imageFile) {
+				console.log(imageFile);
+				this.teamInfo.teamLogoImage = imageFile;
+				this.$emit('e-team-info', this.teamInfo);
 			},
 		},
 		mounted() {

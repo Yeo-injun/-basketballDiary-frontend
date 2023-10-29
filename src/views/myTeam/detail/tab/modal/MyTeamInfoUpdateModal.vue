@@ -53,11 +53,15 @@
 		data() {
 			return {
 				teamInfo: {},
+				teamLogoImage: null,
 			};
 		},
 		methods: {
 			setTeamInfo(eTeamInfo) {
+				console.log('MODAL');
+				console.log(eTeamInfo);
 				this.teamInfo = eTeamInfo;
+				this.teamLogoImage = eTeamInfo.teamLogoImage;
 			},
 			async getTeamInfo(teamSeq) {
 				try {
@@ -70,8 +74,11 @@
 			},
 			async modifyTeamInfo() {
 				try {
-					const paramJSON = this.teamInfo;
-					await MyTeamAPI.modifyMyTeam(this.pTeamSeq, paramJSON);
+					await MyTeamAPI.modifyMyTeamInfo(
+						this.pTeamSeq,
+						this.teamInfo,
+						this.teamLogoImage
+					);
 					this.isActivate = false;
 				} catch (e) {
 					console.log(e);
