@@ -45,8 +45,17 @@ export default {
 		return axiosService.get(`/${teamSeq}/info`);
 	},
 	/* API017 : 소속팀 정보 수정 */
+	// TODO 제거 예정 메소드
 	modifyMyTeam(teamSeq, teamInfo) {
-		return axiosService.post(`/${teamSeq}/info`, teamInfo);
+		return axiosService.postWithMultipart(`/${teamSeq}/info`, teamInfo);
+	},
+	modifyMyTeamInfo(teamSeq, teamInfo, teamLogo) {
+		// TODO 임시 구현 내용
+		console.log(['API', teamInfo]);
+		return axiosService.postWithMultipart(`/${teamSeq}/info`, {
+			teamInfo: teamInfo,
+			teamLogo: teamLogo,
+		});
 	},
 	/**
 	 * injun
