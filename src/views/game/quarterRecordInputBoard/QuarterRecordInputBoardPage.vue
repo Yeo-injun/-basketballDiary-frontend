@@ -27,6 +27,7 @@
 				v-if="this.isHomeTeamInputMode"
 				:pHomeAwayCode="this.homeCode"
 				:pEntry="this.homeTeamEntry"
+				@open-entry-manage-modal="saveGameQuarter"
 				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
@@ -34,6 +35,7 @@
 				v-else
 				:pHomeAwayCode="this.awayCode"
 				:pEntry="this.awayTeamEntry"
+				@open-entry-manage-modal="saveGameQuarter"
 				@add-player-record="processInputRecordStat"
 				@save-entry="getGameEntry"
 			/>
@@ -41,7 +43,10 @@
 		<v-container>
 			<v-row>
 				<v-col cols="6" justify="center">
-					<SaveGameQuarterBtn pBtnName="쿼터저장" @do-save="saveGameQuarter" />
+					<SaveGameQuarterBtn
+						pBtnName="쿼터저장"
+						@do-save="saveGameQuarterWithMessageAlert"
+					/>
 				</v-col>
 				<v-col cols="6" justify="center">
 					<DeleteGameQuarterBtn
@@ -68,8 +73,6 @@
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
 	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
 
-	// import HomeTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
-	// import AwayTeamRecordInputBoardComp from '@/views/game/quarterRecordInputBoard/components/RecordInputBoardComp.vue';
 	import HomeTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 	import AwayTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 
@@ -80,8 +83,6 @@
 		components: {
 			GameQuarterInfoComp,
 			HomeAwayTeamToggle,
-			// HomeTeamRecordInputBoardComp,
-			// AwayTeamRecordInputBoardComp,
 			HomeTeamRecordTableSheet,
 			AwayTeamRecordTableSheet,
 			SaveGameQuarterBtn,
@@ -91,6 +92,7 @@
 			const query = this.$route.query;
 			return {
 				gameSeq: query.gameSeq,
+				teamSeq: query.teamSeq,
 				quarterCode: query.quarterCode,
 				isInitData: {
 					gameQuarterRecords: false,
@@ -155,6 +157,12 @@
 			setQuarterTime(targetVal) {
 				this.gameQuarterRecords.quarterTime = targetVal;
 			},
+			// 게임쿼터 저장API 호출 후 성공여부에 따라 메세지 alert창 호출
+			async saveGameQuarterWithMessageAlert() {
+				const result = await this.saveGameQuarter();
+				alert(result.message);
+			},
+			// 게임쿼터 저장API 호출
 			async saveGameQuarter() {
 				try {
 					await GameAPI.saveQuarterRecords(
@@ -168,10 +176,16 @@
 							awayTeamPlayerRecords: this.awayTeamEntry,
 						}
 					);
-					alert('저장완료되었습니다.');
 				} catch (e) {
-					alert(e.message);
+					return {
+						success: false,
+						message: e.message,
+					};
 				}
+				return {
+					success: true,
+					message: '저장완료되었습니다.',
+				};
 			},
 			async deleteGameQuarter() {
 				const params = {
@@ -180,10 +194,12 @@
 				};
 
 				await GameAPI.deleteGameQuarter(params);
-				// TODO 화면이동처리하기
 				this.$router.push({
 					name: 'GameRecordDetailPage',
-					query: params,
+					query: {
+						gameSeq: this.gameSeq,
+						teamSeq: this.teamSeq,
+					},
 				});
 			},
 			changeRecordInputTeam(params) {

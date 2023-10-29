@@ -13,7 +13,7 @@
 		</div>
 		<!-- 쿼터 정보가 없을 경우에 보여지는 Components -->
 		<div v-else>
-			<v-card>
+			<v-card v-if="!isGameConfirmed()">
 				<div class="text-center">
 					<QuarterCreateBtn
 						pBtnName="쿼터 입력"
@@ -50,15 +50,11 @@
 			QuarterCreateBtn,
 		},
 		props: {
+			pGameSeq: Number,
+			pTeamSeq: Number,
 			pQuarterCode: String,
 			pGameRecordStateCode: String,
 			pTeamsQuarterRecords: Object,
-		},
-		data() {
-			const query = this.$route.query;
-			return {
-				gameSeq: query.gameSeq,
-			};
 		},
 		methods: {
 			hasQuarterRecords(quarterRecords) {
@@ -67,13 +63,20 @@
 				}
 				return true;
 			},
+			isGameConfirmed() {
+				if (GAME_CONFIRMATION_CODE == this.pGameRecordStateCode) {
+					return true;
+				}
+				return false;
+			},
 			moveQuarterRecordInputBoardPage() {
 				switch (this.pGameRecordStateCode) {
 					case JOIN_TEAM_CONFIRMATION_CODE:
 						this.$router.push({
 							name: 'QuarterRecordInputBoardPage',
 							query: {
-								gameSeq: this.gameSeq,
+								gameSeq: this.pGameSeq,
+								teamSeq: this.pTeamSeq,
 								quarterCode: this.pQuarterCode,
 							},
 						});
@@ -82,19 +85,18 @@
 						this.$router.push({
 							name: 'QuarterRecordDetailPage',
 							query: {
-								gameSeq: this.gameSeq,
+								gameSeq: this.pGameSeq,
+								teamSeq: this.pTeamSeq,
 								quarterCode: this.pQuarterCode,
 							},
 						});
 				}
 			},
 			async createGameQuarterBasicInfo() {
-				const params = {
-					gameSeq: this.gameSeq,
+				await GameAPI.createGameQuarterBasicInfo({
+					gameSeq: this.pGameSeq,
 					quarterCode: this.pQuarterCode,
-				};
-
-				await GameAPI.createGameQuarterBasicInfo(params);
+				});
 				this.moveQuarterRecordInputBoardPage();
 			},
 		},

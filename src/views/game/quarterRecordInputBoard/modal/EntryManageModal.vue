@@ -4,7 +4,7 @@
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
 			<div class="text-right" v-bind="attrs" v-on="on">
-				<EntryManageModalOpenBtn pBtnName="엔트리관리" />
+				<EntryManageModalOpenBtn @do-open="onOpenModal" pBtnName="엔트리관리" />
 			</div>
 		</template>
 
@@ -88,6 +88,12 @@
 			},
 		},
 		methods: {
+			// 모달 오픈되고 이후 동작 구현을 위한 이벤트 emit
+			onOpenModal() {
+				console.log('EntryManageModal');
+				this.$emit('post-open-handle');
+				console.log('EntryManageModal==END');
+			},
 			async loadSavedEntry() {
 				const params = {
 					gameSeq: this.gameSeq,

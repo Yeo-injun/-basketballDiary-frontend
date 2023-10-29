@@ -1,5 +1,5 @@
 <template>
-	<MyTeamDetailTabs />
+	<MyTeamDetailTabs :pTabName="this.tabName" :pTeamSeq="this.teamSeq" />
 </template>
 
 <script>
@@ -8,6 +8,13 @@
 	export default {
 		components: {
 			MyTeamDetailTabs,
+		},
+		data() {
+			const query = this.$route.query;
+			return {
+				tabName: query.tabName,
+				teamSeq: Number(query.teamSeq),
+			};
 		},
 	};
 </script>

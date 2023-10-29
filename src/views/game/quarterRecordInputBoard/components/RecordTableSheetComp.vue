@@ -7,6 +7,7 @@
 			<v-col>
 				<EntryManageModal
 					:pHomeAwayCode="this.pHomeAwayCode"
+					@post-open-handle="emitOpenEntryManageModal"
 					@save-entry="emitSaveEntryEvent"
 				/>
 			</v-col>
@@ -20,15 +21,6 @@
 	import InGameRecordSheet from '@/views/game/quarterRecordInputBoard/components/InGameRecordSheetComp.vue';
 
 	export default {
-		// created() {
-		// 	alert('RecordTableSheet CREATED!!!');
-		// },
-		// mounted() {
-		// 	alert('RecordTableSheet MOUNTED!!!');
-		// },
-		// destroy() {
-		// 	alert('RecordTableSheet Destroy!!!');
-		// },
 		components: {
 			EntryManageModal,
 			InGameRecordSheet,
@@ -43,6 +35,9 @@
 			};
 		},
 		methods: {
+			emitOpenEntryManageModal() {
+				this.$emit('open-entry-manage-modal');
+			},
 			emitSaveEntryEvent() {
 				this.$emit('save-entry');
 			},
@@ -55,26 +50,6 @@
 					timeStamp: new Date(),
 				});
 			},
-			// emitPlayerRecord(player) {
-			// 	this.$emit('add-player-record', {
-			// 		gameJoinPlayerSeq: player.gameJoinPlayerSeq,
-			// 		homeAwayCode: this.pHomeAwayCode,
-			// 		statType: this.latestAddStat.statType,
-			// 		mode: this.latestAddStat.mode,
-			// 		timeStamp: this.latestAddStat.timeStamp,
-			// 	});
-			// 	// 새로운 객체로 초기화
-			// 	this.latestAddStat = {};
-			// },
-			// emitCancelPlayerRecord(cancelInfo) {
-			// 	this.$emit('cancel-player-record', {
-			// 		gameJoinPlayerSeq: cancelInfo.gameJoinPlayerSeq,
-			// 		homeAwayCode: this.pHomeAwayCode,
-			// 		statType: cancelInfo.statType,
-			// 		mode: cancelInfo.mode,
-			// 		timeStamp: new Date(),
-			// 	});
-			// },
 		},
 	};
 </script>

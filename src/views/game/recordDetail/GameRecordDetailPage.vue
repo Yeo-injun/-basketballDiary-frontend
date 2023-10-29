@@ -6,7 +6,7 @@
 		<GameInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
-		<GameQuartersComp :pGameSeq="this.gameSeq" />
+		<GameQuartersComp :pGameSeq="this.gameSeq" :pTeamSeq="this.teamSeq" />
 		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
 		<v-row v-if="isShowGameManageBtn()">
 			<v-col>
@@ -48,17 +48,18 @@
 		},
 		data() {
 			const query = this.$route.query;
+
 			return {
 				gameSeq: Number(query.gameSeq),
-				gameRecordState: query.gameRecordState,
-				teamSeq: query.teamSeq,
+				teamSeq: Number(query.teamSeq),
 				teamName: query.teamName,
+				gameRecordState: query.gameRecordState,
 			};
 		},
 		methods: {
 			isShowGameManageBtn() {
-				const isConfirmState = this.gameRecordState == GAME_CONFIRMATION_CODE;
-				if (isConfirmState) {
+				const isGameConfirmed = this.gameRecordState == GAME_CONFIRMATION_CODE;
+				if (isGameConfirmed) {
 					return false;
 				}
 
@@ -67,10 +68,11 @@
 			},
 			moveMyTeamPage() {
 				this.$router.push({
-					name: 'MyTeamPage',
-					params: {
+					name: 'MyTeamDetailPage',
+					query: {
 						teamSeq: this.teamSeq,
 						teamName: this.teamName,
+						tabName: 'MyTeamGamesTab',
 					},
 				});
 			},

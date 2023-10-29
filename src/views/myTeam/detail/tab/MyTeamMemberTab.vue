@@ -70,7 +70,7 @@
 	import MyTeamManagerComp from '@/components/myTeam/MyTeamManagerComp.vue';
 	import MyTeamMemberComp from '@/components/myTeam/MyTeamMemberComp.vue';
 
-	import MyTeamInfoUpdateModal from '@/components/myTeam/modal/MyTeamInfoUpdateModal.vue';
+	import MyTeamInfoUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamInfoUpdateModal.vue';
 	import MyTeamProfileUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamProfileUpdateModal.vue';
 
 	import ProfileUpdateBtn from '@/components/button/FrameOpenBtn.vue';
