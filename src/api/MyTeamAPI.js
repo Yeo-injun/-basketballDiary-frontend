@@ -41,6 +41,13 @@ export default {
 		});
 	},
 	/* API016 : 소속팀 정보 단건 조회 */
+	// TODO 삭제 예정 API 메소드
+	async getTeamInfo(teamSeq) {
+		const { data } = await axiosService.get(`/${teamSeq}/info`);
+		data.logoImageUrl = ImageClient.toImageServerUrl(data.teamImagePath);
+		return data;
+	},
+
 	searchTeam(teamSeq) {
 		return axiosService.get(`/${teamSeq}/info`);
 	},
@@ -50,8 +57,10 @@ export default {
 		return axiosService.postWithMultipart(`/${teamSeq}/info`, teamInfo);
 	},
 	modifyMyTeamInfo(teamSeq, teamInfo, teamLogo) {
-		// TODO 임시 구현 내용
-		console.log(['API', teamInfo]);
+		/**
+		 * Spring에서는 teamInfo와 teamLogo를 각각 @RequestPart 어노테이션으로 받음
+		 * teamInfo는 JSON Type으로, teamLogo는 Multipart/image타입으로 Request를 받아서 처리
+		 */
 		return axiosService.postWithMultipart(`/${teamSeq}/info`, {
 			teamInfo: teamInfo,
 			teamLogo: teamLogo,

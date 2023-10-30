@@ -10,6 +10,10 @@ export default {
 	 * - 로컬의 경우 백엔드와 프론트 서버의 IP/PORT가 다름. 따라서 이미지를 가져오기 위해서는 이미지 서버역할을 하고 있는 로컬 백엔드 서버의 IP/PORT를 명시해줘야 함
 	 */
 	toImageServerUrl(url) {
+		const nullTypes = new Set([null, undefined, '']);
+		if (nullTypes.has(url)) {
+			return '';
+		}
 		return `${IMAGE_SERVER_BASE_URI}/image${url}`;
 	},
 };
