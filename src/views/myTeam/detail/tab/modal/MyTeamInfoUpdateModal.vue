@@ -58,6 +58,7 @@
 		},
 		methods: {
 			setTeamInfo(eTeamInfo) {
+				// TODO 소스코드 정리 필요
 				console.log('MODAL');
 				console.log(eTeamInfo);
 				this.teamInfo = eTeamInfo;
@@ -66,8 +67,9 @@
 			async getTeamInfo(teamSeq) {
 				try {
 					// TODO 두번째 팝업 호출시 왜 순서대로 호출이 안되는지... 확인필요
-					const response = await MyTeamAPI.searchTeam(teamSeq);
-					this.teamInfo = response.data;
+					this.teamInfo = await MyTeamAPI.getTeamInfo(teamSeq);
+					console.log(this.teamInfo);
+					console.log('=========================');
 				} catch (error) {
 					console.log(error);
 				}

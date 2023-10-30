@@ -103,7 +103,11 @@
 						accept="image/*"
 						@change="setImageFile"
 					/>
-					<MyTeamImage :pMaxHeight="250" />
+					<MyTeamImage
+						:pImageUrl="this.pTeamInfo.logoImageUrl"
+						:pMaxHeight="String(200)"
+						:pMaxWidth="String(200)"
+					/>
 				</v-col>
 				<v-col cols="8">
 					<v-textarea
