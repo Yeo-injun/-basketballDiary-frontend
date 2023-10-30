@@ -1,12 +1,13 @@
 <template>
-	<div>
+	<v-layout align-center justify-center>
 		<v-img
+			contain
 			class="ms-5"
 			:max-height="this.maxHeight"
 			:max-width="this.maxWidth"
 			:src="this.src"
 		/>
-	</div>
+	</v-layout>
 </template>
 
 <script>
