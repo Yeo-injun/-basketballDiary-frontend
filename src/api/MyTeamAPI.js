@@ -12,7 +12,7 @@ export default {
 	 * seongju
 	 */
 	/* API014 : 소속팀 목록 조회 */
-	searchTeams(messge) {
+	getMyTeams(messge) {
 		return axiosService.get('', { messge });
 	},
 	/* API012 소속팀 개인프로필 수정 */
@@ -25,6 +25,7 @@ export default {
 	/* API011 소속팀 개인프로필 조회 */
 	async findMyTeamsProfile(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/profile`);
+		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
 		data.imageUrl = ImageClient.toImageServerUrl(data.memberImagePath);
 		return data;
 	},
@@ -44,6 +45,7 @@ export default {
 	// TODO 삭제 예정 API 메소드
 	async getTeamInfo(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/info`);
+		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
 		data.logoImageUrl = ImageClient.toImageServerUrl(data.teamImagePath);
 		return data;
 	},

@@ -5,14 +5,19 @@
 			class="ms-5"
 			:max-height="this.maxHeight"
 			:max-width="this.maxWidth"
+			:lazy-src="this.lazySrc"
 			:src="this.src"
-		/>
+			@error="handleLoadError"
+		>
+		</v-img>
 	</v-layout>
 </template>
 
 <script>
-	const nullTypes = new Set(['', null, undefined, 0]);
+	import ImageClient from '@/http/ImageClient.js';
 
+	const nullTypes = new Set(['', null, undefined, 0]);
+	const DEFAULT_IMAGE_URL = 'https://picsum.photos/id/11/500/300'; // TODO 기본 이미지도 변경 필요
 	export default {
 		props: {
 			pImageUrl: {
@@ -35,14 +40,13 @@
 		},
 		data() {
 			const initImageSize = this.getInitImageSize();
-			console.log(initImageSize);
 			return {
 				maxHeight: initImageSize.maxHeight,
 				maxWidth: initImageSize.maxWidth,
-				// TODO 기본 이미지도 변경 필요
+				lazySrc: DEFAULT_IMAGE_URL, // 본 이미지 로딩되기 전 이미지
 				src: nullTypes.has(this.pImageUrl)
-					? 'https://picsum.photos/id/11/500/300'
-					: this.pImageUrl,
+					? DEFAULT_IMAGE_URL
+					: ImageClient.toImageServerUrl(this.pImageUrl),
 			};
 		},
 		methods: {
@@ -74,6 +78,10 @@
 					maxHeight: '',
 					maxWidth: this.pMaxWidth,
 				};
+			},
+			handleLoadError() {
+				// 이미지 로드 에러발생시 기본이미지로 세팅
+				this.src = DEFAULT_IMAGE_URL;
 			},
 		},
 	};
