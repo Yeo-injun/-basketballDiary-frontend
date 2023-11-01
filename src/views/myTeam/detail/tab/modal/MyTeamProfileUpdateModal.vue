@@ -42,7 +42,7 @@
 	import InputRule from '@/common/input/InputRule.js';
 
 	/** Components */
-	import MyTeamProfileImageComp from '@/components/myTeam/MyTeamProfileImageComp.vue';
+	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 
 	export default {
@@ -109,7 +109,7 @@
 					backNumber: this.backNumber,
 					imageFile: this.imageFile,
 				};
-				// TODO 사진 파일이 없는 경우 수정 처리되도록 백엔드 수정하기
+
 				await MyTeamAPI.modifyMyTeamsProfile(msg);
 				this.$emit('modal-close', false);
 			},
