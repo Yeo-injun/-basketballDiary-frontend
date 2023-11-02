@@ -33,6 +33,9 @@ function toStringExceptImage(data, key) {
 	if (isImageType(data, key)) {
 		return value;
 	}
+	if (typeof value === 'string') {
+		return value;
+	}
 	return JSON.stringify(value);
 }
 
