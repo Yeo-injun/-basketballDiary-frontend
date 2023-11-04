@@ -35,7 +35,7 @@
 				</v-col>
 				<v-col cols="5">
 					<MyTeamImage
-						:pImageUrl="this.pTeamInfo.logoImageUrl"
+						:pImageUrl="teamInfo.logoImageUrl"
 						:pMaxHeight="String(250)"
 						:pMaxWidth="String(250)"
 					/>
@@ -134,6 +134,13 @@
 		components: {
 			MyTeamImage,
 			CustomDatePickerComp,
+		},
+		mounted() {
+			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
+			if (this.pTeamInfo != null) {
+				this.teamInfo = this.pTeamInfo;
+				return;
+			}
 		},
 		data() {
 			return {
@@ -237,11 +244,6 @@
 				this.teamInfo.teamLogoImage = imageFile;
 				this.$emit('e-team-info', this.teamInfo);
 			},
-		},
-		mounted() {
-			if (this.pTeamInfo != null) {
-				this.teamInfo = this.pTeamInfo;
-			}
 		},
 	};
 </script>
