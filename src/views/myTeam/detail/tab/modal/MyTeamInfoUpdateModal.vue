@@ -2,7 +2,7 @@
 	<v-dialog v-model="isActivate" width="1200">
 		<v-card>
 			<v-card-title class="text-h5 grey lighten-2">
-				팀정보(디렉토리 이동)
+				팀정보(TODO 기존 컴포넌트 삭제 필요 )
 			</v-card-title>
 
 			<v-card-text>
@@ -53,25 +53,34 @@
 		data() {
 			return {
 				teamInfo: {},
+				teamLogoImage: null,
 			};
 		},
 		methods: {
 			setTeamInfo(eTeamInfo) {
+				// TODO 소스코드 정리 필요
+				console.log('MODAL');
+				console.log(eTeamInfo);
 				this.teamInfo = eTeamInfo;
+				this.teamLogoImage = eTeamInfo.teamLogoImage;
 			},
 			async getTeamInfo(teamSeq) {
 				try {
 					// TODO 두번째 팝업 호출시 왜 순서대로 호출이 안되는지... 확인필요
-					const response = await MyTeamAPI.searchTeam(teamSeq);
-					this.teamInfo = response.data;
+					this.teamInfo = await MyTeamAPI.getTeamInfo(teamSeq);
+					console.log(this.teamInfo);
+					console.log('=========================');
 				} catch (error) {
 					console.log(error);
 				}
 			},
 			async modifyTeamInfo() {
 				try {
-					const paramJSON = this.teamInfo;
-					await MyTeamAPI.modifyMyTeam(this.pTeamSeq, paramJSON);
+					await MyTeamAPI.modifyMyTeamInfo(
+						this.pTeamSeq,
+						this.teamInfo,
+						this.teamLogoImage
+					);
 					this.isActivate = false;
 				} catch (e) {
 					console.log(e);

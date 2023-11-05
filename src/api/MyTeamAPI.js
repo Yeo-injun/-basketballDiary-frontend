@@ -12,7 +12,7 @@ export default {
 	 * seongju
 	 */
 	/* API014 : 소속팀 목록 조회 */
-	searchTeams(messge) {
+	getMyTeams(messge) {
 		return axiosService.get('', { messge });
 	},
 	/* API012 소속팀 개인프로필 수정 */
@@ -25,6 +25,7 @@ export default {
 	/* API011 소속팀 개인프로필 조회 */
 	async findMyTeamsProfile(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/profile`);
+		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
 		data.imageUrl = ImageClient.toImageServerUrl(data.memberImagePath);
 		return data;
 	},
@@ -41,12 +42,31 @@ export default {
 		});
 	},
 	/* API016 : 소속팀 정보 단건 조회 */
+	// TODO 삭제 예정 API 메소드
+	async getTeamInfo(teamSeq) {
+		const { data } = await axiosService.get(`/${teamSeq}/info`);
+		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
+		data.logoImageUrl = ImageClient.toImageServerUrl(data.teamImagePath);
+		return data;
+	},
+
 	searchTeam(teamSeq) {
 		return axiosService.get(`/${teamSeq}/info`);
 	},
 	/* API017 : 소속팀 정보 수정 */
+	// TODO 제거 예정 메소드
 	modifyMyTeam(teamSeq, teamInfo) {
-		return axiosService.post(`/${teamSeq}/info`, teamInfo);
+		return axiosService.postWithMultipart(`/${teamSeq}/info`, teamInfo);
+	},
+	modifyMyTeamInfo(teamSeq, teamInfo, teamLogo) {
+		/**
+		 * Spring에서는 teamInfo와 teamLogo를 각각 @RequestPart 어노테이션으로 받음
+		 * teamInfo는 JSON Type으로, teamLogo는 Multipart/image타입으로 Request를 받아서 처리
+		 */
+		return axiosService.postWithMultipart(`/${teamSeq}/info`, {
+			teamInfo: teamInfo,
+			teamLogo: teamLogo,
+		});
 	},
 	/**
 	 * injun

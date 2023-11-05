@@ -2,34 +2,52 @@
 	<v-container>
 		<v-form ref="form" lazy-validation>
 			<v-row>
-				<v-col cols="2" align-self="center">
-					<v-input>팀명</v-input>
+				<v-col cols="7">
+					<v-row>
+						<v-col cols="2" align-self="center">
+							<v-input>팀명</v-input>
+						</v-col>
+						<v-col>
+							<v-text-field :rules="rules" v-model="teamInfo.teamName" />
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="2">
+							<v-input>연고지</v-input>
+						</v-col>
+						<v-col>
+							<v-input append-icon="mdi-pencil" @click:append="hometownAPI()">
+								{{ teamInfo.hometown }}
+							</v-input>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="2">
+							<v-input>창단일</v-input>
+						</v-col>
+						<v-col>
+							<CustomDatePickerComp
+								:p-init-value="teamInfo.foundationYmd"
+								@pickup-date="setFoundationYmd"
+							/>
+						</v-col>
+					</v-row>
 				</v-col>
-				<v-col cols="4">
-					<v-text-field :rules="rules" v-model="teamInfo.teamName" />
-				</v-col>
-			</v-row>
-			<v-row>
-				<v-col cols="2">
-					<v-input>연고지</v-input>
-				</v-col>
-				<v-col cols="4">
-					<v-input append-icon="mdi-pencil" @click:append="hometownAPI()">
-						{{ teamInfo.hometown }}
-					</v-input>
-				</v-col>
-			</v-row>
-			<v-row>
-				<v-col cols="2">
-					<v-input>창단일</v-input>
-				</v-col>
-				<v-col cols="4">
-					<CustomDatePickerComp
-						:p-init-value="teamInfo.foundationYmd"
-						@pickup-date="setFoundationYmd"
+				<v-col cols="5">
+					<MyTeamImage
+						:pImageUrl="teamInfo.logoImageUrl"
+						:pMaxHeight="String(250)"
+						:pMaxWidth="String(250)"
+					/>
+					<v-file-input
+						show-size
+						label="팀사진"
+						accept="image/*"
+						@change="setImageFile"
 					/>
 				</v-col>
 			</v-row>
+
 			<v-row>
 				<v-data-table
 					:headers="headers"
@@ -96,17 +114,12 @@
 				</v-data-table>
 			</v-row>
 			<v-row>
-				<v-col cols="4">
-					<MyTeamImage :pMaxHeight="250" />
-				</v-col>
-				<v-col cols="8">
-					<v-textarea
-						label="팀 소개"
-						max-width="250"
-						outlined
-						v-model="teamInfo.introduction"
-					></v-textarea>
-				</v-col>
+				<v-textarea
+					label="팀 소개"
+					max-width="250"
+					outlined
+					v-model="teamInfo.introduction"
+				></v-textarea>
 			</v-row>
 		</v-form>
 	</v-container>
@@ -122,6 +135,13 @@
 			MyTeamImage,
 			CustomDatePickerComp,
 		},
+		mounted() {
+			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
+			if (this.pTeamInfo != null) {
+				this.teamInfo = this.pTeamInfo;
+				return;
+			}
+		},
 		data() {
 			return {
 				teamInfo: {
@@ -129,6 +149,7 @@
 					hometown: '',
 					foundationYmd: '',
 					introduction: '',
+					teamLogoImage: null,
 					teamRegularExercises: [{}],
 				},
 				rules: [
@@ -218,11 +239,11 @@
 				}
 				this.teamInfo.teamRegularExercises.splice(idx, 1);
 			},
-		},
-		mounted() {
-			if (this.pTeamInfo != null) {
-				this.teamInfo = this.pTeamInfo;
-			}
+			setImageFile(imageFile) {
+				console.log(imageFile);
+				this.teamInfo.teamLogoImage = imageFile;
+				this.$emit('e-team-info', this.teamInfo);
+			},
 		},
 	};
 </script>

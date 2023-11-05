@@ -30,7 +30,7 @@
 </template>
 
 <script>
-	import MyTeamProfileImageComp from '@/components/myTeam/MyTeamProfileImageComp.vue';
+	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
 
 	export default {
 		components: {

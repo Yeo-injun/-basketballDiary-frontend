@@ -3,7 +3,7 @@
 		<TeamCreationBtn />
 		<h1>소속팀 목록</h1>
 		<MyTeamComp
-			v-for="(team, index) in teamList"
+			v-for="(team, index) in myTeams"
 			:key="index"
 			:pTeamInfo="team"
 		/>
@@ -11,7 +11,7 @@
 		<v-pagination
 			v-model="pagination.pageNo"
 			:length="pagination.totalPageCount"
-			@input="searchMyTeams"
+			@input="getMyTeamsWithPagination"
 		/>
 	</v-container>
 </template>
@@ -33,7 +33,7 @@
 		},
 		data: () => {
 			return {
-				teamList: [],
+				myTeams: [],
 				pagination: PaginationUtil.getIntlPager(),
 			};
 		},
@@ -41,15 +41,14 @@
 			async getMyTeams(params) {
 				// 비동기적인 console.log 처리로 인해 발생하는 현상
 				// https://kkangdda.tistory.com/81
-				const res = await MyTeamAPI.searchTeams(params);
-				this.teamList = res.data.myTeamDTOList;
+				const res = await MyTeamAPI.getMyTeams(params);
+				this.myTeams = res.data.myTeamDTOList;
 				this.pagination = res.data.pagerDTO;
 			},
-			searchMyTeams() {
-				const params = {
+			getMyTeamsWithPagination() {
+				this.getMyTeams({
 					pageNo: this.pagination.pageNo,
-				};
-				this.getMyTeams(params);
+				});
 			},
 		},
 		mounted() {
