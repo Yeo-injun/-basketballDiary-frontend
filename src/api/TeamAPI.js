@@ -10,6 +10,6 @@ export default {
 	},
 	/** API021 : 팀 등록 */
 	registerTeam(params) {
-		return axiosService.post('', params);
+		return axiosService.postWithMultipart('', params);
 	},
 };

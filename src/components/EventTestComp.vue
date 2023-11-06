@@ -11,6 +11,8 @@
 </template>
 
 <script>
+	import ValidationUtil from '@/common/util/ValidationUtil';
+
 	export default {
 		data() {
 			return {
@@ -74,6 +76,7 @@
 				}
 			},
 			onClick() {
+				console.log(ValidationUtil.isNull([{}]));
 				console.log('CLICK');
 			},
 		},
