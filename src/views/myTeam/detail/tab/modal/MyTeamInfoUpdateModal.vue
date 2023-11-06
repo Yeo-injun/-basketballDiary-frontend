@@ -1,9 +1,7 @@
 <template>
 	<v-dialog v-model="isActivate" width="1200">
 		<v-card>
-			<v-card-title class="text-h5 grey lighten-2">
-				팀정보(TODO 기존 컴포넌트 삭제 필요 )
-			</v-card-title>
+			<v-card-title class="text-h5 grey lighten-2"> 팀정보 </v-card-title>
 
 			<v-card-text>
 				<TeamInfoFormComp :pTeamInfo="teamInfo" @e-team-info="setTeamInfo" />
