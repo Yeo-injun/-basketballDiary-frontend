@@ -66,9 +66,9 @@
 	import AuthUtil from '@/common/AuthUtil.js';
 
 	/** Components */
-	import MyTeamProfileComp from '@/components/myTeam/MyTeamProfileComp.vue';
-	import MyTeamManagerComp from '@/components/myTeam/MyTeamManagerComp.vue';
-	import MyTeamMemberComp from '@/components/myTeam/MyTeamMemberComp.vue';
+	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
+	import MyTeamManagerComp from '@/views/myTeam/detail/components/MyTeamManagerComp.vue';
+	import MyTeamMemberComp from '@/views/myTeam/detail/components/MyTeamMemberComp.vue';
 
 	import MyTeamInfoUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamInfoUpdateModal.vue';
 	import MyTeamProfileUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamProfileUpdateModal.vue';
