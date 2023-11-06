@@ -40,9 +40,10 @@ function toStringExceptImage(data, key) {
 }
 
 function isImageType(data, key) {
-	const value = data[key];
-	const valuType = value['type'];
 	const nullTypes = new Set([null, undefined, '']);
+
+	const value = data[key];
+	const valuType = nullTypes.has(value) ? '' : value['type'];
 	if (!nullTypes.has(valuType) && -1 < valuType.indexOf('image/')) {
 		return true;
 	}

@@ -193,6 +193,7 @@
 			teamInfo: {
 				deep: true,
 				handler: function (newTeamInfo) {
+					console.log('watch-teamInfo');
 					// rule기반으로 유효성 체크해서 데이터가 유효할 경우에만 넘기기
 					// 참고자료 : https://minu0807.tistory.com/82
 					const isValid = this.$refs.form.validate();
@@ -240,9 +241,7 @@
 				this.teamInfo.teamRegularExercises.splice(idx, 1);
 			},
 			setImageFile(imageFile) {
-				console.log(imageFile);
 				this.teamInfo.teamLogoImage = imageFile;
-				this.$emit('e-team-info', this.teamInfo);
 			},
 		},
 	};
