@@ -130,6 +130,8 @@
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 	import DateUtil from '@/common/DateUtil.js';
 
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
 	export default {
 		components: {
 			MyTeamImage,
@@ -149,9 +151,9 @@
 					hometown: '',
 					foundationYmd: '',
 					introduction: '',
-					teamLogoImage: null,
 					teamRegularExercises: [{}],
 				},
+				teamLogoImage: null,
 				rules: [
 					(str) => !!str || '필수 입력사항입니다.',
 					(str) => (str && str.length >= 2) || '2자 이상 입력해야합니다.',
@@ -193,13 +195,22 @@
 			teamInfo: {
 				deep: true,
 				handler: function (newTeamInfo) {
-					console.log('watch-teamInfo');
 					// rule기반으로 유효성 체크해서 데이터가 유효할 경우에만 넘기기
 					// 참고자료 : https://minu0807.tistory.com/82
 					const isValid = this.$refs.form.validate();
 					if (isValid) {
-						this.$emit('e-team-info', newTeamInfo);
+						// 정기운동시간 목록 처리하기
+						if (ValidationUtil.isNull(newTeamInfo.teamRegularExercises)) {
+							newTeamInfo.teamRegularExercises = [];
+						}
+						this.$emit('change-team-info', newTeamInfo);
 					}
+				},
+			},
+			teamLogoImage: {
+				deep: true,
+				handler: function (newTeamLogoImage) {
+					this.$emit('change-team-logo-image', newTeamLogoImage);
 				},
 			},
 		},
@@ -207,6 +218,10 @@
 			pTeamInfo: Object,
 		},
 		methods: {
+			setImageFile(imageFile) {
+				this.teamLogoImage = imageFile;
+			},
+
 			setFoundationYmd(ymd) {
 				this.teamInfo.foundationYmd = DateUtil.Format.toString(ymd);
 			},
@@ -239,9 +254,6 @@
 					return;
 				}
 				this.teamInfo.teamRegularExercises.splice(idx, 1);
-			},
-			setImageFile(imageFile) {
-				this.teamInfo.teamLogoImage = imageFile;
 			},
 		},
 	};

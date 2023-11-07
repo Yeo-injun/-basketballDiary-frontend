@@ -9,9 +9,7 @@
 			</v-card-title>
 			<v-row dense>
 				<v-col cols="5">
-					<!-- 사진 -->
-					사진 넣기
-					{{ this.pGameJoinTeamInfo.imagePath }}
+					<TeamLogoImage :pImageUrl="pGameJoinTeamInfo.teamImagePath" />
 				</v-col>
 				<v-col cols="7">
 					<div>팀장이름 : {{ this.pGameJoinTeamInfo.leaderName }}</div>
@@ -23,10 +21,25 @@
 </template>
 
 <script>
+	/**
+	 * Components
+	 */
+	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
+
+	/**
+	 * Utils
+	 */
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
+	/**
+	 * Code
+	 */
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
 	export default {
+		components: {
+			TeamLogoImage,
+		},
 		props: {
 			pGameJoinTeamInfo: Object,
 		},

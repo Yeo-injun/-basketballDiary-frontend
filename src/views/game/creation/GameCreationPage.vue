@@ -7,9 +7,7 @@
 	내려주는 props가 값일때는 props명으로 작성
 	-->
 	<v-container>
-		<h2>경기 정보</h2>
-		<GameCreationBtn @do-save="createGame()" pBtnName="게임생성" />
-
+		<MainTitle pTitleName="경기정보" />
 		<!-- 경기시작시간 및 종료시간 셀렉트박스로 만드는거 검토 -->
 		<v-form ref="gameCreationInfo">
 			<CustomDatePickerComp
@@ -49,28 +47,30 @@
 				v-model="gamePlaceName"
 			/>
 		</v-form>
+		<GameCreationBtn @do-save="createGame()" pBtnName="게임생성" />
 	</v-container>
 </template>
 
 <script>
-	import gameApi from '@/api/GameAPI.js';
+	import GameAPI from '@/api/GameAPI.js';
 	import AddressOpenApi from '@/common/address/AddressOpenApi.js';
 
-	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
+	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
 	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
 	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
-
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
+	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
 
 	import DateUtil from '@/common/DateUtil.js';
 	import ValidationUtil from '@/common/util/ValidationUtil';
 
 	export default {
 		components: {
-			GameCreationBtn,
+			MainTitle,
 			GameStartTimeSelectbox,
 			GameEndTimeSelectbox,
 			CustomDatePickerComp,
+			GameCreationBtn,
 		},
 		data() {
 			return {
@@ -143,7 +143,7 @@
 					},
 				};
 
-				const { data } = await gameApi.createGame(reqBody);
+				const { data } = await GameAPI.createGame(reqBody);
 
 				this.$router.push({
 					name: 'GameJoinTeamSelectionPage',

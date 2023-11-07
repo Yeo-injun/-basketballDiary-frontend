@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<v-btn color="primary" @click="doSave">{{ this.pBtnName }}</v-btn>
+		<v-btn block color="primary" @click="doSave">{{ this.pBtnName }}</v-btn>
 	</v-container>
 </template>
 
