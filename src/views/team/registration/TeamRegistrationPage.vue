@@ -1,14 +1,17 @@
 <template>
 	<v-container>
-		<PageTitle pTitleName="팀등록화면" />
-		<TeamInfoFormComp @e-team-info="setTeamInfo" />
+		<MainTitle pTitleName="팀등록화면" />
+		<TeamInfoFormComp
+			@change-team-info="setTeamInfo"
+			@change-team-logo-image="setTeamLogoImage"
+		/>
 		<TeamRegistrationBtn pBtnName="팀등록" @do-save="registerTeam()" />
 	</v-container>
 </template>
 
 <script>
 	import TeamAPI from '@/api/TeamAPI.js';
-	import PageTitle from '@/components/title/FramePageMainTitle.vue';
+	import MainTitle from '@/components/title/FramePageMainTitle.vue';
 	import TeamInfoFormComp from '@/components/team/TeamInfoFormComp.vue';
 	import TeamRegistrationBtn from '@/components/button/FrameSaveBtn.vue';
 
@@ -16,19 +19,22 @@
 
 	export default {
 		components: {
-			PageTitle,
+			MainTitle,
 			TeamInfoFormComp,
 			TeamRegistrationBtn,
 		},
 		data() {
 			return {
 				teamInfo: {},
+				teamLogoImage: null,
 			};
 		},
-		watch: {},
 		methods: {
-			setTeamInfo(eTeamInfo) {
-				this.teamInfo = eTeamInfo;
+			setTeamInfo(teamInfo) {
+				this.teamInfo = teamInfo;
+			},
+			setTeamLogoImage(logoImage) {
+				this.teamLogoImage = logoImage;
 			},
 			async registerTeam() {
 				// TODO 팀정보를 제대로 입력했는지 검증로직 추가 수정요망
@@ -44,15 +50,11 @@
 						hometown: teamInfo.hometown,
 						foundationYmd: teamInfo.foundationYmd,
 						introduction: teamInfo.introduction,
-						teamRegularExercises: ValidationUtil.isNull(
-							teamInfo.teamRegularExercises
-						)
-							? teamInfo.teamRegularExercises
-							: [],
+						teamRegularExercises: teamInfo.teamRegularExercises,
 						sidoCode: teamInfo.sidoCode,
 						sigunguCode: teamInfo.sigunguCode,
 					},
-					teamLogoImage: teamInfo.teamLogoImage,
+					teamLogoImage: this.teamLogoImage,
 				});
 				alert('팀이 정상적으로 등록되었습니다.');
 				this.$router.push({ name: 'MyTeamListPage' });
