@@ -1,20 +1,24 @@
 <template>
 	<v-container>
-		팀 등록 화면
+		<PageTitle pTitleName="팀등록화면" />
 		<TeamInfoFormComp @e-team-info="setTeamInfo" />
-		<v-btn color="primary" depressed @click="registerTeam()"> 등록 </v-btn>
+		<TeamRegistrationBtn pBtnName="팀등록" @do-save="registerTeam()" />
 	</v-container>
 </template>
 
 <script>
 	import TeamAPI from '@/api/TeamAPI.js';
+	import PageTitle from '@/components/title/FramePageMainTitle.vue';
 	import TeamInfoFormComp from '@/components/team/TeamInfoFormComp.vue';
+	import TeamRegistrationBtn from '@/components/button/FrameSaveBtn.vue';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	export default {
 		components: {
+			PageTitle,
 			TeamInfoFormComp,
+			TeamRegistrationBtn,
 		},
 		data() {
 			return {
