@@ -13,7 +13,11 @@ export default {
 	 */
 	/* API014 : 소속팀 목록 조회 */
 	getMyTeams(messge) {
-		return axiosService.get('', { messge });
+		return axiosService.get('', {
+			params: {
+				pageNo: messge.pageNo,
+			},
+		});
 	},
 	/* API012 소속팀 개인프로필 수정 */
 	modifyMyTeamsProfile(messge) {
