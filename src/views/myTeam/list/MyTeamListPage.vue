@@ -25,6 +25,7 @@
 	import TeamCreationBtn from '@/views/myTeam/list/button/TeamCreationBtn.vue';
 
 	import PaginationUtil from '@/common/util/PaginationUtil.js';
+	import ValidationUtil from '@/common/util/ValidationUtil';
 
 	export default {
 		components: {
@@ -38,17 +39,18 @@
 			};
 		},
 		methods: {
-			async getMyTeams(params) {
+			async getMyTeams(pageNo) {
 				// 비동기적인 console.log 처리로 인해 발생하는 현상
 				// https://kkangdda.tistory.com/81
-				const res = await MyTeamAPI.getMyTeams(params);
-				this.myTeams = res.data.myTeamDTOList;
-				this.pagination = res.data.pagerDTO;
-			},
-			getMyTeamsWithPagination() {
-				this.getMyTeams({
-					pageNo: this.pagination.pageNo,
+				const res = await MyTeamAPI.getMyTeams({
+					pageNo: ValidationUtil.isNotNull(pageNo) ? pageNo : 0,
 				});
+				this.myTeams = res.data.myTeams;
+				this.pagination = res.data.pagination;
+			},
+			/** v-pagination @input이벤트 - page번호가 바뀌면 바뀐 page번호가 이벤트 handler의 인자로 들어옴 */
+			getMyTeamsWithPagination(pageNo) {
+				this.getMyTeams(pageNo);
 			},
 		},
 		mounted() {
