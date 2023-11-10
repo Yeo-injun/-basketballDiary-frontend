@@ -6,9 +6,12 @@
 		<MyTeamGameRecordSearchComp />
 		<!-- 목록영역 컴포넌트 : 소제목 포함 / item 반복문 -->
 		<div>총 {{ gameCount }}개</div>
-		<v-container v-for="game in games" :key="game.gameSeq">
-			<MyTeamGameRecordComp :pGame="game" :pTeamSeq="pTeamSeq" />
-		</v-container>
+		<MyTeamGameRecordComp
+			v-for="game in games"
+			:key="game.gameSeq"
+			:pGame="game"
+			:pTeamSeq="pTeamSeq"
+		/>
 		<v-pagination
 			v-model="pagination.pageNo"
 			:length="pagination.totalPageCount"
