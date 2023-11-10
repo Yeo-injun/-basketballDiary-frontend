@@ -125,8 +125,13 @@ export default {
 		);
 	},
 	/* API052 : 소속팀 게임목록조회 */
-	searchMyTeamGames(messge) {
-		return axiosService.get(`/${messge.teamSeq}/games`);
+	searchMyTeamGames(path, query) {
+		return axiosService.get(`/${path.teamSeq}/games`, {
+			params: {
+				pageNo: query.pageNo,
+				// TODO 검색조건 추가
+			},
+		});
 	},
 	/* API036 : 소속팀 전체 팀원 검색 */
 	searchAllTeamMembers(messge) {
