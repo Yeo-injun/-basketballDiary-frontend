@@ -9,6 +9,11 @@
 		<v-container v-for="game in games" :key="game.gameSeq">
 			<MyTeamGameRecordComp :pGame="game" :pTeamSeq="pTeamSeq" />
 		</v-container>
+		<v-pagination
+			v-model="pagination.pageNo"
+			:length="pagination.totalPageCount"
+			@input="getMyTeamsWithPagination"
+		/>
 	</v-container>
 </template>
 
@@ -17,6 +22,8 @@
 
 	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
 	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
+
+	import PaginationUtil from '@/common/util/PaginationUtil.js';
 
 	export default {
 		components: {
@@ -31,6 +38,7 @@
 				games: [],
 				// TODO 페이지네이션 추가 필요
 				gameCount: 0,
+				pagination: PaginationUtil.getIntlPager(),
 			};
 		},
 		props: {
