@@ -38,10 +38,10 @@ export default {
 		return axiosService.get(`/${teamSeq}/managers`);
 	},
 	/* API002 : 소속팀 팀원목록 조회 */
-	getTeamMembers(teamSeq, pageNo) {
-		return axiosService.get(`/${teamSeq}/members`, {
+	getTeamMembers(path, query) {
+		return axiosService.get(`/${path.teamSeq}/members`, {
 			params: {
-				pageNo: pageNo,
+				pageNo: query.pageNo,
 			},
 		});
 	},
