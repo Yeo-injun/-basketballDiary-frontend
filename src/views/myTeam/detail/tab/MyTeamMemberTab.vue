@@ -47,13 +47,11 @@
 			</div>
 
 			<!-- TODO 페이지네이션 공통 컴포넌트로 관리하기 -->
-			<div class="text-center">
-				<v-pagination
-					v-model="pager.pageNo"
-					:length="pager.totalPageCount"
-					@input="handlePage"
-				/>
-			</div>
+			<v-pagination
+				v-model="pagination.pageNo"
+				:length="pagination.totalPageCount"
+				@input="getTeamMembersWithPagination"
+			/>
 		</v-container>
 	</div>
 </template>
@@ -64,6 +62,7 @@
 	/** CODE */
 	/** Utils */
 	import AuthUtil from '@/common/AuthUtil.js';
+	import PaginationUtil from '@/common/util/PaginationUtil.js';
 
 	/** Components */
 	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
@@ -103,12 +102,7 @@
 				teamInfo: {},
 				isActivatedTeamInfoModal: false,
 				isActivatedProfileModal: false,
-				// TODO 페이지네이션 공통 처리 적용
-				pager: {
-					pageNo: 1,
-					totalCount: 0,
-					totalPageCount: 1,
-				},
+				pagination: PaginationUtil.getIntlPager(),
 			};
 		},
 		methods: {
@@ -124,14 +118,18 @@
 				const response = await MyTeamAPI.getManagers(this.teamSeq);
 				this.managers = response.data.managers;
 			},
-			async getTeamMembers() {
+			async getTeamMembers(pageNo) {
 				const response = await MyTeamAPI.getTeamMembers(
-					this.teamSeq,
-					this.pager.pageNo - 1
+					{ teamSeq: this.teamSeq },
+					{ pageNo: pageNo }
 				);
 				const { data } = response;
 				this.teamMembers = data.teamMembers;
-				this.pager = data.pager;
+				this.pagination = data.pagination;
+			},
+			/** v-pagination @input이벤트 - page번호가 바뀌면 바뀐 page번호가 이벤트 handler의 인자로 들어옴 */
+			getTeamMembersWithPagination(pageNo) {
+				this.getTeamMembers(pageNo);
 			},
 			clickAddTeamMember() {
 				const teamSeq = this.teamSeq;
@@ -139,9 +137,6 @@
 					name: 'MyTeamMemberManagePage',
 					query: { teamSeq: teamSeq },
 				});
-			},
-			handlePage() {
-				this.getTeamMembers();
 			},
 			isManager() {
 				return AuthUtil.isManager(this.teamSeq);
