@@ -1,9 +1,9 @@
 <template>
-	<v-container>
-		<v-btn class="mb-2 mr-2" width="100" @click="doSearach">
-			{{ btnName }}
-		</v-btn>
-	</v-container>
+	<!-- <v-container> -->
+	<v-btn class="mb-2 mr-2" width="100" @click="doSearach">
+		{{ btnName }}
+	</v-btn>
+	<!-- </v-container> -->
 </template>
 
 <script>
