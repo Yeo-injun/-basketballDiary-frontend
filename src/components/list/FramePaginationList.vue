@@ -36,25 +36,24 @@
 			};
 		},
 		watch: {
-			// 상위 컴포넌트에서 받아온 페이징 데이터로 초기화
+			// 상위 컴포넌트에서 받아온 페이징 데이터의 변경사항 체크하여 초기화
 			pPagination: {
 				handler() {
-					if (ValidationUtil.isNull(this.pPagination)) {
-						this.pagination = this.initPagination();
-						return;
-					}
-					this.pagination = this.pPagination;
+					this.pagination = this.initPagination();
 				},
 				deep: true,
 			},
 		},
 		methods: {
 			initPagination() {
-				return {
-					pageNo: 1,
-					totalPageCount: 1,
-					totalCount: 0,
-				};
+				if (ValidationUtil.isNull(this.pPagination)) {
+					return {
+						pageNo: 1,
+						totalPageCount: 1,
+						totalCount: 0,
+					};
+				}
+				return this.pPagination;
 			},
 			onClickPage() {
 				console.log(this.pagination);
