@@ -9,7 +9,7 @@
 		</div>
 
 		<!-- 보여줄 데이터가 없을 경우 -->
-		<v-container v-if="pList.length == 3">
+		<v-container v-if="pList.length == 0">
 			<slot name="itemEmptySlot"></slot>
 		</v-container>
 
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+	import ValidationUtil from '@/common/util/ValidationUtil';
+
 	export default {
 		props: {
 			pList: Array,
@@ -30,24 +32,29 @@
 		},
 		data() {
 			return {
-				pagination: {
-					pageNo: 1,
-					totalPageCount: 3,
-					totalCount: 0,
-				},
+				pagination: this.initPagination(),
 			};
 		},
 		watch: {
-			// 상위 컴포넌트에서 받아온 페이징 데이터로 초기화
+			// 상위 컴포넌트에서 받아온 페이징 데이터의 변경사항 체크하여 초기화
 			pPagination: {
 				handler() {
-					console.log(this.pPagination);
-					this.pagination = this.pPagination;
+					this.pagination = this.initPagination();
 				},
 				deep: true,
 			},
 		},
 		methods: {
+			initPagination() {
+				if (ValidationUtil.isNull(this.pPagination)) {
+					return {
+						pageNo: 1,
+						totalPageCount: 1,
+						totalCount: 0,
+					};
+				}
+				return this.pPagination;
+			},
 			onClickPage() {
 				console.log(this.pagination);
 				this.$emit('click-page', this.pagination);

@@ -8,8 +8,8 @@
 				<v-col cols="4">
 					<TeamLogoImage
 						:pImageUrl="team.teamImagePath"
-						:pMaxWidth="200"
-						:pMaxHeight="200"
+						:pMaxWidth="String(200)"
+						:pMaxHeight="String(200)"
 					/>
 				</v-col>
 				<v-col cols="8">
