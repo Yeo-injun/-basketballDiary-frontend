@@ -1,29 +1,24 @@
 <template>
 	<v-container>
-		<TeamSearchComp @on-cond-change="onCondChange" @on-search="searchTeams" />
-		<!-- 팀목록 : TODO 팀정보 컴포넌트 만들기 -->
-
+		<TeamSearchComp
+			@on-cond-change="onSearchCondChange"
+			@on-search="searchTeams"
+		/>
 		<TeamListPageSubTitle pTitleName="농구팀 목록" />
 
-		<v-container v-for="(item, index) in teamList" :key="index">
-			<TeamComp v-bind:pTeam="item" />
-		</v-container>
-		<v-container v-if="teamList.length == 0">
-			검색 조건에 맞는 팀이 없습니다!
-		</v-container>
-		<div class="text-center">
-			<v-pagination
-				v-model="pagination.pageNo"
-				:length="pagination.totalPageCount"
-				@input="searchTeams"
-			/>
-		</div>
+		<TeamListPagination :pList="teamList" :pPagination="pagination">
+			<template v-slot:itemSlot="data">
+				<TeamComp :pTeam="data.item" />
+			</template>
+			<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
+		</TeamListPagination>
 	</v-container>
 </template>
 
 <script>
 	import TeamSearchComp from '@/views/team/list/components/TeamSearchComp.vue';
 	import TeamListPageSubTitle from '@/components/title/FramePageSubTitle.vue';
+	import TeamListPagination from '@/components/list/FramePaginationList.vue';
 	import TeamComp from '@/views/team/list/components/TeamComp.vue';
 
 	import TeamAPI from '@/api/TeamAPI.js';
@@ -32,21 +27,18 @@
 		components: {
 			TeamSearchComp,
 			TeamListPageSubTitle,
+			TeamListPagination,
 			TeamComp,
 		},
 		data() {
 			return {
 				searchCond: {},
 				teamList: [],
-				pagination: {
-					pageNo: 1,
-					totalPageCount: 1,
-					totalCount: 0,
-				},
+				pagination: {}, // 비어있는 초기화해서 자식컴포넌트에 props 로 넘겨주면 초기화값 반영
 			};
 		},
 		methods: {
-			onCondChange(cond) {
+			onSearchCondChange(cond) {
 				this.searchCond.teamName = cond.teamName;
 				this.searchCond.startDay = cond.startDay;
 				this.searchCond.endDay = cond.endDay;
@@ -56,7 +48,7 @@
 			async searchTeams() {
 				console.log(this.pagination);
 
-				const res = await TeamAPI.searchTeamList({
+				const { data } = await TeamAPI.searchTeamList({
 					'team-name': this.searchCond.teamName,
 					'start-day': this.searchCond.startDay,
 					'end-day': this.searchCond.endDay,
@@ -64,8 +56,9 @@
 					'end-time': this.searchCond.endTime,
 					'page-no': this.pagination.pageNo,
 				});
-				this.teamList = res.data.teamDTOList;
-				this.pagination = res.data.pagerDTO;
+				// TODO API 메세지 속성명 변경 teamList / pagination
+				this.teamList = data.teamDTOList;
+				this.pagination = data.pagerDTO;
 			},
 		},
 		mounted() {
