@@ -30,9 +30,6 @@
 
 	/** Utils */
 
-	// Vue lifeCycle 에 관하여
-	// https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
-
 	export default {
 		components: {
 			MyTeamList,

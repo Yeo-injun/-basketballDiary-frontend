@@ -2,61 +2,60 @@
 
 <template>
 	<v-container>
-		<h2>{{ teamName }} 게임목록조회</h2>
+		<h2>{{ this.pTeamName }} 경기목록조회</h2>
 		<MyTeamGameRecordSearchComp />
 		<div>총 {{ pagination.totalCount }}개</div>
-		<MyTeamGameRecordComp
-			v-for="game in games"
-			:key="game.gameSeq"
-			:pGame="game"
-			:pTeamSeq="pTeamSeq"
-		/>
-		<v-pagination
-			v-model="pagination.pageNo"
-			:length="pagination.totalPageCount"
-			@input="searchMyTeamGamesWithPagination"
-		/>
+		<MyTeamGameRecordList
+			:pList="games"
+			:pPagination="pagination"
+			@click-page="searchMyTeamGames"
+		>
+			<template v-slot:itemSlot="data">
+				<MyTeamGameRecordComp :pGame="data.item" :pTeamSeq="pTeamSeq" />
+			</template>
+			<template v-slot:itemEmptySlot> 경기 기록이 존재하지 않습니다. </template>
+		</MyTeamGameRecordList>
 	</v-container>
 </template>
 
 <script>
-	import MyTeamAPI from '@/api/MyTeamAPI.js';
-
+	/** Components */
 	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
+	import MyTeamGameRecordList from '@/components/list/FramePaginationList.vue';
 	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
 
-	import PaginationUtil from '@/common/util/PaginationUtil.js';
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+
+	/** CODE */
+
+	/** Utils */
 
 	export default {
 		components: {
 			MyTeamGameRecordSearchComp,
+			MyTeamGameRecordList,
 			MyTeamGameRecordComp,
 		},
 		data() {
-			const query = this.$route.query;
 			return {
-				teamSeq: query.teamSeq,
-				teamName: query.pTeamName,
 				games: [],
-				pagination: PaginationUtil.getIntlPager(),
+				pagination: {},
 			};
 		},
 		props: {
 			pTeamSeq: Number,
+			pTeamName: String,
 		},
 		methods: {
 			/* API052 : 소속팀 게임목록조회 */
-			async searchMyTeamGames(pageNo) {
+			async searchMyTeamGames() {
 				const { data } = await MyTeamAPI.searchMyTeamGames(
-					{ teamSeq: this.teamSeq },
-					{ pageNo: pageNo }
+					{ teamSeq: this.pTeamSeq },
+					{ pageNo: this.pagination.pageNo }
 				);
 				this.games = data.games;
 				this.pagination = data.pagination;
-			},
-			/** v-pagination @input이벤트 - page번호가 바뀌면 바뀐 page번호가 이벤트 handler의 인자로 들어옴 */
-			searchMyTeamGamesWithPagination(pageNo) {
-				this.searchMyTeamGames(pageNo);
 			},
 		},
 		mounted() {
