@@ -2,55 +2,58 @@
 	<v-container>
 		<TeamCreationBtn />
 		<h1>소속팀 목록</h1>
-		<MyTeamComp
-			v-for="(team, index) in myTeams"
-			:key="index"
-			:pTeamInfo="team"
-		/>
-
-		<v-pagination
-			v-model="pagination.pageNo"
-			:length="pagination.totalPageCount"
-			@input="getMyTeamsWithPagination"
-		/>
+		<MyTeamList
+			:pList="myTeams"
+			:pPagination="pagination"
+			@click-page="getMyTeams"
+		>
+			<template v-slot:itemSlot="data">
+				<MyTeamComp :pTeamInfo="data.item" />
+			</template>
+			<template v-slot:itemEmptySlot>
+				소속되어 있는 농구 팀이 없습니다.
+			</template>
+		</MyTeamList>
 	</v-container>
 </template>
 
 <script>
-	// Vue lifeCycle 에 관하여
-	// https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
-	import MyTeamAPI from '@/api/MyTeamAPI';
+	/** Components */
+	import MyTeamList from '@/components/list/FramePaginationList.vue';
 	import MyTeamComp from '@/views/myTeam/list/components/MyTeamComp.vue';
 
 	import TeamCreationBtn from '@/views/myTeam/list/button/TeamCreationBtn.vue';
 
-	import PaginationUtil from '@/common/util/PaginationUtil.js';
-	import ValidationUtil from '@/common/util/ValidationUtil';
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+	/** CODE */
+
+	/** Utils */
+
+	// Vue lifeCycle 에 관하여
+	// https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html
 
 	export default {
 		components: {
+			MyTeamList,
 			MyTeamComp,
 			TeamCreationBtn,
 		},
-		data: () => {
+		data() {
 			return {
 				myTeams: [],
-				pagination: PaginationUtil.getIntlPager(),
+				pagination: {},
 			};
 		},
 		methods: {
-			async getMyTeams(pageNo) {
+			async getMyTeams() {
 				// 비동기적인 console.log 처리로 인해 발생하는 현상
 				// https://kkangdda.tistory.com/81
 				const res = await MyTeamAPI.getMyTeams({
-					pageNo: ValidationUtil.isNotNull(pageNo) ? pageNo : 0,
+					pageNo: this.pagination.pageNo,
 				});
 				this.myTeams = res.data.myTeams;
 				this.pagination = res.data.pagination;
-			},
-			/** v-pagination @input이벤트 - page번호가 바뀌면 바뀐 page번호가 이벤트 handler의 인자로 들어옴 */
-			getMyTeamsWithPagination(pageNo) {
-				this.getMyTeams(pageNo);
 			},
 		},
 		mounted() {

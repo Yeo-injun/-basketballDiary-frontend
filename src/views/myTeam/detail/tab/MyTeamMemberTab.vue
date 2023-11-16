@@ -41,7 +41,7 @@
 			/>
 
 			<v-subheader>팀원 목록</v-subheader>
-			<TeamMemberListPagination
+			<TeamMemberList
 				:pList="teamMembers"
 				:pPagination="pagination"
 				@click-page="getTeamMembers"
@@ -50,7 +50,7 @@
 					<MyTeamMemberComp :pTeamMember="data.item" :pTeamSeq="teamSeq" />
 				</template>
 				<template v-slot:itemEmptySlot> 등록된 팀원이 없습니다. </template>
-			</TeamMemberListPagination>
+			</TeamMemberList>
 		</v-container>
 	</div>
 </template>
@@ -73,7 +73,7 @@
 
 	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
 	import MyTeamManagerComp from '@/views/myTeam/detail/components/MyTeamManagerComp.vue';
-	import TeamMemberListPagination from '@/components/list/FramePaginationList.vue';
+	import TeamMemberList from '@/components/list/FramePaginationList.vue';
 	import MyTeamMemberComp from '@/views/myTeam/detail/components/MyTeamMemberComp.vue';
 
 	// TODO 팀원추가 화면을 Layer로 구현하는 것을 고민... FrameOpenBtn 으로 대체 예정
@@ -90,7 +90,7 @@
 
 			MyTeamProfileComp,
 			MyTeamManagerComp,
-			TeamMemberListPagination,
+			TeamMemberList,
 			MyTeamMemberComp,
 		},
 		data() {
