@@ -6,7 +6,7 @@
 		/>
 		<TeamListPageSubTitle pTitleName="농구팀 목록" />
 
-		<TeamListPagination
+		<TeamList
 			:pList="teams"
 			:pPagination="pagination"
 			@click-page="searchTeams"
@@ -15,14 +15,14 @@
 				<TeamComp :pTeam="data.item" />
 			</template>
 			<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
-		</TeamListPagination>
+		</TeamList>
 	</v-container>
 </template>
 
 <script>
 	import TeamSearchComp from '@/views/team/list/components/TeamSearchComp.vue';
 	import TeamListPageSubTitle from '@/components/title/FramePageSubTitle.vue';
-	import TeamListPagination from '@/components/list/FramePaginationList.vue';
+	import TeamList from '@/components/list/FramePaginationList.vue';
 	import TeamComp from '@/views/team/list/components/TeamComp.vue';
 
 	import TeamAPI from '@/api/TeamAPI.js';
@@ -31,7 +31,7 @@
 		components: {
 			TeamSearchComp,
 			TeamListPageSubTitle,
-			TeamListPagination,
+			TeamList,
 			TeamComp,
 		},
 		data() {
