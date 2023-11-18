@@ -52,7 +52,7 @@
 			async searchTeams() {
 				console.log(this.pagination);
 
-				const { data } = await TeamAPI.searchTeamList({
+				const { data } = await TeamAPI.searchTeams({
 					'team-name': this.searchCond.teamName,
 					'start-day': this.searchCond.startDay,
 					'end-day': this.searchCond.endDay,
@@ -60,9 +60,9 @@
 					'end-time': this.searchCond.endTime,
 					'page-no': this.pagination.pageNo,
 				});
-				// TODO API 메세지 속성명 변경 teams / pagination
-				this.teams = data.teamDTOList;
-				this.pagination = data.pagerDTO;
+
+				this.teams = data.teams;
+				this.pagination = data.pagination;
 			},
 		},
 		mounted() {
