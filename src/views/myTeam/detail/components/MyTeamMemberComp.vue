@@ -4,11 +4,10 @@
 			<v-card class="grey lighten-3">
 				<v-row align="center">
 					<v-col cols="2">
-						<v-img
-							class="ms-5"
-							max-height="50"
-							max-width="50"
-							src="https://as2.ftcdn.net/v2/jpg/02/29/75/83/1000_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+						<ProfileImage
+							pImageUrl="https://as2.ftcdn.net/v2/jpg/02/29/75/83/1000_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+							:pMaxHeight="String(75)"
+							:pMaxWidth="String(75)"
 						/>
 					</v-col>
 					<v-col cols="10">
@@ -50,11 +49,14 @@
 	import AuthUtil from '@/common/AuthUtil.js';
 
 	/** Components */
+	import ProfileImage from '@/components/image/FrameImageComp.vue';
+
 	import ManagerAppointmentBtn from '@/components/button/ManagerAppointmentBtn.vue';
 	import TeamMemberDischargeBtn from '@/components/button/TeamMemberDischargeBtn.vue';
 
 	export default {
 		components: {
+			ProfileImage,
 			ManagerAppointmentBtn,
 			TeamMemberDischargeBtn,
 		},
