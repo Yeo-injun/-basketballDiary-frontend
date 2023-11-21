@@ -4,7 +4,7 @@
 			<v-card class="grey lighten-3">
 				<v-row align="center">
 					<v-col cols="2">
-						<MyTeamProfileImageComp :pImageUrl="pMyProfile.imageUrl" />
+						<ProfileImage :pImageUrl="pMyProfile.imageUrl" />
 					</v-col>
 					<v-col cols="10">
 						<v-row justify="space-between">
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
+	import ProfileImage from '@/components/image/FrameImageComp.vue';
 
 	export default {
 		components: {
-			MyTeamProfileImageComp,
+			ProfileImage,
 		},
 		props: {
 			pMyProfile: Object,
