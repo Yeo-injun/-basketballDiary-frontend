@@ -39,6 +39,7 @@
 			},
 		},
 		data() {
+			console.log(['FrameImageComp', this.pImageUrl]);
 			const initImageSize = this.getInitImageSize();
 			return {
 				maxHeight: initImageSize.maxHeight,
@@ -50,20 +51,24 @@
 			};
 		},
 		methods: {
+			/**
+			 * props 값을 참조하여 이미지 최대 사이즈 지정
+			 */
 			getInitImageSize() {
 				const hasMaxHeight = !nullTypes.has(this.pMaxHeight);
 				const hasMaxWidth = !nullTypes.has(this.pMaxWidth);
-				if (hasMaxHeight && hasMaxWidth) {
-					return {
-						maxHeight: this.pMaxHeight,
-						maxWidth: this.pMaxWidth,
-					};
-				}
-
+				// 최대 사이즈 props값이 없으면 기본 최대사이즈 지정
 				if (!hasMaxHeight && !hasMaxWidth) {
 					return {
 						maxHeight: 120,
 						maxWidth: 120,
+					};
+				}
+
+				if (hasMaxHeight && hasMaxWidth) {
+					return {
+						maxHeight: this.pMaxHeight,
+						maxWidth: this.pMaxWidth,
 					};
 				}
 

@@ -34,8 +34,10 @@
 					</v-row>
 				</v-col>
 				<v-col cols="5">
-					<MyTeamImage
-						:pImageUrl="teamInfo.logoImageUrl"
+					<!-- props가 온전히 세팅될때까지 이미지 컴포넌트 생성 지연 -->
+					<TeamLogoImage
+						v-if="this.dataInit"
+						:pImageUrl="teamInfo.teamLogoImage"
 						:pMaxHeight="String(250)"
 						:pMaxWidth="String(250)"
 					/>
@@ -126,7 +128,7 @@
 </template>
 
 <script>
-	import MyTeamImage from '@/components/image/FrameImageComp.vue';
+	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 	import DateUtil from '@/common/DateUtil.js';
 
@@ -134,18 +136,23 @@
 
 	export default {
 		components: {
-			MyTeamImage,
+			TeamLogoImage,
 			CustomDatePickerComp,
 		},
 		mounted() {
 			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
-			if (this.pTeamInfo != null) {
-				this.teamInfo = this.pTeamInfo;
+			if (null == this.pTeamInfo) {
 				return;
 			}
+			this.teamInfo = this.pTeamInfo;
+			this.teamLogoImage = this.pTeamInfo.teamLogoImage;
+			this.dataInit = true;
 		},
 		data() {
 			return {
+				/** 컴포넌트 렌더링 제어 상태 */
+				dataInit: false,
+				/** 데이터 */
 				teamInfo: {
 					teamName: '',
 					hometown: '',

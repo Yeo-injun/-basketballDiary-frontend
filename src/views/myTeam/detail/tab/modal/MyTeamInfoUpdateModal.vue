@@ -5,7 +5,8 @@
 
 			<v-card-text>
 				<TeamInfoFormComp
-					:pTeamInfo="teamInfo"
+					v-if="this.dataInit"
+					:pTeamInfo="this.teamInfo"
 					@change-team-info="setTeamInfo"
 					@change-team-logo-image="setTeamLogoImage"
 				/>
@@ -54,6 +55,9 @@
 		},
 		data() {
 			return {
+				/** 데이터 초기화 완료여부 */
+				dataInit: false,
+				/** 관리 데이터 */
 				teamInfo: {},
 				teamLogoImage: null,
 			};
@@ -65,10 +69,9 @@
 			setTeamLogoImage(logoImage) {
 				this.teamLogoImage = logoImage;
 			},
-			async getTeamInfo(teamSeq) {
-				// TODO 두번째 팝업 호출시 왜 순서대로 호출이 안되는지... 확인필요
-				this.teamInfo = await MyTeamAPI.getTeamInfo(teamSeq);
-				console.log(this.teamInfo);
+			async getTeamInfo() {
+				this.teamInfo = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
+				this.teamInfo.teamLogoImage = this.teamInfo.teamImagePath;
 			},
 			async modifyTeamInfo() {
 				await MyTeamAPI.modifyMyTeamInfo(
@@ -80,19 +83,20 @@
 			},
 		},
 		watch: {
-			// 팝업창을 활성화 상태를 감지하여 데이터 호출
-			// isActivate data를 감시하여 해당 데이터에 따라 콜백 함수 처리
-			isActivate: function (isDialogOpend) {
+			/**
+			 * Modal 활성화시 API를 동기처리하여 dataInit 상태를 제어
+			 * 이를 통해 하위 컴포넌트가 create되지 않도록 제어
+			 * cf. 해당 컴포넌트가 다른 컴포넌트의 자식컴포넌트가 되면 mounted는 한번만 호출됨.
+			 *      Modal을 활성화할때마다 데이터를 새로 받아오기 위해서는 mounted가 아니라 Modal의 활성화상태를 감지하여 API통신해야 함.
+			 **/
+			isActivate: async function (isDialogOpend) {
 				if (isDialogOpend) {
-					const teamSeq = this.pTeamSeq;
-					this.getTeamInfo(teamSeq);
+					await this.getTeamInfo();
+					this.dataInit = true;
+					return;
 				}
+				this.dataInit = false;
 			},
-		},
-		// TODO 팝업창이 활성화될때 데이터 호출하는 구조로 변경하기...
-		mounted() {
-			const teamSeq = this.pTeamSeq;
-			this.getTeamInfo(teamSeq);
 		},
 	};
 </script>
