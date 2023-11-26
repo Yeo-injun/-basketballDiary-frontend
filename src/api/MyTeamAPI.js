@@ -1,5 +1,5 @@
 import axios from '@/http/CustomAxios.js';
-import ImageClient from '@/http/ImageClient';
+// import ImageClient from '@/http/ImageClient';
 
 const axiosService = axios.createAxiosInstance('/myTeams');
 
@@ -29,8 +29,6 @@ export default {
 	/* API011 소속팀 개인프로필 조회 */
 	async findMyTeamsProfile(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/profile`);
-		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
-		data.imageUrl = ImageClient.toImageServerUrl(data.memberImagePath);
 		return data;
 	},
 	/* API001 : 소속팀 운영진 조회 */
@@ -46,22 +44,11 @@ export default {
 		});
 	},
 	/* API016 : 소속팀 정보 단건 조회 */
-	// TODO 삭제 예정 API 메소드
 	async getTeamInfo(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/info`);
-		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
-		data.logoImageUrl = ImageClient.toImageServerUrl(data.teamImagePath);
 		return data;
 	},
-
-	searchTeam(teamSeq) {
-		return axiosService.get(`/${teamSeq}/info`);
-	},
 	/* API017 : 소속팀 정보 수정 */
-	// TODO 제거 예정 메소드
-	modifyMyTeam(teamSeq, teamInfo) {
-		return axiosService.postWithMultipart(`/${teamSeq}/info`, teamInfo);
-	},
 	modifyMyTeamInfo(teamSeq, teamInfo, teamLogo) {
 		/**
 		 * Spring에서는 teamInfo와 teamLogo를 각각 @RequestPart 어노테이션으로 받음

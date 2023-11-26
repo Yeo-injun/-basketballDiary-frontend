@@ -4,7 +4,7 @@
 			<v-card class="grey lighten-3">
 				<v-row align="center">
 					<v-col cols="2">
-						<ProfileImage :pImageUrl="pMyProfile.imageUrl" />
+						<ProfileImage :pImageUrl="pMyProfile.memberImagePath" />
 					</v-col>
 					<v-col cols="10">
 						<v-row justify="space-between">
