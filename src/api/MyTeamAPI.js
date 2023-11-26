@@ -49,10 +49,6 @@ export default {
 		return data;
 	},
 	/* API017 : 소속팀 정보 수정 */
-	// TODO 제거 예정 메소드
-	modifyMyTeam(teamSeq, teamInfo) {
-		return axiosService.postWithMultipart(`/${teamSeq}/info`, teamInfo);
-	},
 	modifyMyTeamInfo(teamSeq, teamInfo, teamLogo) {
 		/**
 		 * Spring에서는 teamInfo와 teamLogo를 각각 @RequestPart 어노테이션으로 받음
