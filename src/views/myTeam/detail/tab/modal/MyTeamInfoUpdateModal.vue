@@ -7,8 +7,11 @@
 				<TeamInfoFormComp
 					v-if="this.dataInit"
 					:pTeamInfo="this.teamInfo"
+					:pTeamLogoImagePath="this.teamLogoImagePath"
+					:pTeamRegularExercises="this.teamRegularExercises"
 					@change-team-info="setTeamInfo"
-					@change-team-logo-image="setTeamLogoImage"
+					@change-team-exercises="setTeamExercises"
+					@change-team-logo-image="setTeamLogoImageFile"
 				/>
 			</v-card-text>
 
@@ -59,25 +62,42 @@
 				dataInit: false,
 				/** 관리 데이터 */
 				teamInfo: {},
-				teamLogoImage: null,
+				teamLogoImagePath: '',
+				teamRegularExercises: [],
+				teamLogoImageFile: null,
 			};
 		},
 		methods: {
 			setTeamInfo(teamInfo) {
 				this.teamInfo = teamInfo;
 			},
-			setTeamLogoImage(logoImage) {
-				this.teamLogoImage = logoImage;
+			setTeamExercises(teamExercises) {
+				this.teamRegularExercises = teamExercises;
+			},
+			setTeamLogoImageFile(imageFile) {
+				this.teamLogoImageFile = imageFile;
 			},
 			async getTeamInfo() {
-				this.teamInfo = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
-				this.teamInfo.teamLogoImage = this.teamInfo.teamImagePath;
+				// TODO API 메세지 구조 변경
+				// 팀정보 와 팀 이미지, 팀정기운동목록 정보를 각각 분리....
+				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
+				this.teamInfo = data;
+				this.teamLogoImagePath = data.teamImagePath;
+				this.teamRegularExercises = data.teamRegularExercises;
 			},
 			async modifyTeamInfo() {
 				await MyTeamAPI.modifyMyTeamInfo(
 					this.pTeamSeq,
-					this.teamInfo,
-					this.teamLogoImage
+					{
+						teamName: this.teamInfo.teamName,
+						hometown: this.teamInfo.hometown,
+						introduction: this.teamInfo.introduction,
+						foundationYmd: this.teamInfo.foundationYmd,
+						sidoCode: this.teamInfo.sidoCode,
+						sigunguCode: this.teamInfo.sigunguCode,
+						teamRegularExercises: this.teamRegularExercises,
+					},
+					this.teamLogoImageFile
 				);
 				this.isActivate = false;
 			},

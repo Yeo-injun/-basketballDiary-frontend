@@ -34,10 +34,8 @@
 					</v-row>
 				</v-col>
 				<v-col cols="5">
-					<!-- props가 온전히 세팅될때까지 이미지 컴포넌트 생성 지연 -->
 					<TeamLogoImage
-						v-if="this.dataInit"
-						:pImageUrl="teamInfo.teamLogoImage"
+						:pImageUrl="pTeamLogoImagePath"
 						:pMaxHeight="String(250)"
 						:pMaxWidth="String(250)"
 					/>
@@ -53,7 +51,7 @@
 			<v-row>
 				<v-data-table
 					:headers="headers"
-					:items="teamInfo.teamRegularExercises"
+					:items="teamRegularExercises"
 					hide-default-footer
 				>
 					<template v-slot:top>
@@ -141,11 +139,14 @@
 		},
 		mounted() {
 			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
-			if (null == this.pTeamInfo) {
+			if (ValidationUtil.isNull(this.pTeamInfo)) {
 				return;
 			}
 			this.teamInfo = this.pTeamInfo;
-			this.teamLogoImage = this.pTeamInfo.teamLogoImage;
+			this.teamLogoImage = this.pTeamLogoImagePath;
+			if (ValidationUtil.isNotNull(this.pTeamRegularExercises)) {
+				this.teamRegularExercises = this.pTeamRegularExercises;
+			}
 			this.dataInit = true;
 		},
 		data() {
@@ -158,8 +159,9 @@
 					hometown: '',
 					foundationYmd: '',
 					introduction: '',
-					teamRegularExercises: [{}],
+					// teamRegularExercises: [{}],
 				},
+				teamRegularExercises: [{}],
 				teamLogoImage: null,
 				rules: [
 					(str) => !!str || '필수 입력사항입니다.',
@@ -214,29 +216,35 @@
 					}
 				},
 			},
-			teamLogoImage: {
+			teamLogoImageFile: {
 				deep: true,
-				handler: function (newTeamLogoImage) {
-					this.$emit('change-team-logo-image', newTeamLogoImage);
+				handler: function (newImageFile) {
+					this.$emit('change-team-logo-image', newImageFile);
+				},
+			},
+			teamRegularExercises: {
+				deep: true,
+				handler: function (newData) {
+					this.$emit('change-team-exercises', newData);
 				},
 			},
 		},
 		props: {
 			pTeamInfo: Object,
+			pTeamLogoImagePath: String,
+			pTeamRegularExercises: Array,
 		},
 		methods: {
 			setImageFile(imageFile) {
-				this.teamLogoImage = imageFile;
+				this.teamLogoImageFile = imageFile;
 			},
-
 			setFoundationYmd(ymd) {
 				this.teamInfo.foundationYmd = DateUtil.Format.toString(ymd);
 			},
 			addressAPI(idx) {
 				new window.daum.Postcode({
 					oncomplete: (data) => {
-						this.teamInfo.teamRegularExercises[idx].exercisePlaceAddress =
-							data.address;
+						this.teamRegularExercises[idx].exercisePlaceAddress = data.address;
 					},
 				}).open();
 			},
@@ -251,16 +259,15 @@
 				}).open();
 			},
 			createExerciseTime() {
-				this.teamInfo.teamRegularExercises.push({});
+				this.teamRegularExercises.push({});
 			},
 			deleteExerciseTime(idx) {
-				const isRemainOneExercise =
-					this.teamInfo.teamRegularExercises.length == 1;
+				const isRemainOneExercise = this.teamRegularExercises.length == 1;
 				if (isRemainOneExercise) {
-					alert('정기 운동시간 입력란을 삭제할 수 없습니다.');
+					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
 					return;
 				}
-				this.teamInfo.teamRegularExercises.splice(idx, 1);
+				this.teamRegularExercises.splice(idx, 1);
 			},
 		},
 	};
