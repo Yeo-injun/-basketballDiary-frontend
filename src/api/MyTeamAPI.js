@@ -29,8 +29,6 @@ export default {
 	/* API011 소속팀 개인프로필 조회 */
 	async findMyTeamsProfile(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/profile`);
-		// TODO 걷어내기 - FrameImageComp에서 serverUrl부여하는 것으로 변경
-		data.imageUrl = ImageClient.toImageServerUrl(data.memberImagePath);
 		return data;
 	},
 	/* API001 : 소속팀 운영진 조회 */
