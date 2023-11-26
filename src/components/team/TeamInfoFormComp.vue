@@ -150,7 +150,7 @@
 		},
 		data() {
 			return {
-				/** 컴포넌트 렌더링 제어 상태 */
+				/** 컴포넌트 데이터 init 상태 */
 				dataInit: false,
 				/** 데이터 */
 				teamInfo: {
