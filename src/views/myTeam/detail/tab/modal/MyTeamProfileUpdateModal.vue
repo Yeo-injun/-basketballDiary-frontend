@@ -25,9 +25,15 @@
 					</v-form>
 				</v-container>
 			</v-card-text>
-			<v-card-actions>
-				<MyTeamProfileUpdateBtn pBtnName="수정" @do-update="updateProfile" />
-			</v-card-actions>
+			<MyTeamProfileUpdateBtn pBtnName="수정" @do-update="updateProfile" />
+			<MyTeamProfileUpdateModalCloseBtn
+				@do-close="isActivated = false"
+				pBtnName="닫기"
+			/>
+
+			<!-- <v-card-actions>
+				actions내부에서 컴포넌트를 선언하면 줄바꿈이 되지 않고 옆으로 이어서 보여진다.
+			</v-card-actions> -->
 		</v-card>
 	</v-dialog>
 </template>
@@ -44,11 +50,13 @@
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
+	import MyTeamProfileUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
 
 	export default {
 		components: {
 			MyTeamProfileImageComp,
 			MyTeamProfileUpdateBtn,
+			MyTeamProfileUpdateModalCloseBtn,
 		},
 		data() {
 			return {
