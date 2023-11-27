@@ -15,7 +15,7 @@
 <template>
 	<!-- TODO 버튼 위치 잡기 -->
 	<v-container>
-		<v-btn text color="primary" @click="this.moveRoutePage">
+		<v-btn block text color="primary" @click="this.moveRoutePage">
 			{{ this.getBtnName() }}
 		</v-btn>
 	</v-container>

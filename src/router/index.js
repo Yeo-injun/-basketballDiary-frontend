@@ -87,7 +87,7 @@ export default new VueRouter({
 		 * authUser페이지 TODO 이름 통일하기 - authUser컨트롤러와 이름 통일(API url도 같이)
 		 */
 		createRoute(
-			'views/authUser/MyProfilePage',
+			'views/authUser/profile/MyProfilePage',
 			'/account/profile',
 			'MyProfilePage'
 		),
