@@ -62,9 +62,9 @@
 				dataInit: false,
 				/** 관리 데이터 */
 				teamInfo: {},
-				teamLogoImagePath: '',
 				teamRegularExercises: [],
 				teamLogoImageFile: null,
+				teamLogoImagePath: '',
 			};
 		},
 		methods: {
