@@ -15,26 +15,26 @@
 				/>
 			</v-card-text>
 
-			<v-card-actions>
-				<v-btn outlined depressed text @click.stop="isActivate = false">
-					취소
-				</v-btn>
-				<v-btn color="primary" depressed @click="modifyTeamInfo()">
-					저장
-				</v-btn>
-			</v-card-actions>
+			<TeamInfoUpdateBtn @do-update="modifyTeamInfo" pBtnName="수정" />
+			<TeamInfoUpdateModalCloseBtn
+				@do-close="isActivate = false"
+				pBtnName="닫기"
+			/>
 		</v-card>
 	</v-dialog>
 </template>
 
 <script>
 	import TeamInfoFormComp from '@/components/team/TeamInfoFormComp.vue';
-
+	import TeamInfoUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
+	import TeamInfoUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
 	import MyTeamAPI from '@/api/MyTeamAPI';
 
 	export default {
 		components: {
 			TeamInfoFormComp,
+			TeamInfoUpdateBtn,
+			TeamInfoUpdateModalCloseBtn,
 		},
 		props: {
 			value: {
@@ -62,9 +62,9 @@
 				dataInit: false,
 				/** 관리 데이터 */
 				teamInfo: {},
-				teamLogoImagePath: '',
 				teamRegularExercises: [],
 				teamLogoImageFile: null,
+				teamLogoImagePath: '',
 			};
 		},
 		methods: {
