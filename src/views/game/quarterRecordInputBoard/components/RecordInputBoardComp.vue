@@ -20,7 +20,7 @@
 <script>
 	import PlayerRecordComp from '@/components/game/gameJoinPlayer/PlayerRecordComp.vue';
 	import QuarterEntryComp from '@/views/game/quarterRecordInputBoard/components/QuarterEntryComp.vue';
-	import StatInputBoardComp from '@/views/game/quarterRecordInputBoard/components/StatInputBoardComp.vue';
+	import StatInputBoardComp from '@/views/game/quarterRecordInputBoard/components/inputBoard/StatInputBoardComp.vue';
 
 	export default {
 		components: {

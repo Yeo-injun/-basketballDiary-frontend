@@ -17,7 +17,7 @@
 	<v-container>
 		<v-row no-gutters justify="end">
 			<v-col cols="1">
-				<v-btn text color="primary" @click="this.moveRoutePage">
+				<v-btn color="primary" outlined @click="this.moveRoutePage">
 					{{ btnName }}
 				</v-btn>
 			</v-col>
