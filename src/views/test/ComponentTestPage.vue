@@ -10,6 +10,7 @@
 			<!-- 목록이 존재하지 않을 경우 보여줄 컴포넌트 -->
 			<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
 		</TestSlot>
+		<StatInput />
 	</div>
 </template>
 
@@ -17,12 +18,15 @@
 	import EventTestComp from '@/components/EventTestComp.vue';
 	import TestSlot from '@/components/list/FramePaginationList.vue';
 	import TestBtn from '@/components/button/FrameAddBtn.vue';
+	/** 스탯 버튼 테스트 */
+	import StatInput from '@/views/game/quarterRecordInputBoard/components/inputBoard/StatInputBtnV2.vue';
 
 	export default {
 		components: {
 			EventTestComp,
 			TestSlot,
 			TestBtn,
+			StatInput,
 		},
 		data() {
 			return {
