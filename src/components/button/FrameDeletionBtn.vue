@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<v-btn color="error" @click="doDelete">{{ this.pBtnName }}</v-btn>
+		<v-btn block color="error" @click="doDelete">{{ this.pBtnName }}</v-btn>
 	</v-container>
 </template>
 

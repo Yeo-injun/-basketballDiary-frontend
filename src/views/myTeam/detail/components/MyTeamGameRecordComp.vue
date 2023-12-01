@@ -1,12 +1,6 @@
 <template>
 	<v-card class="ma-6 pa-2">
 		<!-- TODO 해당 버튼 바꾸기 -->
-		<GameRecordPageMoveBtn
-			:pBtnName="this.getPageMoveInfo().btnName"
-			:pRoutePageName="this.getPageMoveInfo().routePageName"
-			:pRouteParams="this.getPageMoveInfo().routeParams"
-		/>
-		<!-- 상세보기 버튼 추가 -->
 		<v-card-text>
 			<div>경기일자 : {{ gameYmd }}</div>
 			<div>
@@ -15,6 +9,11 @@
 		</v-card-text>
 		<ScoreBoardComp :pGameScore="this.gameScore" />
 		<QuarterScoreBoardComp :pQuarterScore="this.quarterScore" />
+		<GameRecordPageMoveBtn
+			:pBtnName="this.getPageMoveInfo().btnName"
+			:pRoutePageName="this.getPageMoveInfo().routePageName"
+			:pRouteParams="this.getPageMoveInfo().routeParams"
+		/>
 	</v-card>
 </template>
 
