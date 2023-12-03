@@ -162,7 +162,8 @@
 					// teamRegularExercises: [{}],
 				},
 				teamRegularExercises: [{}],
-				teamLogoImage: null,
+				// teamLogoImage: null,
+				teamLogoImageFile: null, // 오류 테스트 후 수정
 				rules: [
 					(str) => !!str || '필수 입력사항입니다.',
 					(str) => (str && str.length >= 2) || '2자 이상 입력해야합니다.',

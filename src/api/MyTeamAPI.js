@@ -49,14 +49,14 @@ export default {
 		return data;
 	},
 	/* API017 : 소속팀 정보 수정 */
-	modifyMyTeamInfo(teamSeq, teamInfo, teamLogo) {
+	modifyMyTeamInfo(teamSeq, teamInfo, teamLogoImageFile) {
 		/**
 		 * Spring에서는 teamInfo와 teamLogo를 각각 @RequestPart 어노테이션으로 받음
 		 * teamInfo는 JSON Type으로, teamLogo는 Multipart/image타입으로 Request를 받아서 처리
 		 */
 		return axiosService.postWithMultipart(`/${teamSeq}/info`, {
 			teamInfo: teamInfo,
-			teamLogo: teamLogo,
+			teamLogo: teamLogoImageFile,
 		});
 	},
 	/**
