@@ -78,8 +78,6 @@
 				this.teamLogoImageFile = imageFile;
 			},
 			async getTeamInfo() {
-				// TODO API 메세지 구조 변경
-				// 팀정보 와 팀 이미지, 팀정기운동목록 정보를 각각 분리....
 				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
 				this.teamInfo = {
 					teamSeq: data.teamSeq,
