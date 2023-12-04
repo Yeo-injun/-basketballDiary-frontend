@@ -6,17 +6,18 @@
 		<div v-if="isLogin">
 			<h1>환영합니다. {{ loginUserInfo.userId }}님</h1>
 		</div>
-		<EventTestComp />
+		<!-- 테스트 영역 -->
+		<ComponentTest />
 	</v-container>
 </template>
 
 <script>
+	import ComponentTest from '@/views/test/ComponentTestPage.vue';
 	import AuthUtil from '@/common/AuthUtil.js';
-	import EventTestComp from '@/components/EventTestComp.vue';
 
 	export default {
 		components: {
-			EventTestComp,
+			ComponentTest,
 		},
 		computed: {
 			isLogin() {

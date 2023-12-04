@@ -2,49 +2,60 @@
 
 <template>
 	<v-container>
-		<h2>{{ teamName }} 게임목록조회</h2>
+		<h2>{{ this.pTeamName }} 경기목록조회</h2>
 		<MyTeamGameRecordSearchComp />
-		<!-- 목록영역 컴포넌트 : 소제목 포함 / item 반복문 -->
-		<div>총 {{ gameCount }}개</div>
-		<v-container v-for="game in games" :key="game.gameSeq">
-			<MyTeamGameRecordComp :pGame="game" :pTeamSeq="pTeamSeq" />
-		</v-container>
+		<div>총 {{ pagination.totalCount }}개</div>
+		<MyTeamGameRecordList
+			:pList="games"
+			:pPagination="pagination"
+			@click-page="searchMyTeamGames"
+		>
+			<template v-slot:itemSlot="data">
+				<MyTeamGameRecordComp :pGame="data.item" :pTeamSeq="pTeamSeq" />
+			</template>
+			<template v-slot:itemEmptySlot> 경기 기록이 존재하지 않습니다. </template>
+		</MyTeamGameRecordList>
 	</v-container>
 </template>
 
 <script>
-	import MyTeamAPI from '@/api/MyTeamAPI.js';
-
+	/** Components */
 	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
+	import MyTeamGameRecordList from '@/components/list/FramePaginationList.vue';
 	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
+
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+
+	/** CODE */
+
+	/** Utils */
 
 	export default {
 		components: {
 			MyTeamGameRecordSearchComp,
+			MyTeamGameRecordList,
 			MyTeamGameRecordComp,
 		},
 		data() {
-			const query = this.$route.query;
 			return {
-				teamSeq: query.teamSeq,
-				teamName: query.pTeamName,
 				games: [],
-				// TODO 페이지네이션 추가 필요
-				gameCount: 0,
+				pagination: {},
 			};
 		},
 		props: {
 			pTeamSeq: Number,
+			pTeamName: String,
 		},
 		methods: {
 			/* API052 : 소속팀 게임목록조회 */
 			async searchMyTeamGames() {
-				const params = {
-					teamSeq: this.teamSeq,
-				};
-				const response = await MyTeamAPI.searchMyTeamGames(params);
-				this.games = response.data;
-				this.gameCount = response.data.length; // TODO API에서 페이징 처리를 하면 해당 값을 반영해야 함.
+				const { data } = await MyTeamAPI.searchMyTeamGames(
+					{ teamSeq: this.pTeamSeq },
+					{ pageNo: this.pagination.pageNo }
+				);
+				this.games = data.games;
+				this.pagination = data.pagination;
 			},
 		},
 		mounted() {

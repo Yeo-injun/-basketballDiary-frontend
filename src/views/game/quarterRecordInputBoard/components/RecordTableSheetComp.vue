@@ -18,7 +18,7 @@
 
 <script>
 	import EntryManageModal from '@/views/game/quarterRecordInputBoard/modal/EntryManageModal.vue';
-	import InGameRecordSheet from '@/views/game/quarterRecordInputBoard/components/InGameRecordSheetComp.vue';
+	import InGameRecordSheet from '@/views/game/quarterRecordInputBoard/components/inputBoard/InGameRecordSheetComp.vue';
 
 	export default {
 		components: {

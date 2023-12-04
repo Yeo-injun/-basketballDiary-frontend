@@ -1,5 +1,9 @@
 <template>
-	<MyTeamDetailTabs :pTabName="this.tabName" :pTeamSeq="this.teamSeq" />
+	<MyTeamDetailTabs
+		:pTabName="tabName"
+		:pTeamSeq="teamSeq"
+		:pTeamName="teamName"
+	/>
 </template>
 
 <script>
@@ -14,6 +18,7 @@
 			return {
 				tabName: query.tabName,
 				teamSeq: Number(query.teamSeq),
+				teamName: query.teamName,
 			};
 		},
 	};

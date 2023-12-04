@@ -34,8 +34,8 @@
 					</v-row>
 				</v-col>
 				<v-col cols="5">
-					<MyTeamImage
-						:pImageUrl="teamInfo.logoImageUrl"
+					<TeamLogoImage
+						:pImageUrl="pTeamLogoImagePath"
 						:pMaxHeight="String(250)"
 						:pMaxWidth="String(250)"
 					/>
@@ -51,7 +51,7 @@
 			<v-row>
 				<v-data-table
 					:headers="headers"
-					:items="teamInfo.teamRegularExercises"
+					:items="teamRegularExercises"
 					hide-default-footer
 				>
 					<template v-slot:top>
@@ -126,32 +126,44 @@
 </template>
 
 <script>
-	import MyTeamImage from '@/components/image/FrameImageComp.vue';
+	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
 	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 	import DateUtil from '@/common/DateUtil.js';
 
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
 	export default {
 		components: {
-			MyTeamImage,
+			TeamLogoImage,
 			CustomDatePickerComp,
 		},
 		mounted() {
 			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
-			if (this.pTeamInfo != null) {
-				this.teamInfo = this.pTeamInfo;
+			if (ValidationUtil.isNull(this.pTeamInfo)) {
 				return;
 			}
+			this.teamInfo = this.pTeamInfo;
+			this.teamLogoImage = this.pTeamLogoImagePath;
+			if (ValidationUtil.isNotNull(this.pTeamRegularExercises)) {
+				this.teamRegularExercises = this.pTeamRegularExercises;
+			}
+			this.dataInit = true;
 		},
 		data() {
 			return {
+				/** 컴포넌트 데이터 init 상태 */
+				dataInit: false,
+				/** 데이터 */
 				teamInfo: {
 					teamName: '',
 					hometown: '',
 					foundationYmd: '',
 					introduction: '',
-					teamLogoImage: null,
-					teamRegularExercises: [{}],
+					// teamRegularExercises: [{}],
 				},
+				teamRegularExercises: [{}],
+				// teamLogoImage: null,
+				teamLogoImageFile: null, // 오류 테스트 후 수정
 				rules: [
 					(str) => !!str || '필수 입력사항입니다.',
 					(str) => (str && str.length >= 2) || '2자 이상 입력해야합니다.',
@@ -197,23 +209,43 @@
 					// 참고자료 : https://minu0807.tistory.com/82
 					const isValid = this.$refs.form.validate();
 					if (isValid) {
-						this.$emit('e-team-info', newTeamInfo);
+						// 정기운동시간 목록 처리하기
+						if (ValidationUtil.isNull(newTeamInfo.teamRegularExercises)) {
+							newTeamInfo.teamRegularExercises = [];
+						}
+						this.$emit('change-team-info', newTeamInfo);
 					}
+				},
+			},
+			teamLogoImageFile: {
+				deep: true,
+				handler: function (newImageFile) {
+					this.$emit('change-team-logo-image', newImageFile);
+				},
+			},
+			teamRegularExercises: {
+				deep: true,
+				handler: function (newData) {
+					this.$emit('change-team-exercises', newData);
 				},
 			},
 		},
 		props: {
 			pTeamInfo: Object,
+			pTeamLogoImagePath: String,
+			pTeamRegularExercises: Array,
 		},
 		methods: {
+			setImageFile(imageFile) {
+				this.teamLogoImageFile = imageFile;
+			},
 			setFoundationYmd(ymd) {
 				this.teamInfo.foundationYmd = DateUtil.Format.toString(ymd);
 			},
 			addressAPI(idx) {
 				new window.daum.Postcode({
 					oncomplete: (data) => {
-						this.teamInfo.teamRegularExercises[idx].exercisePlaceAddress =
-							data.address;
+						this.teamRegularExercises[idx].exercisePlaceAddress = data.address;
 					},
 				}).open();
 			},
@@ -228,21 +260,15 @@
 				}).open();
 			},
 			createExerciseTime() {
-				this.teamInfo.teamRegularExercises.push({});
+				this.teamRegularExercises.push({});
 			},
 			deleteExerciseTime(idx) {
-				const isRemainOneExercise =
-					this.teamInfo.teamRegularExercises.length == 1;
+				const isRemainOneExercise = this.teamRegularExercises.length == 1;
 				if (isRemainOneExercise) {
-					alert('정기 운동시간 입력란을 삭제할 수 없습니다.');
+					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
 					return;
 				}
-				this.teamInfo.teamRegularExercises.splice(idx, 1);
-			},
-			setImageFile(imageFile) {
-				console.log(imageFile);
-				this.teamInfo.teamLogoImage = imageFile;
-				this.$emit('e-team-info', this.teamInfo);
+				this.teamRegularExercises.splice(idx, 1);
 			},
 		},
 	};

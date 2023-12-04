@@ -12,6 +12,10 @@ export default {
 		const formData = new FormData();
 
 		jsonKeys.forEach(function (key) {
+			if (isNull(objData[key])) {
+				return;
+			}
+
 			const value = toStringExceptImage(objData, key);
 			if (isImageType(objData, key)) {
 				formData.append(key, value);
@@ -28,6 +32,11 @@ export default {
 	},
 };
 
+const nullTypes = new Set([null, undefined, '']);
+function isNull(value) {
+	return nullTypes.has(value);
+}
+
 function toStringExceptImage(data, key) {
 	const value = data[key];
 	if (isImageType(data, key)) {
@@ -41,8 +50,7 @@ function toStringExceptImage(data, key) {
 
 function isImageType(data, key) {
 	const value = data[key];
-	const valuType = value['type'];
-	const nullTypes = new Set([null, undefined, '']);
+	const valuType = nullTypes.has(value) ? '' : value['type'];
 	if (!nullTypes.has(valuType) && -1 < valuType.indexOf('image/')) {
 		return true;
 	}

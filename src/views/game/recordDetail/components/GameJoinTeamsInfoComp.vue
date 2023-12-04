@@ -74,11 +74,9 @@
 		},
 		methods: {
 			async getGameJoinTeamsInfo() {
-				const params = {
+				const res = await GameAPI.getGameJoinTeamsInfo({
 					gameSeq: this.pGameSeq,
-				};
-
-				const res = await GameAPI.getGameJoinTeamsInfo(params);
+				});
 				// TODO mounted() 되는 시점과 data() 내부의 메소드가 호출되는 시점을 비교할 필요가 있음
 				// 데이터 초기화를 위한 메소드를 언제 호출할 것인지 고민 필요
 				// mounted()는 재렌더링이 안되는지..?

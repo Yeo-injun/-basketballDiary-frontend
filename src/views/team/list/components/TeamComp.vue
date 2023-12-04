@@ -6,7 +6,11 @@
 			</v-card-title>
 			<v-row>
 				<v-col cols="4">
-					{{ team.teamImagePath }}
+					<TeamLogoImage
+						:pImageUrl="team.teamImagePath"
+						:pMaxWidth="String(200)"
+						:pMaxHeight="String(200)"
+					/>
 				</v-col>
 				<v-col cols="8">
 					<v-row>
@@ -48,11 +52,16 @@
 </template>
 
 <script>
+	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
+
 	import AuthUserAPI from '@/api/AuthUserAPI.js';
 
 	import AuthUtil from '@/common/AuthUtil.js';
 
 	export default {
+		components: {
+			TeamLogoImage,
+		},
 		props: {
 			pTeam: {},
 		},

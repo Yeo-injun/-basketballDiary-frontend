@@ -1,21 +1,25 @@
 <template>
 	<v-container>
-		<v-btn block color="error" @click="doDelete">{{ this.pBtnName }}</v-btn>
+		<v-btn block @click="doClose">{{ this.pBtnName }}</v-btn>
 	</v-container>
 </template>
 
 <script>
+	/**
+	 * Close 버튼의 동작 정의
+	 * - Modal 등의 컴포넌트가 destroy되는 동작 포함
+	 */
 	export default {
 		props: {
 			pBtnName: String,
 		},
 		data() {
 			return {
-				eventEmitName: 'do-delete',
+				eventEmitName: 'do-close',
 			};
 		},
 		methods: {
-			doDelete() {
+			doClose() {
 				this.$emit(this.eventEmitName);
 			},
 		},
