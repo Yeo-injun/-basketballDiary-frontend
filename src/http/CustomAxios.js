@@ -24,12 +24,14 @@ const ERROR_CODE = {
 	INTERNAL_SERVER_ERROR: 500,
 };
 
+/**
+ * 실행모드에 따라 환경변수 동적으로 반영하기
+ * 참고자료 : https://velog.io/@skyepodium/vue-%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%93%9C%EC%99%80-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95
+ * .env환경변수 파일 만들기, 실행모드 스크립트 작성하기 -> package.json
+ **/
 const API_SERVER_BASE_URI = process.env.VUE_APP_API_URI;
 
 export default {
-	// 실행모드에 따라 환경변수 동적으로 반영하기
-	// 참고자료 : https://velog.io/@skyepodium/vue-%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%93%9C%EC%99%80-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95
-	// .env환경변수 파일 만들기, 실행모드 스크립트 작성하기 -> package.json
 	/**
 	 * HTTP API 통신을 위한 Axios Client 설정
 	 * - WAS에 만들어놓은 API들을 호출하고자하는 용도
@@ -55,38 +57,14 @@ export default {
 			LoadingStateManager.mutations.loadingStart();
 			return config;
 		});
+
 		// Response 인터셉터 등록
 		axiosInstance.interceptors.response.use(
-			function (response) {
+			response => {
 				LoadingStateManager.mutations.loadingEnd();
 				return response;
 			},
-			function (error) {
-				LoadingStateManager.mutations.loadingEnd();
-				console.log('======= 인터셉터 진입 : 에러 발생 =======');
-				const isNotConectNetwork = typeof error.response == 'undefined';
-				if (isNotConectNetwork) {
-					alert('네트워크 연결이 불안정합니다. 네트워크 상태를 확인해주세요.');
-					return Promise.reject(error);
-				}
-
-				// 예외에 따라 메세지 알림창 호출
-				const errorMessage = error.response.data.message;
-				if (undefined !== errorMessage && null !== errorMessage) {
-					alert(errorMessage);
-				}
-
-				// HTTP STATUS CODE에 따라서 페이지 라우팅
-				const statusCode = error.response.status;
-				const errorCodeName = error.response.data.code;
-				routeErrorPage(statusCode, errorCodeName);
-				/**-------------------------------------
-				 * Promise.reject() return의 효과
-				 * - 에러를 API를 호출한 Axios에게 넘겨줌
-				 * - API를 호출한 곳에서 try ~ catch문으로 예외처리 할 수 있음
-				 **------------------------------------*/
-				return Promise.reject(error);
-			}
+			error => ResponseErrorHandler.handle( error )
 		);
 
 		// POST 호출 ( ContentType : multipart인 경우 )
@@ -101,16 +79,64 @@ export default {
 	},
 };
 
-function routeErrorPage(responseStutsCode, errorCodeName) {
-	let errorPagePath = '/error';
-	switch (responseStutsCode) {
-		case ERROR_CODE.UNAUTHORIZED:
-			if (errorCodeName == 'UNAUTHORIZED_ACCESS') {
-				break;
-			}
-			AuthStateManager.mutations.processLogout();
-			errorPagePath = '/login';
-			router.push(errorPagePath);
-			break;
-	}
+/**------------------------------
+ * HTTP 오류 핸들러
+ **------------------------------*/
+const ResponseErrorHandler = {
+	handle( error ) {
+		LoadingStateManager.mutations.loadingEnd();
+		const noNetworkConnection = typeof error.response == 'undefined';
+		if ( noNetworkConnection ) {
+			alert('네트워크 연결이 불안정합니다. 네트워크 상태를 확인해주세요.');
+			return Promise.reject(error);
+		}
+
+		// 예외에 따라 메세지 알림창 호출
+		const errorMessage = error.response.data.message;
+		if (undefined !== errorMessage && null !== errorMessage) {
+			alert(errorMessage);
+		}
+
+		// HTTP STATUS CODE에 따라서 페이지 라우팅
+		const statusCode = error.response.status;
+		const errorCodeName = error.response.data.code;
+		ErrorPageHandler.route(statusCode, errorCodeName);
+		/**-------------------------------------
+		 * Promise.reject() return의 효과
+		 * - 에러를 API를 호출한 Axios에게 넘겨줌
+		 * - API를 호출한 곳에서 try ~ catch문으로 예외처리 할 수 있음
+		 **------------------------------------*/
+		return Promise.reject(error);
+	},
 }
+
+/**------------------------------
+ * Http 오류를 처리하기 위한 객체
+ * - 오류발생시 route할 페이지 처리 
+ **------------------------------*/
+const ErrorPageHandler = {
+	route( stutsCode, errorCodeName ) {
+		// 에러 상태코드에 따라서 이동할 화면 url 추출
+		const routeTargetUrl = ErrorRouteTable[ stutsCode ];
+		if ( !routeTargetUrl ) {
+			return;
+		}
+
+		// 서버에서 로그인이 필요하다는 에러가 발생했을 경우프론트엔드에서가지고 있는 인증값 초기화
+		// ( 로그인했지만 서버 세션 만료로 로그인 필요 에러가 발생했을 수도 있으므로 로그아웃 처리 )
+		if ( errorCodeName == 'LOGIN_REQUIRED' ) {
+			AuthStateManager.mutations.processLogout();
+		}
+
+		router.push( routeTargetUrl );
+	},
+}
+
+/**------------------------------
+ * 에러 발생시 라우팅할 화면 url을 관리하는 테이블
+ * - 401 권한이 없는 접근일 경우 로그인 페이지로
+ * - 500 서버 내부 오류일 경우 에러 페이지로 
+ **------------------------------*/
+const ErrorRouteTable = {};
+ErrorRouteTable[ ERROR_CODE.UNAUTHORIZED ] 			= "/login";
+ErrorRouteTable[ ERROR_CODE.INTERNAL_SERVER_ERROR ] = "/error";
