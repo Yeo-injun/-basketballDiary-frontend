@@ -9,13 +9,16 @@
 					<h3>프로필 사진</h3>
 					<MyTeamProfileImageComp :pImageUrl="this.imageUrl" />
 					<v-form ref="updateProfileInputs">
-						<v-file-input
+						<!-- <v-file-input
 							show-size
 							label="수정할 프로필 사진 업로드"
 							accept="image/*"
 							@change="setImageFile"
+						/> -->
+						<ProfileImageInput
+							@exceed-max-size="setErrorMessage"
+							@select-valid-image="setImageFile"
 						/>
-
 						<!-- TODO 입력 오류 해결 필요 -->
 						<v-text-field
 							label="등번호"
@@ -49,12 +52,14 @@
 
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
+	import ProfileImageInput from '@/components/input/FrameImageInput.vue';
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 	import MyTeamProfileUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
 
 	export default {
 		components: {
 			MyTeamProfileImageComp,
+			ProfileImageInput,
 			MyTeamProfileUpdateBtn,
 			MyTeamProfileUpdateModalCloseBtn,
 		},
@@ -72,6 +77,7 @@
 				rules: {
 					backNumber: InputRule.backNumber,
 				},
+				errorMessage : "",
 			};
 		},
 		props: {
@@ -104,11 +110,16 @@
 			},
 		},
 		methods: {
-			setImageFile(imageFile) {
+			setErrorMessage( errorMessage ) {
+				this.errorMessage = errorMessage;
+			},
+			setImageFile( imageFile ) {
 				this.imageFile = imageFile;
+				this.errorMessage = "";
 			},
 			async updateProfile() {
 				if (!this.$refs.updateProfileInputs.validate()) {
+					alert( this.errorMessage );
 					return;
 				}
 
