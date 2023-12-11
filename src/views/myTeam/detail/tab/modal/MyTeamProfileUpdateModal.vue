@@ -9,15 +9,11 @@
 					<h3>프로필 사진</h3>
 					<MyTeamProfileImageComp :pImageUrl="this.imageUrl" />
 					<v-form ref="updateProfileInputs">
-						<!-- <v-file-input
-							show-size
-							label="수정할 프로필 사진 업로드"
-							accept="image/*"
-							@change="setImageFile"
-						/> -->
 						<ProfileImageInput
-							@exceed-max-size="setErrorMessage"
-							@select-valid-image="setImageFile"
+							pLabel="수정할 프로필 사진 업로드"
+							@exceed-max-size="handleImageFileInputEvent"
+							@clear-input="handleImageFileInputEvent"
+							@select-valid-image="handleImageFileInputEvent"
 						/>
 						<!-- TODO 입력 오류 해결 필요 -->
 						<v-text-field
@@ -71,13 +67,13 @@
 				backNumber: this.pBackNumber,
 				imageUrl: this.pImageUrl,
 				imageFile: null,
+				imageFileErrorMessage : "",
 				/*-------------------
 				 * Input RULE 정책
 				 *-------------------*/
 				rules: {
 					backNumber: InputRule.backNumber,
 				},
-				errorMessage : "",
 			};
 		},
 		props: {
@@ -110,16 +106,13 @@
 			},
 		},
 		methods: {
-			setErrorMessage( errorMessage ) {
-				this.errorMessage = errorMessage;
-			},
-			setImageFile( imageFile ) {
-				this.imageFile = imageFile;
-				this.errorMessage = "";
+			handleImageFileInputEvent( event ) {
+				this.imageFile 				= event.imageFile;
+				this.imageFileErrorMessage 	= event.errorMessage;
 			},
 			async updateProfile() {
 				if (!this.$refs.updateProfileInputs.validate()) {
-					alert( this.errorMessage );
+					alert( this.imageFileErrorMessage );
 					return;
 				}
 
@@ -128,6 +121,7 @@
 					backNumber: this.backNumber,
 					imageFile: this.imageFile,
 				};
+				console.log( msg );
 
 				await MyTeamAPI.modifyMyTeamsProfile(msg);
 				this.$emit('modal-close', false);
