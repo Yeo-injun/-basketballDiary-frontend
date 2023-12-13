@@ -11,6 +11,13 @@
 			<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
 		</TestSlot>
 		<StatInput />
+		<v-text-field
+				label="주소"
+				v-model="dataSize"
+				@change="onChangeByteUtilTest"
+							/>
+
+		BytesUtil 테스트 : {{ this.dataSize }}
 	</div>
 </template>
 
@@ -21,6 +28,8 @@
 	/** 스탯 버튼 테스트 */
 	import StatInput from '@/views/game/quarterRecordInputBoard/components/inputBoard/StatInputBtnV2.vue';
 
+	import BytesUtil from '@/common/util/BytesUtil';
+	
 	export default {
 		components: {
 			EventTestComp,
@@ -34,6 +43,7 @@
 				env: process.env.NODE_ENV,
 				list: [{ name: '가' }, { name: '나' }, { name: '다' }],
 				pagination: null,
+				dataSize : "",
 			};
 		},
 		methods: {
@@ -44,6 +54,9 @@
 					totalCount: 0,
 				};
 			},
+			onChangeByteUtilTest( bytes ) {
+				this.dataSize = BytesUtil.withUnit( bytes );
+			}
 		},
 	};
 </script>
