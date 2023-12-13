@@ -12,6 +12,7 @@
 
 <script>
     import ValidationUtil from '@/common/util/ValidationUtil.js';
+    import BytesUtil from '@/common/util/BytesUtil';
 	
     const EventName = {
         EXCEED_MAX_SIZE : 'exceed-max-size',
@@ -39,10 +40,11 @@
 
                 const MAX_BYTES = ValidationUtil.isNotNull( this.pMaxBytes ) 
                                 ? this.pMaxBytes : 1 * 1024 * 1024 * 3; // 3mb
+                const MAX_BYTES_WITH_UNIT = BytesUtil.withUnit( MAX_BYTES );
                 if ( MAX_BYTES < imageFile.size ) {
                     this.$emit( EventName.EXCEED_MAX_SIZE, {
                         imageFile : null,
-                        errorMessage : `업로드 최대 크기 ( ${MAX_BYTES} )를 초과하였습니다.`, 
+                        errorMessage : `업로드 최대 크기 ( ${MAX_BYTES_WITH_UNIT} )를 초과하였습니다.`, 
                     });
                     return false;
                 }
