@@ -1,9 +1,8 @@
 <template>
     <v-file-input
-    ref="imageInput"
+        accept="image/*"
         show-size
         :label="this.pLabel || '사진 업로드'"
-        accept="image/*"
         :model-value="this.imageFile"
         :rules="[ this.checkMaxFileSize ]"
         @click:clear="onImageClear"
