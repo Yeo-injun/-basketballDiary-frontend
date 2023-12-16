@@ -39,7 +39,7 @@
                 }
 
                 const MAX_BYTES = ValidationUtil.isNotNull( this.pMaxBytes ) 
-                                ? this.pMaxBytes : 1 * 1024 * 1024 * 3; // 3mb
+                                ? this.pMaxBytes : 1 * 1024 * 1024 * 3 / 2; // 1.5mb
                 const MAX_BYTES_WITH_UNIT = BytesUtil.withUnit( MAX_BYTES );
                 if ( MAX_BYTES < imageFile.size ) {
                     this.$emit( EventName.EXCEED_MAX_SIZE, {
