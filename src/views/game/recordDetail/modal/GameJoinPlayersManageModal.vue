@@ -53,6 +53,7 @@
 
 	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 	import { PlayerTypeCode } from '@/const/code/PlayerCode';
+	
 	export default {
 		mounted() {
 			this.getGameJoinPlayers();
@@ -102,8 +103,10 @@
 					gameJoinPlayers: this.gameJoinPlayers,
 				};
 
-				await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
-
+				const res = await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
+				// TODO 개발서버에서도 Location 속성에 접근가능한지 확인 필요 ( CORS 설정때문에 해당 헤더속성에 접근못하고 있음 (local Backend서버에는 설정 추가함 ) )
+				console.log( ["============게임참가선수등록========", res.headers, res.headers.location ]);
+				
 				this.isModalOpen = false;
 				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
 				this.$emit('register-complete', {
