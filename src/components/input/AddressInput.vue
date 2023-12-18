@@ -1,0 +1,48 @@
+<template>
+    <v-text-field
+        :label="this.pLabel"
+        v-model="this.addressInfo.address"
+        :rules="this.rule"
+        prepend-icon="mdi-map-marker"
+        @click="searchAddress"
+    />
+</template>
+
+<script>
+	import ValidationUtil from '@/common/util/ValidationUtil';
+    
+    export default {
+        props : {
+            pLabel  : String,
+            pData   : Object,
+            pRules  : Array,
+        },
+        data() {
+            return {
+                addressInfo : ValidationUtil.isNotNull( this.pData ) 
+                              ? this.pData : { address : "", sidoCode : "", sigunguCode : "", },
+                rule: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+            };
+        }, 
+        watch : {
+            addressInfo( newInfo ) {
+                this.$emit( 'data', newInfo );
+            },
+        },
+        methods: {
+            searchAddress() {
+                new window.daum.Postcode({
+					oncomplete: (data) => {
+						console.log(data);
+						this.addressInfo.address = data.address;
+						this.addressInfo.sidoCode = data.sigunguCode.substr(0, 2);
+						this.addressInfo.sigunguCode = data.sigunguCode;
+					},
+				}).open();
+            },
+        }
+    }
+
+</script>
+
+<style lang="scss" scoped></style>
