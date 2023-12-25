@@ -1,8 +1,9 @@
 <template>
     <v-text-field
         :label="this.pLabel"
-        v-model="this.model"
         :rules="this.rules"
+        :value="this.model"
+        @input="onChangeInput"
 	/>
 </template>
 
@@ -16,16 +17,20 @@
             pData : String,
         },
         data() {
+            console.log( [ "FrameTextFieldInputData", this.pData ] );
+
             return {
                 model : ValidationUtil.isNotNull( this.pData ) ? this.pData : "",
                 rules: [(value) => ValidationUtil.input.checkNotEmpty(value)],
             };
-        }, 
-        watch: {
-            model: function( newModel ) {
-                this.$emit( 'data', newModel );
-            },
         },
+        methods: {
+            onChangeInput( newValue ) {
+                console.log( [ "FrameTextFieldInputChangeHandler", newValue ] );
+                this.model = newValue;
+                this.$emit( 'data', newValue );
+            },
+        }
     }
 
 </script>

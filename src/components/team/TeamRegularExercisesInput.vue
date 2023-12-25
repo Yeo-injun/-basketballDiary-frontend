@@ -22,8 +22,12 @@
                 <td><v-autocomplete :items="days" v-model="item.dayOfTheWeekCode" /></td>
                 <td><v-autocomplete :items="times" v-model="item.startTime" /></td>
                 <td><v-autocomplete :items="times" v-model="item.endTime" /></td>
-                <td><v-text-field v-model="item.exercisePlaceAddress" /></td>
-                <td><TeamExercisePlaceAddressInput v-model="item.exercisePlaceName" /></td>
+                <td><v-text-field v-model="item.exercisePlaceName" /></td>
+                <td><TeamExercisePlaceAddressInput :pData="{ 
+						'address' : item.exercisePlaceAddress, 
+						'sidoCode' : item.sidoCode,
+						'sigunguCode' : item.sigunguCode,
+					}" /></td>
                 <td>
                     <v-btn
                         @click="deleteExerciseTime(index)"

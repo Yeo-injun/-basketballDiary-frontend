@@ -58,18 +58,34 @@
 		},
 		data() {
 			return {
-				/** 데이터 초기화 완료여부 */
+				/*-----------------------
+				 * 데이터 초기화 완료여부
+				 *-----------------------*/
 				dataInit: false,
-				/** 관리 데이터 */
+				/*-----------------------
+				 * input 유효성
+				 *-----------------------*/
+				inputValid : true, // Modal 초기화시 input에 데이터 반영되어 있기 때문에 기본값은 true로 설정 
+				/*-----------------------
+				 * API 메세지 데이터
+				 *-----------------------*/
 				teamInfo: {},
 				teamRegularExercises: [],
 				teamLogoImageFile: null,
 				teamLogoImagePath: '',
+				/*-----------------------
+				 * API 메세지 데이터 - 에러메세지
+				 *-----------------------*/
+				teamInfoError : "",
+				// TODO 다른 속성도 작성 
 			};
 		},
 		methods: {
-			setTeamInfo(teamInfo) {
-				this.teamInfo = teamInfo;
+			setTeamInfo( emitData ) {
+				console.log( ["MyTeamInfoUpdateModalSetTeamInfo", emitData])
+				this.teamInfo = emitData.data;
+				this.inputValid = emitData.inputValid;
+				this.teamInfoError = emitData.errorMessage;
 			},
 			setTeamExercises(teamExercises) {
 				this.teamRegularExercises = teamExercises;
@@ -92,6 +108,11 @@
 				this.teamRegularExercises = data.regularExercises;
 			},
 			async modifyTeamInfo() {
+				console.log( [ "modifyTeamInfo", this.inputValid ] );
+				if ( !this.inputValid ) {
+					alert( this.teamInfoError );
+				}
+
 				await MyTeamAPI.modifyMyTeamInfo(
 					this.pTeamSeq,
 					{
