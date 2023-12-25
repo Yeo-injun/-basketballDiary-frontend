@@ -63,10 +63,6 @@
 				 *-----------------------*/
 				dataInit: false,
 				/*-----------------------
-				 * input 유효성
-				 *-----------------------*/
-				inputValid : true, // Modal 초기화시 input에 데이터 반영되어 있기 때문에 기본값은 true로 설정 
-				/*-----------------------
 				 * API 메세지 데이터
 				 *-----------------------*/
 				teamInfo: {},
@@ -76,7 +72,8 @@
 				/*-----------------------
 				 * API 메세지 데이터 - 에러메세지
 				 *-----------------------*/
-				teamInfoError : "",
+				teamInfoErrorMessage : "",
+				teamLogoImageFIleErrorMessage : "",
 				// TODO 다른 속성도 작성 
 			};
 		},
@@ -84,14 +81,15 @@
 			setTeamInfo( emitData ) {
 				console.log( ["MyTeamInfoUpdateModalSetTeamInfo", emitData])
 				this.teamInfo = emitData.data;
-				this.inputValid = emitData.inputValid;
-				this.teamInfoError = emitData.errorMessage;
+				this.teamInfoErrorMessage = emitData.errorMessage;
 			},
 			setTeamExercises(teamExercises) {
 				this.teamRegularExercises = teamExercises;
 			},
-			setTeamLogoImageFile(imageFile) {
-				this.teamLogoImageFile = imageFile;
+			setTeamLogoImageFile( emitData ) {
+				console.log( ["setTeamLogoImageFileEmit", emitData]);
+				this.teamLogoImageFile 		= emitData.data;
+				this.teamLogoImageFIleErrorMessage = emitData.errorMessage;
 			},
 			async getTeamInfo() {
 				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
@@ -108,9 +106,10 @@
 				this.teamRegularExercises = data.regularExercises;
 			},
 			async modifyTeamInfo() {
-				console.log( [ "modifyTeamInfo", this.inputValid ] );
-				if ( !this.inputValid ) {
-					alert( this.teamInfoError );
+				const hasInputErrorMessage = this.teamInfoErrorMessage || this.teamLogoImageFIleErrorMessage;
+				if ( hasInputErrorMessage ) {
+					alert( hasInputErrorMessage );
+					return;
 				}
 
 				await MyTeamAPI.modifyMyTeamInfo(

@@ -24,11 +24,6 @@
                 rule: [(value) => ValidationUtil.input.checkNotEmpty(value)],
             };
         }, 
-        watch : {
-            addressInfo( newInfo ) {
-                this.$emit( 'data', newInfo );
-            },
-        },
         methods: {
             searchAddress() {
                 new window.daum.Postcode({
@@ -37,6 +32,8 @@
 						this.addressInfo.address = data.address;
 						this.addressInfo.sidoCode = data.sigunguCode.substr(0, 2);
 						this.addressInfo.sigunguCode = data.sigunguCode;
+                        // TODO Rules 결과에 따라 emitEvent 분기 처리
+                        this.$emit( 'data', this.addressInfo );
 					},
 				}).open();
             },
