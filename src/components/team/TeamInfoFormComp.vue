@@ -1,24 +1,32 @@
 <template>
 	<v-container>
-		<v-form v-if="dataInit" ref="form" lazy-validation >
+		<!-- <v-form v-if="dataInit" ref="form" lazy-validation > -->
+			<v-form v-if="dataInit">
 			<v-row>
 				<v-col cols="7">
 					<v-row>
 						<TeamNameInput pLabel="팀명"
 							:pData="teamInfo.teamName"
 							@data="handleTeamName"
+							@violation="onViolationTeamName"
 						/>
 					</v-row>
 					<v-row>
 						<HomeTownAddressInput pLabel="연고지"
-							:pData="{ address : teamInfo.hometown }"
-							@data="handleHometown"
+							:pData="{ 
+								address : teamInfo.hometown,
+							 	sidoCode : teamInfo.sidoCode,
+								sigunguCode : teamInfo.sigunguCode,
+							}"
+							@data="handleTeamAddressInfo"
+							@violation="onViolationTeamAddressInfo"
 						/>
 					</v-row>
 					<v-row>
 						<FoundationDateInput pLabel="창단일"
 							:pData="teamInfo.foundationYmd"
 							@data="handleFoundationYmd"
+							@violation="onViolationFoundationYmd"
 						/>
 					</v-row>
 				</v-col>
@@ -39,6 +47,7 @@
 				<TeamIntroductionInput pLabel="팀 소개글을 작성해주세요."
 					:pData="teamInfo.introduction"
 					@data="handleTeamIntroduction"
+					@violation="onViolationTeamIntroduction"
 				/>
 			</v-row>
 
@@ -110,6 +119,8 @@
 				teamInfo: {
 					teamName: '',
 					hometown: '',
+					sidoCode: '',
+					sigunguCode : '',
 					foundationYmd: '',
 					introduction: '',
 				},
@@ -123,24 +134,6 @@
 		 * - input의 속성이 변경될때마다 상위 컴포넌트로 데이터 전달 ( $emit 사용 )
 		 **-------------------------------------------------*/
 		watch: {
-			teamInfo: {
-				deep: true,
-				handler: function (newTeamInfo) {
-					const inputValid = this.$refs.form.validate();
-					console.log( ["TeamInfoFormCompWatcher", inputValid ]);
-					this.$emit(Event.CHANGE_TEAM_INFO, this._createEmitTemplate( 
-						newTeamInfo,
-						inputValid,
-						inputValid ? "": "팀정보 입력값이 유효하지 않습니다. 입력값을 확인해주세요.", 
-					));
-				},
-			},
-			teamLogoImageFile: {
-				deep: true,
-				handler: function (newImageFile) {
-					this.$emit(Event.CHANGE_TEAM_LOGO_IMAGE, newImageFile);
-				},
-			},
 			teamRegularExercises: {
 				deep: true,
 				handler: function (newData) {
@@ -154,30 +147,69 @@
 			pTeamRegularExercises: Array,
 		},
 		methods: {
-			_createEmitTemplate( data, inputValid, errorMessage ) {
+			_createEmitTemplate( data, errorMessage ) {
 				return {
 					data : data,
-					inputValid : inputValid,
 					errorMessage : errorMessage,
 				}
 			},
+			emitValidTeamInfo() {
+				this.$emit( Event.CHANGE_TEAM_INFO, this._createEmitTemplate( this.teamInfo, "" ) );
+			},
+			emitInValidTeamInfo() {
+				this.$emit( Event.CHANGE_TEAM_INFO, this._createEmitTemplate( this.teamInfo,  "팀정보 입력값이 유효하지 않습니다. 입력값을 확인해주세요." ) );
+			},
+			/** 팀정보 */
 			handleTeamName( data ) {
 				console.log( [ "handlerTeamName", data ] );
 				this.teamInfo.teamName = data;
+				this.emitValidTeamInfo();
 			},
-			handleHometown( data ) {
+			handleTeamAddressInfo( data ) {
 				this.teamInfo.hometown = data.address;
+				this.teamInfo.sidoCode = data.sidoCode;
+				this.teamInfo.sigunguCode = data.sigunguCode;
+				this.emitValidTeamInfo();
 			},
 			handleFoundationYmd( data ) {
 				this.teamInfo.foundationYmd = data;
-			},
-			handleImageFileInputEvent( event ) {
-				this.teamLogoImageFile				= event.imageFile;
-				this.teamLogoImageFileErrorMessage 	= event.errorMessage;
+				this.emitValidTeamInfo();
 			},
 			handleTeamIntroduction( data ) {
 				this.teamInfo.introduction = data;
+				this.emitValidTeamInfo();
 			},
+			/** 팀정보 - 입력정책 위반시 발생하는 이벤트 ( TODO input 컴포넌트에서 해당 이벤트 생성하도록 구현 필요 ) */
+			onViolationTeamName( data ) {
+				console.log( [ "onViolationTeamName", data ] );
+				this.teamInfo.teamName = data;
+				this.emitInValidTeamInfo();
+			},
+			onViolationTeamAddressInfo( data ) {
+				this.teamInfo.hometown = data.address;
+				this.teamInfo.sidoCode = data.sidoCode;
+				this.teamInfo.sigunguCode = data.sigunguCode;
+				this.emitInValidTeamInfo();
+			},
+			onViolationFoundationYmd( data ) {
+				this.teamInfo.foundationYmd = data;
+				this.emitInValidTeamInfo();
+			},
+			onViolationTeamIntroduction( data ) {
+				this.teamInfo.introduction = data;
+				this.emitInValidTeamInfo();
+			},
+			/** 팀로고 이미지 */
+			handleImageFileInputEvent( event ) {
+				this.teamLogoImageFile				= event.imageFile;
+				this.teamLogoImageFileErrorMessage 	= event.errorMessage;
+				console.log( ['logoImage', this.teamLogoImageFile, this.teamLogoImageFileErrorMessage])
+				this.$emit(Event.CHANGE_TEAM_LOGO_IMAGE, this._createEmitTemplate(
+					this.teamLogoImageFile,
+					this.teamLogoImageFileErrorMessage,						
+				));
+			},
+			/** 팀정기운동 목록 - 입력 정책 관련 이벤트 제어하는 로직 추가 필요 TODO */
 			handleTeamRegularExercises( data ) {
 				this.teamRegularExercises = data;
 			},
