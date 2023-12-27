@@ -9,38 +9,43 @@
 
 <script>
 	import ValidationUtil from '@/common/util/ValidationUtil';
+    import InputRuleChecker from '@/common/input/InputRuleChecker';
     
     export default {
         props : {
-            pLabel : String,
-            pData : String,
-            pRules : Array,
+            pLabel      : String    ,   // input의 Label명칭
+            pData       : String    ,   // input의 초기화 데이터
+            pRules      : Array     ,   // input 입력값의 정책 ( 필수여부 지정은 pRequired로 지정 )
+            pRequired   : Boolean   ,   // input 입력값의 필수여부 ( 입력 정책 추가 및 별도 표시용 )
         },
         data() {
-            console.log( [ "FrameTextFieldInputData", this.pData ] );
-
+            const defaultRules = [];
+            if ( this.pRequired === true ) {
+                defaultRules.push( (value) => ValidationUtil.input.checkNotEmpty(value) );
+            }
             return {
                 model : ValidationUtil.isNotNull( this.pData ) ? this.pData : "",
-                rules: [(value) => ValidationUtil.input.checkNotEmpty(value)],
+                rules : ValidationUtil.isNotNull( this.pRules ) 
+                        ? [ ...defaultRules, ...this.pRules ] : defaultRules,
             };
         },
         methods: {
             onChangeInput( newValue ) {
-                console.log( [ "FrameTextFieldInputChangeHandler", newValue ] );
                 this.model = newValue;
-                // TODO rules를 순회해서 검증함. rule 위반이 1건이라도 존재할 경우와 정상일 경우를 나눠 콜백을 실행  // return 타입이 string일 경우 errorMessage이므로 해당 
-                // ValidationUtil.checkRules( rules, value, onCompliance, onViolation )
-                for ( const rule of this.rules ) {
-                    debugger;
-                    const ruleResult                = rule( newValue );
-                    const ruleResultType            = typeof ruleResult;
-                    const hasRuleViolationMessage   = ruleResultType == "string";
-                    if ( hasRuleViolationMessage ) {
-                        this.$emit( 'violation', newValue );
-                        return;
-                    }
+                const ruleResult = InputRuleChecker.check( newValue, this.rules );
+                
+                if ( ruleResult.isValid ) {
+                    this.$emit( 'compliance', {
+                        data : newValue,
+                        message : "정상 입력값입니다.", 
+                    } );
+                    return;
                 }
-                this.$emit( 'data', newValue );
+
+                this.$emit( 'violation', {
+                    data : newValue,
+                    message : ruleResult.message,
+                } );
             },
         }
     }
