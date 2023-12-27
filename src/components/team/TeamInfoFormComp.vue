@@ -7,7 +7,8 @@
 					<v-row>
 						<TeamNameInput pLabel="팀명"
 							:pData="teamInfo.teamName"
-							@data="handleTeamName"
+							:pRequired="true"
+							@compliance="onComplianceTeamName"
 							@violation="onViolationTeamName"
 						/>
 					</v-row>
@@ -46,7 +47,8 @@
 			<v-row>
 				<TeamIntroductionInput pLabel="팀 소개글을 작성해주세요."
 					:pData="teamInfo.introduction"
-					@data="handleTeamIntroduction"
+					:pRequired="true"
+					@compliance="onComplianceTeamIntroduction"
 					@violation="onViolationTeamIntroduction"
 				/>
 			</v-row>
@@ -160,9 +162,9 @@
 				this.$emit( Event.CHANGE_TEAM_INFO, this._createEmitTemplate( this.teamInfo,  "팀정보 입력값이 유효하지 않습니다. 입력값을 확인해주세요." ) );
 			},
 			/** 팀정보 */
-			handleTeamName( data ) {
-				console.log( [ "handlerTeamName", data ] );
-				this.teamInfo.teamName = data;
+			onComplianceTeamName( e ) {
+				console.log( [ "onComplianceTeamName", e ] );
+				this.teamInfo.teamName = e.data;
 				this.emitValidTeamInfo();
 			},
 			handleTeamAddressInfo( data ) {
@@ -175,14 +177,14 @@
 				this.teamInfo.foundationYmd = data;
 				this.emitValidTeamInfo();
 			},
-			handleTeamIntroduction( data ) {
-				this.teamInfo.introduction = data;
+			onComplianceTeamIntroduction( e ) {
+				this.teamInfo.introduction = e.data;
 				this.emitValidTeamInfo();
 			},
-			/** 팀정보 - 입력정책 위반시 발생하는 이벤트 ( TODO input 컴포넌트에서 해당 이벤트 생성하도록 구현 필요 ) */
-			onViolationTeamName( data ) {
-				console.log( [ "onViolationTeamName", data ] );
-				this.teamInfo.teamName = data;
+			/** 팀정보 - 입력정책 위반시 발생하는 이벤트 */
+			onViolationTeamName( e ) {
+				console.log( [ "onViolationTeamName", e ] );
+				this.teamInfo.teamName = e.data;
 				this.emitInValidTeamInfo();
 			},
 			onViolationTeamAddressInfo( data ) {
@@ -195,8 +197,8 @@
 				this.teamInfo.foundationYmd = data;
 				this.emitInValidTeamInfo();
 			},
-			onViolationTeamIntroduction( data ) {
-				this.teamInfo.introduction = data;
+			onViolationTeamIntroduction( e ) {
+				this.teamInfo.introduction = e.data;
 				this.emitInValidTeamInfo();
 			},
 			/** 팀로고 이미지 */
