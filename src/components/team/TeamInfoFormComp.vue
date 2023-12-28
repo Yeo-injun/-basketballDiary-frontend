@@ -11,6 +11,12 @@
 							@compliance="onComplianceTeamName"
 							@violation="onViolationTeamName"
 						/>
+						<FoundationDatePickerInput pLabel="창단일"
+							:pData="teamInfo.foundationYmd"
+							:pRequired="true"
+							@compliance="onComplianceFoundationYmd"
+							@violation="onViolationFoundationYmd"
+						/>
 					</v-row>
 					<v-row>
 						<HomeTownAddressInput pLabel="연고지"
@@ -21,14 +27,6 @@
 							}"
 							@data="onComplianceTeamAddressInfo"
 							@violation="onViolationTeamAddressInfo"
-						/>
-					</v-row>
-					<v-row>
-						<FoundationDateInput pLabel="창단일"
-							:pData="teamInfo.foundationYmd"
-							:pRequired="true"
-							@compliance="onComplianceFoundationYmd"
-							@violation="onViolationFoundationYmd"
 						/>
 					</v-row>
 				</v-col>
@@ -67,7 +65,7 @@
 <script>
 	import TeamNameInput from '@/components/input/FrameTextFieldInput.vue';
 	import HomeTownAddressInput from '@/components/input/AddressInput.vue';
-	import FoundationDateInput from '@/components/input/DateInput.vue';
+	import FoundationDatePickerInput from '@/components/input/DatePickerInput.vue';
 
 	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
 	import TeamLogoImageInput from '@/components/input/FrameImageInput.vue';
@@ -90,7 +88,7 @@
 		components: {
 			TeamNameInput,
 			HomeTownAddressInput,
-			FoundationDateInput,
+			FoundationDatePickerInput,
 			TeamLogoImage,
 			TeamLogoImageInput,
 			TeamIntroductionInput,
