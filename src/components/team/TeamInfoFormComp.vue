@@ -19,14 +19,15 @@
 							 	sidoCode : teamInfo.sidoCode,
 								sigunguCode : teamInfo.sigunguCode,
 							}"
-							@data="handleTeamAddressInfo"
+							@data="onComplianceTeamAddressInfo"
 							@violation="onViolationTeamAddressInfo"
 						/>
 					</v-row>
 					<v-row>
 						<FoundationDateInput pLabel="창단일"
 							:pData="teamInfo.foundationYmd"
-							@data="handleFoundationYmd"
+							:pRequired="true"
+							@compliance="onComplianceFoundationYmd"
 							@violation="onViolationFoundationYmd"
 						/>
 					</v-row>
@@ -163,18 +164,17 @@
 			},
 			/** 팀정보 */
 			onComplianceTeamName( e ) {
-				console.log( [ "onComplianceTeamName", e ] );
 				this.teamInfo.teamName = e.data;
 				this.emitValidTeamInfo();
 			},
-			handleTeamAddressInfo( data ) {
+			onComplianceTeamAddressInfo( data ) {
 				this.teamInfo.hometown = data.address;
 				this.teamInfo.sidoCode = data.sidoCode;
 				this.teamInfo.sigunguCode = data.sigunguCode;
 				this.emitValidTeamInfo();
 			},
-			handleFoundationYmd( data ) {
-				this.teamInfo.foundationYmd = data;
+			onComplianceFoundationYmd( e ) {
+				this.teamInfo.foundationYmd = e.data;
 				this.emitValidTeamInfo();
 			},
 			onComplianceTeamIntroduction( e ) {
@@ -183,7 +183,6 @@
 			},
 			/** 팀정보 - 입력정책 위반시 발생하는 이벤트 */
 			onViolationTeamName( e ) {
-				console.log( [ "onViolationTeamName", e ] );
 				this.teamInfo.teamName = e.data;
 				this.emitInValidTeamInfo();
 			},
@@ -193,8 +192,8 @@
 				this.teamInfo.sigunguCode = data.sigunguCode;
 				this.emitInValidTeamInfo();
 			},
-			onViolationFoundationYmd( data ) {
-				this.teamInfo.foundationYmd = data;
+			onViolationFoundationYmd( e ) {
+				this.teamInfo.foundationYmd = e.data;
 				this.emitInValidTeamInfo();
 			},
 			onViolationTeamIntroduction( e ) {
