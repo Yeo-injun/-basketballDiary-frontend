@@ -37,13 +37,11 @@
 				:rules="this.rules.email"
 				required
 			></v-text-field>
-
-			<CustomDatePickerComp
-				@pickup-date="setBirthYmd"
-				:p-label-name="pPickerLabelName"
-				:p-init-value="pInitValue"
+			<BirthDayInput pLabel="생년월일"
+				:pData="userRegInfo.birthYmd"
+				:pRequired="true"
+				@compliance="setBirthYmd"
 			/>
-
 			<v-radio-group
 				v-model="userRegInfo.gender"
 				row
@@ -79,23 +77,29 @@
 </template>
 
 <script>
+	/** Backend API */
 	import AuthAPI from '@/api/AuthAPI.js';
-	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
 
+	/** Code */
+	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil';
 	import InputRule from '@/common/input/InputRule.js';
 
-	import ValidationUtil from '@/common/util/ValidationUtil';
+	/** Components */
+	import BirthDayInput from '@/components/input/DatePickerInput.vue';
+
+	/** Emit Event */
+
+
 
 	// id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 	// 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
 	export default {
 		components: {
-			CustomDatePickerComp,
+			BirthDayInput,
 		},
 		data: () => {
 			return {
-				pPickerLabelName: '생년월일',
-				pInitValue: '',
 				isModalOpen: '',
 				isNotDuplicateUserId: false,
 				passwordCheck: '',
@@ -126,8 +130,8 @@
 			};
 		}, // data
 		methods: {
-			setBirthYmd(selecteDate) {
-				this.userRegInfo.birthYmd = selecteDate;
+			setBirthYmd( e ) {
+				this.userRegInfo.birthYmd = e.data;
 			},
 			initDuplicationCheckStatus() {
 				this.isNotDuplicateUserId = false;

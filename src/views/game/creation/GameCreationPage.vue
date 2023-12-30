@@ -36,7 +36,8 @@
 					sidoCode : sidoCode,
 					sigunguCode : sigunguCode,
 				}"
-				@data="onComplianceGamePlaceAddressInfo"
+				:pRequired="true"
+				@compliance="onComplianceGamePlaceAddressInfo"
 			/>
 			<GamePlaceNameInput pLabel="경기장명"
 				:pData="gamePlaceName"
