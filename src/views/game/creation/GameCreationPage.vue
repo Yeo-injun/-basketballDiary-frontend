@@ -10,10 +10,10 @@
 		<MainTitle pTitleName="경기정보" />
 		<!-- 경기시작시간 및 종료시간 셀렉트박스로 만드는거 검토 -->
 		<v-form ref="gameCreationInfo">
-			<CustomDatePickerComp
-				p-label-name="경기일자"
-				:p-init-value="gameYmd"
-				@pickup-date="setGameYmd"
+			<GameDatePickerInput pLabel="경기일자"
+				:pData="gameYmd"
+				:pRequired="true"
+				@compliance="setGameYmd"
 			/>
 			<tr>
 				<td>
@@ -52,24 +52,33 @@
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
 	import AddressOpenApi from '@/common/address/AddressOpenApi.js';
 
-	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
-	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
-	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
-	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
-	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
-
+	/** Code */
+	/** Utils */
 	import DateUtil from '@/common/DateUtil.js';
 	import ValidationUtil from '@/common/util/ValidationUtil';
+
+	/** Components */
+	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
+	import GameDatePickerInput from '@/components/input/DatePickerInput.vue';
+
+	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+
+	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
+
+	/** Emit Event */
+
 
 	export default {
 		components: {
 			MainTitle,
+			GameDatePickerInput,
 			GameStartTimeSelectbox,
 			GameEndTimeSelectbox,
-			CustomDatePickerComp,
 			GameCreationBtn,
 		},
 		data() {
