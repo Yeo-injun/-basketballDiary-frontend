@@ -10,10 +10,10 @@
 		<MainTitle pTitleName="경기정보" />
 		<!-- 경기시작시간 및 종료시간 셀렉트박스로 만드는거 검토 -->
 		<v-form ref="gameCreationInfo">
-			<CustomDatePickerComp
-				p-label-name="경기일자"
-				:p-init-value="gameYmd"
-				@pickup-date="setGameYmd"
+			<GameDatePickerInput pLabel="경기일자"
+				:pData="gameYmd"
+				:pRequired="true"
+				@compliance="setGameYmd"
 			/>
 			<tr>
 				<td>
@@ -30,21 +30,19 @@
 					/>
 				</td>
 			</tr>
-
-			<!-- TODO 공통컴포넌트로 AddressInputComp.vue -->
-
-			<v-text-field
-				label="주소"
-				v-model="gamePlaceAddress"
-				:rules="this.rules.gamePlaceAddress"
-				disabled
+			<GamePlaceAddressInput pLabel="경기장주소"
+				:pData="{ 
+					address : gamePlaceAddress,
+					sidoCode : sidoCode,
+					sigunguCode : sigunguCode,
+				}"
+				@data="onComplianceGamePlaceAddressInfo"
 			/>
-			<v-btn @click="popupAddressSearch()">주소검색</v-btn>
-
-			<v-text-field
-				label="경기장명"
-				:rules="this.rules.gamePlaceName"
-				v-model="gamePlaceName"
+			<GamePlaceNameInput pLabel="경기장명"
+				:pData="gamePlaceName"
+				:pRequired="true"
+				:pRules="rules.gamePlaceName"
+				@compliance="onComplianceGamePlaceName"
 			/>
 		</v-form>
 		<GameCreationBtn @do-save="createGame()" pBtnName="게임생성" />
@@ -52,24 +50,37 @@
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
-	import AddressOpenApi from '@/common/address/AddressOpenApi.js';
 
-	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
-	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
-	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
-	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
-	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
-
+	/** Code */
+	/** Utils */
 	import DateUtil from '@/common/DateUtil.js';
 	import ValidationUtil from '@/common/util/ValidationUtil';
+
+	/** Components */
+	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
+	import GameDatePickerInput from '@/components/input/DatePickerInput.vue';
+
+	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+
+	import GamePlaceAddressInput from '@/components/input/AddressInput.vue';
+	import GamePlaceNameInput from '@/components/input/FrameTextFieldInput.vue';
+
+	import GameCreationBtn from '@/components/button/FrameSaveBtn.vue';
+
+	/** Emit Event */
+
 
 	export default {
 		components: {
 			MainTitle,
+			GameDatePickerInput,
 			GameStartTimeSelectbox,
 			GameEndTimeSelectbox,
-			CustomDatePickerComp,
+			GamePlaceAddressInput,
+			GamePlaceNameInput,
 			GameCreationBtn,
 		},
 		data() {
@@ -88,11 +99,7 @@
 				 * 경기생성 정보 (Validation)
 				 *--------------------*/
 				rules: {
-					gamePlaceAddress: [
-						(value) => ValidationUtil.input.checkNotEmpty(value),
-					],
 					gamePlaceName: [
-						(value) => ValidationUtil.input.checkNotEmpty(value),
 						(value) =>
 							ValidationUtil.input.checkMaxLength(value, {
 								maxLength: 10,
@@ -102,18 +109,8 @@
 			};
 		},
 		methods: {
-			popupAddressSearch() {
-				const vueInstance = this;
-				AddressOpenApi.open(function (data) {
-					vueInstance.gamePlaceAddress = data.address;
-
-					const sidoSigunguCode = data.sigunguCode;
-					vueInstance.sidoCode = sidoSigunguCode.substr(0, 2);
-					vueInstance.sigunguCode = sidoSigunguCode.substr(2, 3);
-				});
-			},
-			setGameYmd(ymd) {
-				this.reqBody.gameYmd = DateUtil.Format.toString(ymd);
+			setGameYmd( e ) {
+				this.gameYmd = e.data;
 			},
 			setGameStartTime(time) {
 				// TODO 입력값이 정상값인지 확인
@@ -122,6 +119,14 @@
 			setGameEndTime(time) {
 				// TODO 입력값이 정상값인지 확인
 				this.gameEndTime = time;
+			},
+			onComplianceGamePlaceAddressInfo( e ) {
+				this.gamePlaceAddress	= e.address;
+				this.sidoCode			= e.sidoCode;
+				this.sigunguCode		= e.sigunguCode;
+			},
+			onComplianceGamePlaceName( e ) {
+				this.gamePlaceName	= e.data;
 			},
 			async createGame() {
 				if (!this.checkValidGameCreationInfo()) {

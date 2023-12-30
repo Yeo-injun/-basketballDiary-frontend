@@ -1,5 +1,6 @@
 <template>
     <v-text-field
+        readonly
         :label="this.pLabel"
         v-model="this.addressInfo.address"
         :rules="this.rule"
