@@ -28,7 +28,7 @@
             return {
                 addressInfo : ValidationUtil.isNotNull( this.pData ) 
                               ? this.pData : { address : "", sidoCode : "", sigunguCode : "", },
-                rules : this.pRules.length > 0 
+                rules : ValidationUtil.isNotNull( this.pRules ) 
                         ? [ ...defaultRules, ...this.pRules ] : defaultRules,
             };
         }, 
