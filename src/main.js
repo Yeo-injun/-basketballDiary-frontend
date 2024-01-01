@@ -7,6 +7,13 @@ import vuetify from './plugins/vuetify';
  * 기본값은 ../src/*
  *--------------------------------*/
 import router from '@/router/index.js';
+import ImpsPlatform from 'imps-platform-detect';
+
+/**--------------------------------
+ * 사용자 디바이스 식별 플러그인 등록 - 24.01.01 ( 월 ) 
+ * cf. npm URL : https://www.npmjs.com/package/imps-platform-detect
+ *---------------------------------*/
+Vue.use( ImpsPlatform ); 
 
 Vue.config.productionTip = false;
 
