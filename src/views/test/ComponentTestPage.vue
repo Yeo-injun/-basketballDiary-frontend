@@ -1,5 +1,6 @@
 <template>
 	<div v-if="this.env == 'local'">
+		사용자 브라우저 : {{ this.agentType }}
 		<EventTestComp />
 		<TestSlot :pList="list" :pPagination="pagination" @click-page="onClick">
 			<!-- 하위컴포넌트에서 slot에 할당한 데이터를 상위컴포넌트에서는 data라는 변수명으로 사용한다는 문법 -->
@@ -38,12 +39,14 @@
 			StatInput,
 		},
 		data() {
+			const userAgentType = navigator.userAgent;
 			return {
 				// 실행 환경 확인
 				env: process.env.NODE_ENV,
 				list: [{ name: '가' }, { name: '나' }, { name: '다' }],
 				pagination: null,
 				dataSize : "",
+				agentType : userAgentType,
 			};
 		},
 		methods: {
