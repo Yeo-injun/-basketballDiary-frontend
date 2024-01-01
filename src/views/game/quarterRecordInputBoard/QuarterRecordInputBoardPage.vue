@@ -6,6 +6,10 @@
 				@select-quarter-time="setQuarterTime"
 			/>
 			<v-container>
+				<h4 v-if="$platform.isWeb">
+					<div>※ PC웹브라우저인 경우 마우스 클릭으로 입력이 안될수 있습니다.</div>
+					<div>F12를 눌러 개발도구창을 활성화 시킨 후 Ctrl + Shift + M을 눌러 태블릿 모드로 전환시켜 주세요.</div>
+				</h4>
 				<HomeAwayTeamToggle
 					:pHomeTeamName="this.gameQuarterRecords.homeTeamRecords.teamName"
 					:pHomeTeamCode="this.gameQuarterRecords.homeTeamRecords.homeAwayCode"
