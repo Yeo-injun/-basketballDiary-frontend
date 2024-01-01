@@ -23,11 +23,16 @@
                 <td><v-autocomplete :items="times" v-model="item.startTime" /></td>
                 <td><v-autocomplete :items="times" v-model="item.endTime" /></td>
                 <td><v-text-field v-model="item.exercisePlaceName" /></td>
-                <td><TeamExercisePlaceAddressInput :pData="{ 
-						'address' : item.exercisePlaceAddress, 
-						'sidoCode' : item.sidoCode,
-						'sigunguCode' : item.sigunguCode,
-					}" /></td>
+                <td>
+					<TeamExercisePlaceAddressInput 
+						:pData="{ 
+							'address' : item.exercisePlaceAddress, 
+							'sidoCode' : item.sidoCode,
+							'sigunguCode' : item.sigunguCode,
+						}"
+						@compliance="onComplianceTeamExercisePlaceAddress"
+					/>
+				</td>
                 <td>
                     <v-btn
                         @click="deleteExerciseTime(index)"
@@ -87,12 +92,16 @@ import TeamExercisePlaceAddressInput from '@/components/input/AddressInput.vue';
 			},
 		},
 		methods: {
-			addressAPI(idx) {
-				new window.daum.Postcode({
-					oncomplete: (data) => {
-						this.teamRegularExercises[idx].exercisePlaceAddress = data.address;
-					},
-				}).open();
+			// addressAPI(idx) {
+			// 	new window.daum.Postcode({
+			// 		oncomplete: (data) => {
+			// 			this.teamRegularExercises[idx].exercisePlaceAddress = data.address;
+			// 		},
+			// 	}).open();
+			// },
+			onComplianceTeamExercisePlaceAddress( e ) {
+				console.log( e );
+				// 주소 정보 할당하기
 			},
 			createExerciseTime() {
 				this.teamRegularExercises.push({});

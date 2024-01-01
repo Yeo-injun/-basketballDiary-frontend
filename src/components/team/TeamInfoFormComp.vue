@@ -6,7 +6,7 @@
 				<v-col cols="7">
 					<v-row>
 						<TeamNameInput pLabel="팀명"
-							:pData="teamInfo.teamName"
+							:pData="this.teamInfo.teamName"
 							:pRequired="true"
 							@compliance="onComplianceTeamName"
 							@violation="onViolationTeamName"
@@ -25,8 +25,8 @@
 							 	sidoCode : teamInfo.sidoCode,
 								sigunguCode : teamInfo.sigunguCode,
 							}"
-							@data="onComplianceTeamAddressInfo"
-							@violation="onViolationTeamAddressInfo"
+							:pRequired="true"
+							@compliance="onComplianceTeamAddressInfo"
 						/>
 					</v-row>
 				</v-col>
@@ -210,6 +210,7 @@
 			},
 			/** 팀정기운동 목록 - 입력 정책 관련 이벤트 제어하는 로직 추가 필요 TODO */
 			handleTeamRegularExercises( data ) {
+				console.log( data );
 				this.teamRegularExercises = data;
 			},
 		},

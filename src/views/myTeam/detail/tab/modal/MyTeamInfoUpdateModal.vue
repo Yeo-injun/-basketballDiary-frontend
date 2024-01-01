@@ -6,7 +6,7 @@
 			<v-card-text>
 				<TeamInfoFormComp
 					v-if="this.dataInit"
-					:pTeamInfo="this.teamInfo"
+					:pTeamInfo="teamInfo"
 					:pTeamLogoImagePath="this.teamLogoImagePath"
 					:pTeamRegularExercises="this.teamRegularExercises"
 					@change-team-info="setTeamInfo"

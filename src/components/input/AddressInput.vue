@@ -3,7 +3,7 @@
         readonly
         :label="this.pLabel"
         v-model="this.addressInfo.address"
-        :rules="this.rule"
+        :rules="this.rules"
         prepend-icon="mdi-map-marker"
         @click="searchAddress"
     />
@@ -11,11 +11,11 @@
 
 <script>
 	import ValidationUtil from '@/common/util/ValidationUtil';
-    
+
     export default {
         props : {
             pLabel      : String    ,   // input의 Label명칭
-            pData       : String    ,   // input의 초기화 데이터
+            pData       : Object    ,   // input의 초기화 데이터
             pRules      : Array     ,   // input 입력값의 정책 ( 필수여부 지정은 pRequired로 지정 )
             pRequired   : Boolean   ,   // input 입력값의 필수여부 ( 입력 정책 추가 및 별도 표시용 )
         },
@@ -35,13 +35,13 @@
         methods: {
             searchAddress() {
                 new window.daum.Postcode({
+                    // 우편번호 검색결과 목록 클릭시 클릭한 주소정보를 내려줌.
 					oncomplete: (data) => {
-						console.log(data);
-						this.addressInfo.address = data.address;
-						this.addressInfo.sidoCode = data.sigunguCode.substr(0, 2);
-						this.addressInfo.sigunguCode = data.sigunguCode;
-                        // TODO Rules 결과에 따라 emitEvent 분기 처리
-                        this.$emit( 'data', this.addressInfo );
+						this.addressInfo.address        = data.address;
+						this.addressInfo.sidoCode       = data.sigunguCode.substr(0, 2);
+						this.addressInfo.sigunguCode    = data.sigunguCode;
+                        
+                        // 검색 결과를 클릭하면 무조건 정상데이터만 emit됨
                         this.$emit( 'compliance', this.addressInfo );
 					},
 				}).open();
