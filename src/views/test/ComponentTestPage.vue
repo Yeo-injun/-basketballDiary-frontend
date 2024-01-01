@@ -1,8 +1,13 @@
 <template>
 	<div>
-		사용자 브라우저 : {{ this.agentType }}
 		<div v-if="this.env == 'local'">
 			사용자 브라우저 : {{ this.agentType }}
+			<div v-if="$platform.isWeb">
+				사용자 클라이언트 Web
+			</div>
+			<div v-if="$platform.isTablet">
+				사용자 클라이언트 Tablet
+			</div>
 			<EventTestComp />
 			<TestSlot :pList="list" :pPagination="pagination" @click-page="onClick">
 				<!-- 하위컴포넌트에서 slot에 할당한 데이터를 상위컴포넌트에서는 data라는 변수명으로 사용한다는 문법 -->
