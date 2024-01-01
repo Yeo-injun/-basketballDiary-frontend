@@ -1,6 +1,5 @@
 <template>
 	<div>
-		사용자 브라우저 : {{ this.agentType }}
 		<div v-if="this.env == 'local'">
 			사용자 브라우저 : {{ this.agentType }}
 			<EventTestComp />
