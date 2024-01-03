@@ -15,11 +15,9 @@
 							@clear-input="handleImageFileInputEvent"
 							@select-valid-image="handleImageFileInputEvent"
 						/>
-						<!-- TODO 입력 오류 해결 필요 -->
-						<v-text-field
-							label="등번호"
-							v-model="backNumber"
-							:rules="this.rules.backNumber"
+						<BacknumberInput 
+							:pData="this.backNumber" 
+							:pRequired="true"
 						/>
 					</v-form>
 				</v-container>
@@ -41,40 +39,25 @@
 	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI';
 
-	/** Code/Const */
-
+	/** Code */
 	/** Utils */
-	import InputRule from '@/common/input/InputRule.js';
-
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
 	import ProfileImageInput from '@/components/input/FrameImageInput.vue';
+	import BacknumberInput from '@/components/input/player/BacknumberInput.vue';
+
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 	import MyTeamProfileUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
+
+	/** Emit Event */
 
 	export default {
 		components: {
 			MyTeamProfileImageComp,
 			ProfileImageInput,
+			BacknumberInput,
 			MyTeamProfileUpdateBtn,
 			MyTeamProfileUpdateModalCloseBtn,
-		},
-		data() {
-			return {
-				/*-------------------
-				 * Input 데이터
-				 *-------------------*/
-				backNumber: this.pBackNumber,
-				imageUrl: this.pImageUrl,
-				imageFile: null,
-				imageFileErrorMessage : "",
-				/*-------------------
-				 * Input RULE 정책
-				 *-------------------*/
-				rules: {
-					backNumber: InputRule.backNumber,
-				},
-			};
 		},
 		props: {
 			pIsActivated: {
@@ -93,6 +76,18 @@
 				type: String,
 				required: false,
 			},
+		},
+		data() {
+			const data = {
+				/*-------------------
+				 * Input 데이터
+				 *-------------------*/
+				backNumber: this.pBackNumber,
+				imageUrl: this.pImageUrl,
+				imageFile: null,
+				imageFileErrorMessage : "",
+			}
+			return data;
 		},
 		computed: {
 			// TODO 모달이 열리는 시점에 props 데이터로 모달 데이터 업데이트하기
