@@ -7,7 +7,7 @@
 			<v-card-text>
 				<v-container>
 					<h3>프로필 사진</h3>
-					<MyTeamProfileImageComp :pImageUrl="this.imageUrl" />
+					<MyTeamProfileImageComp :pImageUrl="this.pImageUrl" />
 					<v-form ref="updateProfileInputs">
 						<ProfileImageInput
 							pLabel="수정할 프로필 사진 업로드"
@@ -15,9 +15,11 @@
 							@clear-input="handleImageFileInputEvent"
 							@select-valid-image="handleImageFileInputEvent"
 						/>
-						<BacknumberInput 
+						<BackNumberInput 
 							:pData="this.backNumber" 
 							:pRequired="true"
+							@compliance="onComplianceBackNumber"
+							@violation="onViolationBackNumber"
 						/>
 					</v-form>
 				</v-container>
@@ -41,10 +43,11 @@
 
 	/** Code */
 	/** Utils */
+	import InputRuleViolation from '@/common/input/InputRuleViolation.js';
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
 	import ProfileImageInput from '@/components/input/FrameImageInput.vue';
-	import BacknumberInput from '@/components/input/player/BacknumberInput.vue';
+	import BackNumberInput from '@/components/input/player/BackNumberInput.vue';
 
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 	import MyTeamProfileUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
@@ -55,7 +58,7 @@
 		components: {
 			MyTeamProfileImageComp,
 			ProfileImageInput,
-			BacknumberInput,
+			BackNumberInput,
 			MyTeamProfileUpdateBtn,
 			MyTeamProfileUpdateModalCloseBtn,
 		},
@@ -79,14 +82,21 @@
 		},
 		data() {
 			const data = {
+				imageUrl: this.pImageUrl,
 				/*-------------------
 				 * Input 데이터
 				 *-------------------*/
 				backNumber: this.pBackNumber,
-				imageUrl: this.pImageUrl,
 				imageFile: null,
-				imageFileErrorMessage : "",
+				/*-------------------
+				 * Input 오류
+				 *-------------------*/
+				errorMessage : {
+					imageFile : "",
+					backNumber : "",
+				},
 			}
+			console.log( data );
 			return data;
 		},
 		computed: {
@@ -101,13 +111,21 @@
 			},
 		},
 		methods: {
+			onComplianceBackNumber( e ) {
+				this.backNumber = e.data;
+				this.errorMessage.backNumber = '';
+			},
+			onViolationBackNumber( e ) {
+				this.backNumber = e.data;
+				this.errorMessage.backNumber = e.message;
+			},
 			handleImageFileInputEvent( event ) {
 				this.imageFile 				= event.imageFile;
-				this.imageFileErrorMessage 	= event.errorMessage;
+				this.errorMessage.imageFile	= event.errorMessage;
 			},
 			async updateProfile() {
 				if (!this.$refs.updateProfileInputs.validate()) {
-					alert( this.imageFileErrorMessage );
+					InputRuleViolation.alert( this.errorMessage );
 					return;
 				}
 

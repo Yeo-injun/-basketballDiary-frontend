@@ -27,10 +27,9 @@
             pRequired   : Boolean   ,   // input 입력값의 필수여부 ( 입력 정책 추가 및 별도 표시용 )
         },
         data() {
-            const backNumberRules = InputRule.getBackNumber(); 
             return {
                 backNumber  : this.pData,
-                rules       : backNumberRules,
+                rules       : InputRule.backNumber,
             };
         },
         methods: {
