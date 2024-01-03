@@ -44,7 +44,7 @@ function _isNull(val) {
 		val == undefined ||
 		(typeof val == 'string' && val == '') || // ""
 		(Array.isArray(val) && val.length == 0) || // [] -> true
-		(Array.isArray(val) && Object.keys(val[0]).length == 0) || // [{}] -> true
+		(Array.isArray(val) && typeof val[0] == 'object' && Object.keys(val[0]).length == 0) || // [{}] -> true
 		(typeof val == 'object' && Object.keys(val).length == 0) // {}
 	) {
 		return true;

@@ -33,14 +33,4 @@ export default {
 				message: '등번호는 3자리수까지 입력 가능합니다.',
 			}),
 	],
-	getBackNumber() {
-		return [
-			(value) => ValidationUtil.input.checkNumberType(value),
-			(value) =>
-				ValidationUtil.input.checkMaxLength(value, {
-					maxLength: 3,
-					message: '등번호는 3자리수까지 입력 가능합니다.',
-				}),
-		];
-	},
 };
