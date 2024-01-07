@@ -1,7 +1,7 @@
 <template>
 	<v-container>
 		<!-- <v-form v-if="dataInit" ref="form" lazy-validation > -->
-			<v-form v-if="dataInit">
+		<v-form v-if="dataInit" ref="form">
 			<v-row>
 				<v-col cols="7">
 					<v-row>
@@ -9,13 +9,11 @@
 							:pData="this.teamInfo.teamName"
 							:pRequired="true"
 							@compliance="onComplianceTeamName"
-							@violation="onViolationTeamName"
 						/>
 						<FoundationDatePickerInput pLabel="창단일"
 							:pData="teamInfo.foundationYmd"
 							:pRequired="true"
 							@compliance="onComplianceFoundationYmd"
-							@violation="onViolationFoundationYmd"
 						/>
 					</v-row>
 					<v-row>
@@ -48,7 +46,6 @@
 					:pData="teamInfo.introduction"
 					:pRequired="true"
 					@compliance="onComplianceTeamIntroduction"
-					@violation="onViolationTeamIntroduction"
 				/>
 			</v-row>
 
@@ -127,7 +124,6 @@
 				},
 				teamRegularExercises: [{}],
 				teamLogoImageFile: null,
-				teamLogoImageFileErrorMessage: "",
 			}
 		},
 		/**-------------------------------------------------
@@ -148,65 +144,38 @@
 			pTeamRegularExercises: Array,
 		},
 		methods: {
-			_createEmitTemplate( data, errorMessage ) {
+			/**
+			 * Form내 input컴포넌트의 유효성을 체크한다.
+			 * @return Boolean  
+			 */
+			validate() {
+				return this.$refs.form.validate();
+			},
+			getForm() {
 				return {
-					data : data,
-					errorMessage : errorMessage,
+					teamInfo: this.teamInfo,
+					teamRegularExercises: this.teamRegularExercises,
+					teamLogoImageFile: this.teamLogoImageFile,
 				}
-			},
-			emitValidTeamInfo() {
-				this.$emit( Event.CHANGE_TEAM_INFO, this._createEmitTemplate( this.teamInfo, "" ) );
-			},
-			emitInValidTeamInfo() {
-				this.$emit( Event.CHANGE_TEAM_INFO, this._createEmitTemplate( this.teamInfo,  "팀정보 입력값이 유효하지 않습니다. 입력값을 확인해주세요." ) );
 			},
 			/** 팀정보 */
 			onComplianceTeamName( e ) {
 				this.teamInfo.teamName = e.data;
-				this.emitValidTeamInfo();
 			},
 			onComplianceTeamAddressInfo( data ) {
 				this.teamInfo.hometown = data.address;
 				this.teamInfo.sidoCode = data.sidoCode;
 				this.teamInfo.sigunguCode = data.sigunguCode;
-				this.emitValidTeamInfo();
 			},
 			onComplianceFoundationYmd( e ) {
 				this.teamInfo.foundationYmd = e.data;
-				this.emitValidTeamInfo();
 			},
 			onComplianceTeamIntroduction( e ) {
 				this.teamInfo.introduction = e.data;
-				this.emitValidTeamInfo();
-			},
-			/** 팀정보 - 입력정책 위반시 발생하는 이벤트 */
-			onViolationTeamName( e ) {
-				this.teamInfo.teamName = e.data;
-				this.emitInValidTeamInfo();
-			},
-			onViolationTeamAddressInfo( data ) {
-				this.teamInfo.hometown = data.address;
-				this.teamInfo.sidoCode = data.sidoCode;
-				this.teamInfo.sigunguCode = data.sigunguCode;
-				this.emitInValidTeamInfo();
-			},
-			onViolationFoundationYmd( e ) {
-				this.teamInfo.foundationYmd = e.data;
-				this.emitInValidTeamInfo();
-			},
-			onViolationTeamIntroduction( e ) {
-				this.teamInfo.introduction = e.data;
-				this.emitInValidTeamInfo();
 			},
 			/** 팀로고 이미지 */
 			handleImageFileInputEvent( event ) {
-				this.teamLogoImageFile				= event.imageFile;
-				this.teamLogoImageFileErrorMessage 	= event.errorMessage;
-				console.log( ['logoImage', this.teamLogoImageFile, this.teamLogoImageFileErrorMessage])
-				this.$emit(Event.CHANGE_TEAM_LOGO_IMAGE, this._createEmitTemplate(
-					this.teamLogoImageFile,
-					this.teamLogoImageFileErrorMessage,						
-				));
+				this.teamLogoImageFile = event.imageFile;
 			},
 			/** 팀정기운동 목록 - 입력 정책 관련 이벤트 제어하는 로직 추가 필요 TODO */
 			handleTeamRegularExercises( data ) {
