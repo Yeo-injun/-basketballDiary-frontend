@@ -14,7 +14,7 @@
 	/** Utils */
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
-	/** Components */
+	/** Vue Components */
 	import MainTitle from '@/components/title/FramePageMainTitle.vue';
 	import TeamInfoFormComp from '@/components/team/TeamInfoFormComp.vue';
 	import TeamRegistrationBtn from '@/components/button/FrameSaveBtn.vue';
