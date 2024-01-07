@@ -5,6 +5,7 @@
 
 			<v-card-text>
 				<TeamInfoFormComp
+					ref="teamInfoUpdateForm"
 					v-if="this.dataInit"
 					:pTeamInfo="teamInfo"
 					:pTeamLogoImagePath="this.teamLogoImagePath"
@@ -69,27 +70,17 @@
 				teamRegularExercises: [],
 				teamLogoImageFile: null,
 				teamLogoImagePath: '',
-				/*-----------------------
-				 * API 메세지 데이터 - 에러메세지
-				 *-----------------------*/
-				teamInfoErrorMessage : "",
-				teamLogoImageFIleErrorMessage : "",
-				// TODO 다른 속성도 작성 
 			};
 		},
 		methods: {
 			setTeamInfo( emitData ) {
-				console.log( ["MyTeamInfoUpdateModalSetTeamInfo", emitData])
 				this.teamInfo = emitData.data;
-				this.teamInfoErrorMessage = emitData.errorMessage;
 			},
 			setTeamExercises(teamExercises) {
 				this.teamRegularExercises = teamExercises;
 			},
 			setTeamLogoImageFile( emitData ) {
-				console.log( ["setTeamLogoImageFileEmit", emitData]);
 				this.teamLogoImageFile 		= emitData.data;
-				this.teamLogoImageFIleErrorMessage = emitData.errorMessage;
 			},
 			async getTeamInfo() {
 				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
@@ -106,9 +97,7 @@
 				this.teamRegularExercises = data.regularExercises;
 			},
 			async modifyTeamInfo() {
-				const hasInputErrorMessage = this.teamInfoErrorMessage || this.teamLogoImageFIleErrorMessage;
-				if ( hasInputErrorMessage ) {
-					alert( hasInputErrorMessage );
+				if ( !this.$refs.teamInfoUpdateForm.validate() ) {
 					return;
 				}
 

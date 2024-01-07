@@ -45,7 +45,7 @@
                         imageFile : null,
                         errorMessage : `업로드 최대 크기 ( ${MAX_BYTES_WITH_UNIT} )를 초과하였습니다.`, 
                     });
-                    return false;             
+                    return `업로드 최대 크기 ( ${MAX_BYTES_WITH_UNIT} )를 초과하였습니다.`; // false;             
                 }
                 // 유효할 경우에만 사진 파일을 emit함
                 this.$emit( EventName.SELECT_VALID_IMAGE, {
