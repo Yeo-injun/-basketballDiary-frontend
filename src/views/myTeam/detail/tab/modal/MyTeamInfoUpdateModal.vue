@@ -8,11 +8,8 @@
 					ref="teamInfoUpdateForm"
 					v-if="this.dataInit"
 					:pTeamInfo="teamInfo"
-					:pTeamLogoImagePath="this.teamLogoImagePath"
-					:pTeamRegularExercises="this.teamRegularExercises"
-					@change-team-info="setTeamInfo"
-					@change-team-exercises="setTeamExercises"
-					@change-team-logo-image="setTeamLogoImageFile"
+					:pTeamLogoImagePath="teamLogoImagePath"
+					:pTeamRegularExercises="teamRegularExercises"
 				/>
 			</v-card-text>
 
@@ -64,7 +61,7 @@
 				 *-----------------------*/
 				dataInit: false,
 				/*-----------------------
-				 * API 메세지 데이터
+				 * teamInfoForm 초기화 데이터
 				 *-----------------------*/
 				teamInfo: {},
 				teamRegularExercises: [],
@@ -73,15 +70,6 @@
 			};
 		},
 		methods: {
-			setTeamInfo( emitData ) {
-				this.teamInfo = emitData.data;
-			},
-			setTeamExercises(teamExercises) {
-				this.teamRegularExercises = teamExercises;
-			},
-			setTeamLogoImageFile( emitData ) {
-				this.teamLogoImageFile 		= emitData.data;
-			},
 			async getTeamInfo() {
 				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
 				this.teamInfo = {
@@ -101,18 +89,19 @@
 					return;
 				}
 
+				const teamInfoForm = this.$refs.teamInfoUpdateForm.getForm();
 				await MyTeamAPI.modifyMyTeamInfo(
 					this.pTeamSeq,
 					{
-						teamName: this.teamInfo.teamName,
-						hometown: this.teamInfo.hometown,
-						introduction: this.teamInfo.introduction,
-						foundationYmd: this.teamInfo.foundationYmd,
-						sidoCode: this.teamInfo.sidoCode,
-						sigunguCode: this.teamInfo.sigunguCode,
-						teamRegularExercises: this.teamRegularExercises,
+						teamName: teamInfoForm.teamInfo.teamName,
+						hometown: teamInfoForm.teamInfo.hometown,
+						introduction: teamInfoForm.teamInfo.introduction,
+						foundationYmd: teamInfoForm.teamInfo.foundationYmd,
+						sidoCode: teamInfoForm.teamInfo.sidoCode,
+						sigunguCode: teamInfoForm.teamInfo.sigunguCode,
+						teamRegularExercises: teamInfoForm.teamRegularExercises,
 					},
-					this.teamLogoImageFile
+					teamInfoForm.teamLogoImageFile
 				);
 				this.isActivate = false;
 			},
