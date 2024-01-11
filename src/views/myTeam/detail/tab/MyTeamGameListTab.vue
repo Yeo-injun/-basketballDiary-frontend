@@ -2,7 +2,6 @@
 
 <template>
 	<v-container>
-		<h2>{{ this.pTeamName }} 경기목록조회</h2>
 		<MyTeamGameRecordSearchComp />
 		<div>총 {{ pagination.totalCount }}개</div>
 		<MyTeamGameRecordList
