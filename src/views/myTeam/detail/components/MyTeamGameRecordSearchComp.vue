@@ -1,18 +1,32 @@
 <template>
 	<v-container>
-		<h4>검색조건</h4>
-		<GameTypeSelect @value="setGameTypeCode" />
-		<HomeAwaySelect @value="setHomeAwayCode" />
-		<SearchStartDateInput pLabel="검색시작일자"
-			:pData="gameStartYmd"
-			:pRequired="true"
-			@compliance="setGameStartYmd"
-		/>
-		<SearchEndDateInput pLabel="검색종료일자"
-			:pData="gameEndYmd"
-			:pRequired="true"
-			@compliance="setGameEndYmd"
-		/>
+		<MyTeamGameSubTitle pTitleName="검색조건" />
+		<v-row>
+			<v-col>
+				<GameTypeSelect @value="setGameTypeCode" />
+				
+			</v-col>
+			<v-col>
+				<HomeAwaySelect @value="setHomeAwayCode" />
+				
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col>
+				<SearchStartDateInput pLabel="검색시작일자"
+					:pData="gameStartYmd"
+					:pRequired="true"
+					@compliance="setGameStartYmd"
+				/>	
+			</v-col>
+			<v-col>
+				<SearchEndDateInput pLabel="검색종료일자"
+					:pData="gameEndYmd"
+					:pRequired="true"
+					@compliance="setGameEndYmd"
+				/>				
+			</v-col>
+		</v-row>
 		<v-text-field label="경기장주소" />
 		<v-text-field label="경기장명" />
 		<MyTeamGameSearchBtn @do-search="onSearchMyTeamGames()" />
@@ -24,6 +38,7 @@
 	/** Code */
 	/** Utils */
 	/** Components */
+	import MyTeamGameSubTitle from '@/components/title/FramePageSubTitle.vue'
 	import SearchStartDateInput from '@/components/input/DatePickerInput.vue';
 	import SearchEndDateInput from '@/components/input/DatePickerInput.vue';
 
@@ -36,6 +51,7 @@
 
 	export default {
 		components: {
+			MyTeamGameSubTitle,
 			SearchStartDateInput,
 			SearchEndDateInput,
 			MyTeamGameSearchBtn,

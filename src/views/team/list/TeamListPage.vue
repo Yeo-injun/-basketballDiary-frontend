@@ -1,11 +1,12 @@
 <template>
 	<v-container>
+		<TeamSearchMainTitle pTitleName="농구팀 검색" />
+		<TeamSearchCondSubTitle pTitleName="검색조건" />
 		<TeamSearchComp
 			@on-cond-change="onSearchCondChange"
 			@on-search="searchTeams"
 		/>
-		<TeamListPageSubTitle pTitleName="농구팀 목록" />
-
+		<TeamListSubTitle pTitleName="검색결과" />
 		<TeamList
 			:pList="teams"
 			:pPagination="pagination"
@@ -20,8 +21,12 @@
 </template>
 
 <script>
+	import TeamSearchMainTitle from "@/components/title/FramePageMainTitle.vue";
+
+	import TeamSearchCondSubTitle from '@/components/title/FramePageSubTitle.vue';
 	import TeamSearchComp from '@/views/team/list/components/TeamSearchComp.vue';
-	import TeamListPageSubTitle from '@/components/title/FramePageSubTitle.vue';
+	
+	import TeamListSubTitle from '@/components/title/FramePageSubTitle.vue';
 	import TeamList from '@/components/list/FramePaginationList.vue';
 	import TeamComp from '@/views/team/list/components/TeamComp.vue';
 
@@ -29,8 +34,10 @@
 
 	export default {
 		components: {
+			TeamSearchMainTitle,
+			TeamSearchCondSubTitle,
 			TeamSearchComp,
-			TeamListPageSubTitle,
+			TeamListSubTitle,
 			TeamList,
 			TeamComp,
 		},
