@@ -1,68 +1,63 @@
 <template>
-	<v-card>
-		<v-card-title>농구팀 검색</v-card-title>
-		<v-card-subtitle>
-			<v-text-field label="팀명" v-model="searchCond.teamName" />
-			<v-row>
-				<v-col>
-					<!-- 정기운동 : 요일 -->
-					<v-row>
-						<v-col>
-							<v-card-title> 정기운동요일 </v-card-title>
-						</v-col>
-						<v-col>
-							<v-select
-								v-model="searchCond.startDay"
-								:items="daysOfTheWeek"
-								item-text="text"
-								item-value="value"
-								label="시작요일"
-							></v-select>
-						</v-col>
-						<v-col>
-							<v-select
-								v-model="searchCond.endDay"
-								:items="daysOfTheWeek"
-								item-text="text"
-								item-value="value"
-								label="끝요일"
-							></v-select>
-						</v-col>
-					</v-row>
-				</v-col>
-				<v-col>
-					<!-- 정기운동 : 시간 -->
-					<v-row>
-						<v-col>
-							<v-card-title> 정기운동시간 </v-card-title>
-						</v-col>
-						<v-col>
-							<v-select
-								v-model="searchCond.startTime"
-								:items="times"
-								item-text="text"
-								item-value="value"
-								label="시작시간"
-							></v-select>
-						</v-col>
-						<v-col>
-							<v-select
-								v-model="searchCond.endTime"
-								:items="times"
-								item-text="text"
-								item-value="value"
-								label="끝시간"
-							></v-select>
-						</v-col>
-					</v-row>
-				</v-col>
-			</v-row>
-
-			<v-row justify="end">
-				<TeamSearchBtn @do-search="onSearchClick" />
-			</v-row>
-		</v-card-subtitle>
-	</v-card>
+	<v-container>
+		<v-text-field label="팀명" v-model="searchCond.teamName" />
+		<v-row>
+			<v-col>
+				<!-- TODO 요일 selectbox / 시간 selectbox 컴포넌트 별도 생성하기 -->
+				<!-- 정기운동 : 요일 -->
+				<v-row>
+					<v-col>
+						<v-card-title> 정기운동요일 </v-card-title>
+					</v-col>
+					<v-col>
+						<v-select
+							v-model="searchCond.startDay"
+							:items="daysOfTheWeek"
+							item-text="text"
+							item-value="value"
+							label="시작요일"
+						></v-select>
+					</v-col>
+					<v-col>
+						<v-select
+							v-model="searchCond.endDay"
+							:items="daysOfTheWeek"
+							item-text="text"
+							item-value="value"
+							label="끝요일"
+						></v-select>
+					</v-col>
+				</v-row>
+			</v-col>
+			<v-col>
+				<!-- 정기운동 : 시간 -->
+				<v-row>
+					<v-col>
+						<v-card-title> 정기운동시간 </v-card-title>
+					</v-col>
+					<v-col>
+						<v-select
+							v-model="searchCond.startTime"
+							:items="times"
+							item-text="text"
+							item-value="value"
+							label="시작시간"
+						></v-select>
+					</v-col>
+					<v-col>
+						<v-select
+							v-model="searchCond.endTime"
+							:items="times"
+							item-text="text"
+							item-value="value"
+							label="끝시간"
+						></v-select>
+					</v-col>
+				</v-row>
+			</v-col>
+		</v-row>
+		<TeamSearchBtn @do-search="onSearchClick" />
+	</v-container>
 </template>
 
 <script>
