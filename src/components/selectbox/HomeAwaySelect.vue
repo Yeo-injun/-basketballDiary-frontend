@@ -5,7 +5,7 @@
 			:items="selectItems"
 			item-text="name"
 			item-value="value"
-			label="게임구분"
+			label="경기구분"
 			@change="selectValue"
 		/>
 	</v-container>
