@@ -2,7 +2,7 @@
 
 <template>
 	<v-container>
-		<MyTeamGameRecordSearchComp />
+		<MyTeamGameRecordSearchComp @do-search="searchMyTeamGames"/>
 		<div>총 {{ pagination.totalCount }}개</div>
 		<MyTeamGameRecordList
 			:pList="games"
@@ -18,17 +18,18 @@
 </template>
 
 <script>
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+
+	/** Code */
+	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil';
+
 	/** Components */
 	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
 	import MyTeamGameRecordList from '@/components/list/FramePaginationList.vue';
 	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
-
-	/** Backend API */
-	import MyTeamAPI from '@/api/MyTeamAPI';
-
-	/** CODE */
-
-	/** Utils */
+	/** Emit Event */
 
 	export default {
 		components: {
@@ -48,19 +49,34 @@
 		},
 		methods: {
 			/* API052 : 소속팀 게임목록조회 */
-			async searchMyTeamGames() {
+			async searchMyTeamGames( searchCond ) {
+
 				const { data } = await MyTeamAPI.searchMyTeamGames(
 					{ teamSeq: this.pTeamSeq },
-					{ pageNo: this.pagination.pageNo }
+					this.toQueryParams( searchCond ),
 				);
 				this.games = data.games;
 				this.pagination = data.pagination;
+			},
+			toQueryParams( searchCond ) {
+				if ( ValidationUtil.isNotNull( searchCond ) ) {
+					return {
+						pageNo			: this.pagination.pageNo,
+						gameBgngYmd		: searchCond.gameStartYmd	,
+						gameEndYmd		: searchCond.gameEndYmd		,
+						gameTypeCode	: searchCond.gameTypeCode	,
+						homeAwayCode	: searchCond.homeAwayCode	,
+						gamePlaceName	: searchCond.gamePlaceName	,
+					}
+				}
+				return { pageNo: this.pagination.pageNo };
 			},
 		},
 		mounted() {
 			this.searchMyTeamGames();
 		},
 	};
+
 </script>
 
 <style lang="scss" scoped></style>

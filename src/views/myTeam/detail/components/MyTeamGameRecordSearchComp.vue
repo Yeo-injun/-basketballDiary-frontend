@@ -8,7 +8,6 @@
 			</v-col>
 			<v-col>
 				<HomeAwaySelect @value="setHomeAwayCode" />
-				
 			</v-col>
 		</v-row>
 		<v-row>
@@ -27,8 +26,11 @@
 				/>				
 			</v-col>
 		</v-row>
-		<v-text-field label="경기장주소" />
-		<v-text-field label="경기장명" />
+		<!-- <v-text-field label="경기장주소" /> -->
+		<GamePlaceNameInput pLabel="경기장명"
+			:pData="gamePlaceName"
+			@compliance="setGamePlaceName"
+		/>
 		<MyTeamGameSearchBtn @do-search="onSearchMyTeamGames()" />
 	</v-container>
 </template>
@@ -45,6 +47,8 @@
 	import GameTypeSelect from '@/components/selectbox/GameTypeSelect.vue';
 	import HomeAwaySelect from '@/components/selectbox/HomeAwaySelect.vue';
 
+	import GamePlaceNameInput from '@/components/input/FrameTextFieldInput.vue';
+
 	import MyTeamGameSearchBtn from '@/components/button/FrameSearchBtn.vue';
 
 	/** Emit Event */
@@ -54,16 +58,18 @@
 			MyTeamGameSubTitle,
 			SearchStartDateInput,
 			SearchEndDateInput,
-			MyTeamGameSearchBtn,
 			GameTypeSelect,
 			HomeAwaySelect,
+			GamePlaceNameInput,
+			MyTeamGameSearchBtn,
 		},
 		data() {
 			return {
-				gameStartYmd : "",
-				gameEndYmd : "",
-				gameTypeCode: '',
-				homeAwayCode: '',
+				gameTypeCode	: "",	// 경기유형코드
+				homeAwayCode	: "",	// 경기구분 - 홈/어웨이코드
+				gameStartYmd 	: "",	// 경기시작일자
+				gameEndYmd 		: "",	// 경기종료일자
+				gamePlaceName	: "",	// 경기장소명
 			};
 		},
 		methods: {
@@ -79,9 +85,17 @@
 			setHomeAwayCode(value) {
 				this.homeAwayCode = value;
 			},
+			setGamePlaceName( e ) {
+				this.gamePlaceName = e.data;
+			},
 			onSearchMyTeamGames() {
-				console.log('adsf');
-				alert('TODO 검색 API붙이기');
+				this.$emit( 'do-search', {
+					gameStartYmd	: this.gameStartYmd,
+					gameEndYmd		: this.gameEndYmd,
+					gameTypeCode	: this.gameTypeCode,
+					homeAwayCode	: this.homeAwayCode,
+					gamePlaceName	: this.gamePlaceName,
+				});
 			},
 		},
 	};

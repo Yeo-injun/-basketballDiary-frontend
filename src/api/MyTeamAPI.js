@@ -115,8 +115,13 @@ export default {
 	searchMyTeamGames(path, query) {
 		return axiosService.get(`/${path.teamSeq}/games`, {
 			params: {
-				pageNo: query.pageNo,
-				// TODO 검색조건 추가
+				pageNo			: query.pageNo			,
+				gameBgngYmd		: query.gameBgngYmd		,
+				gameEndYmd		: query.gameEndYmd		,
+				sidoCode		: query.sidoCode		,
+				gamePlaceName	: query.gamePlaceName	,
+				gameTypeCode	: query.gameTypeCode	,
+				homeAwayCode	: query.homeAwayCode	,
 			},
 		});
 	},
