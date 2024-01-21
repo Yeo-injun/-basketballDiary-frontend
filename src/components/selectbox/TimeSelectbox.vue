@@ -49,7 +49,7 @@
 				let accumualtedTimes = 0;
 				while ( accumualtedTimes <= timeInfo.max ) {
 					options.push( this._generateOptionFormat( accumualtedTimes ) );
-					accumualtedTimes += timeInfo.interval;
+					accumualtedTimes += Number( timeInfo.interval );
 				}
 				return options;
 			},
@@ -70,7 +70,10 @@
 				return result;
 			},
 			selectValue() {
-				this.$emit('select-value', this.selected);
+				this.$emit('select-value', {
+					unitType 	: this.pUnitType,
+					value		: Number( this.selected ),
+				});
 			},
 		},
 	};
