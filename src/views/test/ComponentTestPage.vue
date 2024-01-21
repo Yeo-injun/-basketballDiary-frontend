@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div v-if="this.env == 'local'">
+			<GameTimeSelectbox @select-value="onSelectValue" pInitVal="0311"/>
 			사용자 브라우저 : {{ this.agentType }}
 			<div v-if="$platform.isWeb">
 				사용자 클라이언트 Web
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+	import GameTimeSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue';
 	import EventTestComp from '@/components/EventTestComp.vue';
 	import TestSlot from '@/components/list/FramePaginationList.vue';
 	import TestBtn from '@/components/button/FrameAddBtn.vue';
@@ -41,6 +43,7 @@
 	
 	export default {
 		components: {
+			GameTimeSelectbox,
 			EventTestComp,
 			TestSlot,
 			TestBtn,
@@ -67,7 +70,10 @@
 			},
 			onChangeByteUtilTest( bytes ) {
 				this.dataSize = BytesUtil.withUnit( bytes );
-			}
+			},
+			onSelectValue( val ) {
+				console.log( val );
+			},
 		},
 	};
 </script>
