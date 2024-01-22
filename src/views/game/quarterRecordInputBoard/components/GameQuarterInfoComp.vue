@@ -2,10 +2,7 @@
 	<v-container>
 		<h4>경기일자 : {{ this.gameYmd }}</h4>
 		<h4>경기시간 : {{ this.gameStartTime }} ~{{ this.gameEndTime }}</h4>
-		<GameTimeSelect
-			pLabelName="쿼터시간"
-			pUnitType="min"
-			:pMaxTime="10"
+		<QuarterTimeSelectbox
 			:pInitVal="this.quarterTime"
 			@select-value="selectQuarterTime"
 		/>
@@ -22,7 +19,7 @@
 </template>
 
 <script>
-	import GameTimeSelect from '@/components/selectbox/GameTimeSelect.vue';
+	import QuarterTimeSelectbox from '@/components/selectbox/game/QuarterTimeSelectbox.vue';
 	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
 
 	import ValidationUtil from '@/common/util/ValidationUtil';
@@ -30,7 +27,7 @@
 
 	export default {
 		components: {
-			GameTimeSelect,
+			QuarterTimeSelectbox,
 			GameQuarterInfoFrame,
 		},
 		props: {
@@ -61,6 +58,7 @@
 				return this.pGameQuarterRecords.quarterTime;
 			},
 			selectQuarterTime(val) {
+				console.log( val );
 				this.quarterTime = val;
 				this.$emit('select-quarter-time', val);
 			},

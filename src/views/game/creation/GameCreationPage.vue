@@ -22,7 +22,7 @@
 						@select-value="setGameStartTime"
 					/>
 				</td>
-				<td>~</td>
+				<td> ~ </td>
 				<td>
 					<GameEndTimeSelectbox
 						p-label-name="경기종료시간"
@@ -63,8 +63,8 @@
 	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
 	import GameDatePickerInput from '@/components/input/DatePickerInput.vue';
 
-	import GameStartTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
-	import GameEndTimeSelectbox from '@/components/selectbox/GameTimeSelect.vue';
+	import GameStartTimeSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue';
+	import GameEndTimeSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue';
 
 	import GamePlaceAddressInput from '@/components/input/AddressInput.vue';
 	import GamePlaceNameInput from '@/components/input/FrameTextFieldInput.vue';
