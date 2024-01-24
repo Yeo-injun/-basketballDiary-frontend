@@ -2,7 +2,7 @@
 	<v-container>
 		<v-col align-self="center">
 			<v-row no-gutters justify="center">
-				{{ this.pGameTypeCode }}
+				{{ this.pGameTypeCodeName }}
 			</v-row>
 		</v-col>
 	</v-container>
@@ -12,11 +12,7 @@
 	export default {
 		props: {
 			pGameTypeCode: String,
-		},
-		data() {
-			return {
-				gameTypeCode: this.pGameTypeCode,
-			};
+			pGameTypeCodeName : String,
 		},
 	};
 </script>
