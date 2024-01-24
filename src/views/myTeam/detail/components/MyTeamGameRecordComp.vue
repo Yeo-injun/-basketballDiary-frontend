@@ -1,23 +1,21 @@
 <template>
 	<v-card class="ma-6 pa-2">
-		<!-- TODO 해당 버튼 바꾸기 -->
 		<v-card-text>
 			<div>경기일자 : {{ this.pGame.gameYmd }}</div>
 			<div>
 				경기장주소 : {{ this.pGame.gamePlaceAddress }} / 경기장명 : {{ this.pGame.gamePlaceName }}
 			</div>
 		</v-card-text>
-		<!-- TODO props 쪼개기. 각각 속성별로 넘겨주기... 하위컴포넌트에서 최종 데이터 처리-->
-		<ScoreBoardComp :pGameScore="{
-			gameTypeCode: this.pGame.gameTypeCode,
-			gameTypeCodeName: this.pGame.gameTypeCodeName,
-			homeTeam: this.pGame.homeTeam,
-			awayTeam: this.pGame.awayTeam,
-		}" />
-		<QuarterScoreBoardComp :pQuarterScore="{
-			homeTeam: this.pGame.homeTeam,
-			awayTeam: this.pGame.awayTeam,
-		}" />
+		<ScoreBoardComp 
+			:pGameTypeCode="this.pGame.gameTypeCode"
+			:pGameTypeCodeName="this.pGame.gameTypeCodeName"
+			:pHomeTeamScoreInfo="this.pGame.homeTeam"
+			:pAwayTeamScoreInfo="this.pGame.awayTeam"
+		/>
+		<QuarterScoreBoardComp 
+			:pHomeTeamQuarterScores="this.pGame.homeTeam"
+			:pAwayTeamQuarterScores="this.pGame.awayTeam"
+		/>
 		<GameRecordPageMoveBtn
 			:pBtnName="this.getPageMoveInfo().btnName"
 			:pRoutePageName="this.getPageMoveInfo().routePageName"
@@ -39,8 +37,6 @@
 	import GameRecordPageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 
 	/** Emit Event */
-
-
 
 	/*-----------------------------
 	/*	코드값 

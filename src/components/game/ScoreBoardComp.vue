@@ -3,13 +3,13 @@
 		<v-card>
 			<v-row no-gutters>
 				<v-col cols="12" sm="5">
-					<TeamScoreComp :pTeamScoreInfo="this.homeTeam" />
+					<TeamScoreComp :pTeamScoreInfo="this.pHomeTeamScoreInfo" />
 				</v-col>
 				<v-col cols="12" sm="2">
-					<ScoreInfoComp :pGameTypeCodeName="this.gameTypeCodeName" />
+					<ScoreInfoComp :pGameTypeCodeName="this.pGameTypeCodeName" />
 				</v-col>
 				<v-col cols="12" sm="5">
-					<TeamScoreComp :pTeamScoreInfo="this.awayTeam" />
+					<TeamScoreComp :pTeamScoreInfo="this.pAwayTeamScoreInfo" />
 				</v-col>
 			</v-row>
 		</v-card>
@@ -26,18 +26,10 @@
 			ScoreInfoComp,
 		},
 		props: {
-			pGameScore: Object,
-		},
-		data() {
-			return {
-				gameTypeCode: this.pGameScore.gameTypeCode,
-				gameTypeCodeName: this.pGameScore.gameTypeCodeName,
-				homeTeam: this.pGameScore.homeTeam,
-				awayTeam: this.pGameScore.awayTeam,
-			};
-		},
-		setup() {
-			return {};
+			pGameTypeCode		: String,
+			pGameTypeCodeName	: String,
+			pHomeTeamScoreInfo	: Object,
+			pAwayTeamScoreInfo	: Object,
 		},
 	};
 </script>
