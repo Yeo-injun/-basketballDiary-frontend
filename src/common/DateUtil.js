@@ -124,6 +124,19 @@ export default {
 		const currentDay = String(currentTimeStamp.getDate()).padStart(2, '0');
 		return `${currentYear}${currentMonth}${currentDay}`;
 	},
+	/**
+	 * 두 날짜 사이의 일자 계산
+	 * - toYmd에서 fromYmd 사이에 몇일인지 계산
+	 * @param {String} fromYmd 	*yyyyMMdd 형태여야 함
+	 * @param {String} toYmd	*yyyyMMdd 형태여야 함
+	 */
+	getDaysBetween( fromYmd, toYmd ) {
+		const fromDate 	= new Date( Formatter.toYmd( fromYmd ) );
+		const toDate	= new Date( Formatter.toYmd( toYmd ) );
+		const betweenMilliSeconds	 	= toDate - fromDate;
+		const DAY_FOR_MILLISECONDS 		= 24 * 60 * 60 * 1000; // 24시간 * 60분 * 60초 * 1000밀리초
+		return betweenMilliSeconds / DAY_FOR_MILLISECONDS;
+	},
 }; //export
 
 const Formatter = {

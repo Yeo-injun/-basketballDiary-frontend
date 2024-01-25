@@ -26,7 +26,6 @@
 				/>				
 			</v-col>
 		</v-row>
-		<!-- <v-text-field label="경기장주소" /> -->
 		<GamePlaceNameInput pLabel="경기장명"
 			:pData="gamePlaceName"
 			@compliance="setGamePlaceName"
@@ -39,6 +38,8 @@
 	/** Backend API */
 	/** Code */
 	/** Utils */
+	import DateUtil from '@/common/DateUtil.js';
+
 	/** Components */
 	import MyTeamGameSubTitle from '@/components/title/FramePageSubTitle.vue'
 	import SearchStartDateInput from '@/components/input/DatePickerInput.vue';
@@ -50,6 +51,7 @@
 	import GamePlaceNameInput from '@/components/input/FrameTextFieldInput.vue';
 
 	import MyTeamGameSearchBtn from '@/components/button/FrameSearchBtn.vue';
+import ValidationUtil from '@/common/util/ValidationUtil';
 
 	/** Emit Event */
 
@@ -89,6 +91,19 @@
 				this.gamePlaceName = e.data;
 			},
 			onSearchMyTeamGames() {
+				// 검색일자가 하나라도 없으면 검색 불가
+				if ( ( ValidationUtil.isNotNull( this.gameStartYmd ) && ValidationUtil.isNull( this.gameEndYmd ) )
+				  || ( ValidationUtil.isNull( this.gameStartYmd ) && ValidationUtil.isNotNull( this.gameEndYmd ) )
+				) {
+					alert( "검색일자가 유효하지 않습니다. 검색시작일자와 종료일자 모두 입력해주시기 바랍니다." );
+					return;
+				}
+				// 검색일자범위 유효성 검사
+				const daysOfBetween = DateUtil.getDaysBetween( this.gameStartYmd, this.gameEndYmd );
+				if ( daysOfBetween < 0 ) {
+					alert( "검색일자의 범위가 유효하지 않습니다. 검색 시작일자가 검색 종료일자와 같거나 빨라야 합니다." );
+					return;
+				}
 				this.$emit( 'do-search', {
 					gameStartYmd	: this.gameStartYmd,
 					gameEndYmd		: this.gameEndYmd,
