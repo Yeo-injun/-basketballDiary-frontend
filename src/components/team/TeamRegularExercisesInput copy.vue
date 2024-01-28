@@ -20,19 +20,12 @@
 
         <template v-slot:item="{ item, index }">
             <tr :data-id="index">
-				<!-- TODO 별도 컴포넌트로 만들어서 해당 컴포넌트에서 정기운동시간별로 data를 관리. 변경될시마다 emit하여 최신화된 데이터 동기화... -->
                 <td><v-autocomplete :items="days" v-model="item.dayOfTheWeekCode" /></td>
-                <td>
-					<GameTimeStartSelectbox pLabelName="시작"
-						:pInitVal="item.startTime"/>
-				</td>
-				<td>
-					<GameTimeEndSelectbox pLabelName="종료"
-						:pInitVal="item.endTime" />
-				</td>
+                <td><v-autocomplete :items="times" v-model="item.startTime" /></td>
+                <td><v-autocomplete :items="times" v-model="item.endTime" /></td>
                 <td>
 					<ExercisePlaceNameTextInput
-						@compliance="onInputExercisePlaceName"
+					@compliance="onInputExercisePlaceName"
 					/>
 				</td>
                 <td>
@@ -61,9 +54,6 @@
 </template>
 
 <script>
-	import GameTimeStartSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue'; 
-	import GameTimeEndSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue'; 
-
 	import ExercisePlaceNameTextInput from '@/components/input/FrameTextFieldInput.vue';
 	import TeamExercisePlaceAddressInput from '@/components/input/AddressInput.vue';
 
@@ -72,8 +62,6 @@
 
 	export default {
 		components: {
-			GameTimeStartSelectbox,
-			GameTimeEndSelectbox,
 			ExercisePlaceNameTextInput,
             TeamExercisePlaceAddressInput,
 		},
@@ -88,10 +76,11 @@
 				 * 컴포넌트 메타 데이터 
 				 *---------------------------*/
 				days: DateUtil.TheWeek.getDayOptions(),
+				times: DateUtil.Times.getOptions(),
 				headers: [
 					{ text: '요일'    , value: 'dayOfTheWeekCode'     , width: '10%',   },
-					{ text: '시작시간', value: 'startTime'            , sorted : false , width: '15%',    },
-					{ text: '종료시간', value: 'endTime'              , sorted : false , width: '15%' },
+					{ text: '시작시간', value: 'startTime'            , sorted : false , width: '10%',    },
+					{ text: '종료시간', value: 'endTime'              , sorted : false , width: '10%' },
 					{ text: '경기장'  , value: 'exercisePlaceName'    , sorted : false , },
 					{ text: '주소'    , value: 'exercisePlaceAddress' , sorted : false , width: '30%', },
                     { text: '삭제'    , align: 'center' },
