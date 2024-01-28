@@ -26,13 +26,28 @@
             }
 
             return {
-                addressInfo : ValidationUtil.isNotNull( this.pData ) 
-                              ? this.pData : { address : "", sidoCode : "", sigunguCode : "", },
-                rules : ValidationUtil.isNotNull( this.pRules ) 
-                        ? [ ...defaultRules, ...this.pRules ] : defaultRules,
+                addressInfo : this.initAddress( this.pData ),
+                rules       : ValidationUtil.isNotNull( this.pRules ) 
+                              ? [ ...defaultRules, ...this.pRules ] : defaultRules,
             };
-        }, 
+        },
+		/**-------------------------------------------------
+		 * Vue 인스턴스의 watch속성 : 인스턴스내 객체 데이터의 변경을 감지한다.
+		 * - input의 속성이 변경될때마다 상위 컴포넌트로 데이터 전달 ( $emit 사용 )
+		 **-------------------------------------------------*/
+         watch: {
+			pData : {
+				deep: true,
+				handler: function (newData) {
+					this.addressInfo = this.initAddress( newData );
+				},
+			},
+		},
         methods: {
+            initAddress( addressInfo ) {
+                return ValidationUtil.isNotNull( addressInfo ) 
+                       ? addressInfo : { address : "", sidoCode : "", sigunguCode : "", }
+            },
             searchAddress() {
                 new window.daum.Postcode({
                     // 우편번호 검색결과 목록 클릭시 클릭한 주소정보를 내려줌.
