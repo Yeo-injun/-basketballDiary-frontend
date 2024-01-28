@@ -12,8 +12,9 @@
                     @click="createExerciseTime()"
                     small
                     color="primary"
-                    ><v-icon>mdi-plus</v-icon></v-btn
                 >
+					<v-icon>mdi-plus</v-icon>
+				</v-btn>
             </v-toolbar>
         </template>
 
@@ -22,7 +23,11 @@
                 <td><v-autocomplete :items="days" v-model="item.dayOfTheWeekCode" /></td>
                 <td><v-autocomplete :items="times" v-model="item.startTime" /></td>
                 <td><v-autocomplete :items="times" v-model="item.endTime" /></td>
-                <td><v-text-field v-model="item.exercisePlaceName" /></td>
+                <td>
+					<ExercisePlaceNameTextInput
+					@compliance="onInputExercisePlaceName"
+					/>
+				</td>
                 <td>
 					<TeamExercisePlaceAddressInput 
 						:pData="{ 
@@ -39,8 +44,9 @@
                         color="red"
                         outlined
                         small
-                        ><v-icon>mdi-minus</v-icon></v-btn
                     >
+						<v-icon>mdi-minus</v-icon>
+					</v-btn>
                 </td>
             </tr>
         </template>
@@ -48,13 +54,15 @@
 </template>
 
 <script>
-import TeamExercisePlaceAddressInput from '@/components/input/AddressInput.vue';
+	import ExercisePlaceNameTextInput from '@/components/input/FrameTextFieldInput.vue';
+	import TeamExercisePlaceAddressInput from '@/components/input/AddressInput.vue';
 
 	import DateUtil from '@/common/DateUtil.js';
 
 
 	export default {
 		components: {
+			ExercisePlaceNameTextInput,
             TeamExercisePlaceAddressInput,
 		},
 		props: {
@@ -79,29 +87,17 @@ import TeamExercisePlaceAddressInput from '@/components/input/AddressInput.vue';
 				],
 			};
 		},
-		/**-------------------------------------------------
-		 * Vue 인스턴스의 watch속성 : 인스턴스내 객체 데이터의 변경을 감지한다.
-		 * - input의 속성이 변경될때마다 상위 컴포넌트로 데이터 전달 ( $emit 사용 )
-		 **-------------------------------------------------*/
-		watch: {
-			teamRegularExercises: {
-				deep: true,
-				handler: function (newData) {
-					this.$emit('data', newData);
-				},
-			},
-		},
 		methods: {
-			// addressAPI(idx) {
-			// 	new window.daum.Postcode({
-			// 		oncomplete: (data) => {
-			// 			this.teamRegularExercises[idx].exercisePlaceAddress = data.address;
-			// 		},
-			// 	}).open();
-			// },
-			onComplianceTeamExercisePlaceAddress( e ) {
-				console.log( e );
+			onInputExercisePlaceName( e ) {
+				console.log([ 'onInputExercisePlaceName', e ] );
+				console.log([ 'onInputExercisePlaceName', this.teamRegularExercises ] );
 				// 주소 정보 할당하기
+			},
+			onComplianceTeamExercisePlaceAddress( e ) {
+				console.log([ 'onComplianceTeamExercisePlaceAddress', e ] );
+				console.log([ 'onComplianceTeamExercisePlaceAddress', this.teamRegularExercises[0] ] );
+				// 주소 정보 할당하기
+				this.$emit( 'change', this.teamRegularExercises );
 			},
 			createExerciseTime() {
 				this.teamRegularExercises.push({});

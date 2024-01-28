@@ -1,6 +1,5 @@
 <template>
 	<v-container>
-		<!-- <v-form v-if="dataInit" ref="form" lazy-validation > -->
 		<v-form v-if="dataInit" ref="form">
 			<v-row>
 				<v-col cols="7">
@@ -52,7 +51,7 @@
 			<v-row>
 				<TeamRegularExercisesInput 
 					:pData="teamRegularExercises"
-					@data="handleTeamRegularExercises"
+					@change="handleTeamRegularExercises"
 				/>
 			</v-row>
 		</v-form>
@@ -71,15 +70,6 @@
 	import TeamRegularExercisesInput from '@/components/team/TeamRegularExercisesInput.vue';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
-
-	/**---------------------------------
-	 * 해당 컴포넌트가 Emit하는 이벤트명
-	 **---------------------------------*/
-	 const Event = {
-		CHANGE_TEAM_INFO 		: 'change-team-info',
-		CHANGE_TEAM_LOGO_IMAGE 	: 'change-team-logo-image',
-		CHANGE_TEAM_EXERCISES 	: 'change-team-exercises',
-    } 
 
 	export default {
 		components: {
@@ -126,18 +116,6 @@
 				teamLogoImageFile: null,
 			}
 		},
-		/**-------------------------------------------------
-		 * Vue 인스턴스의 watch속성 : 인스턴스내 객체 데이터의 변경을 감지한다.
-		 * - input의 속성이 변경될때마다 상위 컴포넌트로 데이터 전달 ( $emit 사용 )
-		 **-------------------------------------------------*/
-		watch: {
-			teamRegularExercises: {
-				deep: true,
-				handler: function (newData) {
-					this.$emit(Event.CHANGE_TEAM_EXERCISES, newData);
-				},
-			},
-		},
 		props: {
 			pTeamInfo: Object,
 			pTeamLogoImagePath: String,
@@ -179,7 +157,7 @@
 			},
 			/** 팀정기운동 목록 - 입력 정책 관련 이벤트 제어하는 로직 추가 필요 TODO */
 			handleTeamRegularExercises( data ) {
-				console.log( data );
+				console.log( [ 'TeamInfoFormComp.handleTeamRegularExercises()', data[0].exercisePlaceAddress] );
 				this.teamRegularExercises = data;
 			},
 		},
