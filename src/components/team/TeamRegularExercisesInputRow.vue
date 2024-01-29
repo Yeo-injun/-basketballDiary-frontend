@@ -2,34 +2,34 @@
 	<tr :data-id="pRowIndex">
 		<td>
 			<WeekdaySelectbox 
-				:pInitVal="this.dayOfTheWeekCode"
+				:pInitVal="this.pData.dayOfTheWeekCode"
 				@select-value="this.setDayOfTheWeekCode"
 			/>
 		</td>
 		<td>
 			<GameTimeStartSelectbox pLabelName="시작"
-				:pInitVal="this.startTime"
+				:pInitVal="this.pData.startTime"
 				@select-value="this.setDayOfTheWeekCode"
 			/>
 		</td>
 		<td>
 			<GameTimeEndSelectbox pLabelName="종료"
-				:pInitVal="this.endTime"
+				:pInitVal="this.pData.endTime"
 				@select-value="this.setDayOfTheWeekCode"
 			/>
 		</td>
 		<td>
 			<ExercisePlaceNameTextInput
-				:pData="this.exercisePlaceName"
+				:pData="this.pData.exercisePlaceName"
 				@compliance="this.setExercisePlaceName"
 			/>
 		</td>
 		<td>
 			<TeamExercisePlaceAddressInput 
 				:pData="{ 
-					'address' : this.exercisePlaceAddress, 
-					'sidoCode' : this.sidoCode,
-					'sigunguCode' : this.sigunguCode,
+					'address' : this.pData.exercisePlaceAddress, 
+					'sidoCode' : this.pData.sidoCode,
+					'sigunguCode' : this.pData.sigunguCode,
 				}"
 				@compliance="this.setExercisePlaceAddress"
 			/>
@@ -51,7 +51,7 @@
 	/** Backend API */
 	/** Code */
 	/** Utils */
-	import ValidationUtil from '@/common/util/ValidationUtil';
+	// import ValidationUtil from '@/common/util/ValidationUtil';
 
 	/** Components */
 	import WeekdaySelectbox from '@/components/selectbox/WeekdaySelectbox.vue';
@@ -77,28 +77,19 @@
 			pData : Object,
 		},
 		data() {
-			const initData = ValidationUtil.isNull( this.pData ) ? {
-				dayOfTheWeekCode		: "",
-				startTime				: "",
-				endTime					: "",
-				exercisePlaceName		: "",
-				exercisePlaceAddress	: "",
-				sidoCode				: "",
-				sigunguCode				: "",
-			} : this.pData;
 			return {
-				dayOfTheWeekCode 		: initData.dayOfTheWeekCode ,
-				startTime 				: initData.startTime ,
-				endTime 				: initData.endTime ,
-				exercisePlaceName		: initData.exercisePlaceName ,
-				exercisePlaceAddress 	: initData.exercisePlaceAddress ,
-				sidoCode 				: initData.sidoCode ,
-				sigunguCode 			: initData.sigunguCode ,
+				dayOfTheWeekCode 		: this.pData.dayOfTheWeekCode ,
+				startTime 				: this.pData.startTime ,
+				endTime 				: this.pData.endTime ,
+				exercisePlaceName		: this.pData.exercisePlaceName ,
+				exercisePlaceAddress 	: this.pData.exercisePlaceAddress ,
+				sidoCode 				: this.pData.sidoCode ,
+				sigunguCode 			: this.pData.sigunguCode ,
 			};
 		},
 		methods: {
 			deleteExerciseTime() {
-				this.$emit('deleteRow', { rowIndex : this.pRowIndex } );
+				this.$emit('delete-row', { index : this.pRowIndex } );
 			},
 			setDayOfTheWeekCode( value ) {
 				this.dayOfTheWeekCode = value;
