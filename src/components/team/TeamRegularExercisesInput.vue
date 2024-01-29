@@ -22,13 +22,23 @@
             <TeamRegularExercisesInputRow 
 				:pRowIndex="index"
 				:pData="item"
+				@delete-row="deleteExerciseTime"
 			/>
         </template>
     </v-data-table>
 </template>
 
 <script>
-	import TeamRegularExercisesInputRow from './TeamRegularExercisesInputRow.vue';
+	/** Backend API */
+	/** Code */
+	/** Utils */
+	import ArrayUtil from '@/common/util/ArrayUtil';
+	
+	/** Components */
+	import TeamRegularExercisesInputRow from '@/components/team/TeamRegularExercisesInputRow.vue';
+
+	let rowCount = 0; 
+	/** Emit Event */
 	export default {
 		components: {
 			TeamRegularExercisesInputRow,
@@ -39,7 +49,7 @@
 		data() {
 			const hasPropsData = this.pData.length > 0;
 			return {
-				teamRegularExercises: hasPropsData ? this.pData : [{}],
+				teamRegularExercises: hasPropsData ? this.pData : [ this.createExerciseTime() ],
 				/*---------------------------
 				 * 컴포넌트 메타 데이터 
 				 *---------------------------*/
@@ -55,15 +65,31 @@
 		},
 		methods: {
 			createExerciseTime() {
-				this.teamRegularExercises.push({});
+				this.teamRegularExercises.push({
+					index 					: rowCount++,
+					dayOfTheWeekCode		: "",
+					startTime				: "",
+					endTime					: "",
+					exercisePlaceName		: "",
+					exercisePlaceAddress	: "",
+					sidoCode				: "",
+					sigunguCode				: "",
+
+				});
 			},
-			deleteExerciseTime(idx) {
+			deleteExerciseTime( row ) {
 				const isRemainOneExercise = this.teamRegularExercises.length == 1;
 				if (isRemainOneExercise) {
 					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
 					return;
 				}
-				this.teamRegularExercises.splice(idx, 1);
+				this.teamRegularExercises = ArrayUtil.deleteItemById(
+					this.teamRegularExercises,
+					row,
+					'index'
+				);
+				rowCount--;
+				// this.teamRegularExercises.splice( row.index, 1);
 			},
 		},
 	};
