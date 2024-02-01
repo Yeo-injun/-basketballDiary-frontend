@@ -2,34 +2,34 @@
 	<tr :data-id="pRowIndex">
 		<td>
 			<WeekdaySelectbox 
-				:pInitVal="this.pData.dayOfTheWeekCode"
+				:pInitVal="this.value.dayOfTheWeekCode"
 				@select-value="this.setDayOfTheWeekCode"
 			/>
 		</td>
 		<td>
 			<GameTimeStartSelectbox pLabelName="시작"
-				:pInitVal="this.pData.startTime"
+				:pInitVal="this.value.startTime"
 				@select-value="this.setDayOfTheWeekCode"
 			/>
 		</td>
 		<td>
 			<GameTimeEndSelectbox pLabelName="종료"
-				:pInitVal="this.pData.endTime"
+				:pInitVal="this.value.endTime"
 				@select-value="this.setDayOfTheWeekCode"
 			/>
 		</td>
 		<td>
 			<ExercisePlaceNameTextInput
-				:pData="this.pData.exercisePlaceName"
+				:pData="this.value.exercisePlaceName"
 				@compliance="this.setExercisePlaceName"
 			/>
 		</td>
 		<td>
 			<TeamExercisePlaceAddressInput 
 				:pData="{ 
-					'address' : this.pData.exercisePlaceAddress, 
-					'sidoCode' : this.pData.sidoCode,
-					'sigunguCode' : this.pData.sigunguCode,
+					'address' : this.value.exercisePlaceAddress, 
+					'sidoCode' : this.value.sidoCode,
+					'sigunguCode' : this.value.sigunguCode,
 				}"
 				@compliance="this.setExercisePlaceAddress"
 			/>
@@ -73,23 +73,23 @@
             TeamExercisePlaceAddressInput,
 		},
 		props: {
+			value : {},
 			pRowIndex : Number,
-			pData : Object,
 		},
 		data() {
 			return {
-				dayOfTheWeekCode 		: this.pData.dayOfTheWeekCode ,
-				startTime 				: this.pData.startTime ,
-				endTime 				: this.pData.endTime ,
-				exercisePlaceName		: this.pData.exercisePlaceName ,
-				exercisePlaceAddress 	: this.pData.exercisePlaceAddress ,
-				sidoCode 				: this.pData.sidoCode ,
-				sigunguCode 			: this.pData.sigunguCode ,
+				dayOfTheWeekCode 		: this.value.dayOfTheWeekCode ,
+				startTime 				: this.value.startTime ,
+				endTime 				: this.value.endTime ,
+				exercisePlaceName		: this.value.exercisePlaceName ,
+				exercisePlaceAddress 	: this.value.exercisePlaceAddress ,
+				sidoCode 				: this.value.sidoCode ,
+				sigunguCode 			: this.value.sigunguCode ,
 			};
 		},
 		methods: {
 			deleteExerciseTime() {
-				this.$emit('delete-row', { index : this.pRowIndex } );
+				this.$emit('delete-row', this.pRowIndex );
 			},
 			setDayOfTheWeekCode( value ) {
 				this.dayOfTheWeekCode = value;
@@ -100,8 +100,9 @@
 			setEndTime( value ) {
 				this.endTime = value;
 			},
-			setExercisePlaceName( value ) {
-				this.exercisePlaceName = value;
+			setExercisePlaceName( result ) {
+				this.exercisePlaceName = result.data;
+				this.$emit( 'input', result.data );
 			},
 			setExercisePlaceAddress( data ) {
 				this.exercisePlaceAddress	= data.address;
