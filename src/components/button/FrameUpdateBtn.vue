@@ -15,14 +15,9 @@
 		props: {
 			pBtnName: String,
 		},
-		data() {
-			return {
-				eventEmitName: 'do-update',
-			};
-		},
 		methods: {
 			doUpdate() {
-				this.$emit(this.eventEmitName);
+				this.$emit( 'do-update' );
 			},
 		},
 	};

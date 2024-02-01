@@ -8,7 +8,8 @@ Vue.use(VueRouter);
 /** REFERENCE
  * -중첩된 라우트 : https://v3.router.vuejs.org/kr/guide/essentials/nested-routes.html
  */
-export default new VueRouter({
+
+const router = new VueRouter({
 	// Named Router 사용 - 참고자료 : https://velog.io/@yjyoo/vue.js-Vue-Router-%EC%A0%95%EB%A6%AC
 	// 기본은 Hash모드지만 이경우 웹브라우저 url입력창에 #이 계속 붙음.
 	// 이를 방지하기 위해 history 모드로 변경.
@@ -102,7 +103,34 @@ export default new VueRouter({
 			'AccountSignOutPage'
 		),
 	],
+	// catch (err) {
+	// 	alert("dddd");
+	// 	if (err.name === 'NavigationDuplicated') {
+	// 	  // 중복 내비게이션 오류를 무시하거나 처리합니다.
+	// 	  console.log('Avoided redundant navigation error:', err);
+	// 	  return;
+	// 	} 
+	// 	// 그 외의 오류에 대한 처리
+	// 	console.error(err);
+	// 	throw err;
+	// },
+
 });
+
+// // 라우팅 처리전 동작 정의
+// router.beforeEach( ( to, from, next ) => {
+// 	console.log( to );
+// 	console.log( from );
+// 	console.log( next );
+// 	// 중복 네이게이션 확인 및 처리
+// 	const isSameRoute = to.name == from.name && to.path == from.path;
+// 	if ( isSameRoute ) {
+// 		return;
+// 	}
+
+// 	// 이상이 없을경우 다음동작 수행
+// 	next();
+// });
 
 // TODO  클래스로 만들어서 생성자로 객체 만들기
 function createRoute(componentPath, urlPath, componentName, childernList) {
@@ -119,3 +147,6 @@ function createRoute(componentPath, urlPath, componentName, childernList) {
 		props: true,
 	};
 }
+
+export default router;
+

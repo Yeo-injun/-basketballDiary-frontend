@@ -5,13 +5,11 @@
 
 			<v-card-text>
 				<TeamInfoFormComp
+					ref="teamInfoUpdateForm"
 					v-if="this.dataInit"
-					:pTeamInfo="this.teamInfo"
-					:pTeamLogoImagePath="this.teamLogoImagePath"
-					:pTeamRegularExercises="this.teamRegularExercises"
-					@change-team-info="setTeamInfo"
-					@change-team-exercises="setTeamExercises"
-					@change-team-logo-image="setTeamLogoImageFile"
+					:pTeamInfo="teamInfo"
+					:pTeamLogoImagePath="teamLogoImagePath"
+					:pTeamRegularExercises="teamRegularExercises"
 				/>
 			</v-card-text>
 
@@ -58,9 +56,13 @@
 		},
 		data() {
 			return {
-				/** 데이터 초기화 완료여부 */
+				/*-----------------------
+				 * 데이터 초기화 완료여부
+				 *-----------------------*/
 				dataInit: false,
-				/** 관리 데이터 */
+				/*-----------------------
+				 * teamInfoForm 초기화 데이터
+				 *-----------------------*/
 				teamInfo: {},
 				teamRegularExercises: [],
 				teamLogoImageFile: null,
@@ -68,15 +70,6 @@
 			};
 		},
 		methods: {
-			setTeamInfo(teamInfo) {
-				this.teamInfo = teamInfo;
-			},
-			setTeamExercises(teamExercises) {
-				this.teamRegularExercises = teamExercises;
-			},
-			setTeamLogoImageFile(imageFile) {
-				this.teamLogoImageFile = imageFile;
-			},
 			async getTeamInfo() {
 				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
 				this.teamInfo = {
@@ -92,18 +85,23 @@
 				this.teamRegularExercises = data.regularExercises;
 			},
 			async modifyTeamInfo() {
+				if ( !this.$refs.teamInfoUpdateForm.validate() ) {
+					return;
+				}
+
+				const teamInfoForm = this.$refs.teamInfoUpdateForm.getForm();
 				await MyTeamAPI.modifyMyTeamInfo(
 					this.pTeamSeq,
 					{
-						teamName: this.teamInfo.teamName,
-						hometown: this.teamInfo.hometown,
-						introduction: this.teamInfo.introduction,
-						foundationYmd: this.teamInfo.foundationYmd,
-						sidoCode: this.teamInfo.sidoCode,
-						sigunguCode: this.teamInfo.sigunguCode,
-						teamRegularExercises: this.teamRegularExercises,
+						teamName: teamInfoForm.teamInfo.teamName,
+						hometown: teamInfoForm.teamInfo.hometown,
+						introduction: teamInfoForm.teamInfo.introduction,
+						foundationYmd: teamInfoForm.teamInfo.foundationYmd,
+						sidoCode: teamInfoForm.teamInfo.sidoCode,
+						sigunguCode: teamInfoForm.teamInfo.sigunguCode,
+						teamRegularExercises: teamInfoForm.teamRegularExercises,
 					},
-					this.teamLogoImageFile
+					teamInfoForm.teamLogoImageFile
 				);
 				this.isActivate = false;
 			},

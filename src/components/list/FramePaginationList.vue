@@ -32,7 +32,7 @@
 		},
 		data() {
 			return {
-				pagination: this.initPagination(),
+				pagination	: this.initPagination(),
 			};
 		},
 		watch: {
@@ -41,7 +41,7 @@
 				handler() {
 					this.pagination = this.initPagination();
 				},
-				deep: true,
+				deep	: true,
 			},
 		},
 		methods: {

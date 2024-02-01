@@ -1,36 +1,30 @@
 <template>
 	<v-container>
-		<v-form ref="form" lazy-validation>
+		<v-form v-if="dataInit" ref="form">
 			<v-row>
 				<v-col cols="7">
 					<v-row>
-						<v-col cols="2" align-self="center">
-							<v-input>팀명</v-input>
-						</v-col>
-						<v-col>
-							<v-text-field :rules="rules" v-model="teamInfo.teamName" />
-						</v-col>
+						<TeamNameInput pLabel="팀명"
+							:pData="this.teamInfo.teamName"
+							:pRequired="true"
+							@compliance="onComplianceTeamName"
+						/>
+						<FoundationDatePickerInput pLabel="창단일"
+							:pData="teamInfo.foundationYmd"
+							:pRequired="true"
+							@compliance="onComplianceFoundationYmd"
+						/>
 					</v-row>
 					<v-row>
-						<v-col cols="2">
-							<v-input>연고지</v-input>
-						</v-col>
-						<v-col>
-							<v-input append-icon="mdi-pencil" @click:append="hometownAPI()">
-								{{ teamInfo.hometown }}
-							</v-input>
-						</v-col>
-					</v-row>
-					<v-row>
-						<v-col cols="2">
-							<v-input>창단일</v-input>
-						</v-col>
-						<v-col>
-							<CustomDatePickerComp
-								:p-init-value="teamInfo.foundationYmd"
-								@pickup-date="setFoundationYmd"
-							/>
-						</v-col>
+						<HomeTownAddressInput pLabel="연고지"
+							:pData="{ 
+								address : teamInfo.hometown,
+							 	sidoCode : teamInfo.sidoCode,
+								sigunguCode : teamInfo.sigunguCode,
+							}"
+							:pRequired="true"
+							@compliance="onComplianceTeamAddressInfo"
+						/>
 					</v-row>
 				</v-col>
 				<v-col cols="5">
@@ -39,107 +33,59 @@
 						:pMaxHeight="String(250)"
 						:pMaxWidth="String(250)"
 					/>
-					<v-file-input
-						show-size
-						label="팀사진"
-						accept="image/*"
-						@change="setImageFile"
+					<TeamLogoImageInput pLabel="팀 로고 사진"
+						@exceed-max-size="handleImageFileInputEvent"
+						@clear-input="handleImageFileInputEvent"
+						@select-valid-image="handleImageFileInputEvent"
 					/>
 				</v-col>
 			</v-row>
-
 			<v-row>
-				<v-data-table
-					:headers="headers"
-					:items="teamRegularExercises"
-					hide-default-footer
-				>
-					<template v-slot:top>
-						<v-toolbar flat>
-							<v-toolbar-title><v-input>정기운동시간</v-input></v-toolbar-title>
-							<v-divider class="mx-4" inset vertical />
-							<v-spacer />
-							<v-btn
-								@click="createExerciseTime()"
-								fab
-								dark
-								small
-								color="primary"
-								><v-icon dark>mdi-plus</v-icon></v-btn
-							>
-						</v-toolbar>
-					</template>
-
-					<template v-slot:item="{ item, index }">
-						<tr :data-id="index">
-							<td>
-								<v-autocomplete
-									:items="days"
-									dense
-									v-model="item.dayOfTheWeekCode"
-								/>
-							</td>
-							<td>
-								<v-autocomplete :items="times" dense v-model="item.startTime" />
-							</td>
-							<td>
-								<v-autocomplete :items="times" dense v-model="item.endTime" />
-							</td>
-							<td>
-								<v-text-field disabled v-model="item.exercisePlaceAddress" />
-							</td>
-							<td>
-								<v-btn
-									@click="addressAPI(index)"
-									color="secondary"
-									x-small
-									fab
-									dark
-									><v-icon>mdi-pencil</v-icon></v-btn
-								>
-							</td>
-							<td><v-text-field v-model="item.exercisePlaceName" /></td>
-							<td>
-								<v-btn
-									@click="deleteExerciseTime(index)"
-									color="secondary"
-									x-small
-									dark
-									fab
-									><v-icon>mdi-delete</v-icon></v-btn
-								>
-							</td>
-						</tr>
-					</template>
-				</v-data-table>
+				<TeamIntroductionInput pLabel="팀 소개글을 작성해주세요."
+					:pData="teamInfo.introduction"
+					:pRequired="true"
+					@compliance="onComplianceTeamIntroduction"
+				/>
 			</v-row>
+
 			<v-row>
-				<v-textarea
-					label="팀 소개"
-					max-width="250"
-					outlined
-					v-model="teamInfo.introduction"
-				></v-textarea>
+				<TeamRegularExercisesInput 
+					:pData="teamRegularExercises"
+					@change="handleTeamRegularExercises"
+				/>
 			</v-row>
 		</v-form>
 	</v-container>
 </template>
 
 <script>
+	import TeamNameInput from '@/components/input/FrameTextFieldInput.vue';
+	import HomeTownAddressInput from '@/components/input/AddressInput.vue';
+	import FoundationDatePickerInput from '@/components/input/DatePickerInput.vue';
+
 	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
-	import CustomDatePickerComp from '@/components/common/CustomDatePickerComp.vue';
-	import DateUtil from '@/common/DateUtil.js';
+	import TeamLogoImageInput from '@/components/input/FrameImageInput.vue';
+
+	import TeamIntroductionInput from '@/components/input/FrameTextAreaInput.vue';
+	import TeamRegularExercisesInput from '@/components/team/TeamRegularExercisesInput.vue';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	export default {
 		components: {
+			TeamNameInput,
+			HomeTownAddressInput,
+			FoundationDatePickerInput,
 			TeamLogoImage,
-			CustomDatePickerComp,
+			TeamLogoImageInput,
+			TeamIntroductionInput,
+			TeamRegularExercisesInput,
 		},
 		mounted() {
+			console.log( ["FormMounted", this.pTeamInfo])
 			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
 			if (ValidationUtil.isNull(this.pTeamInfo)) {
+				this.dataInit = true;	// init할 데이터가 없어도 데이터 초기화 단계가 완료된 상태로 바꿔줘야 함.
 				return;
 			}
 			this.teamInfo = this.pTeamInfo;
@@ -151,84 +97,24 @@
 		},
 		data() {
 			return {
-				/** 컴포넌트 데이터 init 상태 */
+				/*---------------------------
+				 * 컴포넌트 데이터 init 상태 
+				 *---------------------------*/
 				dataInit: false,
-				/** 데이터 */
+				/*---------------------------
+				 * input 데이터 속성 
+				 *---------------------------*/
 				teamInfo: {
 					teamName: '',
 					hometown: '',
+					sidoCode: '',
+					sigunguCode : '',
 					foundationYmd: '',
 					introduction: '',
-					// teamRegularExercises: [{}],
 				},
 				teamRegularExercises: [{}],
-				// teamLogoImage: null,
-				teamLogoImageFile: null, // 오류 테스트 후 수정
-				rules: [
-					(str) => !!str || '필수 입력사항입니다.',
-					(str) => (str && str.length >= 2) || '2자 이상 입력해야합니다.',
-				],
-				days: DateUtil.TheWeek.getDayOptions(),
-				times: DateUtil.Times.getOptions(),
-				headers: [
-					{
-						text: '요일',
-						value: 'dayOfTheWeekCode',
-						sortable: false,
-						width: '10%',
-						align: 'start',
-					},
-					{
-						text: '시작시간',
-						value: 'startTime',
-						sortable: false,
-						width: '10%',
-					},
-					{ text: '종료시간', value: 'endTime', sortable: false, width: '10%' },
-					{
-						text: '주소',
-						value: 'exercisePlaceAddress',
-						sortable: false,
-						width: '30%',
-					},
-					{ text: '' },
-					{ text: '경기장', value: 'exercisePlaceName', sortable: false },
-					{ text: '삭제', align: 'center' },
-				],
-			};
-		},
-		/** teamInfo가 변경될때마다 $emit으로 이벤트를 발생시켜서 상위 컴포넌트로 teamInfo데이터 전달
-		 *  $emit으로 데이터를 전달하고자 할때는 'e-보내고자하는 데이터명'. ex. e-team-info
-		 *  참고자료 : https://codingcoding.tistory.com/337
-		 */
-		watch: {
-			teamInfo: {
-				deep: true,
-				handler: function (newTeamInfo) {
-					// rule기반으로 유효성 체크해서 데이터가 유효할 경우에만 넘기기
-					// 참고자료 : https://minu0807.tistory.com/82
-					const isValid = this.$refs.form.validate();
-					if (isValid) {
-						// 정기운동시간 목록 처리하기
-						if (ValidationUtil.isNull(newTeamInfo.teamRegularExercises)) {
-							newTeamInfo.teamRegularExercises = [];
-						}
-						this.$emit('change-team-info', newTeamInfo);
-					}
-				},
-			},
-			teamLogoImageFile: {
-				deep: true,
-				handler: function (newImageFile) {
-					this.$emit('change-team-logo-image', newImageFile);
-				},
-			},
-			teamRegularExercises: {
-				deep: true,
-				handler: function (newData) {
-					this.$emit('change-team-exercises', newData);
-				},
-			},
+				teamLogoImageFile: null,
+			}
 		},
 		props: {
 			pTeamInfo: Object,
@@ -236,39 +122,43 @@
 			pTeamRegularExercises: Array,
 		},
 		methods: {
-			setImageFile(imageFile) {
-				this.teamLogoImageFile = imageFile;
+			/**
+			 * Form내 input컴포넌트의 유효성을 체크한다.
+			 * @return Boolean  
+			 */
+			validate() {
+				return this.$refs.form.validate();
 			},
-			setFoundationYmd(ymd) {
-				this.teamInfo.foundationYmd = DateUtil.Format.toString(ymd);
-			},
-			addressAPI(idx) {
-				new window.daum.Postcode({
-					oncomplete: (data) => {
-						this.teamRegularExercises[idx].exercisePlaceAddress = data.address;
-					},
-				}).open();
-			},
-			hometownAPI() {
-				new window.daum.Postcode({
-					oncomplete: (data) => {
-						console.log(data);
-						this.teamInfo.hometown = data.address;
-						this.teamInfo.sidoCode = data.sigunguCode.substr(0, 2);
-						this.teamInfo.sigunguCode = data.sigunguCode;
-					},
-				}).open();
-			},
-			createExerciseTime() {
-				this.teamRegularExercises.push({});
-			},
-			deleteExerciseTime(idx) {
-				const isRemainOneExercise = this.teamRegularExercises.length == 1;
-				if (isRemainOneExercise) {
-					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
-					return;
+			getForm() {
+				return {
+					teamInfo: this.teamInfo,
+					teamRegularExercises: this.teamRegularExercises,
+					teamLogoImageFile: this.teamLogoImageFile,
 				}
-				this.teamRegularExercises.splice(idx, 1);
+			},
+			/** 팀정보 */
+			onComplianceTeamName( e ) {
+				this.teamInfo.teamName = e.data;
+			},
+			onComplianceTeamAddressInfo( data ) {
+				this.teamInfo.hometown = data.address;
+				this.teamInfo.sidoCode = data.sidoCode;
+				this.teamInfo.sigunguCode = data.sigunguCode;
+			},
+			onComplianceFoundationYmd( e ) {
+				this.teamInfo.foundationYmd = e.data;
+			},
+			onComplianceTeamIntroduction( e ) {
+				this.teamInfo.introduction = e.data;
+			},
+			/** 팀로고 이미지 */
+			handleImageFileInputEvent( event ) {
+				this.teamLogoImageFile = event.imageFile;
+			},
+			/** 팀정기운동 목록 - 입력 정책 관련 이벤트 제어하는 로직 추가 필요 TODO */
+			handleTeamRegularExercises( data ) {
+				console.log( [ 'TeamInfoFormComp.handleTeamRegularExercises()', data[0].exercisePlaceAddress] );
+				this.teamRegularExercises = data;
 			},
 		},
 	};

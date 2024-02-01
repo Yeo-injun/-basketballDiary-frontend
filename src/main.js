@@ -7,26 +7,13 @@ import vuetify from './plugins/vuetify';
  * 기본값은 ../src/*
  *--------------------------------*/
 import router from '@/router/index.js';
-/**-------------------------------
- * Vue touch event 설치시 메세지
-npm i -S vue2-touch-events
+import ImpsPlatform from 'imps-platform-detect';
 
-added 1 package, and audited 970 packages in 15s
-
-99 packages are looking for funding
-  run `npm fund` for details
-
-14 vulnerabilities (9 moderate, 4 high, 1 critical)
-
-To address issues that do not require attention, run:
-  npm audit fix
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
-
-Run `npm audit` for details
- *-------------------------------*/
-import Vue2TouchEvents from 'vue2-touch-events'; // https://www.npmjs.com/package/vue2-touch-events
+/**--------------------------------
+ * 사용자 디바이스 식별 플러그인 등록 - 24.01.01 ( 월 ) 
+ * cf. npm URL : https://www.npmjs.com/package/imps-platform-detect
+ *---------------------------------*/
+Vue.use( ImpsPlatform ); 
 
 Vue.config.productionTip = false;
 
@@ -36,6 +23,5 @@ Vue.config.productionTip = false;
 new Vue({
 	vuetify,
 	router, // router등록
-	Vue2TouchEvents, // touch이벤트 플러그인 등록 ( 23.10.06 인준 추가 )
 	render: (h) => h(App),
 }).$mount('#app');

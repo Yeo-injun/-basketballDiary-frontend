@@ -2,8 +2,7 @@
 
 <template>
 	<v-container>
-		<h2>{{ this.pTeamName }} 경기목록조회</h2>
-		<MyTeamGameRecordSearchComp />
+		<MyTeamGameRecordSearchComp @do-search="searchMyTeamGames"/>
 		<div>총 {{ pagination.totalCount }}개</div>
 		<MyTeamGameRecordList
 			:pList="games"
@@ -19,17 +18,18 @@
 </template>
 
 <script>
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+
+	/** Code */
+	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil';
+
 	/** Components */
 	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
 	import MyTeamGameRecordList from '@/components/list/FramePaginationList.vue';
 	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
-
-	/** Backend API */
-	import MyTeamAPI from '@/api/MyTeamAPI';
-
-	/** CODE */
-
-	/** Utils */
+	/** Emit Event */
 
 	export default {
 		components: {
@@ -39,6 +39,11 @@
 		},
 		data() {
 			return {
+				/**
+				 * cf. prop를 이용하여 상위컴포넌트의 데이터를 하위컴포넌트로 전달하여 렌더링시 주의점
+				 * - Props로 전달받은 데이터를 컴포넌트 data로 관리하여 해당 data속성을 컴포넌트에 관리할시 props 변경값이 반영되지 않음.
+				 * - Props로 내린 값을 상위컴포넌트 변경하여 하위 컴포넌트에서 변경된 Props값을 보여주려면 props 속성 그대로 하위컴포넌트에서 사용해야 함.  
+				 */
 				games: [],
 				pagination: {},
 			};
@@ -49,19 +54,34 @@
 		},
 		methods: {
 			/* API052 : 소속팀 게임목록조회 */
-			async searchMyTeamGames() {
+			async searchMyTeamGames( searchCond ) {
+
 				const { data } = await MyTeamAPI.searchMyTeamGames(
 					{ teamSeq: this.pTeamSeq },
-					{ pageNo: this.pagination.pageNo }
+					this.toQueryParams( searchCond ),
 				);
 				this.games = data.games;
 				this.pagination = data.pagination;
+			},
+			toQueryParams( searchCond ) {
+				if ( ValidationUtil.isNotNull( searchCond ) ) {
+					return {
+						pageNo			: this.pagination.pageNo,
+						gameBgngYmd		: searchCond.gameStartYmd	,
+						gameEndYmd		: searchCond.gameEndYmd		,
+						gameTypeCode	: searchCond.gameTypeCode	,
+						homeAwayCode	: searchCond.homeAwayCode	,
+						gamePlaceName	: searchCond.gamePlaceName	,
+					}
+				}
+				return { pageNo: this.pagination.pageNo };
 			},
 		},
 		mounted() {
 			this.searchMyTeamGames();
 		},
 	};
+
 </script>
 
 <style lang="scss" scoped></style>

@@ -37,9 +37,7 @@
 		},
 		data() {
 			return {
-				gameBasicInfo: function () {
-					console.log('data가 호출되는 시점 ');
-				},
+				gameBasicInfo: {},
 			};
 		},
 		methods: {
@@ -50,15 +48,15 @@
 				};
 
 				const res = await GameAPI.getGameBasicInfo(params);
-				const gameBasicInfo = res.data.gameInfo;
+				const gameInfo = res.data;
 
-				const startTime = DateUtil.Format.toTime(gameBasicInfo.gameStartTime);
-				const endTime = DateUtil.Format.toTime(gameBasicInfo.gameEndTime);
+				const startTime = DateUtil.Format.toTime(gameInfo.gameStartTime);
+				const endTime = DateUtil.Format.toTime(gameInfo.gameEndTime);
 				this.gameBasicInfo = {
-					gameYmd: DateUtil.Format.toYmd(gameBasicInfo.gameYmd),
+					gameYmd: DateUtil.Format.toYmd(gameInfo.gameYmd),
 					gameTime: `${startTime} ~ ${endTime}`,
-					gamePlaceAddress: gameBasicInfo.gamePlaceAddress,
-					gamePlaceName: gameBasicInfo.gamePlaceName,
+					gamePlaceAddress: gameInfo.gamePlaceAddress,
+					gamePlaceName: gameInfo.gamePlaceName,
 				};
 			},
 		},

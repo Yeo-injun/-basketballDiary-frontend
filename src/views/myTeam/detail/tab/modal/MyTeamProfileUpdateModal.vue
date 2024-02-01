@@ -7,20 +7,19 @@
 			<v-card-text>
 				<v-container>
 					<h3>프로필 사진</h3>
-					<MyTeamProfileImageComp :pImageUrl="this.imageUrl" />
+					<MyTeamProfileImageComp :pImageUrl="this.pImageUrl" />
 					<v-form ref="updateProfileInputs">
-						<v-file-input
-							show-size
-							label="수정할 프로필 사진 업로드"
-							accept="image/*"
-							@change="setImageFile"
+						<ProfileImageInput
+							pLabel="수정할 프로필 사진 업로드"
+							@exceed-max-size="handleImageFileInputEvent"
+							@clear-input="handleImageFileInputEvent"
+							@select-valid-image="handleImageFileInputEvent"
 						/>
-
-						<!-- TODO 입력 오류 해결 필요 -->
-						<v-text-field
-							label="등번호"
-							v-model="backNumber"
-							:rules="this.rules.backNumber"
+						<BackNumberInput 
+							:pData="this.backNumber" 
+							:pRequired="true"
+							@compliance="onComplianceBackNumber"
+							@violation="onViolationBackNumber"
 						/>
 					</v-form>
 				</v-container>
@@ -42,37 +41,26 @@
 	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI';
 
-	/** Code/Const */
-
+	/** Code */
 	/** Utils */
-	import InputRule from '@/common/input/InputRule.js';
-
+	import InputRuleViolation from '@/common/input/InputRuleViolation.js';
 	/** Components */
 	import MyTeamProfileImageComp from '@/components/image/FrameImageComp.vue';
+	import ProfileImageInput from '@/components/input/FrameImageInput.vue';
+	import BackNumberInput from '@/components/input/player/BackNumberInput.vue';
+
 	import MyTeamProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 	import MyTeamProfileUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
+
+	/** Emit Event */
 
 	export default {
 		components: {
 			MyTeamProfileImageComp,
+			ProfileImageInput,
+			BackNumberInput,
 			MyTeamProfileUpdateBtn,
 			MyTeamProfileUpdateModalCloseBtn,
-		},
-		data() {
-			return {
-				/*-------------------
-				 * Input 데이터
-				 *-------------------*/
-				backNumber: this.pBackNumber,
-				imageUrl: this.pImageUrl,
-				imageFile: null,
-				/*-------------------
-				 * Input RULE 정책
-				 *-------------------*/
-				rules: {
-					backNumber: InputRule.backNumber,
-				},
-			};
 		},
 		props: {
 			pIsActivated: {
@@ -92,6 +80,25 @@
 				required: false,
 			},
 		},
+		data() {
+			const data = {
+				imageUrl: this.pImageUrl,
+				/*-------------------
+				 * Input 데이터
+				 *-------------------*/
+				backNumber: this.pBackNumber,
+				imageFile: null,
+				/*-------------------
+				 * Input 오류
+				 *-------------------*/
+				errorMessage : {
+					imageFile : "",
+					backNumber : "",
+				},
+			}
+			console.log( data );
+			return data;
+		},
 		computed: {
 			// TODO 모달이 열리는 시점에 props 데이터로 모달 데이터 업데이트하기
 			isActivated: {
@@ -104,11 +111,21 @@
 			},
 		},
 		methods: {
-			setImageFile(imageFile) {
-				this.imageFile = imageFile;
+			onComplianceBackNumber( e ) {
+				this.backNumber = e.data;
+				this.errorMessage.backNumber = '';
+			},
+			onViolationBackNumber( e ) {
+				this.backNumber = e.data;
+				this.errorMessage.backNumber = e.message;
+			},
+			handleImageFileInputEvent( event ) {
+				this.imageFile 				= event.imageFile;
+				this.errorMessage.imageFile	= event.errorMessage;
 			},
 			async updateProfile() {
 				if (!this.$refs.updateProfileInputs.validate()) {
+					InputRuleViolation.alert( this.errorMessage );
 					return;
 				}
 
@@ -117,6 +134,7 @@
 					backNumber: this.backNumber,
 					imageFile: this.imageFile,
 				};
+				console.log( msg );
 
 				await MyTeamAPI.modifyMyTeamsProfile(msg);
 				this.$emit('modal-close', false);

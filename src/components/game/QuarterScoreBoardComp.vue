@@ -2,11 +2,11 @@
 	<v-container>
 		<v-row>
 			<v-col cols="12" sm="5">
-				<QuarterScoreComp :pScore="this.homeTeamQuarterScore" />
+				<QuarterScoreComp :pScore="this.pHomeTeamQuarterScores" />
 			</v-col>
 			<v-col cols="12" sm="2"></v-col>
 			<v-col cols="12" sm="5">
-				<QuarterScoreComp :pScore="this.awayTeamQuarterScore" />
+				<QuarterScoreComp :pScore="this.pAwayTeamQuarterScores" />
 			</v-col>
 		</v-row>
 	</v-container>
@@ -20,13 +20,8 @@
 			QuarterScoreComp,
 		},
 		props: {
-			pQuarterScore: Object,
-		},
-		data() {
-			return {
-				homeTeamQuarterScore: this.pQuarterScore.homeTeam,
-				awayTeamQuarterScore: this.pQuarterScore.awayTeam,
-			};
+			pHomeTeamQuarterScores: Object,
+			pAwayTeamQuarterScores: Object,
 		},
 	};
 </script>
