@@ -49,9 +49,10 @@
 			</v-row>
 
 			<v-row>
-				<TeamRegularExercisesInput 
-					:pData="teamRegularExercises"
-					@change="handleTeamRegularExercises"
+				<TeamRegularExercisesInput
+					v-model="teamRegularExercises"
+					@create-row="addExerciseTime"
+					@delete-row="deleteExerciseTime"
 				/>
 			</v-row>
 		</v-form>
@@ -112,7 +113,7 @@
 					foundationYmd: '',
 					introduction: '',
 				},
-				teamRegularExercises: [{}],
+				teamRegularExercises: [ this.createExerciseTime() ],
 				teamLogoImageFile: null,
 			}
 		},
@@ -155,11 +156,30 @@
 			handleImageFileInputEvent( event ) {
 				this.teamLogoImageFile = event.imageFile;
 			},
-			/** 팀정기운동 목록 - 입력 정책 관련 이벤트 제어하는 로직 추가 필요 TODO */
-			handleTeamRegularExercises( data ) {
-				console.log( [ 'TeamInfoFormComp.handleTeamRegularExercises()', data[0].exercisePlaceAddress] );
-				this.teamRegularExercises = data;
+			/** 팀정기운동 목록 */
+			createExerciseTime() {
+				return {
+					dayOfTheWeekCode		: "",
+					startTime				: "",
+					endTime					: "",
+					exercisePlaceName		: "",
+					exercisePlaceAddress	: "",
+					sidoCode				: "",
+					sigunguCode				: "",
+				};
 			},
+			inputExerciseTime( data ) {
+				console.log( ['inputExerciseTime', data ]);
+			},
+			addExerciseTime() {
+				console.log( ['addExerciseTime']);
+				this.teamRegularExercises.push( this.createExerciseTime() );
+			},
+			deleteExerciseTime( deleteRowIndex ) {
+				console.log( ['deleteExerciseTime', deleteRowIndex ]);
+				this.teamRegularExercises.splice( deleteRowIndex, 1 );
+			},
+
 		},
 	};
 </script>
