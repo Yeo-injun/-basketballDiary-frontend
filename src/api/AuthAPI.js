@@ -1,7 +1,7 @@
-import axios from '../http/CustomAxios.js';
+import axios from '@/http/CustomAxios.js';
 
 // API설정 공통화
-const axiosService = axios.createAxiosInstance('/user');
+const axiosService = axios.createAxiosInstance('/auth');
 
 export default {
 	getAuthInfo() {

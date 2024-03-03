@@ -33,6 +33,9 @@
             };
         },
         methods: {
+            getValue() {
+                return this.model;
+            },
             onChangeInput( newValue ) {
                 this.model = newValue;
                 const ruleResult = InputRuleChecker.check( newValue, this.rules );

@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div v-if="this.env == 'local'">
+			{{ loginUserInfo() }}
 			<GameTimeSelectbox @select-value="onSelectValue" pInitVal="0311"/>
 			사용자 브라우저 : {{ this.agentType }}
 			<div v-if="$platform.isWeb">
@@ -40,7 +41,7 @@
 	import StatInput from '@/views/game/quarterRecordInputBoard/components/inputBoard/StatInputBtnV2.vue';
 
 	import BytesUtil from '@/common/util/BytesUtil';
-	
+	import AuthUtil from '@/common/AuthUtil.js';
 	export default {
 		components: {
 			GameTimeSelectbox,
@@ -61,6 +62,9 @@
 			};
 		},
 		methods: {
+			loginUserInfo() {
+				return AuthUtil.getAuthUserInfo();
+			},
 			onClick() {
 				this.pagination = {
 					pageNo: 2,
