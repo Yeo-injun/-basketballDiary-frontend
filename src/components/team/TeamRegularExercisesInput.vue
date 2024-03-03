@@ -22,7 +22,6 @@
             <TeamRegularExercisesInputRow 
 				:value="item"
 				:pRowIndex="index"
-				@input="inputExerciseTimeInfo"
 				@delete-row="deleteExerciseTime( index )"
 			/>
         </template>
@@ -61,10 +60,6 @@
 			};
 		},
 		methods: {
-			inputExerciseTimeInfo( value ) {
-				console.log( ["inputExerciseTimeInfo", value ]);
-				this.$emit( 'input', value );
-			},
 			/**
 			 * 데이터는 상위컴포넌트에서 직접관리
 			 * - 커스텀 이벤트를 발생시켜 상위컴포넌트에 처리위임

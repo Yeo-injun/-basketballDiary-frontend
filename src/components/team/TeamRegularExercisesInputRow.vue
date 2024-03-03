@@ -102,7 +102,6 @@
 			},
 			setExercisePlaceName( result ) {
 				this.exercisePlaceName = result.data;
-				this.$emit( 'input', result.data );
 			},
 			setExercisePlaceAddress( data ) {
 				this.exercisePlaceAddress	= data.address;
