@@ -17,13 +17,13 @@
 					</v-row>
 					<v-row>
 						<HomeTownAddressInput pLabel="연고지"
+							ref="homeTownAddressInput"
 							:pData="{ 
 								address : teamInfo.hometown,
 							 	sidoCode : teamInfo.sidoCode,
 								sigunguCode : teamInfo.sigunguCode,
 							}"
 							:pRequired="true"
-							@compliance="onComplianceTeamAddressInfo"
 						/>
 					</v-row>
 				</v-col>
@@ -141,25 +141,20 @@
 			getForm() {
 				// TODO 개선방향
 				// input에 존재하는 값을 직접 참조하는 방법을 활용... Vue컴포넌트에 변수로 관리하지 않기
-				const refs = this.$refs;
+				const refs 					= this.$refs;
+				const homeTownAddressInfo 	= refs.homeTownAddressInput.getValue();
 				return {
 					teamInfo: {
-						teamName		: refs.teamNameInput.getValue()	,
-						hometown		: this.teamInfo.hometown	,
-						sidoCode		: this.teamInfo.sidoCode	,
-						sigunguCode 	: this.teamInfo.sigunguCode	,
+						teamName		: refs.teamNameInput.getValue()			,
+						hometown		: homeTownAddressInfo.address			,
+						sidoCode		: homeTownAddressInfo.sidoCode			,
+						sigunguCode 	: homeTownAddressInfo.sigunguCode		,
 						foundationYmd	: refs.foundationYmdInput.getValue()	,
 						introduction	: refs.teamIntroductionInput.getValue()	,
 					},
 					teamRegularExercises: this.teamRegularExercises,
 					teamLogoImageFile: this.teamLogoImageFile,
 				}
-			},
-			/** 팀정보 */
-			onComplianceTeamAddressInfo( data ) {
-				this.teamInfo.hometown = data.address;
-				this.teamInfo.sidoCode = data.sidoCode;
-				this.teamInfo.sigunguCode = data.sigunguCode;
 			},
 			/** 팀로고 이미지 */
 			handleImageFileInputEvent( event ) {
