@@ -5,9 +5,9 @@
 				<v-col cols="7">
 					<v-row>
 						<TeamNameInput pLabel="팀명"
+							ref="teamNameInput"
 							:pData="this.teamInfo.teamName"
 							:pRequired="true"
-							@compliance="onComplianceTeamName"
 						/>
 						<FoundationDatePickerInput pLabel="창단일"
 							:pData="teamInfo.foundationYmd"
@@ -43,9 +43,8 @@
 			<v-row>
 				<TeamIntroductionInput pLabel="팀 소개글을 작성해주세요."
 					ref="teamIntroductionInput"
-					:pData="teamInfo.introduction"
+					:pData="this.teamInfo.introduction"
 					:pRequired="true"
-					@compliance="onComplianceTeamIntroduction"
 				/>
 			</v-row>
 
@@ -140,19 +139,23 @@
 			 * 각 input마다 refs를 달아서 직접 input의 value 값 가져오는 방식 검토...
 			 */
 			getForm() {
-				console.log( this.$refs.teamIntroductionInput.getValue() );
 				// TODO 개선방향
 				// input에 존재하는 값을 직접 참조하는 방법을 활용... Vue컴포넌트에 변수로 관리하지 않기
+				const refs = this.$refs;
 				return {
-					teamInfo: this.teamInfo,
+					teamInfo: {
+						teamName		: refs.teamNameInput.getValue()	,
+						hometown		: this.teamInfo.hometown	,
+						sidoCode		: this.teamInfo.sidoCode	,
+						sigunguCode 	: this.teamInfo.sigunguCode	,
+						foundationYmd	: this.teamInfo.foundationYmd , 	// refs.foundationYmdInput.getValue()	,
+						introduction	: refs.teamIntroductionInput.getValue()	,
+					},
 					teamRegularExercises: this.teamRegularExercises,
 					teamLogoImageFile: this.teamLogoImageFile,
 				}
 			},
 			/** 팀정보 */
-			onComplianceTeamName( e ) {
-				this.teamInfo.teamName = e.data;
-			},
 			onComplianceTeamAddressInfo( data ) {
 				this.teamInfo.hometown = data.address;
 				this.teamInfo.sidoCode = data.sidoCode;
@@ -160,9 +163,6 @@
 			},
 			onComplianceFoundationYmd( e ) {
 				this.teamInfo.foundationYmd = e.data;
-			},
-			onComplianceTeamIntroduction( e ) {
-				this.teamInfo.introduction = e.data;
 			},
 			/** 팀로고 이미지 */
 			handleImageFileInputEvent( event ) {
