@@ -9,10 +9,10 @@
 							:pData="this.teamInfo.teamName"
 							:pRequired="true"
 						/>
-						<FoundationDatePickerInput pLabel="창단일"
-							:pData="teamInfo.foundationYmd"
+						<FoundationYmdInput pLabel="창단일"
+							ref="foundationYmdInput"
+							:pData="this.teamInfo.foundationYmd"
 							:pRequired="true"
-							@compliance="onComplianceFoundationYmd"
 						/>
 					</v-row>
 					<v-row>
@@ -62,7 +62,7 @@
 <script>
 	import TeamNameInput from '@/components/input/FrameTextFieldInput.vue';
 	import HomeTownAddressInput from '@/components/input/AddressInput.vue';
-	import FoundationDatePickerInput from '@/components/input/DatePickerInput.vue';
+	import FoundationYmdInput from '@/components/input/DatePickerInput.vue';
 
 	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
 	import TeamLogoImageInput from '@/components/input/FrameImageInput.vue';
@@ -76,7 +76,7 @@
 		components: {
 			TeamNameInput,
 			HomeTownAddressInput,
-			FoundationDatePickerInput,
+			FoundationYmdInput,
 			TeamLogoImage,
 			TeamLogoImageInput,
 			TeamIntroductionInput,
@@ -90,7 +90,7 @@
 			}
 			this.teamInfo = this.pTeamInfo;
 			this.teamLogoImage = this.pTeamLogoImagePath;
-			if (ValidationUtil.isNotNull(this.pTeamRegularExercises)) {
+			if ( ValidationUtil.isNotNull( this.pTeamRegularExercises ) ) {
 				this.teamRegularExercises = this.pTeamRegularExercises;
 			}
 			this.dataInit = true;
@@ -148,7 +148,7 @@
 						hometown		: this.teamInfo.hometown	,
 						sidoCode		: this.teamInfo.sidoCode	,
 						sigunguCode 	: this.teamInfo.sigunguCode	,
-						foundationYmd	: this.teamInfo.foundationYmd , 	// refs.foundationYmdInput.getValue()	,
+						foundationYmd	: refs.foundationYmdInput.getValue()	,
 						introduction	: refs.teamIntroductionInput.getValue()	,
 					},
 					teamRegularExercises: this.teamRegularExercises,
@@ -160,9 +160,6 @@
 				this.teamInfo.hometown = data.address;
 				this.teamInfo.sidoCode = data.sidoCode;
 				this.teamInfo.sigunguCode = data.sigunguCode;
-			},
-			onComplianceFoundationYmd( e ) {
-				this.teamInfo.foundationYmd = e.data;
 			},
 			/** 팀로고 이미지 */
 			handleImageFileInputEvent( event ) {
