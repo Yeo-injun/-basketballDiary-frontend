@@ -44,6 +44,12 @@
 			},
 		},
         methods: {
+            // input컴포넌트의 value를 refs를 사용해서 직접 가져오기
+            getValue() {
+                return this.addressInfo;
+            },
+            // input컴포넌트의 value를 refs를 사용해서 검증하기 ( TODO 미구현... )
+            // 주소정보 속성 초기화
             initAddress( addressInfo ) {
                 return ValidationUtil.isNotNull( addressInfo ) 
                        ? addressInfo : { address : "", sidoCode : "", sigunguCode : "", }
@@ -56,6 +62,9 @@
 						this.addressInfo.sidoCode       = data.sigunguCode.substr(0, 2);
 						this.addressInfo.sigunguCode    = data.sigunguCode;
                         
+                        // TODO 걷어내기 검토
+                        // 값이 변경될때마다 상위 컴포넌트로 event emit시키는 구조 걷어내기
+                        // 상위 컴포넌트에서 refs를 활용하여 input컴포넌트의 메소드를 직접 참조 
                         // 검색 결과를 클릭하면 무조건 정상데이터만 emit됨
                         this.$emit( 'compliance', this.addressInfo );
 					},

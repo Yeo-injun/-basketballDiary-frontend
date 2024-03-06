@@ -17,13 +17,13 @@
 					</v-row>
 					<v-row>
 						<HomeTownAddressInput pLabel="연고지"
+							ref="homeTownAddressInput"
 							:pData="{ 
 								address : teamInfo.hometown,
 							 	sidoCode : teamInfo.sidoCode,
 								sigunguCode : teamInfo.sigunguCode,
 							}"
 							:pRequired="true"
-							@compliance="onComplianceTeamAddressInfo"
 						/>
 					</v-row>
 				</v-col>
@@ -50,9 +50,8 @@
 
 			<v-row>
 				<TeamRegularExercisesInput
-					v-model="teamRegularExercises"
-					@create-row="addExerciseTime"
-					@delete-row="deleteExerciseTime"
+					ref="teamRegularExercsiesInput"
+					:pData="this.pTeamRegularExercises"
 				/>
 			</v-row>
 		</v-form>
@@ -90,9 +89,6 @@
 			}
 			this.teamInfo = this.pTeamInfo;
 			this.teamLogoImage = this.pTeamLogoImagePath;
-			if ( ValidationUtil.isNotNull( this.pTeamRegularExercises ) ) {
-				this.teamRegularExercises = this.pTeamRegularExercises;
-			}
 			this.dataInit = true;
 		},
 		data() {
@@ -112,7 +108,7 @@
 					foundationYmd: '',
 					introduction: '',
 				},
-				teamRegularExercises: [ this.createExerciseTime() ],
+				// teamRegularExercises: [ this.createExerciseTime() ],
 				teamLogoImageFile: null,
 			}
 		},
@@ -141,13 +137,14 @@
 			getForm() {
 				// TODO 개선방향
 				// input에 존재하는 값을 직접 참조하는 방법을 활용... Vue컴포넌트에 변수로 관리하지 않기
-				const refs = this.$refs;
+				const refs 					= this.$refs;
+				const homeTownAddressInfo 	= refs.homeTownAddressInput.getValue();
 				return {
 					teamInfo: {
-						teamName		: refs.teamNameInput.getValue()	,
-						hometown		: this.teamInfo.hometown	,
-						sidoCode		: this.teamInfo.sidoCode	,
-						sigunguCode 	: this.teamInfo.sigunguCode	,
+						teamName		: refs.teamNameInput.getValue()			,
+						hometown		: homeTownAddressInfo.address			,
+						sidoCode		: homeTownAddressInfo.sidoCode			,
+						sigunguCode 	: homeTownAddressInfo.sigunguCode		,
 						foundationYmd	: refs.foundationYmdInput.getValue()	,
 						introduction	: refs.teamIntroductionInput.getValue()	,
 					},
@@ -155,36 +152,29 @@
 					teamLogoImageFile: this.teamLogoImageFile,
 				}
 			},
-			/** 팀정보 */
-			onComplianceTeamAddressInfo( data ) {
-				this.teamInfo.hometown = data.address;
-				this.teamInfo.sidoCode = data.sidoCode;
-				this.teamInfo.sigunguCode = data.sigunguCode;
-			},
 			/** 팀로고 이미지 */
 			handleImageFileInputEvent( event ) {
 				this.teamLogoImageFile = event.imageFile;
 			},
-			/** 팀정기운동 목록 */
-			createExerciseTime() {
-				return {
-					dayOfTheWeekCode		: "",
-					startTime				: "",
-					endTime					: "",
-					exercisePlaceName		: "",
-					exercisePlaceAddress	: "",
-					sidoCode				: "",
-					sigunguCode				: "",
-				};
-			},
-			addExerciseTime() {
-				this.teamRegularExercises.push( this.createExerciseTime() );
-			},
-			deleteExerciseTime( deleteRowIndex ) {
-				console.log( ['deleteExerciseTime', deleteRowIndex ]);
-				this.teamRegularExercises.splice( deleteRowIndex, 1 );
-			},
-
+			// /** 팀정기운동 목록 */
+			// createExerciseTime() {
+			// 	return {
+			// 		dayOfTheWeekCode		: "",
+			// 		startTime				: "",
+			// 		endTime					: "",
+			// 		exercisePlaceName		: "",
+			// 		exercisePlaceAddress	: "",
+			// 		sidoCode				: "",
+			// 		sigunguCode				: "",
+			// 	};
+			// },
+			// addExerciseTime() {
+			// 	this.teamRegularExercises.push( this.createExerciseTime() );
+			// },
+			// deleteExerciseTime( deleteRowIndex ) {
+			// 	console.log( ['deleteExerciseTime', deleteRowIndex ]);
+			// 	this.teamRegularExercises.splice( deleteRowIndex, 1 );
+			// },
 		},
 	};
 </script>
