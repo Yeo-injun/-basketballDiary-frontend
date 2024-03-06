@@ -1,7 +1,7 @@
 <template>
     <v-data-table
         :headers="headers"
-        :items="value"
+        :items="rows"
         hide-default-footer
     >
         <template v-slot:top>
@@ -9,7 +9,7 @@
                 <v-toolbar-title>정기운동시간</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical />
                 <v-btn
-                    @click="createExerciseTime()"
+                    @click="addExerciseTime()"
                     small
                     color="primary"
                 >
@@ -22,7 +22,7 @@
             <TeamRegularExercisesInputRow 
 				:value="item"
 				:pRowIndex="index"
-				@delete-row="deleteExerciseTime( index )"
+				@delete-row="deleteRow( index )"
 			/>
         </template>
     </v-data-table>
@@ -32,6 +32,7 @@
 	/** Backend API */
 	/** Code */
 	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	
 	/** Components */
 	import TeamRegularExercisesInputRow from '@/components/team/TeamRegularExercisesInputRow.vue';
@@ -42,9 +43,10 @@
 			TeamRegularExercisesInputRow,
 		},
 		props: {
-			value : {},
+			pData : Array,
 		},
 		data() {
+			const rows = ValidationUtil.isNull( this.pData ) ? [ this.createExerciseTime() ] : this.pData;
 			return {
 				/*---------------------------
 				 * 컴포넌트 메타 데이터 
@@ -57,24 +59,35 @@
 					{ text: '주소'    , value: 'exercisePlaceAddress' , sorted : false , width: '30%', },
                     { text: '삭제'    , align: 'center' },
 				],
+				rows: rows,
 			};
 		},
 		methods: {
-			/**
-			 * 데이터는 상위컴포넌트에서 직접관리
-			 * - 커스텀 이벤트를 발생시켜 상위컴포넌트에 처리위임
-			 * - 데이터와 input의 값을 sync맞추기 위해서 ( 즉, 양방향 바인딩을 위해 ) v-model 혹은 :value,@input을 활용
-			 */
-			createExerciseTime() {
-				this.$emit( 'create-row' );
+			getValue() {
+				return this.rows;
 			},
-			deleteExerciseTime( rowIndex ) {
-				const isRemainOneExercise = this.value.length <= 1;
+			/** 팀정기운동 목록 */
+			createExerciseTime() {
+				return {
+					dayOfTheWeekCode		: "",
+					startTime				: "",
+					endTime					: "",
+					exercisePlaceName		: "",
+					exercisePlaceAddress	: "",
+					sidoCode				: "",
+					sigunguCode				: "",
+				};
+			},
+			addExerciseTime() {
+				this.rows.push( this.createExerciseTime() );
+			},
+			deleteRow( rowIndex ) {
+				const isRemainOneExercise = this.rows.length <= 1;
 				if (isRemainOneExercise) {
 					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
 					return;
 				}
-				this.$emit( 'delete-row', rowIndex );
+				this.rows.splice( rowIndex, 1 );
 			},
 		},
 	};

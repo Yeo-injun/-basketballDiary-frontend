@@ -50,9 +50,8 @@
 
 			<v-row>
 				<TeamRegularExercisesInput
-					v-model="teamRegularExercises"
-					@create-row="addExerciseTime"
-					@delete-row="deleteExerciseTime"
+					ref="teamRegularExercsiesInput"
+					:pData="this.pTeamRegularExercises"
 				/>
 			</v-row>
 		</v-form>
@@ -90,9 +89,6 @@
 			}
 			this.teamInfo = this.pTeamInfo;
 			this.teamLogoImage = this.pTeamLogoImagePath;
-			if ( ValidationUtil.isNotNull( this.pTeamRegularExercises ) ) {
-				this.teamRegularExercises = this.pTeamRegularExercises;
-			}
 			this.dataInit = true;
 		},
 		data() {
@@ -112,7 +108,7 @@
 					foundationYmd: '',
 					introduction: '',
 				},
-				teamRegularExercises: [ this.createExerciseTime() ],
+				// teamRegularExercises: [ this.createExerciseTime() ],
 				teamLogoImageFile: null,
 			}
 		},
@@ -160,26 +156,25 @@
 			handleImageFileInputEvent( event ) {
 				this.teamLogoImageFile = event.imageFile;
 			},
-			/** 팀정기운동 목록 */
-			createExerciseTime() {
-				return {
-					dayOfTheWeekCode		: "",
-					startTime				: "",
-					endTime					: "",
-					exercisePlaceName		: "",
-					exercisePlaceAddress	: "",
-					sidoCode				: "",
-					sigunguCode				: "",
-				};
-			},
-			addExerciseTime() {
-				this.teamRegularExercises.push( this.createExerciseTime() );
-			},
-			deleteExerciseTime( deleteRowIndex ) {
-				console.log( ['deleteExerciseTime', deleteRowIndex ]);
-				this.teamRegularExercises.splice( deleteRowIndex, 1 );
-			},
-
+			// /** 팀정기운동 목록 */
+			// createExerciseTime() {
+			// 	return {
+			// 		dayOfTheWeekCode		: "",
+			// 		startTime				: "",
+			// 		endTime					: "",
+			// 		exercisePlaceName		: "",
+			// 		exercisePlaceAddress	: "",
+			// 		sidoCode				: "",
+			// 		sigunguCode				: "",
+			// 	};
+			// },
+			// addExerciseTime() {
+			// 	this.teamRegularExercises.push( this.createExerciseTime() );
+			// },
+			// deleteExerciseTime( deleteRowIndex ) {
+			// 	console.log( ['deleteExerciseTime', deleteRowIndex ]);
+			// 	this.teamRegularExercises.splice( deleteRowIndex, 1 );
+			// },
 		},
 	};
 </script>
