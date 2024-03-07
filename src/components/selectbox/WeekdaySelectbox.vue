@@ -26,6 +26,9 @@
 			};
 		},
 		methods: {
+			getValue() {
+				return this.selected;
+			},
 			selectValue() {
 				this.$emit('select-value', this.selected);
 			},
