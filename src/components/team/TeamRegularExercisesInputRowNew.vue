@@ -1,37 +1,42 @@
 <template>
-	<tr :data-id="pRowIndex">
+	<tr :data-id="pData.rowId">
 		<td>
-			<WeekdaySelectbox 
+			<WeekdaySelectbox
+				ref="weekdaySelectbox"
 				:pInitVal="this.pData.dayOfTheWeekCode"
-				@select-value="this.setDayOfTheWeekCode"
+				@select-value="updateExerciseTime()"
 			/>
 		</td>
 		<td>
 			<GameTimeStartSelectbox pLabelName="시작"
+				ref="gameTimeStartSelectbox"
 				:pInitVal="this.pData.startTime"
-				@select-value="this.setDayOfTheWeekCode"
+				@select-value="updateExerciseTime()"
 			/>
 		</td>
 		<td>
 			<GameTimeEndSelectbox pLabelName="종료"
+				ref="gameTimeEndSelectbox"
 				:pInitVal="this.pData.endTime"
-				@select-value="this.setDayOfTheWeekCode"
+				@select-value="updateExerciseTime()"
 			/>
 		</td>
 		<td>
 			<ExercisePlaceNameTextInput
+				ref="exercisePlaceNameTextInput"
 				:pData="this.pData.exercisePlaceName"
-				@compliance="this.setExercisePlaceName"
+				@compliance="updateExerciseTime()"
 			/>
 		</td>
 		<td>
-			<TeamExercisePlaceAddressInput 
+			<TeamExercisePlaceAddressInput
+				ref="teamExercisePlaceAddressInput"
 				:pData="{ 
 					'address' 		: this.pData.exercisePlaceAddress, 
 					'sidoCode' 		: this.pData.sidoCode,
 					'sigunguCode' 	: this.pData.sigunguCode,
 				}"
-				@compliance="this.setExercisePlaceAddress"
+				@compliance="updateExerciseTime()"
 			/>
 		</td>
 		<td>
@@ -51,7 +56,6 @@
 	/** Backend API */
 	/** Code */
 	/** Utils */
-	// import ValidationUtil from '@/common/util/ValidationUtil';
 
 	/** Components */
 	import WeekdaySelectbox from '@/components/selectbox/WeekdaySelectbox.vue';
@@ -73,40 +77,26 @@
             TeamExercisePlaceAddressInput,
 		},
 		props: {
-			pData 		: Object,
-			pRowIndex 	: Number,
-		},
-		data() {
-			return {
-				dayOfTheWeekCode 		: this.pData.dayOfTheWeekCode ,
-				startTime 				: this.pData.startTime ,
-				endTime 				: this.pData.endTime ,
-				exercisePlaceName		: this.pData.exercisePlaceName ,
-				exercisePlaceAddress 	: this.pData.exercisePlaceAddress ,
-				sidoCode 				: this.pData.sidoCode ,
-				sigunguCode 			: this.pData.sigunguCode ,
-			};
+			pData 	: Object,
 		},
 		methods: {
 			deleteExerciseTime() {
-				this.$emit('delete-row', this.pRowIndex );
+				this.$emit('delete-row', this.pData.rowId );
 			},
-			setDayOfTheWeekCode( value ) {
-				this.dayOfTheWeekCode = value;
-			},
-			setStartTime( value ) {
-				this.startTime = value;
-			},
-			setEndTime( value ) {
-				this.endTime = value;
-			},
-			setExercisePlaceName( result ) {
-				this.exercisePlaceName = result.data;
-			},
-			setExercisePlaceAddress( data ) {
-				this.exercisePlaceAddress	= data.address;
-				this.sidoCode				= data.sidoCode;
-				this.sigunguCode			= data.sigunguCode;
+			updateExerciseTime() {
+				const refs 			= this.$refs;
+				const placeAddrInfo = refs.teamExercisePlaceAddressInput.getValue();
+				const rowInfo = {
+					rowId 					: this.pData.rowId								,
+					dayOfTheWeekCode 		: refs.weekdaySelectbox.getValue()				,
+					startTime 				: refs.gameTimeStartSelectbox.getValue()		,
+					endTime 				: refs.gameTimeEndSelectbox.getValue()			,
+					exercisePlaceName		: refs.exercisePlaceNameTextInput.getValue()	,
+					exercisePlaceAddress 	: placeAddrInfo.address							,				
+					sidoCode 				: placeAddrInfo.sidoCode						,
+					sigunguCode 			: placeAddrInfo.sigunguCode						,
+				}
+				this.$emit( 'update-row', rowInfo );
 			},
 		},
 	};

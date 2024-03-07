@@ -43,12 +43,15 @@
 			};
 		},
 		methods: {
+			getValue() {
+				return this.hour + this.minute;
+			},
 			selectValue( data ) {
 				switch( data.unitType ) {
 				case 'hour' : this.hour 	= String( data.value ).padStart(2, '0'); break;
 				case 'min' 	: this.minute 	= String( data.value ).padStart(2, '0'); break;
 				}
-				this.$emit('select-value', this.hour + this.minute );
+				this.$emit('select-value', this.getValue() );
 			},
 		},
 	};
