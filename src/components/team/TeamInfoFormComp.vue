@@ -5,25 +5,25 @@
 				<v-col cols="7">
 					<v-row>
 						<TeamNameInput pLabel="팀명"
+							ref="teamNameInput"
 							:pData="this.teamInfo.teamName"
 							:pRequired="true"
-							@compliance="onComplianceTeamName"
 						/>
-						<FoundationDatePickerInput pLabel="창단일"
-							:pData="teamInfo.foundationYmd"
+						<FoundationYmdInput pLabel="창단일"
+							ref="foundationYmdInput"
+							:pData="this.teamInfo.foundationYmd"
 							:pRequired="true"
-							@compliance="onComplianceFoundationYmd"
 						/>
 					</v-row>
 					<v-row>
 						<HomeTownAddressInput pLabel="연고지"
+							ref="homeTownAddressInput"
 							:pData="{ 
 								address : teamInfo.hometown,
 							 	sidoCode : teamInfo.sidoCode,
 								sigunguCode : teamInfo.sigunguCode,
 							}"
 							:pRequired="true"
-							@compliance="onComplianceTeamAddressInfo"
 						/>
 					</v-row>
 				</v-col>
@@ -42,17 +42,16 @@
 			</v-row>
 			<v-row>
 				<TeamIntroductionInput pLabel="팀 소개글을 작성해주세요."
-					:pData="teamInfo.introduction"
+					ref="teamIntroductionInput"
+					:pData="this.teamInfo.introduction"
 					:pRequired="true"
-					@compliance="onComplianceTeamIntroduction"
 				/>
 			</v-row>
 
 			<v-row>
 				<TeamRegularExercisesInput
-					v-model="teamRegularExercises"
-					@create-row="addExerciseTime"
-					@delete-row="deleteExerciseTime"
+					ref="teamRegularExercsiesInput"
+					:pData="this.pTeamRegularExercises"
 				/>
 			</v-row>
 		</v-form>
@@ -62,7 +61,7 @@
 <script>
 	import TeamNameInput from '@/components/input/FrameTextFieldInput.vue';
 	import HomeTownAddressInput from '@/components/input/AddressInput.vue';
-	import FoundationDatePickerInput from '@/components/input/DatePickerInput.vue';
+	import FoundationYmdInput from '@/components/input/DatePickerInput.vue';
 
 	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
 	import TeamLogoImageInput from '@/components/input/FrameImageInput.vue';
@@ -76,14 +75,13 @@
 		components: {
 			TeamNameInput,
 			HomeTownAddressInput,
-			FoundationDatePickerInput,
+			FoundationYmdInput,
 			TeamLogoImage,
 			TeamLogoImageInput,
 			TeamIntroductionInput,
 			TeamRegularExercisesInput,
 		},
 		mounted() {
-			console.log( ["FormMounted", this.pTeamInfo])
 			// 화면 초기화에 사용할 데이터를 props로 받을 경우 data에 세팅 ( 팀정보 수정인 경우에 해당 )
 			if (ValidationUtil.isNull(this.pTeamInfo)) {
 				this.dataInit = true;	// init할 데이터가 없어도 데이터 초기화 단계가 완료된 상태로 바꿔줘야 함.
@@ -91,9 +89,6 @@
 			}
 			this.teamInfo = this.pTeamInfo;
 			this.teamLogoImage = this.pTeamLogoImagePath;
-			if (ValidationUtil.isNotNull(this.pTeamRegularExercises)) {
-				this.teamRegularExercises = this.pTeamRegularExercises;
-			}
 			this.dataInit = true;
 		},
 		data() {
@@ -113,7 +108,7 @@
 					foundationYmd: '',
 					introduction: '',
 				},
-				teamRegularExercises: [ this.createExerciseTime() ],
+				// teamRegularExercises: [ this.createExerciseTime() ],
 				teamLogoImageFile: null,
 			}
 		},
@@ -130,56 +125,56 @@
 			validate() {
 				return this.$refs.form.validate();
 			},
+			/**
+			 * Form컴포넌트 내부에 존재하는 사용자 input 값을 
+			 * data속성으로 관리하지 않기.
+			 * 
+			 * data 속성으로 관리하는 데이터는 각 input컴포넌트에서 관리하고
+			 * 필요할 때 해당 input컴포넌트에서 가져와서 return하기. 
+			 * 
+			 * 각 input마다 refs를 달아서 직접 input의 value 값 가져오는 방식 검토...
+			 */
 			getForm() {
+				// TODO 개선방향
+				// input에 존재하는 값을 직접 참조하는 방법을 활용... Vue컴포넌트에 변수로 관리하지 않기
+				const refs 					= this.$refs;
+				const homeTownAddressInfo 	= refs.homeTownAddressInput.getValue();
 				return {
-					teamInfo: this.teamInfo,
+					teamInfo: {
+						teamName		: refs.teamNameInput.getValue()			,
+						hometown		: homeTownAddressInfo.address			,
+						sidoCode		: homeTownAddressInfo.sidoCode			,
+						sigunguCode 	: homeTownAddressInfo.sigunguCode		,
+						foundationYmd	: refs.foundationYmdInput.getValue()	,
+						introduction	: refs.teamIntroductionInput.getValue()	,
+					},
 					teamRegularExercises: this.teamRegularExercises,
 					teamLogoImageFile: this.teamLogoImageFile,
 				}
-			},
-			/** 팀정보 */
-			onComplianceTeamName( e ) {
-				this.teamInfo.teamName = e.data;
-			},
-			onComplianceTeamAddressInfo( data ) {
-				this.teamInfo.hometown = data.address;
-				this.teamInfo.sidoCode = data.sidoCode;
-				this.teamInfo.sigunguCode = data.sigunguCode;
-			},
-			onComplianceFoundationYmd( e ) {
-				this.teamInfo.foundationYmd = e.data;
-			},
-			onComplianceTeamIntroduction( e ) {
-				this.teamInfo.introduction = e.data;
 			},
 			/** 팀로고 이미지 */
 			handleImageFileInputEvent( event ) {
 				this.teamLogoImageFile = event.imageFile;
 			},
-			/** 팀정기운동 목록 */
-			createExerciseTime() {
-				return {
-					dayOfTheWeekCode		: "",
-					startTime				: "",
-					endTime					: "",
-					exercisePlaceName		: "",
-					exercisePlaceAddress	: "",
-					sidoCode				: "",
-					sigunguCode				: "",
-				};
-			},
-			inputExerciseTime( data ) {
-				console.log( ['inputExerciseTime', data ]);
-			},
-			addExerciseTime() {
-				console.log( ['addExerciseTime']);
-				this.teamRegularExercises.push( this.createExerciseTime() );
-			},
-			deleteExerciseTime( deleteRowIndex ) {
-				console.log( ['deleteExerciseTime', deleteRowIndex ]);
-				this.teamRegularExercises.splice( deleteRowIndex, 1 );
-			},
-
+			// /** 팀정기운동 목록 */
+			// createExerciseTime() {
+			// 	return {
+			// 		dayOfTheWeekCode		: "",
+			// 		startTime				: "",
+			// 		endTime					: "",
+			// 		exercisePlaceName		: "",
+			// 		exercisePlaceAddress	: "",
+			// 		sidoCode				: "",
+			// 		sigunguCode				: "",
+			// 	};
+			// },
+			// addExerciseTime() {
+			// 	this.teamRegularExercises.push( this.createExerciseTime() );
+			// },
+			// deleteExerciseTime( deleteRowIndex ) {
+			// 	console.log( ['deleteExerciseTime', deleteRowIndex ]);
+			// 	this.teamRegularExercises.splice( deleteRowIndex, 1 );
+			// },
 		},
 	};
 </script>

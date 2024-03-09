@@ -10,11 +10,23 @@ export default {
 		}
 		return null;
 	},
-	deleteItemById(arr, targetItem, prop) {
+	deleteItemById( arr, deleteItem, idPropName ) {
 		checkValidArrayType(arr);
 
 		return arr.filter(
-			(item) => !isSameObjByPropComparison(targetItem, item, prop)
+			(item) => !isSameObjByPropComparison( deleteItem, item, idPropName )
+		);
+	},
+	/**
+	 * 객체 배열내에서 속성값이 일치하는 것을 삭제하는 메소드 
+	 * @param {*} arr 
+	 * @param {String} propName 삭제할때 비교할 속성명
+	 * @param {String} propValue 삭제될 값
+	 */
+	deleteItem( arr, propName, propValue ) {
+		checkValidArrayType(arr);
+		return arr.filter(
+			( item ) => item[ propName ] != propValue
 		);
 	},
 	hasItem(arr, targetItem, prop) {

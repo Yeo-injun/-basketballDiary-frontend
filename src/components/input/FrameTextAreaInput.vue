@@ -33,6 +33,17 @@
             };
         },
         methods: {
+            // input컴포넌트의 value를 refs를 사용해서 직접 가져오기
+            getValue() {
+                return this.model;
+            },
+            // input컴포넌트의 value를 refs를 사용해서 검증하기
+            checkValue() {
+                return InputRuleChecker.check( this.model, this.rules );
+            },
+            // TODO 걷어내기
+            // 값이 변경될때마다 상위 컴포넌트로 event emit시키는 구조 걷어내기
+            // 상위 컴포넌트에서 refs를 활용하여 input컴포넌트의 메소드를 직접 참조 
             onChangeInput( newValue ) {
                 this.model = newValue;
                 const ruleResult = InputRuleChecker.check( newValue, this.rules );

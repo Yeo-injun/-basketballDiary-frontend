@@ -1,7 +1,7 @@
 <template>
     <v-data-table
         :headers="headers"
-        :items="value"
+        :items="rows"
         hide-default-footer
     >
         <template v-slot:top>
@@ -9,7 +9,7 @@
                 <v-toolbar-title>정기운동시간</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical />
                 <v-btn
-                    @click="createExerciseTime()"
+                    @click="addExerciseTime()"
                     small
                     color="primary"
                 >
@@ -18,12 +18,11 @@
             </v-toolbar>
         </template>
 
-        <template v-slot:item="{ item, index }">
-            <TeamRegularExercisesInputRow 
-				:value="item"
-				:pRowIndex="index"
-				@input="inputExerciseTimeInfo"
-				@delete-row="deleteExerciseTime( index )"
+        <template v-slot:item="{ item }">
+            <TeamRegularExercisesInputRow
+				:pData="item"
+				@update-row="updateRow"
+				@delete-row="deleteRow"
 			/>
         </template>
     </v-data-table>
@@ -33,9 +32,11 @@
 	/** Backend API */
 	/** Code */
 	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
+	import ArrayUtil from '@/common/util/ArrayUtil.js'
 	
 	/** Components */
-	import TeamRegularExercisesInputRow from '@/components/team/TeamRegularExercisesInputRow.vue';
+	import TeamRegularExercisesInputRow from '@/components/team/TeamRegularExercisesInputRowNew.vue';
 
 	/** Emit Event */
 	export default {
@@ -43,12 +44,15 @@
 			TeamRegularExercisesInputRow,
 		},
 		props: {
-			value : {},
+			pData : Array,
 		},
 		data() {
+			const exerciseTimes = ValidationUtil.isNull( this.pData ) 
+									? [ this.createExerciseTime() ] 
+									: this.pData.forEach( item => item.rowId = this.createRowId() );
 			return {
 				/*---------------------------
-				 * 컴포넌트 메타 데이터 
+				 * 헤더 정보 
 				 *---------------------------*/
 				headers: [
 					{ text: '요일'    , value: 'dayOfTheWeekCode'     , width: '10%',   },
@@ -58,28 +62,54 @@
 					{ text: '주소'    , value: 'exercisePlaceAddress' , sorted : false , width: '30%', },
                     { text: '삭제'    , align: 'center' },
 				],
+				/*---------------------------
+				 * 목록 정보 
+				 *---------------------------*/
+				 rows: exerciseTimes,
 			};
 		},
 		methods: {
-			inputExerciseTimeInfo( value ) {
-				console.log( ["inputExerciseTimeInfo", value ]);
-				this.$emit( 'input', value );
+			getValue() {
+				// TODO v-for 반복문으로 생성된 컴포넌트를 참조하는 방법 확인
+				// const rows = this.$refs.inputRow;
+				return this.rows;
 			},
-			/**
-			 * 데이터는 상위컴포넌트에서 직접관리
-			 * - 커스텀 이벤트를 발생시켜 상위컴포넌트에 처리위임
-			 * - 데이터와 input의 값을 sync맞추기 위해서 ( 즉, 양방향 바인딩을 위해 ) v-model 혹은 :value,@input을 활용
-			 */
+			createRowId() {
+				return 'R' + String( Date.now() ) + '_' + String( Math.floor( Math.random() * 10000 ) ); 
+			},
+			/** 팀정기운동 목록 */
 			createExerciseTime() {
-				this.$emit( 'create-row' );
+				return {
+					rowId					: this.createRowId(),
+					dayOfTheWeekCode		: "",
+					startTime				: "",
+					endTime					: "",
+					exercisePlaceName		: "",
+					exercisePlaceAddress	: "",
+					sidoCode				: "",
+					sigunguCode				: "",
+				};
 			},
-			deleteExerciseTime( rowIndex ) {
-				const isRemainOneExercise = this.value.length <= 1;
+			addExerciseTime() {
+				this.rows.push( this.createExerciseTime() );
+			},
+			updateRow( rowInfo ) {
+				const updateTarget = ArrayUtil.findItemById( this.rows, rowInfo, 'rowId' );
+				updateTarget.dayOfTheWeekCode		= rowInfo.dayOfTheWeekCode;
+				updateTarget.startTime				= rowInfo.startTime;
+				updateTarget.endTime				= rowInfo.endTime;
+				updateTarget.exercisePlaceName		= rowInfo.exercisePlaceName;
+				updateTarget.exercisePlaceAddress	= rowInfo.exercisePlaceAddress;
+				updateTarget.sidoCode				= rowInfo.sidoCode;
+				updateTarget.sigunguCode			= rowInfo.sigunguCode;
+			},
+			deleteRow( rowIndex ) {
+				const isRemainOneExercise = this.rows.length <= 1;
 				if (isRemainOneExercise) {
 					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
 					return;
 				}
-				this.$emit( 'delete-row', rowIndex );
+				this.rows = ArrayUtil.deleteItem( this.rows, 'rowId', rowIndex );
 			},
 		},
 	};
