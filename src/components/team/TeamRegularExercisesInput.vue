@@ -1,7 +1,7 @@
 <template>
     <v-data-table
         :headers="headers"
-        :items="rows"
+        :items="exerciseTimes"
         hide-default-footer
     >
         <template v-slot:top>
@@ -47,9 +47,6 @@
 			pData : Array,
 		},
 		data() {
-			const exerciseTimes = ValidationUtil.isNull( this.pData ) 
-									? [ this.createExerciseTime() ] 
-									: this.pData.forEach( item => item.rowId = this.createRowId() );
 			return {
 				/*---------------------------
 				 * 헤더 정보 
@@ -65,17 +62,22 @@
 				/*---------------------------
 				 * 목록 정보 
 				 *---------------------------*/
-				 rows: exerciseTimes,
+				 exerciseTimes: this.initExerciseTimes(),
 			};
 		},
 		methods: {
 			getValue() {
-				// TODO v-for 반복문으로 생성된 컴포넌트를 참조하는 방법 확인
-				// const rows = this.$refs.inputRow;
-				return this.rows;
+				return this.exerciseTimes;
 			},
-			createRowId() {
-				return 'R' + String( Date.now() ) + '_' + String( Math.floor( Math.random() * 10000 ) ); 
+			initExerciseTimes() {
+				const vueComp = this;
+				if ( ValidationUtil.isNull( vueComp.pData ) ) {
+					return [ vueComp.createExerciseTime() ];
+				} 
+				// 화면에서 제어하기 위한 rowId 부여
+				const exerciseTimes = vueComp.pData;
+				exerciseTimes.forEach( item => item.rowId = vueComp.createRowId() );
+				return exerciseTimes;
 			},
 			/** 팀정기운동 목록 */
 			createExerciseTime() {
@@ -90,11 +92,14 @@
 					sigunguCode				: "",
 				};
 			},
+			createRowId() {
+				return 'R' + String( Date.now() ) + '_' + String( Math.floor( Math.random() * 10000 ) ); 
+			},
 			addExerciseTime() {
-				this.rows.push( this.createExerciseTime() );
+				this.exerciseTimes.push( this.createExerciseTime() );
 			},
 			updateRow( rowInfo ) {
-				const updateTarget = ArrayUtil.findItemById( this.rows, rowInfo, 'rowId' );
+				const updateTarget = ArrayUtil.findItemById( this.exerciseTimes, rowInfo, 'rowId' );
 				updateTarget.dayOfTheWeekCode		= rowInfo.dayOfTheWeekCode;
 				updateTarget.startTime				= rowInfo.startTime;
 				updateTarget.endTime				= rowInfo.endTime;
@@ -104,12 +109,12 @@
 				updateTarget.sigunguCode			= rowInfo.sigunguCode;
 			},
 			deleteRow( rowIndex ) {
-				const isRemainOneExercise = this.rows.length <= 1;
+				const isRemainOneExercise = this.exerciseTimes.length <= 1;
 				if (isRemainOneExercise) {
 					alert('삭제할 수 있는 정기 운동시간이 없습니다.');
 					return;
 				}
-				this.rows = ArrayUtil.deleteItem( this.rows, 'rowId', rowIndex );
+				this.exerciseTimes = ArrayUtil.deleteItem( this.exerciseTimes, 'rowId', rowIndex );
 			},
 		},
 	};
