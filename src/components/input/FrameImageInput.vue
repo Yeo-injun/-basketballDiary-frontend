@@ -3,9 +3,9 @@
         accept="image/*"
         show-size
         :label="this.pLabel || '사진 업로드'"
-        :model-value="this.imageFile"
-        :rules="[ this.checkMaxFileSize ]"
-        @click:clear="onImageClear"
+        :v-model="imageFile"
+        :rules="[ this.checkValidImageInput ]"
+        @click:clear="this.clearImageInput"
     />
 </template>
 
@@ -13,11 +13,6 @@
     import ValidationUtil from '@/common/util/ValidationUtil.js';
     import BytesUtil from '@/common/util/BytesUtil';
 	
-    const EventName = {
-        EXCEED_MAX_SIZE : 'exceed-max-size',
-        SELECT_VALID_IMAGE : 'select-valid-image',
-        CLEAR_INPUT : "clear-input",
-    } 
     export default {
         props : {
             pLabel : String,
@@ -32,33 +27,35 @@
 			};
 		},
         methods : {
-            checkMaxFileSize( imageFile ) {
-                if ( !imageFile ) {
+            getImage() {
+                return this.imageFile;
+            },
+            checkValidImageInput( imageFile ) {
+                if ( null == imageFile ) { // ValidationUtil 내부에서 File객체의 key갯수를 파악하지 못하는 오류가 존재해서 null 비교로 처리
+                    this.clearImageInput();
                     return true;
                 }
 
+                const maxSizeCheckResult = this.checkMaxSize( imageFile );
+                if ( ValidationUtil.isNotNull( maxSizeCheckResult ) ) {
+                    this.clearImageInput();
+                    return maxSizeCheckResult;
+                }
+
+                this.imageFile = imageFile;
+                return true;
+            },
+            checkMaxSize( imageFile ) {
                 const MAX_BYTES = ValidationUtil.isNotNull( this.pMaxBytes ) 
                                 ? this.pMaxBytes : 1 * 1024 * 1024 * 3 / 2; // 1.5mb
                 const MAX_BYTES_WITH_UNIT = BytesUtil.withUnit( MAX_BYTES );
                 if ( MAX_BYTES < imageFile.size ) {
-                    this.$emit( EventName.EXCEED_MAX_SIZE, {
-                        imageFile : null,
-                        errorMessage : `업로드 최대 크기 ( ${MAX_BYTES_WITH_UNIT} )를 초과하였습니다.`, 
-                    });
-                    return `업로드 최대 크기 ( ${MAX_BYTES_WITH_UNIT} )를 초과하였습니다.`; // false;             
+                    return `업로드 최대 크기 ( ${MAX_BYTES_WITH_UNIT} )를 초과하였습니다.`;
                 }
-                // 유효할 경우에만 사진 파일을 emit함
-                this.$emit( EventName.SELECT_VALID_IMAGE, {
-                    imageFile : imageFile,
-                    errorMessage : "", 
-                });
-                return true;
+                return "";
             },
-            onImageClear() {
-                this.$emit( EventName.CLEAR_INPUT, {
-                    imageFile : null,
-                    errorMessage : "", 
-                });
+            clearImageInput() {
+                this.imageFile = null;
             },
         },
     }
