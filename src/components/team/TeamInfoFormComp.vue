@@ -34,9 +34,7 @@
 						:pMaxWidth="String(250)"
 					/>
 					<TeamLogoImageInput pLabel="팀 로고 사진"
-						@exceed-max-size="handleImageFileInputEvent"
-						@clear-input="handleImageFileInputEvent"
-						@select-valid-image="handleImageFileInputEvent"
+						ref="teamLogoImageInput"
 					/>
 				</v-col>
 			</v-row>
@@ -146,12 +144,8 @@
 						introduction	: refs.teamIntroductionInput.getValue()	,
 					},
 					teamRegularExercises: refs.teamRegularExercsiesInput.getValue(),
-					teamLogoImageFile: this.teamLogoImageFile,
+					teamLogoImageFile	: refs.teamLogoImageInput.getImage(),
 				}
-			},
-			/** 팀로고 이미지 */
-			handleImageFileInputEvent( event ) {
-				this.teamLogoImageFile = event.imageFile;
 			},
 		},
 	};

@@ -8,12 +8,9 @@
 				<v-container>
 					<h3>프로필 사진</h3>
 					<MyTeamProfileImageComp :pImageUrl="this.pImageUrl" />
-					<v-form ref="updateProfileInputs">
-						<ProfileImageInput
-							pLabel="수정할 프로필 사진 업로드"
-							@exceed-max-size="handleImageFileInputEvent"
-							@clear-input="handleImageFileInputEvent"
-							@select-valid-image="handleImageFileInputEvent"
+					<v-form ref="profileUpdateForm">
+						<ProfileImageInput	pLabel="수정할 프로필 사진 업로드"
+							ref="profileImageInput"
 						/>
 						<BackNumberInput 
 							:pData="this.backNumber" 
@@ -24,10 +21,11 @@
 					</v-form>
 				</v-container>
 			</v-card-text>
-			<MyTeamProfileUpdateBtn pBtnName="수정" @do-update="updateProfile" />
-			<MyTeamProfileUpdateModalCloseBtn
+			<MyTeamProfileUpdateBtn	pBtnName="수정" 
+				@do-update="updateProfile" 
+			/>
+			<MyTeamProfileUpdateModalCloseBtn pBtnName="닫기"
 				@do-close="isActivated = false"
-				pBtnName="닫기"
 			/>
 
 			<!-- <v-card-actions>
@@ -87,7 +85,6 @@
 				 * Input 데이터
 				 *-------------------*/
 				backNumber: this.pBackNumber,
-				imageFile: null,
 				/*-------------------
 				 * Input 오류
 				 *-------------------*/
@@ -96,7 +93,6 @@
 					backNumber : "",
 				},
 			}
-			console.log( data );
 			return data;
 		},
 		computed: {
@@ -119,22 +115,19 @@
 				this.backNumber = e.data;
 				this.errorMessage.backNumber = e.message;
 			},
-			handleImageFileInputEvent( event ) {
-				this.imageFile 				= event.imageFile;
-				this.errorMessage.imageFile	= event.errorMessage;
-			},
 			async updateProfile() {
-				if (!this.$refs.updateProfileInputs.validate()) {
+				const refs = this.$refs;
+				if (!refs.profileUpdateForm.validate()) {
+					// TODO input값 오류메세지 alert처리 방식 고민
 					InputRuleViolation.alert( this.errorMessage );
 					return;
 				}
 
 				const msg = {
-					teamSeq: this.pTeamSeq,
-					backNumber: this.backNumber,
-					imageFile: this.imageFile,
+					teamSeq		: this.pTeamSeq,
+					backNumber	: this.backNumber,
+					imageFile	: refs.profileImageInput.getImage(),
 				};
-				console.log( msg );
 
 				await MyTeamAPI.modifyMyTeamsProfile(msg);
 				this.$emit('modal-close', false);
