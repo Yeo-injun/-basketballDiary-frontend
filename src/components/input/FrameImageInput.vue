@@ -39,6 +39,10 @@
                 const maxSizeCheckResult = this.checkMaxSize( imageFile );
                 if ( ValidationUtil.isNotNull( maxSizeCheckResult ) ) {
                     this.clearImageInput();
+                    this.$emit( 'violation', {
+                        data : "",
+                        message : maxSizeCheckResult,
+                    } );
                     return maxSizeCheckResult;
                 }
 
@@ -56,6 +60,7 @@
             },
             clearImageInput() {
                 this.imageFile = null;
+                this.$emit( 'clear-input' );
             },
         },
     }
