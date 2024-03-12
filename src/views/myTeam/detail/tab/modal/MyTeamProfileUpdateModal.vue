@@ -11,12 +11,14 @@
 					<v-form ref="profileUpdateForm">
 						<ProfileImageInput	pLabel="수정할 프로필 사진 업로드"
 							ref="profileImageInput"
+							@violation="onErrorProfileImageInput"
+							@clear-input="onClearProfileImageInput"
 						/>
-						<BackNumberInput 
-							:pData="this.backNumber" 
+						<BackNumberInput
+							ref="backNumberInput"
+							:pData="this.pBackNumber" 
 							:pRequired="true"
-							@compliance="onComplianceBackNumber"
-							@violation="onViolationBackNumber"
+							@violation="onErrorBackNumber"
 						/>
 					</v-form>
 				</v-container>
@@ -79,12 +81,7 @@
 			},
 		},
 		data() {
-			const data = {
-				imageUrl: this.pImageUrl,
-				/*-------------------
-				 * Input 데이터
-				 *-------------------*/
-				backNumber: this.pBackNumber,
+			return {
 				/*-------------------
 				 * Input 오류
 				 *-------------------*/
@@ -92,8 +89,7 @@
 					imageFile : "",
 					backNumber : "",
 				},
-			}
-			return data;
+			};
 		},
 		computed: {
 			// TODO 모달이 열리는 시점에 props 데이터로 모달 데이터 업데이트하기
@@ -107,25 +103,25 @@
 			},
 		},
 		methods: {
-			onComplianceBackNumber( e ) {
-				this.backNumber = e.data;
-				this.errorMessage.backNumber = '';
+			onClearProfileImageInput() {
+				this.errorMessage.imageFile = "";
 			},
-			onViolationBackNumber( e ) {
-				this.backNumber = e.data;
+			onErrorProfileImageInput( e ) {
+				this.errorMessage.imageFile = e.message;
+			},
+			onErrorBackNumber( e ) {
 				this.errorMessage.backNumber = e.message;
 			},
 			async updateProfile() {
 				const refs = this.$refs;
 				if (!refs.profileUpdateForm.validate()) {
-					// TODO input값 오류메세지 alert처리 방식 고민
 					InputRuleViolation.alert( this.errorMessage );
 					return;
 				}
 
 				const msg = {
 					teamSeq		: this.pTeamSeq,
-					backNumber	: this.backNumber,
+					backNumber	: refs.backNumberInput.getValue(),
 					imageFile	: refs.profileImageInput.getImage(),
 				};
 
