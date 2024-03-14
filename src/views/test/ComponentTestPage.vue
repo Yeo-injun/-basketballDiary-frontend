@@ -38,7 +38,7 @@
 	import TestSlot from '@/components/list/FramePaginationList.vue';
 	import TestBtn from '@/components/button/FrameAddBtn.vue';
 	/** 스탯 버튼 테스트 */
-	import StatInput from '@/views/game/quarterRecordInputBoard/components/inputBoard/StatInputBtnV2.vue';
+	import StatInput from '@/components/game/stat/StatInputBtnV2.vue';
 
 	import BytesUtil from '@/common/util/BytesUtil';
 	import AuthUtil from '@/common/AuthUtil.js';
