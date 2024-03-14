@@ -17,8 +17,8 @@
 </template>
 
 <script>
-	import EntryManageModal from '@/views/game/quarterRecordInputBoard/modal/EntryManageModal.vue';
-	import EntryTable from '@/views/game/quarterRecordInputBoard/components/EntryTable.vue';
+	import EntryManageModal from '@/views/game/quarterRecordInputBoard/components/modal/EntryManageModal.vue';
+	import EntryTable from '@/views/game/quarterRecordInputBoard/components/inputBoard/buttonType/EntryTable.vue';
 
 	const SELECT_PLAER_EVENT = 'select-player';
 	export default {

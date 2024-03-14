@@ -131,8 +131,8 @@
 		methods: {
 			async getGameQuarterRecords() {
 				const params = {
-					gameSeq: this.gameSeq,
-					quarterCode: this.quarterCode,
+					gameSeq		: this.gameSeq,
+					quarterCode	: this.quarterCode,
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);
