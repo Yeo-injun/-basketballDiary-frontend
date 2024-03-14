@@ -49,7 +49,7 @@
 	/** Components */
 	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
-	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
+	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
 
 	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 	import { PlayerTypeCode } from '@/const/code/PlayerCode';

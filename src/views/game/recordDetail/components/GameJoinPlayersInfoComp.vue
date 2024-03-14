@@ -29,10 +29,10 @@
 
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
-	import HomeTeamPlayerList from '@/views/game/recordDetail/components/GameJoinPlayerListComp.vue';
+	import HomeTeamPlayerList from '@/views/game/recordDetail/components/player/GameJoinPlayerListComp.vue';
 	import HomeTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
-	import AwayTeamPlayerList from '@/views/game/recordDetail/components/GameJoinPlayerListComp.vue';
+	import AwayTeamPlayerList from '@/views/game/recordDetail/components/player/GameJoinPlayerListComp.vue';
 	import AwayTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
 	export default {

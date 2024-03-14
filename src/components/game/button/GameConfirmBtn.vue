@@ -22,12 +22,8 @@
 		},
 		methods: {
 			async confirmGame() {
-				// TODO 게임 쿼터 갯수 확인 후 3개 이하일 경우 다른 메세지를 띄우기
-				if (
-					!confirm(
-						'게임을 확정하시겠습니까? 게임확정후에는 게임기록을 수정할 수 없습니다.'
-					)
-				) {
+				const message = '게임을 확정하시겠습니까? 게임확정후에는 게임기록을 수정할 수 없습니다.';
+				if ( !confirm( message ) ) {
 					return;
 				}
 				await GameAPI.confirmGame({

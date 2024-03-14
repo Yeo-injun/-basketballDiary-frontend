@@ -47,8 +47,8 @@
 	import EntryManageModalOpenBtn from '@/components/button/FrameOpenBtn.vue';
 	import SaveEntryBtn from '@/components/button/FrameSaveBtn.vue';
 
-	import EntryTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
-	import GameJoinPlayerTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
+	import EntryTable from '@/components/game/table/PlayerDataTable.vue';
+	import GameJoinPlayerTable from '@/components/game/table/PlayerDataTable.vue';
 	export default {
 		components: {
 			EntryManageModalOpenBtn,

@@ -34,7 +34,7 @@
 	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 
 	/** Components */
-	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
+	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
 	import TeamMemberSearchBtn from '@/components/button/FrameSearchBtn.vue';
 
 	export default {

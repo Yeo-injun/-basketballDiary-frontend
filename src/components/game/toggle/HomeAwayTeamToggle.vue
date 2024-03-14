@@ -24,8 +24,8 @@
 <script>
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
 
-	import HomeTeamTitle from '@/components/game/joinTeam/toggle/TeamTitleFrame.vue';
-	import AwayTeamTitle from '@/components/game/joinTeam/toggle/TeamTitleFrame.vue';
+	import HomeTeamTitle from '@/components/game/toggle/TeamTitleFrame.vue';
+	import AwayTeamTitle from '@/components/game/toggle/TeamTitleFrame.vue';
 
 	export default {
 		components: {
