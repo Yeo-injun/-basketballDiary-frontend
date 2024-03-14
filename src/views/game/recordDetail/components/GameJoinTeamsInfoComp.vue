@@ -54,8 +54,8 @@
 	 */
 	import GameAPI from '@/api/GameAPI.js';
 
-	import HomeTeamInfoComp from '@/views/game/recordDetail/components/GameJoinTeamInfoComp.vue';
-	import AwayTeamInfoComp from '@/views/game/recordDetail/components/GameJoinTeamInfoComp.vue';
+	import HomeTeamInfoComp from '@/views/game/recordDetail/components/team/GameJoinTeamInfoComp.vue';
+	import AwayTeamInfoComp from '@/views/game/recordDetail/components/team/GameJoinTeamInfoComp.vue';
 
 	export default {
 		components: {

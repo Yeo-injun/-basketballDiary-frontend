@@ -33,7 +33,7 @@
 	import GameJoinPlayersInfoComp from '@/views/game/recordDetail/components/GameJoinPlayersInfoComp.vue';
 	import GameQuartersComp from '@/views/game/recordDetail/components/GameQuartersComp.vue';
 
-	import GameConfirmBtn from '@/views/game/recordDetail/button/GameConfirmBtn.vue';
+	import GameConfirmBtn from '@/components/game/button/GameConfirmBtn.vue';
 	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
 
 	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;

@@ -75,7 +75,7 @@
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
-	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
+	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
 
 	import HomeTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
 	import AwayTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';

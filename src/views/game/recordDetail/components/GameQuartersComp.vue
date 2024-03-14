@@ -41,7 +41,7 @@
 	import GameAPI from '@/api/GameAPI.js';
 
 	import GameRecordAuthManageModal from '@/views/game/recordDetail/modal/GameRecordAuthManageModal.vue';
-	import GameQuarterComp from '@/views/game/recordDetail/components/GameQuarterComp.vue';
+	import GameQuarterComp from '@/views/game/recordDetail/components/quarter/GameQuarterComp.vue';
 
 	export default {
 		components: {
