@@ -70,7 +70,7 @@
 	import {
 		StatType,
 		RecordMode,
-	} from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
+	} from '@/components/game/stat/const/Stat.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 

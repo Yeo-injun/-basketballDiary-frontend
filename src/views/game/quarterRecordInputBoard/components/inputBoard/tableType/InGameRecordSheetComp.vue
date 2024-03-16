@@ -128,10 +128,7 @@
 </template>
 
 <script>
-	import { StatType } from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
-
-	// import FreeThrowInput from '@/components/game/stat/StatInputBtn.vue';
-	// import TryFreeThrowInput from '@/components/game/stat/StatInputBtn.vue';
+	import { StatType } from '@/components/game/stat/const/Stat.js';
 
 	import FreeThrowInput from '@/components/game/stat/StatClickInputComp.vue';
 	import TryFreeThrowInput from '@/components/game/stat/StatClickInputComp.vue';
