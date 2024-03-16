@@ -2,11 +2,13 @@
 	<div>
 		<v-btn :class="this.btnColor" >
 			<v-btn x-small plain class="pa-0" @click="this.emitAddStatInfo">
-				<v-icon>mdi-plus</v-icon>
+				<v-icon small>mdi-plus</v-icon>
 			</v-btn>
-			{{ this.pCount }}
+			<div style="width: 10px;">
+				{{ this.pCount }}
+			</div>
 			<v-btn x-small plain class="pa-0" @click="this.emitCancelStatInfo">
-				<v-icon>mdi-minus</v-icon>
+				<v-icon small>mdi-minus</v-icon>
 			</v-btn>
 		</v-btn>
 	</div>
