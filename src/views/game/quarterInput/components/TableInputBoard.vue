@@ -12,18 +12,18 @@
 				/>
 			</v-col>
 		</v-row>
-		<InGameRecordSheet :pEntry="pEntry" @emit-stat-info="createRecord" />
+		<InGamePlayerSheet :pEntry="pEntry" @emit-stat-info="createRecord" />
 	</v-container>
 </template>
 
 <script>
-	import EntryManageModal from '@/views/game/quarterRecordInputBoard/components/modal/EntryManageModal.vue';
-	import InGameRecordSheet from '@/views/game/quarterRecordInputBoard/components/inputBoard/tableType/InGameRecordSheetComp.vue';
+	import EntryManageModal from '@/views/game/quarterInput/components/modal/EntryManageModal.vue';
+	import InGamePlayerSheet from '@/views/game/quarterInput/components/inputBoard/tableType/InGamePlayerSheet.vue';
 
 	export default {
 		components: {
 			EntryManageModal,
-			InGameRecordSheet,
+			InGamePlayerSheet,
 		},
 		props: {
 			pHomeAwayCode: String,

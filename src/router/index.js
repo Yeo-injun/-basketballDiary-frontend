@@ -45,9 +45,9 @@ const router = new VueRouter({
 			'GameRecordDetailPage'
 		),
 		createRoute(
-			'views/game/quarterRecordInputBoard/QuarterRecordInputBoardPage',
+			'views/game/quarterInput/QuarterInputPage',
 			'/game/quarter/record/inputBoard',
-			'QuarterRecordInputBoardPage'
+			'QuarterInputPage'
 		),
 		createRoute(
 			'views/game/quarterRecordDetail/QuarterRecordDetailPage',
