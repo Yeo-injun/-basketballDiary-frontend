@@ -19,8 +19,8 @@
 
 <script>
 	import PlayerRecordComp from '@/components/game/player/PlayerRecordComp.vue';
-	import QuarterEntryComp from '@/views/game/quarterRecordInputBoard/components/inputBoard/buttonType/QuarterEntryComp.vue';
-	import StatInputBoardComp from '@/views/game/quarterRecordInputBoard/components/inputBoard/buttonType/StatInputBoardComp.vue';
+	import QuarterEntryComp from '@/views/game/quarterInput/components/inputBoard/buttonType/QuarterEntryComp.vue';
+	import StatInputBoardComp from '@/views/game/quarterInput/components/inputBoard/buttonType/StatInputBoardComp.vue';
 
 	export default {
 		components: {

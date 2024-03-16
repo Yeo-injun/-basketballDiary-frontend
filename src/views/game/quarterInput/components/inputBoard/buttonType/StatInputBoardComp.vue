@@ -117,8 +117,8 @@
 		RecordMode,
 	} from '@/components/game/stat/const/Stat.js';
 
-	import AddModeBtn from '@/views/game/quarterRecordInputBoard/components/inputBoard/buttonType/InputModeBtn.vue';
-	import CancelModeBtn from '@/views/game/quarterRecordInputBoard/components/inputBoard/buttonType/InputModeBtn.vue';
+	import AddModeBtn from '@/views/game/quarterInput/components/inputBoard/buttonType/InputModeBtn.vue';
+	import CancelModeBtn from '@/views/game/quarterInput/components/inputBoard/buttonType/InputModeBtn.vue';
 
 	import FreeThrowInputBtn from '@/components/game/stat/StatInputBtn.vue';
 	import TwoPointInputBtn from '@/components/game/stat/StatInputBtn.vue';
