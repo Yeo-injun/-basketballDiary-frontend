@@ -6,7 +6,7 @@
 				<!-- row별 승인 버튼 -->
 				<template v-slot:[`item.cancel`]="{ item }">
 					<template v-if="isShowButton(item.joinRequestStateCode)">
-						<v-btn class="mr-2" small @click="clickCancel(item)">
+						<v-btn class="mr-2" small @click="cancelRequest(item)">
 							요청 취소
 						</v-btn>
 					</template>
@@ -37,17 +37,13 @@
 		},
 		methods: {
 			async getInvitations() {
-				try {
-					const res = await authUserAPI.getJoinRequestsTo();
-					this.joinRequests = res.data;
-				} catch (e) {
-					console.log(e.response);
-				}
+				const res = await authUserAPI.getJoinRequestsTo();
+				this.joinRequests = res.data;
 			},
 			async initLoad() {
 				await this.getInvitations();
 			},
-			async clickCancel(item) {
+			async cancelRequest(item) {
 				if (!confirm('가입요청을 취소하시겠습니까?')) {
 					return;
 				}
@@ -55,14 +51,9 @@
 					teamJoinRequestSeq: item.teamJoinRequestSeq,
 				};
 
-				try {
-					const res = await authUserAPI.cancelJoinReqeust(params);
-					this.joinRequests = res.data;
-					console.log(res);
-				} catch (e) {
-					console.log(e.response);
-					alert(e.response.message);
-				}
+				await authUserAPI.cancelJoinReqeust(params);
+				const res = await authUserAPI.getJoinRequestsTo();
+				this.joinRequests = res.data;
 			},
 			isShowButton(joinRequestStateCode) {
 				const WAITING = '01';
