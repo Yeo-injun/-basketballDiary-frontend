@@ -12,7 +12,7 @@
                     >
                         <v-btn
                         class="mr-2" small
-                        @click="clickApproval(item)"
+                        @click="approveInvitation( item )"
                         >
                             승인
                         </v-btn>
@@ -24,7 +24,7 @@
                     >
                         <v-btn
                         class="mr-2" small
-                        @click="clickRejection(item)"
+                        @click="rejectInvitation(item)"
                         >
                             거절
                         </v-btn>
@@ -56,34 +56,27 @@ import authUserAPI from '@/api/AuthUserAPI.js';
         },
         methods: {
             async getInvitations() {
-                try {
-                    const res = await authUserAPI.getJoinRequestsFrom(); 
-                    this.invitations = res.data;
-                } catch(e) {
-                    console.log(e);
-                }
+                const res = await authUserAPI.getJoinRequestsFrom(); 
+                this.invitations = res.data;
             },
             async initLoad() {
                 await this.getInvitations();
             },
-             async clickApproval(item) {
+             async approveInvitation(item) {
                 if (!confirm("가입요청을 승낙하시겠습니까?")) {
                     return;
                 }
+
                 const params = {
                     teamJoinRequestSeq : item.teamJoinRequestSeq,
                 }
 
-                try {
-                    const res = await authUserAPI.approveInvitation(params);
-                    this.invitations = res.data;
-                    console.log(res);
-                } catch(e) {
-                    console.log(e.response);
-                    alert(e.response.message);
-                }
+                await authUserAPI.approveInvitation(params);
+                const res = await authUserAPI.getJoinRequestsFrom();
+                this.invitations = res.data;
+                
             },
-            async clickRejection(item) {
+            async rejectInvitation(item) {
                 if (!confirm("가입요청을 거절하시겠습니까?")) {
                     return;
                 }
@@ -91,14 +84,9 @@ import authUserAPI from '@/api/AuthUserAPI.js';
                     teamJoinRequestSeq : item.teamJoinRequestSeq,
                 }
 
-                try {
-                    const res = await authUserAPI.rejectInvitation(params);
-                    this.invitations = res.data;
-                    console.log(res);
-                } catch(e) {
-                    console.log(e.response);
-                    alert(e.response.message);
-                }
+                await authUserAPI.rejectInvitation(params);
+                const res = await authUserAPI.getJoinRequestsFrom();
+                this.invitations = res.data;
             },
             isShowButton(joinRequestStateCode) {
                 const WAITING = "01";
