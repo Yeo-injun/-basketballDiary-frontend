@@ -1,10 +1,10 @@
 <template>
     <FrameTextFieldInput pLabel="등번호"
-        :pData="this.backNumber"
+        ref="backNumberInput"
+        :pData="this.pData"
         :pRules="this.rules"
         :pRequired="this.pRequired"
-        @compliance="onComplianceEvent"
-        @violation="onViolationEvent"
+        @violation="this.onViolationEvent"
 	/>
 </template>
 
@@ -28,13 +28,12 @@
         },
         data() {
             return {
-                backNumber  : this.pData,
                 rules       : InputRule.backNumber,
             };
         },
         methods: {
-            onComplianceEvent( e ) {
-                this.$emit( 'compliance', e );
+            getValue() {
+                return this.$refs.backNumberInput.getValue();
             },
             onViolationEvent( e ) {
                 this.$emit( 'violation', e );

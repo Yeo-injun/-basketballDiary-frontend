@@ -73,7 +73,7 @@
 				switch (this.pGameRecordStateCode) {
 					case JOIN_TEAM_CONFIRMATION_CODE:
 						this.$router.push({
-							name: 'QuarterRecordInputBoardPage',
+							name: 'QuarterInputPage',
 							query: {
 								gameSeq: this.pGameSeq,
 								teamSeq: this.pTeamSeq,

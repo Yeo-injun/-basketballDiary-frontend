@@ -8,26 +8,26 @@
 				<v-container>
 					<h3>프로필 사진</h3>
 					<MyTeamProfileImageComp :pImageUrl="this.pImageUrl" />
-					<v-form ref="updateProfileInputs">
-						<ProfileImageInput
-							pLabel="수정할 프로필 사진 업로드"
-							@exceed-max-size="handleImageFileInputEvent"
-							@clear-input="handleImageFileInputEvent"
-							@select-valid-image="handleImageFileInputEvent"
+					<v-form ref="profileUpdateForm">
+						<ProfileImageInput	pLabel="수정할 프로필 사진 업로드"
+							ref="profileImageInput"
+							@violation="onErrorProfileImageInput"
+							@clear-input="onClearProfileImageInput"
 						/>
-						<BackNumberInput 
-							:pData="this.backNumber" 
+						<BackNumberInput
+							ref="backNumberInput"
+							:pData="this.pBackNumber" 
 							:pRequired="true"
-							@compliance="onComplianceBackNumber"
-							@violation="onViolationBackNumber"
+							@violation="onErrorBackNumber"
 						/>
 					</v-form>
 				</v-container>
 			</v-card-text>
-			<MyTeamProfileUpdateBtn pBtnName="수정" @do-update="updateProfile" />
-			<MyTeamProfileUpdateModalCloseBtn
+			<MyTeamProfileUpdateBtn	pBtnName="수정" 
+				@do-update="updateProfile" 
+			/>
+			<MyTeamProfileUpdateModalCloseBtn pBtnName="닫기"
 				@do-close="isActivated = false"
-				pBtnName="닫기"
 			/>
 
 			<!-- <v-card-actions>
@@ -81,13 +81,7 @@
 			},
 		},
 		data() {
-			const data = {
-				imageUrl: this.pImageUrl,
-				/*-------------------
-				 * Input 데이터
-				 *-------------------*/
-				backNumber: this.pBackNumber,
-				imageFile: null,
+			return {
 				/*-------------------
 				 * Input 오류
 				 *-------------------*/
@@ -95,9 +89,7 @@
 					imageFile : "",
 					backNumber : "",
 				},
-			}
-			console.log( data );
-			return data;
+			};
 		},
 		computed: {
 			// TODO 모달이 열리는 시점에 props 데이터로 모달 데이터 업데이트하기
@@ -111,30 +103,27 @@
 			},
 		},
 		methods: {
-			onComplianceBackNumber( e ) {
-				this.backNumber = e.data;
-				this.errorMessage.backNumber = '';
+			onClearProfileImageInput() {
+				this.errorMessage.imageFile = "";
 			},
-			onViolationBackNumber( e ) {
-				this.backNumber = e.data;
+			onErrorProfileImageInput( e ) {
+				this.errorMessage.imageFile = e.message;
+			},
+			onErrorBackNumber( e ) {
 				this.errorMessage.backNumber = e.message;
 			},
-			handleImageFileInputEvent( event ) {
-				this.imageFile 				= event.imageFile;
-				this.errorMessage.imageFile	= event.errorMessage;
-			},
 			async updateProfile() {
-				if (!this.$refs.updateProfileInputs.validate()) {
+				const refs = this.$refs;
+				if (!refs.profileUpdateForm.validate()) {
 					InputRuleViolation.alert( this.errorMessage );
 					return;
 				}
 
 				const msg = {
-					teamSeq: this.pTeamSeq,
-					backNumber: this.backNumber,
-					imageFile: this.imageFile,
+					teamSeq		: this.pTeamSeq,
+					backNumber	: refs.backNumberInput.getValue(),
+					imageFile	: refs.profileImageInput.getImage(),
 				};
-				console.log( msg );
 
 				await MyTeamAPI.modifyMyTeamsProfile(msg);
 				this.$emit('modal-close', false);

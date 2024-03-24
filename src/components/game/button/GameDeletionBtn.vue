@@ -17,7 +17,6 @@
 		},
 		data() {
 			return {
-				gameSeq: this.pGameSeq,
 				eventEmitName: 'delete-game',
 			};
 		},
@@ -27,7 +26,7 @@
 					return;
 				}
 				const params = {
-					gameSeq: this.gameSeq,
+					gameSeq: this.pGameSeq,
 				};
 				await GameAPI.deleteGame(params);
 				this.$emit(this.eventEmitName);

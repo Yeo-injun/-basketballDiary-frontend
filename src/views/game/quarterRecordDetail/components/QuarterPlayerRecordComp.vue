@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	import PlayerRecordComp from '@/components/game/gameJoinPlayer/PlayerRecordComp.vue';
+	import PlayerRecordComp from '@/components/game/player/PlayerRecordComp.vue';
 
 	export default {
 		components: {

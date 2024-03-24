@@ -32,7 +32,7 @@
 	import { GuestMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
 	/** Components */
-	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
+	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
 
 	export default {
 		components: {

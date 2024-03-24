@@ -59,11 +59,11 @@
 
 	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
 
-	import GameRecordersTable from '@/views/game/recordDetail/components/GameRecordersTable.vue';
+	import GameRecordersTable from '@/views/game/recordDetail/modal/GameRecordersTable.vue';
 
 	import GameRecordAuthSaveBtn from '@/components/button/FrameSaveBtn.vue';
-	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
-	import PlayerDataTable from '@/components/game/gameJoinPlayer/PlayerDataTable.vue';
+	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
+	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
 
 	const CREATOR_CODE = GameRecordAuthCode.CREATOR.code;
 	const ONLY_WRITER_CODE = GameRecordAuthCode.ONLY_WRITER.code;

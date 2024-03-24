@@ -34,7 +34,7 @@
 	import GameAPI from '@/api/GameAPI.js';
 
 	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
-	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
+	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
 	import { HomeAwayCode } from '@/const/code/GameCode';
 
 	import QuarterPlayerRecordsComp from '@/views/game/quarterRecordDetail/components/QuarterPlayerRecordComp.vue';

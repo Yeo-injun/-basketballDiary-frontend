@@ -34,9 +34,7 @@
 						:pMaxWidth="String(250)"
 					/>
 					<TeamLogoImageInput pLabel="팀 로고 사진"
-						@exceed-max-size="handleImageFileInputEvent"
-						@clear-input="handleImageFileInputEvent"
-						@select-valid-image="handleImageFileInputEvent"
+						ref="teamLogoImageInput"
 					/>
 				</v-col>
 			</v-row>
@@ -108,7 +106,6 @@
 					foundationYmd: '',
 					introduction: '',
 				},
-				// teamRegularExercises: [ this.createExerciseTime() ],
 				teamLogoImageFile: null,
 			}
 		},
@@ -135,8 +132,6 @@
 			 * 각 input마다 refs를 달아서 직접 input의 value 값 가져오는 방식 검토...
 			 */
 			getForm() {
-				// TODO 개선방향
-				// input에 존재하는 값을 직접 참조하는 방법을 활용... Vue컴포넌트에 변수로 관리하지 않기
 				const refs 					= this.$refs;
 				const homeTownAddressInfo 	= refs.homeTownAddressInput.getValue();
 				return {
@@ -148,33 +143,10 @@
 						foundationYmd	: refs.foundationYmdInput.getValue()	,
 						introduction	: refs.teamIntroductionInput.getValue()	,
 					},
-					teamRegularExercises: this.teamRegularExercises,
-					teamLogoImageFile: this.teamLogoImageFile,
+					teamRegularExercises: refs.teamRegularExercsiesInput.getValue(),
+					teamLogoImageFile	: refs.teamLogoImageInput.getImage(),
 				}
 			},
-			/** 팀로고 이미지 */
-			handleImageFileInputEvent( event ) {
-				this.teamLogoImageFile = event.imageFile;
-			},
-			// /** 팀정기운동 목록 */
-			// createExerciseTime() {
-			// 	return {
-			// 		dayOfTheWeekCode		: "",
-			// 		startTime				: "",
-			// 		endTime					: "",
-			// 		exercisePlaceName		: "",
-			// 		exercisePlaceAddress	: "",
-			// 		sidoCode				: "",
-			// 		sigunguCode				: "",
-			// 	};
-			// },
-			// addExerciseTime() {
-			// 	this.teamRegularExercises.push( this.createExerciseTime() );
-			// },
-			// deleteExerciseTime( deleteRowIndex ) {
-			// 	console.log( ['deleteExerciseTime', deleteRowIndex ]);
-			// 	this.teamRegularExercises.splice( deleteRowIndex, 1 );
-			// },
 		},
 	};
 </script>

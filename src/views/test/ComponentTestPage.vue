@@ -20,14 +20,7 @@
 				<!-- 목록이 존재하지 않을 경우 보여줄 컴포넌트 -->
 				<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
 			</TestSlot>
-			<StatInput />
-			<v-text-field
-					label="주소"
-					v-model="dataSize"
-					@change="onChangeByteUtilTest"
-								/>
-
-			BytesUtil 테스트 : {{ this.dataSize }}
+			<StatInput pType="freeThrow" :pCount=3 />
 		</div>
 	</div>
 </template>
@@ -38,7 +31,7 @@
 	import TestSlot from '@/components/list/FramePaginationList.vue';
 	import TestBtn from '@/components/button/FrameAddBtn.vue';
 	/** 스탯 버튼 테스트 */
-	import StatInput from '@/views/game/quarterRecordInputBoard/components/inputBoard/StatInputBtnV2.vue';
+	import StatInput from '@/components/game/stat/StatClickInputComp.vue';
 
 	import BytesUtil from '@/common/util/BytesUtil';
 	import AuthUtil from '@/common/AuthUtil.js';

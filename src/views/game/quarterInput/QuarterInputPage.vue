@@ -1,8 +1,11 @@
 <template>
 	<div>
 		<div v-if="this.isInitData.gameQuarterRecords">
-			<GameQuarterInfoComp
-				:pGameQuarterRecords="this.gameQuarterRecords"
+			<GameInfo
+				:pGameInfo="this.gameQuarterRecords"
+			/>
+			<QuarterInfo
+				:pQuarterInfo="this.gameQuarterRecords"
 				@select-quarter-time="setQuarterTime"
 			/>
 			<v-container>
@@ -70,22 +73,24 @@
 	import {
 		StatType,
 		RecordMode,
-	} from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
+	} from '@/components/game/stat/const/Stat.js';
 
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
-	import GameQuarterInfoComp from '@/views/game/quarterRecordInputBoard/components/GameQuarterInfoComp.vue';
-	import HomeAwayTeamToggle from '@/components/game/joinTeam/toggle/HomeAwayTeamToggle.vue';
+	import GameInfo from '@/views/game/quarterInput/components/GameInfo.vue';
+	import QuarterInfo from '@/views/game/quarterInput/components/QuarterInfo.vue';
+	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
 
-	import HomeTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
-	import AwayTeamRecordTableSheet from '@/views/game/quarterRecordInputBoard/components/RecordTableSheetComp.vue';
+	import HomeTeamRecordTableSheet from '@/views/game/quarterInput/components/TableInputBoard.vue';
+	import AwayTeamRecordTableSheet from '@/views/game/quarterInput/components/TableInputBoard.vue';
 
 	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
 	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
 
 	export default {
 		components: {
-			GameQuarterInfoComp,
+			GameInfo,
+			QuarterInfo,
 			HomeAwayTeamToggle,
 			HomeTeamRecordTableSheet,
 			AwayTeamRecordTableSheet,
@@ -131,8 +136,8 @@
 		methods: {
 			async getGameQuarterRecords() {
 				const params = {
-					gameSeq: this.gameSeq,
-					quarterCode: this.quarterCode,
+					gameSeq		: this.gameSeq,
+					quarterCode	: this.quarterCode,
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);

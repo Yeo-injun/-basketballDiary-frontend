@@ -128,23 +128,23 @@
 </template>
 
 <script>
-	import { StatType } from '@/views/game/quarterRecordInputBoard/const/QuarterRecordInputBoard.js';
+	import { StatType } from '@/components/game/stat/const/Stat.js';
 
-	import FreeThrowInput from '@/components/game/stat/StatInputBtn.vue';
-	import TryFreeThrowInput from '@/components/game/stat/StatInputBtn.vue';
+	import FreeThrowInput from '@/components/game/stat/StatClickInputComp.vue';
+	import TryFreeThrowInput from '@/components/game/stat/StatClickInputComp.vue';
 
-	import TwoPointInput from '@/components/game/stat/StatInputBtn.vue';
-	import TryTwoPointInput from '@/components/game/stat/StatInputBtn.vue';
+	import TwoPointInput from '@/components/game/stat/StatClickInputComp.vue';
+	import TryTwoPointInput from '@/components/game/stat/StatClickInputComp.vue';
 
-	import ThreePointInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import TryThreePointInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import ThreePointInputBtn from '@/components/game/stat/StatClickInputComp.vue';
+	import TryThreePointInputBtn from '@/components/game/stat/StatClickInputComp.vue';
 
-	import AssistInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import ReboundInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import TurnoverInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import BlockInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import StealInputBtn from '@/components/game/stat/StatInputBtn.vue';
-	import FoulInputBtn from '@/components/game/stat/StatInputBtn.vue';
+	import AssistInputBtn from '@/components/game/stat/StatClickInputComp.vue';
+	import ReboundInputBtn from '@/components/game/stat/StatClickInputComp.vue';
+	import TurnoverInputBtn from '@/components/game/stat/StatClickInputComp.vue';
+	import BlockInputBtn from '@/components/game/stat/StatClickInputComp.vue';
+	import StealInputBtn from '@/components/game/stat/StatClickInputComp.vue';
+	import FoulInputBtn from '@/components/game/stat/StatClickInputComp.vue';
 
 	import FoulCountComp from '@/components/game/stat/FoulCountComp.vue';
 
