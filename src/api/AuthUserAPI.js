@@ -3,9 +3,6 @@ import axios from '../http/CustomAxios.js';
 const axiosService = axios.createAxiosInstance('/loginUser');
 
 export default {
-	/**
-	 * injun
-	 */
 	// API020 : 농구팀 가입요청 보내기
 	sendJoinRequestToTeam(params) {
 		return axiosService.post(`/joinRequestTo/${params.teamSeq}`);
@@ -34,19 +31,20 @@ export default {
 	getJoinRequestsFrom() {
 		return axiosService.get(`/joinRequestsFrom`);
 	},
-
-	/**
-	 * seongju
-	 */
 	getMyInfo() {
 		return axiosService.get(`/profile`);
 	},
 	updateUser(params) {
-		// console.log(params);
 		return axiosService.post(`/profile`, params);
 	},
-	deleteUser() {
-		return axiosService.delete('/profile');
+	// API028 : 회원탈퇴
+	// cf. 일반적인 delete메소드는 Http Body를 지원하지는 않는 것이 표준 스펙. 그렇기 때문에 서버에 따라서 Delete 메소드의 Body를 지원하지 않는 경우 존재. 
+	withdrawalMembership( message ) {
+		return axiosService.delete('/profile',  {
+			params: {
+				password : message.password,
+			},
+		} );
 	},
 	updatePassword(params) {
 		return axiosService.post(`/profile/password`, params);
