@@ -37,7 +37,7 @@ export default {
 	updateUser(params) {
 		return axiosService.post(`/profile`, params);
 	},
-	// API028 : 회원탈퇴
+	// API028 : 회원탈퇴 TODO USERApi로 이전
 	// cf. 일반적인 delete메소드는 Http Body를 지원하지는 않는 것이 표준 스펙. 그렇기 때문에 서버에 따라서 Delete 메소드의 Body를 지원하지 않는 경우 존재. 
 	withdrawalMembership( message ) {
 		return axiosService.delete('/profile',  {
