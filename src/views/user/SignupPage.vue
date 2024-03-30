@@ -10,7 +10,7 @@
 				required
 				@change="initDuplicationCheckStatus"
 			></v-text-field>
-			<v-btn block @click="checkDuplicateUserId">ID중복확인</v-btn>
+			<v-btn block @click="checkUserIdAvailable">ID중복확인</v-btn>
 
 			<v-text-field
 				label="비밀번호"
@@ -72,13 +72,13 @@
 			</v-container>
 			<!-- 시도, 시군구 코드 -->
 		</v-form>
-		<v-btn block color="primary" v-on:click="createUser">회원가입</v-btn>
+		<v-btn block color="primary" v-on:click="signUp">회원가입</v-btn>
 	</v-container>
 </template>
 
 <script>
 	/** Backend API */
-	import AuthAPI from '@/api/AuthAPI.js';
+	import UserAPI from '@/api/UserAPI.js';
 
 	/** Code */
 	/** Utils */
@@ -89,8 +89,6 @@
 	import BirthDayInput from '@/components/input/DatePickerInput.vue';
 
 	/** Emit Event */
-
-
 
 	// id중복체크 - 자동으로 체크하기 https://pozafly.github.io/tripllo/(6)login3-vue/
 	// 참고자료 : https://vuetifyjs.com/en/components/forms/#vuelidate
@@ -137,19 +135,20 @@
 				this.isNotDuplicateUserId = false;
 			},
 			// 아이디 중복체크  API - 중복체크 후 다시 아이디를 고쳤을때
-			async checkDuplicateUserId() {
-				const { isDuplicated } = await AuthAPI.checkDuplicateUserId({
+			async checkUserIdAvailable() {
+				const { isAvailable } = await UserAPI.checkUserIdAvailable({
 					userId: this.userRegInfo.userId,
 				});
 
-				if (isDuplicated) {
-					this.isNotDuplicateUserId = false;
-					alert('중복된 ID가 존재합니다.');
+				if ( isAvailable ) {
+					this.isNotDuplicateUserId = true;
+					alert('사용할 수 있는 ID입니다!');
 					return;
 				}
 
-				this.isNotDuplicateUserId = true;
-				alert('사용할 수 있는 ID입니다!');
+				this.isNotDuplicateUserId = false;
+				alert('중복된 ID가 존재합니다.');
+
 			},
 			// 비밀번호 확인 로직
 			checkPassword() {
@@ -159,7 +158,7 @@
 				return false;
 			},
 			// 회원가입 요청
-			async createUser() {
+			async signUp() {
 				if (!this.isNotDuplicateUserId) {
 					alert('ID중복확인을 해주시기 바랍니다.');
 					return;
@@ -175,13 +174,9 @@
 					return;
 				}
 
-				try {
-					await AuthAPI.createUser(this.userRegInfo);
-					alert('회원가입이 완료되었습니다.');
-					this.$router.push('/login');
-				} catch (e) {
-					console.log(e);
-				}
+				await UserAPI.signUp( this.userRegInfo );
+				alert('회원가입이 완료되었습니다.');
+				this.$router.push('/login');
 			},
 		}, // methods
 	};
