@@ -16,6 +16,7 @@ export default {
 	createUser(messge) {
 		return axiosService.post('/registration', messge);
 	},
+	// TODO USERApi로 이동
 	/**
 	 * 23.10.14 인준 설계 의도
 	 * - API 객체를 호출 할시 호출부에서는 API로 부터 ResponseBody만 제어하도록 구현하기
