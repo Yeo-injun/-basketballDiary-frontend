@@ -40,5 +40,12 @@ export default {
 			},
 		} );
 	},
+	/**
+	 * API025 회원 프로필 조회
+	 */
+	async getMyProfile() {
+		const { data } = await axiosService.get(`/profile`);
+		return data.profile;
+	},
 
 };

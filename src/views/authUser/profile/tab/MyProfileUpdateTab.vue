@@ -18,9 +18,9 @@
 				<v-row>
 					<v-col>성별 :</v-col>
 					<v-col>
-						<v-radio-group v-model="myinfo.gender">
-							<v-radio label="남" value="M"></v-radio>
-							<v-radio label="여" value="F"></v-radio>
+						<v-radio-group v-model="gender">
+							<v-radio label="남" value="01"></v-radio>
+							<v-radio label="여" value="02"></v-radio>
 						</v-radio-group>
 					</v-col>
 				</v-row>
@@ -28,12 +28,12 @@
 					<v-col>포지션 : </v-col>
 					<v-col>
 						<v-row>
-							<v-radio-group v-model="myinfo.positionCode">
-								<v-radio label="포인트 가드" value="10"></v-radio>
-								<v-radio label="센터" value="20"></v-radio>
-								<v-radio label="스몰포워드" value="30"></v-radio>
-								<v-radio label="파워포워드" value="40"></v-radio>
-								<v-radio label="슈팅가드" value="50"></v-radio>
+							<v-radio-group v-model="positionCode">
+								<v-radio label="포인트 가드" value="11"></v-radio>
+								<v-radio label="슈팅가드" value="12"></v-radio>
+								<v-radio label="스몰포워드" value="21"></v-radio>
+								<v-radio label="파워포워드" value="22"></v-radio>
+								<v-radio label="센터" value="30"></v-radio>
 							</v-radio-group>
 						</v-row>
 					</v-col>
@@ -84,7 +84,7 @@
 	import RemoveUserPageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 
 	import myProfileApi from '@/api/AuthUserAPI';
-
+	import UserAPI from '@/api/UserAPI';
 	export default {
 		components: {
 			MainTitle,
@@ -92,45 +92,47 @@
 			PasswordUpdatePageMoveBtn,
 			RemoveUserPageMoveBtn,
 		},
-		data: () => {
+		data() {
 			return {
-				myinfo: {},
-				userName: '',
-				email: '',
-				gender: '',
-				height: '',
-				weight: '',
-				roadAddress: '',
-				zoneCode: '',
-				sidoCode: '',
-				sigunguCode: '',
+				userName		: '',
+				email			: '',
+				gender			: '',
+				positionCode	: '',
+				height			: '',
+				weight			: '',
+				roadAddress		: '',
+				sidoCode		: '',
+				sigunguCode		: '',
+				userImagePath	: '',
 			};
 		},
 		methods: {
 			async load() {
-				this.myinfo = (await myProfileApi.getMyInfo()).data;
-				this.userName = this.myinfo.userName;
-				this.email = this.myinfo.email;
-				this.height = this.myinfo.height;
-				this.weight = this.myinfo.weight;
-				this.roadAddress = this.myinfo.roadAddress;
-				this.zoneCode = this.myinfo.zonecode;
+				const profile = await UserAPI.getMyProfile();
+				this.userName		= profile.userName;
+				this.email			= profile.email;
+				this.gender			= profile.gender;
+				this.positionCode	= profile.positionCode;
+				this.height			= profile.height;
+				this.weight			= profile.weight;
+				this.roadAddress	= profile.roadAddress;
+				this.sidoCode		= profile.sidoCode;
+				this.sigunguCode	= profile.sigunguCode;
+				this.userImagePath	= profile.userImagePath;
 			},
 			async updateProfile() {
-				const params = {
-					userName: this.userName,
-					email: this.email,
-					gender: this.myinfo.gender,
-					height: this.height,
-					weight: this.weight,
-					sidoCode: this.sidoCode,
-					sigunguCode: this.sigunguCode,
-					positionCode: this.myinfo.positionCode,
-					roadAddress: this.roadAddress,
-					zoneCode: this.zoneCode,
-				};
-				const success = await myProfileApi.updateUser(params);
-				console.log(success.status);
+				await myProfileApi.updateUser({
+					userName 		: this.userName,
+					email 			: this.email,
+					gender 			: this.gender,
+					positionCode 	: this.positionCode,
+					height 			: this.height,
+					weight 			: this.weight,
+					roadAddress 	: this.roadAddress,
+					sidoCode 		: this.sidoCode,
+					sigunguCode 	: this.sigunguCode,
+					userImagePath 	: this.userImagePath,
+				});
 			},
 			// kakao Address API 사용 설명 : https://chlost.tistory.com/53
 			showAPI() {

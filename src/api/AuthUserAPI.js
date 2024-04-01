@@ -31,9 +31,6 @@ export default {
 	getJoinRequestsFrom() {
 		return axiosService.get(`/joinRequestsFrom`);
 	},
-	getMyInfo() {
-		return axiosService.get(`/profile`);
-	},
 	updateUser(params) {
 		return axiosService.post(`/profile`, params);
 	},
