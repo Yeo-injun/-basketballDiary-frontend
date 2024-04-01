@@ -47,5 +47,10 @@ export default {
 		const { data } = await axiosService.get(`/profile`);
 		return data.profile;
 	},
-
+	/**
+	 * API026 회원 프로필 수정
+	 */
+	updateMyProfile( params ) {
+		return axiosService.post(`/profile`, params);
+	},
 };

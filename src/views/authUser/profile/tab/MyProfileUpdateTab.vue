@@ -50,18 +50,16 @@
 						<v-text-field v-model="weight" solo></v-text-field>
 					</v-col>
 				</v-row>
-				<v-row>
-					<v-col>주소 : </v-col>
-					<v-col>
-						<v-btn @click="showAPI()" solo>주소찾기</v-btn>
-						<span
-							>도로명주소<v-text-field v-model="roadAddress" solo></v-text-field
-						></span>
-						<span
-							>우편번호<v-text-field v-model="zoneCode" solo></v-text-field
-						></span>
-					</v-col>
-				</v-row>
+				<v-container>
+					<ProfileAddressInput pLabel="주소검색"
+						ref="profileAddressInput"
+						:pData="{
+							address		: this.roadAddress,
+							sidoCode	: this.sidoCode,
+							sigunguCode	: this.sigunguCode,
+						}"
+					/>
+				</v-container>
 				<ProfileUpdateBtn @do-update="updateProfile" pBtnName="수정" />
 				<PasswordUpdatePageMoveBtn
 					pRoutePageName="PasswordUpdatePage"
@@ -77,20 +75,31 @@
 </template>
 
 <script>
+	/** Backend API */
+	import UserAPI from '@/api/UserAPI';
+	/** Code */
+	/** Utils */
+	/** Components */
 	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
 
+	import ProfileAddressInput from '@/components/input/AddressInput.vue';
+	
 	import ProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 	import PasswordUpdatePageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 	import RemoveUserPageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 
-	import myProfileApi from '@/api/AuthUserAPI';
-	import UserAPI from '@/api/UserAPI';
+	/** Emit Event */
+	
 	export default {
 		components: {
 			MainTitle,
+			ProfileAddressInput,
 			ProfileUpdateBtn,
 			PasswordUpdatePageMoveBtn,
 			RemoveUserPageMoveBtn,
+		},
+		mounted() {
+			this.load();
 		},
 		data() {
 			return {
@@ -121,36 +130,22 @@
 				this.userImagePath	= profile.userImagePath;
 			},
 			async updateProfile() {
-				await myProfileApi.updateUser({
+				const addressInput = this.$refs.profileAddressInput.getValue();
+				await UserAPI.updateMyProfile({
 					userName 		: this.userName,
 					email 			: this.email,
 					gender 			: this.gender,
 					positionCode 	: this.positionCode,
 					height 			: this.height,
 					weight 			: this.weight,
-					roadAddress 	: this.roadAddress,
-					sidoCode 		: this.sidoCode,
-					sigunguCode 	: this.sigunguCode,
+					roadAddress 	: addressInput.address,
+					sidoCode 		: addressInput.sidoCode,
+					sigunguCode 	: addressInput.sigunguCode,
 					userImagePath 	: this.userImagePath,
 				});
+
+				alert( "회원정보가 수정되었습니다." );
 			},
-			// kakao Address API 사용 설명 : https://chlost.tistory.com/53
-			showAPI() {
-				// 단, 왜 arrow function을 사용했을까?
-				// 출처 : https://medium.com/@hozacho/vuejs%EC%97%90%EC%84%9C-arrow-function%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0-ec067c342412
-				new window.daum.Postcode({
-					oncomplete: (data) => {
-						this.roadAddress = data.roadAddress;
-						this.zoneCode = data.zonecode;
-						this.sidoCode = data.sigunguCode.substring(0, 2);
-						this.sigunguCode = data.sigunguCode;
-						console.log(data);
-					},
-				}).open();
-			},
-		},
-		mounted() {
-			this.load();
 		},
 	};
 </script>
