@@ -56,12 +56,11 @@
 </template>
 
 <script>
+	import AuthManager from '@/common/auth/AuthManager.js';
 	/** Backend API */
-	import MyTeamAPI from '@/api/MyTeamAPI';
+	import MyTeamAPI from '@/api/MyTeamAPI.js';
 	/** CODE */
 	/** Utils */
-	import AuthUtil from '@/common/AuthUtil.js';
-
 	/** Components */
 	import ProfileUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamProfileUpdateModal.vue';
 	import ProfileUpdateBtn from '@/components/button/FrameOpenBtn.vue';
@@ -138,10 +137,10 @@
 				});
 			},
 			isManager() {
-				return AuthUtil.isManager(this.teamSeq);
+				return AuthManager.isManager( this.teamSeq );
 			},
 			isLeader() {
-				return AuthUtil.isLeader(this.teamSeq);
+				return AuthManager.isLeader(this.teamSeq);
 			},
 			/**-----------------------------
 			 * Modal 제어

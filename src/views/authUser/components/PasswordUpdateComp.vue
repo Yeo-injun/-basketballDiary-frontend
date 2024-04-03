@@ -23,7 +23,7 @@
 <script>
 
 	/** Backend API */
-	import myProfileAPI from "@/api/AuthUserAPI";
+	import UserAPI from "@/api/UserAPI";
 	/** Code */
 	/** Utils */
 	/** Components */
@@ -58,7 +58,7 @@ export default {
 				return;
 			}
 
-			await myProfileAPI.updatePassword( {
+			await UserAPI.updatePassword( {
 				prevPassword	: prevPassword,
 				newPassword		: newPassword
 			} );

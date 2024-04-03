@@ -30,7 +30,8 @@
 <script>
 	import AuthAPI from '@/api/AuthAPI.js';
 	import LoadingStateManager from '@/common/state/LoadingStateManager';
-	import AuthUtil from '@/common/AuthUtil.js';
+
+	import AuthManager from '@/common/auth/AuthManager';
 
 	export default {
 		computed: {
@@ -38,7 +39,7 @@
 				return LoadingStateManager.getters.isLoading();
 			},
 			isLogin() {
-				return AuthUtil.isLogin();
+				return AuthManager.isLogin();
 			},
 		},
 		/**상위컴포넌트에서 데이터 받기 : props 사용하기
@@ -50,14 +51,9 @@
 				if (!confirm('로그아웃 하시겠습니까?')) {
 					return;
 				}
-
-				try {
-					await AuthAPI.logout();
-					AuthUtil.logout();
-					this.$router.go();
-				} catch (e) {
-					console.log(e);
-				}
+				await AuthAPI.logout();
+				AuthManager.logout();
+				this.$router.go();
 			},
 		},
 	};

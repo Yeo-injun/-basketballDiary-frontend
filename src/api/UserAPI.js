@@ -11,6 +11,42 @@ export default {
 		return axiosService.get(`/exclusion/team/${pathVar.teamSeq}`, queryString);
 	},
 	/**
+	 * API025 회원 프로필 조회
+	 */
+	async getMyProfile() {
+		const { data } = await axiosService.get(`/profile`);
+		return data.profile;
+	},
+	/**
+	 * API026 회원 프로필 수정
+	 */
+	updateMyProfile( params ) {
+		return axiosService.post(`/profile`, params);
+	},
+	/**
+	 * API027 비밀번호 변경
+	 */
+	updatePassword( params ) {
+		return axiosService.post(`/password`, params);
+	},
+	/**
+	 * API029 회원가입
+	 */
+	signUp( message ) {
+		return axiosService.post('/signUp', message);
+	},
+	/**
+	 * API028 : 회원탈퇴
+	 * cf. 일반적인 delete메소드는 Http Body를 지원하지는 않는 것이 표준 스펙. 그렇기 때문에 서버에 따라서 Delete 메소드의 Body를 지원하지 않는 경우 존재. 
+	 */
+	withdrawalMembership( message ) {
+		return axiosService.delete('',  {
+			params: {
+				password : message.password,
+			},
+		} );
+	},
+	/**
 	 * API034 사용자ID 사용가능여부 확인
 	 * 23.10.14 인준 설계 의도
 	 * - API 객체를 호출 할시 호출부에서는 API로 부터 ResponseBody만 제어하도록 구현하기
@@ -25,27 +61,4 @@ export default {
 		});
 		return data;
 	},
-	/**
-	 * API029 회원가입
-	 */
-	signUp( message ) {
-		return axiosService.post('/signUp', message);
-	},
-	// API028 : 회원탈퇴
-	// cf. 일반적인 delete메소드는 Http Body를 지원하지는 않는 것이 표준 스펙. 그렇기 때문에 서버에 따라서 Delete 메소드의 Body를 지원하지 않는 경우 존재. 
-	withdrawalMembership( message ) {
-		return axiosService.delete('',  {
-			params: {
-				password : message.password,
-			},
-		} );
-	},
-	/**
-	 * API025 회원 프로필 조회
-	 */
-	async getMyProfile() {
-		const { data } = await axiosService.get(`/profile`);
-		return data.profile;
-	},
-
 };

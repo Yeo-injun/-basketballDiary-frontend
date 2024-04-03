@@ -20,7 +20,7 @@
 
 <script>
 	import AuthAPI from '@/api/AuthAPI.js';
-	import AuthStateManager from '@/common/state/AuthStateManager';
+	import AuthManager from '@/common/auth/AuthManager.js';
 
 	export default {
 		data: () => {
@@ -38,7 +38,7 @@
 				};
 				try {
 					const res = await AuthAPI.login(param);
-					AuthStateManager.mutations.processLogin(res.data);
+					AuthManager.login(res.data);
 					this.$router.push('/');
 				} catch (e) {
 					// request후 response에서 에러가 발생할 경우 Axios interceptor를 먼저 거침

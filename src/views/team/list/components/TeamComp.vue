@@ -56,7 +56,7 @@
 
 	import AuthUserAPI from '@/api/AuthUserAPI.js';
 
-	import AuthUtil from '@/common/AuthUtil.js';
+	import AuthManager from '@/common/auth/AuthManager.js';
 
 	export default {
 		components: {
@@ -90,7 +90,7 @@
 				}
 			},
 			isTeamMember(teamSeq) {
-				return AuthUtil.isTeamMemeber(teamSeq);
+				return AuthManager.isTeamMemeber(teamSeq);
 			},
 			hasExcercises() {
 				return this.team.teamRegularExercises.length > 0;
