@@ -1,26 +1,25 @@
 import AuthAPI from '@/api/AuthAPI';
 import AuthStateManager from '@/common/state/AuthStateManager';
 import ValidationUtil from '@/common/util/ValidationUtil.js';
-// TODO AuthUtil을 AuthManager로 대체하기
-// 
 
-const UNAUTH_USER = '0';
-const NOT_TEAM_MEMBER = '0';
-const TEAM_MEMBER = '1';
-const MANAGER = '2';
-const LEADER = '3';
+const UNAUTH_USER		= '0';
+const NOT_TEAM_MEMBER	= '0';
+const TEAM_MEMBER		= '1';
+const MANAGER			= '2';
+const LEADER			= '3';
 
 export default {
 	async init() {
-		const res = await AuthAPI.getAuthInfo();
-		this.setAuthInfo( res.data );
+		setAuthInfo( await AuthAPI.getAuthInfo() );
 	},
-	setAuthInfo(authInfo) {
-		if (ValidationUtil.isNull(authInfo)) {
-			console.log( "[ Error ] 권한정보가 존재하지 않습니다. ");
-			return;
-		}
-		AuthStateManager.mutations.processLogin(authInfo);
+	login( authInfo ) {
+		AuthStateManager.mutations.processLogin( authInfo );
+	},
+	logout() {
+		AuthStateManager.mutations.processLogout();
+	},
+	getUserInfo() {
+		return AuthStateManager.getters.authUserInfo();
 	},
 	/**------------------------
 	 * 권한 상태 확인 메소드 
@@ -51,13 +50,21 @@ export default {
 	},
 };
 
-function getTeamAuth(teamSeq) {
+function setAuthInfo( authInfo ) {
+	if ( ValidationUtil.isNull( authInfo ) ) {
+		console.log( "[ Error ] 권한정보가 존재하지 않습니다. ");
+		return;
+	}
+	AuthStateManager.mutations.processLogin(authInfo);
+}
+
+function getTeamAuth( teamSeq ) {
 	const isNotLogin = !AuthStateManager.getters.isLogin();
 	if (isNotLogin) {
 		return UNAUTH_USER;
 	}
 
-	const teamAuths = AuthStateManager.getters.authUserInfo().userAuth;
+	const teamAuths = AuthStateManager.getters.authUserInfo().authTeams;
 	// builtin 메소드의 호출을 지양하는 이유 : https://ryusm.tistory.com/123
 	if (Object.prototype.hasOwnProperty.call(teamAuths, teamSeq)) {
 		return teamAuths[teamSeq];

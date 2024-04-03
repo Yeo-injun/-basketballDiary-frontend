@@ -12,12 +12,9 @@
 </template>
 
 <script>
-	import AppNavbar from './components/AppNavbar';
+	import AppNavbar from '@/components/AppNavbar';
 
-	import AuthAPI from './api/AuthAPI';
-
-	import ValidationUtil from '@/common/util/ValidationUtil.js';
-	import AuthUtil from '@/common/AuthUtil.js';
+	import AuthManager from '@/common/auth/AuthManager.js';
 
 	export default {
 		name: 'App',
@@ -44,12 +41,7 @@
 			 * 화살표 함수를 사용해서 methods를 정의하면 Vue가 적절한 this 값을 바인딩하지 못합니다. 따라서 methods를 정의할 때, 화살표 함수를 사용하지 않도록 합니다.
 			 */
 			async checkSessionState() {
-				const res = await AuthAPI.getAuthInfo();
-				const authInfo = res.data;
-				if (ValidationUtil.isNull(authInfo)) {
-					return;
-				}
-				AuthUtil.setAuthInfo(authInfo);
+				await AuthManager.init();
 			},
 		},
 		mounted() {

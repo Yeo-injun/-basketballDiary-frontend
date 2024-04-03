@@ -21,18 +21,14 @@ export default {
 			`/joinRequestsFrom/${params.teamJoinRequestSeq}/approval`
 		);
 	},
+	// API032 : 농구팀 초대 목록 조회
+	getJoinRequestsFrom() {
+		return axiosService.get(`/joinRequestsFrom`);
+	},
 	// API033 : 농구팀 초대 거절
 	rejectInvitation(params) {
 		return axiosService.put(
 			`/joinRequestsFrom/${params.teamJoinRequestSeq}/rejection`
 		);
-	},
-	// API032 : 농구팀 초대 목록 조회
-	getJoinRequestsFrom() {
-		return axiosService.get(`/joinRequestsFrom`);
-	},
-	// TODO USERAPI로 이전 예정
-	updatePassword(params) {
-		return axiosService.post(`/profile/password`, params);
 	},
 };

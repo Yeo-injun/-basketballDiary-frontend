@@ -4,8 +4,9 @@ import axios from '@/http/CustomAxios.js';
 const axiosService = axios.createAxiosInstance('/auth');
 
 export default {
-	getAuthInfo() {
-		return axiosService.get('');
+	async getAuthInfo() {
+		const { data } = await axiosService.get(''); 
+		return data;
 	},
 	login(messge) {
 		return axiosService.post('/login', messge);

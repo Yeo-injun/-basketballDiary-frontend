@@ -43,11 +43,11 @@
 </template>
 
 <script>
+	import AuthManager from '@/common/auth/AuthManager.js';
+	
 	/** Backend API */
 	/** CODE */
 	/** Utils */
-	import AuthUtil from '@/common/AuthUtil.js';
-
 	/** Components */
 	import ProfileImage from '@/components/image/FrameImageComp.vue';
 
@@ -69,7 +69,7 @@
 		},
 		methods: {
 			isLeader() {
-				return AuthUtil.isLeader(this.pTeamSeq);
+				return AuthManager.isLeader(this.pTeamSeq);
 			},
 		},
 	};

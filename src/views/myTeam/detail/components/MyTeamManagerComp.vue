@@ -43,7 +43,7 @@
 	/** Backend API */
 	/** CODE */
 	/** Utils */
-	import AuthUtil from '@/common/AuthUtil.js';
+	import AuthManager from '@/common/auth/AuthManager.js';
 
 	/** Components */
 	import ProfileImage from '@/components/image/FrameImageComp.vue';
@@ -64,7 +64,7 @@
 		},
 		methods: {
 			isLeaderAuth() {
-				return AuthUtil.isLeader(this.pTeamSeq);
+				return AuthManager.isLeader(this.pTeamSeq);
 			},
 			isLeaderMember() {
 				const targetAuth = this.pTeamManager.teamAuthCode;
