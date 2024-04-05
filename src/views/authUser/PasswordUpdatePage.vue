@@ -1,13 +1,19 @@
 <template>
-  <PasswordUpdateComp />
+	<v-container >
+		<MainTitle pTitleName="비밀번호변경" />
+		<PasswordUpdateComp />
+	</v-container>
 </template>
 
 <script>
-import PasswordUpdateComp from "@/components/authUser/PasswordUpdateComp.vue";
+import MainTitle from "@/components/title/FramePageMainTitle.vue";
+import PasswordUpdateComp from "@/views/authUser/components/PasswordUpdateComp.vue";
+
 export default {
-  components: {
-    PasswordUpdateComp,
-  },
+	components: {
+		MainTitle,
+		PasswordUpdateComp,
+	},
 };
 </script>
 

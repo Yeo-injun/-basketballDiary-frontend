@@ -26,6 +26,8 @@
 </template>
 
 <script>
+	import AuthManager from '@/common/auth/AuthManager.js';
+	
 	import GameTimeSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue';
 	import EventTestComp from '@/components/EventTestComp.vue';
 	import TestSlot from '@/components/list/FramePaginationList.vue';
@@ -34,7 +36,7 @@
 	import StatInput from '@/components/game/stat/StatClickInputComp.vue';
 
 	import BytesUtil from '@/common/util/BytesUtil';
-	import AuthUtil from '@/common/AuthUtil.js';
+
 	export default {
 		components: {
 			GameTimeSelectbox,
@@ -56,7 +58,7 @@
 		},
 		methods: {
 			loginUserInfo() {
-				return AuthUtil.getAuthUserInfo();
+				return AuthManager.getUserInfo();
 			},
 			onClick() {
 				this.pagination = {

@@ -1,14 +1,19 @@
 <template>
-  <AccountSignOutComp />
+	<v-container>
+		<MainTitle pTitleName="회원탈퇴" />
+		<AccountSignOutComp />
+	</v-container>
 </template>
 
 <script>
-import AccountSignOutComp from "@/components/authUser/AccountSignOutComp.vue";
+import MainTitle from "@/components/title/FramePageMainTitle.vue";
+import AccountSignOutComp from "@/views/authUser/components/AccountSignOutComp.vue";
 
 export default {
-  components: {
-    AccountSignOutComp,
-  },
+	components: {
+		MainTitle,
+		AccountSignOutComp,
+	},
 };
 </script>
 

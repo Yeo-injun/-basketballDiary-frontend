@@ -13,7 +13,7 @@
 
 <script>
 	import ComponentTest from '@/views/test/ComponentTestPage.vue';
-	import AuthUtil from '@/common/AuthUtil.js';
+	import AuthManager from '@/common/auth/AuthManager.js';
 
 	export default {
 		components: {
@@ -21,10 +21,10 @@
 		},
 		computed: {
 			isLogin() {
-				return AuthUtil.isLogin();
+				return AuthManager.isLogin();
 			},
 			loginUserInfo() {
-				return AuthUtil.getAuthUserInfo();
+				return AuthManager.getUserInfo();
 			},
 		},
 	};

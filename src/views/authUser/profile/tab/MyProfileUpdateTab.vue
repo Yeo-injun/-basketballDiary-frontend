@@ -18,9 +18,9 @@
 				<v-row>
 					<v-col>성별 :</v-col>
 					<v-col>
-						<v-radio-group v-model="myinfo.gender">
-							<v-radio label="남" value="M"></v-radio>
-							<v-radio label="여" value="F"></v-radio>
+						<v-radio-group v-model="gender">
+							<v-radio label="남" value="01"></v-radio>
+							<v-radio label="여" value="02"></v-radio>
 						</v-radio-group>
 					</v-col>
 				</v-row>
@@ -28,12 +28,12 @@
 					<v-col>포지션 : </v-col>
 					<v-col>
 						<v-row>
-							<v-radio-group v-model="myinfo.positionCode">
-								<v-radio label="포인트 가드" value="10"></v-radio>
-								<v-radio label="센터" value="20"></v-radio>
-								<v-radio label="스몰포워드" value="30"></v-radio>
-								<v-radio label="파워포워드" value="40"></v-radio>
-								<v-radio label="슈팅가드" value="50"></v-radio>
+							<v-radio-group v-model="positionCode">
+								<v-radio label="포인트 가드" value="11"></v-radio>
+								<v-radio label="슈팅가드" value="12"></v-radio>
+								<v-radio label="스몰포워드" value="21"></v-radio>
+								<v-radio label="파워포워드" value="22"></v-radio>
+								<v-radio label="센터" value="30"></v-radio>
 							</v-radio-group>
 						</v-row>
 					</v-col>
@@ -50,18 +50,16 @@
 						<v-text-field v-model="weight" solo></v-text-field>
 					</v-col>
 				</v-row>
-				<v-row>
-					<v-col>주소 : </v-col>
-					<v-col>
-						<v-btn @click="showAPI()" solo>주소찾기</v-btn>
-						<span
-							>도로명주소<v-text-field v-model="roadAddress" solo></v-text-field
-						></span>
-						<span
-							>우편번호<v-text-field v-model="zoneCode" solo></v-text-field
-						></span>
-					</v-col>
-				</v-row>
+				<v-container>
+					<ProfileAddressInput pLabel="주소검색"
+						ref="profileAddressInput"
+						:pData="{
+							address		: this.roadAddress,
+							sidoCode	: this.sidoCode,
+							sigunguCode	: this.sigunguCode,
+						}"
+					/>
+				</v-container>
 				<ProfileUpdateBtn @do-update="updateProfile" pBtnName="수정" />
 				<PasswordUpdatePageMoveBtn
 					pRoutePageName="PasswordUpdatePage"
@@ -77,78 +75,77 @@
 </template>
 
 <script>
+	/** Backend API */
+	import UserAPI from '@/api/UserAPI';
+	/** Code */
+	/** Utils */
+	/** Components */
 	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
 
+	import ProfileAddressInput from '@/components/input/AddressInput.vue';
+	
 	import ProfileUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
 	import PasswordUpdatePageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 	import RemoveUserPageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 
-	import myProfileApi from '@/api/AuthUserAPI';
-
+	/** Emit Event */
+	
 	export default {
 		components: {
 			MainTitle,
+			ProfileAddressInput,
 			ProfileUpdateBtn,
 			PasswordUpdatePageMoveBtn,
 			RemoveUserPageMoveBtn,
 		},
-		data: () => {
+		mounted() {
+			this.load();
+		},
+		data() {
 			return {
-				myinfo: {},
-				userName: '',
-				email: '',
-				gender: '',
-				height: '',
-				weight: '',
-				roadAddress: '',
-				zoneCode: '',
-				sidoCode: '',
-				sigunguCode: '',
+				userName		: '',
+				email			: '',
+				gender			: '',
+				positionCode	: '',
+				height			: '',
+				weight			: '',
+				roadAddress		: '',
+				sidoCode		: '',
+				sigunguCode		: '',
+				userImagePath	: '',
 			};
 		},
 		methods: {
 			async load() {
-				this.myinfo = (await myProfileApi.getMyInfo()).data;
-				this.userName = this.myinfo.userName;
-				this.email = this.myinfo.email;
-				this.height = this.myinfo.height;
-				this.weight = this.myinfo.weight;
-				this.roadAddress = this.myinfo.roadAddress;
-				this.zoneCode = this.myinfo.zonecode;
+				const profile = await UserAPI.getMyProfile();
+				this.userName		= profile.userName;
+				this.email			= profile.email;
+				this.gender			= profile.gender;
+				this.positionCode	= profile.positionCode;
+				this.height			= profile.height;
+				this.weight			= profile.weight;
+				this.roadAddress	= profile.roadAddress;
+				this.sidoCode		= profile.sidoCode;
+				this.sigunguCode	= profile.sigunguCode;
+				this.userImagePath	= profile.userImagePath;
 			},
 			async updateProfile() {
-				const params = {
-					userName: this.userName,
-					email: this.email,
-					gender: this.myinfo.gender,
-					height: this.height,
-					weight: this.weight,
-					sidoCode: this.sidoCode,
-					sigunguCode: this.sigunguCode,
-					positionCode: this.myinfo.positionCode,
-					roadAddress: this.roadAddress,
-					zoneCode: this.zoneCode,
-				};
-				const success = await myProfileApi.updateUser(params);
-				console.log(success.status);
+				const addressInput = this.$refs.profileAddressInput.getValue();
+				await UserAPI.updateMyProfile({
+					userName 		: this.userName,
+					email 			: this.email,
+					gender 			: this.gender,
+					positionCode 	: this.positionCode,
+					height 			: this.height,
+					weight 			: this.weight,
+					roadAddress 	: addressInput.address,
+					sidoCode 		: addressInput.sidoCode,
+					sigunguCode 	: addressInput.sigunguCode,
+					userImagePath 	: this.userImagePath,
+				});
+
+				alert( "회원정보가 수정되었습니다." );
 			},
-			// kakao Address API 사용 설명 : https://chlost.tistory.com/53
-			showAPI() {
-				// 단, 왜 arrow function을 사용했을까?
-				// 출처 : https://medium.com/@hozacho/vuejs%EC%97%90%EC%84%9C-arrow-function%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0-ec067c342412
-				new window.daum.Postcode({
-					oncomplete: (data) => {
-						this.roadAddress = data.roadAddress;
-						this.zoneCode = data.zonecode;
-						this.sidoCode = data.sigunguCode.substring(0, 2);
-						this.sigunguCode = data.sigunguCode;
-						console.log(data);
-					},
-				}).open();
-			},
-		},
-		mounted() {
-			this.load();
 		},
 	};
 </script>
