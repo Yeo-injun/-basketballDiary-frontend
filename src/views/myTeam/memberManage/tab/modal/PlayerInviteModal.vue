@@ -20,11 +20,11 @@
 				<v-card-title>선수 검색</v-card-title>
 				<v-card-subtitle>
 					<v-select
-						v-model="searchCond"
-						:items="searchConds"
+						v-model="searchCondType"
+						:items="searchCondTypes"
 						item-text="text"
 						item-value="value"
-						label="검색조건을 선택해주세요."
+						label="검색 유형을 선택해주세요."
 					/>
 
 					<v-text-field label="검색어" v-model="searchKeyword" />
@@ -65,10 +65,8 @@
 		data() {
 			return {
 				dialog: false, // 모달창 제어목적의 변수
-				searchCond: {
-					value: 'userName',
-				},
-				searchConds: [
+				searchCondType	: 'userName',
+				searchCondTypes	: [
 					{ text: '이름', value: 'userName' },
 					{ text: '이메일', value: 'email' },
 				],
@@ -101,22 +99,22 @@
 				this.searchUsers();
 			},
 			clickSearchButton() {
-				if (!this.searchCond) {
-					alert('검색 조건을 선택해주세요.');
+				if ( !this.searchCondType ) {
+					alert('검색 유형을 선택해주세요.');
 					return;
 				}
 				this.searchUsers();
 			},
 			async searchUsers() {
 				// TODO 검색조건 추가해서 목록 조회하기 기능 테스트
-				const res = await UserAPI.searchUsersExcludingTeamMember(
+				const res = await UserAPI.getUsersExcludingTeamMembers(
 					{ teamSeq: this.pTeamSeq },
 					this.getSearchParams()
 				);
 				this.users = res.data.users;
 			},
 			getSearchParams() {
-				switch (this.searchCond.value) {
+				switch ( this.searchCondType ) {
 					case 'userName':
 						return {
 							userName: this.searchKeyword,
