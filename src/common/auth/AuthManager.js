@@ -59,8 +59,7 @@ function setAuthInfo( authInfo ) {
 }
 
 function getTeamAuth( teamSeq ) {
-	const isNotLogin = !AuthStateManager.getters.isLogin();
-	if (isNotLogin) {
+	if ( !AuthStateManager.getters.isLogin() ) {
 		return UNAUTH_USER;
 	}
 
