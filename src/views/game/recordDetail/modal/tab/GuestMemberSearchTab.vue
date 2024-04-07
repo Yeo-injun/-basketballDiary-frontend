@@ -1,20 +1,19 @@
 <template>
 	<div>
 		<h3>게스트(회원) 검색</h3>
-		<PlayerDataTable
-			v-if="isLoadingOk"
-			pRowBtnName="추가"
-			:pHeaders="tableHeaders"
-			:pPlayers="users"
-			@get-row-player-info="addGameJoinPlayer"
-		/>
+		<v-container>
+			<UserSearchList
+				:pTeamSeq="this.pTeamSeq"
+				pRowBtnName="선수추가"
+				@click-row-btn="addGameJoinPlayer"
+			/>
+		</v-container>
 	</div>
 </template>
 
 <script>
 	/** Backend API */
-	import UserAPI from '@/api/UserAPI.js';
-
+	
 	/** Javasript */
 	import {
 		ObjectFactory,
@@ -32,28 +31,14 @@
 	import { GuestMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
 	/** Components */
-	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
+	import UserSearchList from '@/components/user/search/UserSearchListComp.vue';
 
 	export default {
 		components: {
-			PlayerDataTable,
+			UserSearchList,
 		},
 		data() {
 			return {
-				/** 컴포넌트 제어용 */
-				isLoadingOk: false,
-				tableHeaders: [
-					{ text: '성별', value: 'genderName' },
-					{ text: '이름', value: 'userName' },
-					{ text: '포지션', value: 'positionCodeName' },
-					{ text: '이메일', value: 'email' },
-					{ test: '버튼', value: 'button', sortable: false },
-				],
-				/** 검색 조건 */
-				userName: '',
-				email: '',
-				/** 렌더링 데이터 */
-				users: [],
 			};
 		},
 		props: {
@@ -61,31 +46,18 @@
 			pActivatedTabName: String,
 		},
 		watch: {
-			/** 활성화된 탭이 자기자신이면 다시 서버를 호출한다. */
+			/**
+			 *  활성화된 탭이 자기자신이면 다시 서버를 호출한다.
+			 *  TODO 해당 정책 반영여부 검토요망 
+			 */
 			pActivatedTabName(newTabName) {
-				const VueComp = this;
+				// const VueComp = this;
 				if (newTabName == GameJoinPlayerManageTabs.GUEST_MEMBER) {
-					VueComp.searchUsersExcludingTeamMember();
+					// VueComp.searchUsersExcludingTeamMember();
 				}
 			},
 		},
 		methods: {
-			async searchUsersExcludingTeamMember() {
-				const pathVar = {
-					teamSeq: this.pTeamSeq,
-				};
-
-				const queryString = {
-					userName: this.userName,
-					email: this.email,
-				};
-				const res = await UserAPI.searchUsersExcludingTeamMember(
-					pathVar,
-					queryString
-				);
-
-				this.users = res.data.users;
-			},
 			addGameJoinPlayer(targetPlayer) {
 				const backNumber = UIPrompter.backNumber(targetPlayer.backNumber);
 				if (ValidationUtil.isNull(backNumber)) {
@@ -100,11 +72,6 @@
 
 				this.$emit(GuestMemberSearchTabEvent.ADD_GAME_JOIN_PLAYER, player);
 			},
-		},
-		mounted() {
-			this.searchUsersExcludingTeamMember();
-
-			this.isLoadingOk = true;
 		},
 	};
 </script>
