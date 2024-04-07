@@ -15,16 +15,17 @@ export default {
 	/**
 	 * API006 사용자 검색
 	 */
-	getUsersExcludingTeamMembers(pathVar, queryString) {
-		return axiosService.get(
-				`/excludeTeam/${pathVar.teamSeq}`, 
-				{
-					params : {
-						userName 	: ValidationUtil.isNull( queryString.userName ) ? null : queryString.userName,
-						email 		: ValidationUtil.isNull( queryString.email ) 	? null : queryString.email,
-					},	
-				}
-			);
+	async getUsersExcludingTeamMembers(pathVar, queryString) {
+		const { data } = await axiosService.get(
+						`/excludeTeam/${pathVar.teamSeq}`, 
+						{
+							params : {
+								userName 	: ValidationUtil.isNull( queryString.userName ) ? null : queryString.userName,
+								email 		: ValidationUtil.isNull( queryString.email ) 	? null : queryString.email,
+							},	
+						}
+					);
+		return data;
 	},
 	/**
 	 * API025 회원 프로필 조회
