@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<h3>게스트(비회원) 등록</h3>
 		<v-form ref="form">
 			<v-text-field
 				label="이름"

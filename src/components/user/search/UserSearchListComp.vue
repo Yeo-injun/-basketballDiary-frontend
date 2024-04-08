@@ -1,20 +1,28 @@
 <template>
     <div>
         <!-- 검색 조건 영역 -->
-        <v-select
-            v-model="searchCondType"
-            :items="searchCondTypes"
-            item-text="text"
-            item-value="value"
-            label="검색 유형을 선택해주세요."
-        />
-        <v-text-field label="검색어" v-model="searchKeyword" />
+		<v-row>
+			<v-col cols="3">
+				<v-select
+					v-model="searchCondType"
+					:items="searchCondTypes"
+					item-text="text"
+					item-value="value"
+					label="검색 유형을 선택해주세요."
+				/>
+			</v-col>
+			<v-col>
+				<v-text-field label="검색어" v-model="searchKeyword" />
+			</v-col>
+		</v-row>
+
         <UserSearchBtn @do-search="clickSearchButton" />
 
         <!-- 검색 목록 영역 -->
         <v-data-table
             :headers="userListHeader"
             :items="users"
+			items-per-page="5"
         >
 			<!-- row별 버튼 -->
 			<template v-if="pRowBtnName" v-slot:[`item.button`]="{ item }">
@@ -31,7 +39,6 @@
 <script>
     /** Backend API */
 	import UserAPI from '@/api/UserAPI.js';
-	// import MyTeamAPI from '@/api/MyTeamAPI.js';
 
     /** Code */
     /** Utils */
@@ -105,17 +112,6 @@
             emitEventClickRowBtn( userInfo ) {
                 this.$emit( 'click-row-btn', userInfo );
             },
-			// async sendInvitation(e) {
-			// 	if (!confirm('초대요청을 보내시겠습니까?')) {
-			// 		return;
-			// 	}
-			// 	const params = {
-			// 		teamSeq: this.pTeamSeq,
-			// 		userSeq: e.userSeq,
-			// 	};
-			// 	await MyTeamAPI.inviteTeamMember(params);
-			// 	alert('초대 완료했습니다. 선수의 승인을 기다리세요.');
-			// },
 		},
 	};
 </script>

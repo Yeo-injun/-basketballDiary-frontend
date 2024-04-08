@@ -14,24 +14,26 @@
 			<v-card-title class="text-h5 grey lighten-2">
 				{{ pModalTitlePrefix }} 참가선수관리
 			</v-card-title>
-			<div class="text-right">
-				<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
-			</div>
-			<v-container>
-				<div>참가선수 목록</div>
-				<PlayerDataTable
-					v-if="isGetGameJoinPlayersLoadOk"
-					:pPlayers="gameJoinPlayers"
-					pRowBtnName="삭제"
-					@get-row-player-info="deleteGameJoinPlayer"
-				/>
-			</v-container>
 
 			<GameJoinPlayerSelectionTabs
 				v-if="isGetGameJoinPlayersLoadOk"
 				:pTeamSeq="this.teamSeq"
 				@add-game-join-player="addGameJoinPlayer"
 			/>
+
+			<v-container>
+				<PlayerSubTitle pTitleName="참가선수 목록" />
+				<PlayerDataTable
+					v-if="isGetGameJoinPlayersLoadOk"
+					:pPlayers="gameJoinPlayers"
+					pRowBtnName="삭제"
+					@get-row-player-info="deleteGameJoinPlayer"
+				/>
+				<v-container>
+					<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
+				</v-container>
+			</v-container>
+
 		</v-card>
 	</v-dialog>
 </template>
@@ -49,6 +51,8 @@
 	/** Components */
 	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
+
+	import PlayerSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
 
 	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
@@ -61,6 +65,7 @@
 		components: {
 			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
+			PlayerSubTitle,
 			PlayerDataTable,
 			GameJoinPlayerSelectionTabs,
 		},

@@ -6,13 +6,6 @@ const axiosService = axios.createAxiosInstance('/users');
 
 export default {
 	/**
-	 * TODO 제거 예정
-	 * API006 사용자 검색
-	 */
-	searchUsersExcludingTeamMember(pathVar, queryString) {
-		return axiosService.get(`/exclusion/team/${pathVar.teamSeq}`, queryString);
-	},
-	/**
 	 * API006 사용자 검색
 	 */
 	async getUsersExcludingTeamMembers(pathVar, queryString) {

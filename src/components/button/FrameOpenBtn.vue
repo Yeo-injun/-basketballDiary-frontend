@@ -1,5 +1,5 @@
 <template>
-	<v-btn color="secondary" @click="doOpen">{{ this.pBtnName }}</v-btn>
+	<v-btn block color="secondary" @click="doOpen">{{ this.pBtnName }}</v-btn>
 </template>
 
 <script>
