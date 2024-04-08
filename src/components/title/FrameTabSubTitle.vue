@@ -1,5 +1,5 @@
 <template>
-	<h3>{{ this.pTitleName }}</h3>
+	<h4>{{ this.pTitleName }}</h4>
 </template>
 
 <script>
