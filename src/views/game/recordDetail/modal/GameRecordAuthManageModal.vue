@@ -15,29 +15,19 @@
 		</template>
 
 		<v-card>
-			<v-card-title>경기기록 입력권한관리</v-card-title>
+			<v-card-title class="font-weight-medium grey lighten-2">
+				경기기록 입력권한관리
+			</v-card-title>
 			<v-container>
-				<div class="text-right">
-					<GameRecordAuthSaveBtn
-						pBtnName="저장"
-						@do-save="saveGameRecorders()"
-					/>
-				</div>
+
 				<v-container>
-					<div>권한자 목록</div>
-					<GameRecordersTable
-						v-if="isGetGameRecordersLoadOk"
-						:pGameRecorders="gameRecorders"
-						@get-row-player-info="deleteGameRecorder"
+					<ModalSubTitle pTitleName="참가선수 목록" />
+					<HomeAwayTeamToggle
+						class="my-1"
+						:pHomeTeamCodeName="this.homeTeamCodeName"
+						:pAwayTeamCodeName="this.awayTeamCodeName"
+						@select-home-away-team="getOneSideTeamMembers"
 					/>
-				</v-container>
-				<HomeAwayTeamToggle
-					:pHomeTeamCodeName="this.homeTeamCodeName"
-					:pAwayTeamCodeName="this.awayTeamCodeName"
-					@select-home-away-team="getOneSideTeamMembers"
-				/>
-				<v-container>
-					<div>참가선수 목록</div>
 					<PlayerDataTable
 						v-if="isGetGameJoinPlayersLoadOk"
 						:pPlayers="gameJoinPlayers"
@@ -45,6 +35,20 @@
 						@get-row-player-info="addGameRecorder"
 					/>
 				</v-container>
+
+				<v-container>
+					<ModalSubTitle pTitleName="권한자 목록" />
+					<GameRecordersTable
+						v-if="isGetGameRecordersLoadOk"
+						:pGameRecorders="gameRecorders"
+						@get-row-player-info="deleteGameRecorder"
+					/>
+				</v-container>
+				<GameRecordAuthSaveBtn
+					pBtnName="저장"
+					@do-save="saveGameRecorders()"
+				/>
+
 			</v-container>
 		</v-card>
 	</v-dialog>
@@ -57,13 +61,14 @@
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import ArrayUtil from '@/common/util/ArrayUtil.js';
 
-	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
-
+	import ModalSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import GameRecordersTable from '@/views/game/recordDetail/modal/GameRecordersTable.vue';
 
 	import GameRecordAuthSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
 	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
+
+	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
 
 	const CREATOR_CODE = GameRecordAuthCode.CREATOR.code;
 	const ONLY_WRITER_CODE = GameRecordAuthCode.ONLY_WRITER.code;
@@ -71,11 +76,13 @@
 
 	export default {
 		components: {
+			ModalSubTitle,
+
 			GameRecordAuthManageBtn,
-			GameRecordAuthSaveBtn,
 			GameRecordersTable,
 			HomeAwayTeamToggle,
 			PlayerDataTable,
+			GameRecordAuthSaveBtn,
 		},
 		props: {
 			pGameSeq: Number,

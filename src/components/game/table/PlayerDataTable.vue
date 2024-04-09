@@ -2,6 +2,7 @@
 	<v-data-table
 		:headers="this.getHeaders()"
 		:items="pPlayers"
+		:items-per-page="pRowCount"
 		item-key="userSeq"
 		class="elevation-1"
 	>
@@ -22,6 +23,10 @@
 		props: {
 			pHeaders: Array,
 			pPlayers: Array,
+			pRowCount: {
+				type : Number,
+				default() { return 5; },
+			},
 			pRowBtnName: {
 				type: String,
 				default: '삭제',
