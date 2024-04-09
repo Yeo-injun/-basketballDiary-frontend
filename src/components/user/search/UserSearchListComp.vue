@@ -22,7 +22,7 @@
         <v-data-table
             :headers="userListHeader"
             :items="users"
-			items-per-page="5"
+			:items-per-page="pRowCount"
         >
 			<!-- row별 버튼 -->
 			<template v-if="pRowBtnName" v-slot:[`item.button`]="{ item }">
@@ -52,6 +52,10 @@
         },
 		props: {
 			pTeamSeq: Number,
+			pRowCount: {
+				type : Number,
+				default() { return 5; },
+			},
             pRowBtnName : String,
 		},
         mounted() {
