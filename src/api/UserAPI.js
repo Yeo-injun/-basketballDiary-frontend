@@ -1,4 +1,5 @@
 import axios from '@/http/CustomAxios.js';
+import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 // API설정 공통화
 const axiosService = axios.createAxiosInstance('/users');
@@ -7,8 +8,17 @@ export default {
 	/**
 	 * API006 사용자 검색
 	 */
-	searchUsersExcludingTeamMember(pathVar, queryString) {
-		return axiosService.get(`/exclusion/team/${pathVar.teamSeq}`, queryString);
+	async getUsersExcludingTeamMembers(pathVar, queryString) {
+		const { data } = await axiosService.get(
+						`/excludeTeam/${pathVar.teamSeq}`, 
+						{
+							params : {
+								userName 	: ValidationUtil.isNull( queryString.userName ) ? null : queryString.userName,
+								email 		: ValidationUtil.isNull( queryString.email ) 	? null : queryString.email,
+							},	
+						}
+					);
+		return data;
 	},
 	/**
 	 * API025 회원 프로필 조회
@@ -40,11 +50,14 @@ export default {
 	 * cf. 일반적인 delete메소드는 Http Body를 지원하지는 않는 것이 표준 스펙. 그렇기 때문에 서버에 따라서 Delete 메소드의 Body를 지원하지 않는 경우 존재. 
 	 */
 	withdrawalMembership( message ) {
-		return axiosService.delete('',  {
-			params: {
-				password : message.password,
-			},
-		} );
+		return axiosService.delete(
+					'',  
+					{
+						params: {
+							password : message.password,
+						},
+					}
+				);
 	},
 	/**
 	 * API034 사용자ID 사용가능여부 확인
@@ -54,11 +67,14 @@ export default {
 	 * - API호출후 Response Header에 따라서 별도의 처리로직은 API객체 내부에서 처리
 	 */
 	async checkUserIdAvailable( message ) {
-		const { data } = await axiosService.get('/available', {
-			params: {
-				userId : message.userId,
-			},
-		});
+		const { data } = await axiosService.get(
+							'/available', 
+							{
+								params: {
+									userId : message.userId,
+								},
+							}
+						);
 		return data;
 	},
 };

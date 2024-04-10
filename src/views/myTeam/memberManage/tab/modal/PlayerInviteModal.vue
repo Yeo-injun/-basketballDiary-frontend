@@ -18,27 +18,13 @@
 
 				<!-- 선수 검색 영역 -->
 				<v-card-title>선수 검색</v-card-title>
-				<v-card-subtitle>
-					<v-select
-						v-model="searchCond"
-						:items="searchConds"
-						item-text="text"
-						item-value="value"
-						label="검색조건을 선택해주세요."
+				<v-container>
+					<UserSearchList
+						:pTeamSeq="this.pTeamSeq"
+						pRowBtnName="선수초대"
+						@click-row-btn="sendInvitation"
 					/>
-
-					<v-text-field label="검색어" v-model="searchKeyword" />
-
-					<v-btn @click="clickSearchButton"> 검색 </v-btn>
-				</v-card-subtitle>
-				<v-card-text>
-					<v-data-table
-						:headers="userListHeader"
-						:items="users"
-						@click:row="sendInvitation"
-					>
-					</v-data-table>
-				</v-card-text>
+				</v-container>
 			</v-card>
 		</div>
 
@@ -55,87 +41,38 @@
 </template>
 
 <script>
-	import UserAPI from '@/api/UserAPI.js';
+	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
-
+	/** Code */
+	/** Utils */
+	/** Components */
+	import UserSearchList from '@/components/user/search/UserSearchListComp.vue';
+	/** Emit Event */
+	
 	export default {
+		components: {
+			UserSearchList,
+		},
 		props: {
 			pTeamSeq: Number,
 		},
 		data() {
 			return {
 				dialog: false, // 모달창 제어목적의 변수
-				searchCond: {
-					value: 'userName',
-				},
-				searchConds: [
-					{ text: '이름', value: 'userName' },
-					{ text: '이메일', value: 'email' },
-				],
-				searchKeyword: '',
-				userListHeader: [
-					{ text: '이름', value: 'userName', sortable: false },
-					// { text: '활동지역', value: 'joinRequestStateCodeName', sortable: false },
-					{ text: '이메일', value: 'email', sortable: false },
-					{ text: '키', value: 'height', sortable: false },
-					{ text: '몸무게', value: 'weight', sortable: false },
-					{ text: '포지션', value: 'positionCodeName', sortable: false },
-				],
-				users: [],
 			};
 		},
 		watch: {
 			// 팝업창을 열고 닫는 dialog data를 감시하여 해당 데이터에 따라 콜백 함수 처리
 			dialog: function (isDialogOpend) {
 				if (isDialogOpend) {
-					this.searchUsers();
 					return;
 				}
-				// 팝업창이 닫히면 검색조건 초기화
-				this.clearSearchCondAndKeyword();
+				// 팝업창이 닫히면 검색조건 초기화 
+				// TODO 자식 컴포넌트에서 제어할 수 있도록 구현하기
 				this.$emit('close');
 			},
 		},
 		methods: {
-			intlModal() {
-				this.searchUsers();
-			},
-			clickSearchButton() {
-				if (!this.searchCond) {
-					alert('검색 조건을 선택해주세요.');
-					return;
-				}
-				this.searchUsers();
-			},
-			async searchUsers() {
-				// TODO 검색조건 추가해서 목록 조회하기 기능 테스트
-				const res = await UserAPI.searchUsersExcludingTeamMember(
-					{ teamSeq: this.pTeamSeq },
-					this.getSearchParams()
-				);
-				this.users = res.data.users;
-			},
-			getSearchParams() {
-				switch (this.searchCond.value) {
-					case 'userName':
-						return {
-							userName: this.searchKeyword,
-						};
-					case 'email':
-						return {
-							email: this.searchKeyword,
-						};
-					default:
-						return {
-							userName: '',
-							email: '',
-						};
-				}
-			},
-			clearSearchCondAndKeyword() {
-				this.searchCond = '';
-				this.searchKeyword = '';
-			},
 			async sendInvitation(e) {
 				if (!confirm('초대요청을 보내시겠습니까?')) {
 					return;

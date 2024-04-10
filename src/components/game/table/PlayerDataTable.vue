@@ -1,21 +1,20 @@
 <template>
-	<v-container>
-		<v-data-table
-			:headers="this.getHeaders()"
-			:items="pPlayers"
-			item-key="userSeq"
-			class="elevation-1"
-		>
-			<!-- row별 버튼 -->
-			<template v-slot:[`item.button`]="{ item }">
-				<template>
-					<v-btn class="mr-2" small @click="emitClickedPlayerInfo(item)">
-						{{ pRowBtnName }}
-					</v-btn>
-				</template>
+	<v-data-table
+		:headers="this.getHeaders()"
+		:items="pPlayers"
+		:items-per-page="pRowCount"
+		item-key="userSeq"
+		class="elevation-1"
+	>
+		<!-- row별 버튼 -->
+		<template v-slot:[`item.button`]="{ item }">
+			<template>
+				<v-btn class="mr-2" small @click="emitClickedPlayerInfo(item)">
+					{{ pRowBtnName }}
+				</v-btn>
 			</template>
-		</v-data-table>
-	</v-container>
+		</template>
+	</v-data-table>
 </template>
 
 <script>
@@ -24,6 +23,10 @@
 		props: {
 			pHeaders: Array,
 			pPlayers: Array,
+			pRowCount: {
+				type : Number,
+				default() { return 5; },
+			},
 			pRowBtnName: {
 				type: String,
 				default: '삭제',

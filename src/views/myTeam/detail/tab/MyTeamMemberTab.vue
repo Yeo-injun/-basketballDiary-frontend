@@ -1,7 +1,8 @@
-<template>
-	<div v-if="this.isAsyncComplete">
-		<v-container class="px-15">
-			<div class="d-flex">
+<template v-if="this.isAsyncComplete">
+	<v-container class="px-15">
+		
+		<v-row>
+			<v-col>
 				<ProfileUpdateBtn
 					@do-open="openProfileUpdateModal()"
 					pBtnName="프로필 수정"
@@ -13,7 +14,8 @@
 					:pImageUrl="profile.imageUrl"
 					@modal-close="closeProfileUpdateModal()"
 				/>
-
+			</v-col>
+			<v-col>
 				<MyTeamInfoUpdateBtn
 					v-if="this.isManager()"
 					@do-open="isActivatedTeamInfoModal = true"
@@ -24,23 +26,31 @@
 					@input="isActivatedTeamInfoModal = $event"
 					:pTeamSeq="teamSeq"
 				/>
-			</div>
-
-			<v-subheader>개인프로필</v-subheader>
+			</v-col>
+			<v-col>
+				<TeamMemberAddBtn
+					v-if="this.isManager()"
+					@do-add="clickAddTeamMember"
+					pBtnName="팀원 추가"
+				/>
+			</v-col>
+		</v-row>
+	
+		<v-container>
+			<MyProfileSubTitle pTitleName="개인프로필" />
 			<MyTeamProfileComp :pMyProfile="profile" />
+		</v-container>
 
-			<v-subheader>운영진</v-subheader>
+
+		<v-container>
+			<ManagerSubTitle pTitleName="운영진 목록" />
 			<div v-for="(manager, index) in managers" v-bind:key="index">
 				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
 			</div>
+		</v-container>
 
-			<TeamMemberAddBtn
-				v-if="this.isManager()"
-				@do-add="clickAddTeamMember"
-				pBtnName="팀원 추가"
-			/>
-
-			<v-subheader>팀원 목록</v-subheader>
+		<v-container>
+			<TeamMemberSubTitle pTitleName="팀원 목록" />
 			<TeamMemberList
 				:pList="teamMembers"
 				:pPagination="pagination"
@@ -52,7 +62,8 @@
 				<template v-slot:itemEmptySlot> 등록된 팀원이 없습니다. </template>
 			</TeamMemberList>
 		</v-container>
-	</div>
+
+	</v-container>
 </template>
 
 <script>
@@ -70,8 +81,13 @@
 
 	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
 
+	import MyProfileSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
+
+	import ManagerSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import MyTeamManagerComp from '@/views/myTeam/detail/components/MyTeamManagerComp.vue';
+	
+	import TeamMemberSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import TeamMemberList from '@/components/list/FramePaginationList.vue';
 	import MyTeamMemberComp from '@/views/myTeam/detail/components/MyTeamMemberComp.vue';
 
@@ -87,8 +103,13 @@
 
 			TeamMemberAddBtn,
 
+			MyProfileSubTitle,
 			MyTeamProfileComp,
+			
+			ManagerSubTitle,
 			MyTeamManagerComp,
+			
+			TeamMemberSubTitle,
 			TeamMemberList,
 			MyTeamMemberComp,
 		},

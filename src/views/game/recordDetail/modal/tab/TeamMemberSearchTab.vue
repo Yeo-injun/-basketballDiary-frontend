@@ -1,6 +1,5 @@
 <template>
-	<div>
-		<h3>팀원 검색</h3>
+	<v-container>
 		<!-- 검색창 -->
 		<v-text-field label="이름" v-model="playerName" />
 		<TeamMemberSearchBtn @do-search="searchAllTeamMember" />
@@ -10,7 +9,7 @@
 			:pPlayers="teamMembers"
 			@get-row-player-info="addGameJoinPlayer"
 		/>
-	</div>
+	</v-container>
 </template>
 
 <script>
