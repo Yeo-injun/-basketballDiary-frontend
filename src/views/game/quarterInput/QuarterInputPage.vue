@@ -27,6 +27,8 @@
 				:pHomeTeamEntry="this.homeTeamEntry"
 				:pAwayTeamEntry="this.awayTeamEntry"
 				@open-entry-manage-modal="saveGameQuarter"
+				@record-team-score="updateTeamScore"
+				@record-team-foul="updateTeamFoul"
 				@save-entry="getGameEntry"
 			/>
 		</div>
@@ -50,6 +52,13 @@
 </template>
 
 <script>
+	/** Backend API */
+	/** Code */
+	import { HomeAwayCode } from '@/const/code/GameCode';
+
+	/** Utils */
+	/** Components */
+	/** Emit Event */
 	import GameAPI from '@/api/GameAPI.js';
 
 	import GameInfo from '@/views/game/quarterInput/components/GameInfo.vue';
@@ -114,6 +123,34 @@
 				
 
 				this.isInitData.gameQuarterInfo = true;
+			},
+			updateTeamScore( statInfo ) {
+				switch( statInfo.homeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM	: 
+						this.homeTeamQuarterRecord.score += statInfo.score;
+						if ( 0 > this.homeTeamQuarterRecord.score ) {
+							this.homeTeamQuarterRecord.score = 0;
+						} 
+						break;
+					case HomeAwayCode.AWAY_TEAM	: 
+						this.awayTeamQuarterRecord.score += statInfo.score;
+						if ( 0 > this.awayTeamQuarterRecord.score ) {
+							this.awayTeamQuarterRecord.score = 0;
+						} 
+						break;
+					default : throw new Error( "홈/어웨이 코드가 정상적이지 않습니다." );
+				}
+			},
+			updateTeamFoul( statInfo ) {
+				switch( statInfo.homeAwayCode ) {
+				case HomeAwayCode.HOME_TEAM	: 
+					this.homeTeamQuarterRecord.foul += statInfo.foul;
+					break;
+				case HomeAwayCode.AWAY_TEAM	: 
+					this.awayTeamQuarterRecord.foul += statInfo.foul;
+					break;
+				default : throw new Error( "홈/어웨이 코드가 정상적이지 않습니다." );
+				}
 			},
 			async getGameEntry() {
 				const params = {

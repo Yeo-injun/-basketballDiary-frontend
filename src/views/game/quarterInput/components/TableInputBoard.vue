@@ -32,6 +32,7 @@
 	import { HomeAwayCode } from '@/const/code/GameCode';
 	import {
 		RecordMode,
+		StatType,
 	} from '@/components/game/stat/const/Stat.js';
 	/** Utils */
 	import ArrayUtil from '@/common/util/ArrayUtil.js';
@@ -57,10 +58,8 @@
 		},
 		data() {
 			return {
-				latestAddStat: {},
+				// latestAddStat: {},
 				inputTargetHomeAwayCode: HomeAwayCode.HOME_TEAM,	// 기본값 - 홈팀
-				homeTeamRecords : [],	// 팀경기기록 관리용 ( 현재 사용하는 곳 없음 )
-				awayTeamRecords : [],	// 팀경기기록 관리용 ( 현재 사용하는 곳 없음 )
 			};
 		},
 		methods: {
@@ -75,81 +74,108 @@
 			},
 			// 선수기록 입력 제어 메소드
 			inputStat( statInput ) {
+				const statType = statInput.statType;
 				const stat = {
 					gameJoinPlayerSeq	: statInput.gameJoinPlayerSeq,
-					statType			: statInput.statType,
+					statType			: statType,
 					mode				: statInput.mode,
 					homeAwayCode		: this.inputTargetHomeAwayCode,
 					timeStamp			: new Date(),
 				};
-				const homeAwayCode 		= stat.homeAwayCode;
 				const targetPlayer 		= this.getTargetPlayer( stat );
-				const isSuccessInput 	= this.updateRecoredWithStat( stat, targetPlayer );
-				if (!isSuccessInput) {
-					return;
+				// TODO 팀원 기록이 update돼야지만 팀기록 update하기
+				if ( this.updatePlayerRecoredWithStat( stat, targetPlayer ) ) {
+					this.emitTeamRecord( stat );
 				}
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.homeTeamRecords.push( stat );
-				} else {
-					this.awayTeamRecords.push( stat );
-				}
-				// TODO 입력한 경기스탯 emit하여 상위 컴포넌트에서 팀기록 입력하기
 			},
 			getTargetPlayer( statInfo ) {
-				const isHomeTeamRecords = HomeAwayCode.HOME_TEAM == statInfo.homeAwayCode;
-				if (isHomeTeamRecords) {
-					return ArrayUtil.findItemById( this.pHomeTeamEntry, statInfo,'gameJoinPlayerSeq');
+				switch( statInfo.homeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM	: 
+						return ArrayUtil.findItemById( this.pHomeTeamEntry, statInfo,'gameJoinPlayerSeq');
+					case HomeAwayCode.AWAY_TEAM	: 
+						return ArrayUtil.findItemById( this.pAwayTeamEntry, statInfo,'gameJoinPlayerSeq');
+					default : throw new Error( "홈/어웨이 코드가 정상적이지 않습니다." );
 				}
-				return ArrayUtil.findItemById( this.pAwayTeamEntry, statInfo,'gameJoinPlayerSeq');
 			},
-			updateRecoredWithStat( statInput, targetPlayer ) {
+			updatePlayerRecoredWithStat( statInput, targetPlayer ) {
 				const statType = statInput.statType;
 				switch( statInput.mode ) {
-					case RecordMode.ADD 	: DefaultRecordOperator.addPlayer( statType, targetPlayer ); break;
-					case RecordMode.CANCEL 	: DefaultRecordOperator.cancelPlayer( statType, targetPlayer ); break;
+					case RecordMode.ADD 	: 
+						return PlayerRecordOperator.add( statType, targetPlayer );
+					case RecordMode.CANCEL 	: 
+						return PlayerRecordOperator.cancel( statType, targetPlayer );
 					default : throw new Error( "기록 입력 모두가 유효한 값이 아닙니다." );
+				}
+			},
+			emitTeamRecord( statInput ) {
+				const homeAwayCode		= statInput.homeAwayCode;
+				const statModeOperator 	= RecordMode.CANCEL === statInput.mode ? -1 : 1;
+				switch( statInput.statType ) {
+					case StatType.FREE_THROW 		: 
+						this.$emit( 'record-team-score', {
+							homeAwayCode	: homeAwayCode,
+							score 			: statModeOperator * 1 
+						});
+						break;
+					case StatType.TWO_POINT			:
+						this.$emit( 'record-team-score', {
+							homeAwayCode	: homeAwayCode,
+							score 			: statModeOperator * 2
+						});						break;
+					case StatType.THREE_POINT		:
+						this.$emit( 'record-team-score', {
+							homeAwayCode	: homeAwayCode,
+							score 			: statModeOperator * 3
+						});
+						break;
+					case StatType.FOUL :
+						this.$emit( 'record-team-foul', {
+							homeAwayCode	: homeAwayCode,
+							foul 			: statModeOperator * 1
+						});
+						break;
+					default :
+						console.log( '팀기록 미입력 : 향후 다른 기록도 팀기록 반영시 EMIT추가' );
 				}
 			},
 		}
 	};
 
-	const DefaultRecordOperator = {
-		addPlayer( statType, record ) {
-			record[ statType ]++;
+	const PlayerRecordOperator = {
+		add( statType, record ) {
+			record[ statType ]++; // 기본스탯 횟수는 기본적으로 반영 ( 그외 반영정책이 있는 경우 별도 처리 )
 			const addOperation = StatOperationPolicy[ statType ];
 			if ( !addOperation ) {
-				return;
+				// TODO 스탯더하는 동작은 항상 true 리턴.
+				return true;
 			}
 			if ( typeof addOperation.addPlayer === "function" ) {
 				addOperation.addPlayer( record );
 			}
+			return true;
 		},
-		cancelPlayer( statType, record ) {
+		cancel( statType, record ) {
 			const currentStatCnt = record[ statType ];
 			if ( currentStatCnt < 1 ) {
 				return false;
 			}
 
-			const enableCancelOperation = StatOperationPolicy[ statType ].enableCancel;
-			if ( typeof enableCancelOperation === "function" && !enableCancelOperation( record ) ) {
+			const statPolicy = StatOperationPolicy[ statType ];
+			if ( !statPolicy ) {
+				return false;
+			}
+
+			if ( typeof statPolicy.enableCancel === "function" 
+				 && !statPolicy.enableCancel( record ) 
+			) {
 				return false;
 			}
 
 			record[ statType ]--;
-			const cancelOperation = StatOperationPolicy[ statType ];
-			if ( !cancelOperation ) {
-				return;
+			if ( typeof statPolicy.cancelPlayer === "function" ) {
+				statPolicy.cancelPlayer( record );
 			}
-			if ( typeof cancelOperation.cancelPlayer === "function" ) {
-				cancelOperation.cancelPlayer( record );
-			}
-		},
-		// TODO 팀기록 동작 처리
-		addTeam( record ) {
-			record.freeThrow++;
-		},
-		cancelTeam( record ) {
-			record.freeThrow--;
+			return true;
 		},
 	}
 
@@ -199,7 +225,26 @@
 				return record.threePoint < record.tryThreePoint;
 			}
 		},
-	}
+		// 스탯 입력정보 추가제어시 아래와 같이 속성 추가하여 관리
+		turnover : {
+
+		},
+		assist : {
+
+		},
+		rebound : {
+
+		},
+		block : {
+
+		},
+		steal : {
+
+		},
+		foul : {
+
+		},
+}
 </script>
 
 <style lang="scss" scoped></style>
