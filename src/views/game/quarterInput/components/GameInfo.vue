@@ -10,7 +10,9 @@
 
 	export default {
 		props: {
-			pGameInfo: Object,
+			pGameYmd 		:String,
+			pGameStartTime	: String,
+			pGameEndTime 	: String,
 		},
 		data() {
 			return {
@@ -21,13 +23,13 @@
 		},
 		methods: {
 			intlGameYmd() {
-				return DateUtil.Format.toYmd(this.pGameInfo.gameYmd);
+				return DateUtil.Format.toYmd(this.pGameYmd);
 			},
 			intlGameStartTime() {
-				return DateUtil.Format.toTime(this.pGameInfo.gameStartTime);
+				return DateUtil.Format.toTime(this.pGameStartTime);
 			},
 			intlGameEndTime() {
-				return DateUtil.Format.toTime(this.pGameInfo.gameEndTime);
+				return DateUtil.Format.toTime(this.pGameEndTime);
 			},
 		},
 	};
