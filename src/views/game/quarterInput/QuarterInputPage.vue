@@ -23,7 +23,9 @@
 		</div>
 
 		<div v-if="this.isInitData.gameEntry">
-			<TableInputBoard 
+			<TableInputBoard
+				:pHomeTeamName="this.homeTeamQuarterRecord.teamName"
+				:pAwayTeamName="this.awayTeamQuarterRecord.teamName"
 				:pHomeTeamEntry="this.homeTeamEntry"
 				:pAwayTeamEntry="this.awayTeamEntry"
 				@open-entry-manage-modal="saveGameQuarter"

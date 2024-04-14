@@ -2,8 +2,8 @@
 	<v-container>
 		<h3>선수기록지</h3>
 		<HomeAwayTeamToggle
-			pHomeTeamName="해당 토글 구현하기/홈팀"
-			pAwayTeamName="해당 토글 구현하기/어웨이팀"
+			:pHomeTeamName="this.pHomeTeamName"
+			:pAwayTeamName="this.pAwayTeamName"
 			@select-home-away-team="changeInputTeam"
 		/>
 		<v-container>
@@ -53,6 +53,8 @@
 			AwayTeamInGamePlayerSheet,
 		},
 		props: {
+			pHomeTeamName:String,
+			pAwayTeamName:String,
 			pHomeTeamEntry: Array,
 			pAwayTeamEntry: Array,
 		},
@@ -146,7 +148,7 @@
 			record[ statType ]++; // 기본스탯 횟수는 기본적으로 반영 ( 그외 반영정책이 있는 경우 별도 처리 )
 			const addOperation = StatOperationPolicy[ statType ];
 			if ( !addOperation ) {
-				// TODO 스탯더하는 동작은 항상 true 리턴.
+				// 스탯더하는 동작은 항상 true 리턴.
 				return true;
 			}
 			if ( typeof addOperation.addPlayer === "function" ) {
