@@ -4,25 +4,13 @@
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
 			<div class="text-right" v-bind="attrs" v-on="on">
-				<EntryManageModalOpenBtn @do-open="onOpenModal" pBtnName="엔트리관리" />
+				<EntryManageModalOpenBtn @do-open="onOpenModal" pBtnName="선수교체" />
 			</div>
 		</template>
 
 		<v-card>
-			<v-card-title>{{ this.homeAwayCodeName }} 엔트리 관리</v-card-title>
+			<v-card-title class="grey lighten-2">{{ this.homeAwayCodeName }} 출전선수 관리</v-card-title>
 			<v-container>
-				<div class="text-right">
-					<SaveEntryBtn pBtnName="엔트리 저장" @do-save="saveEntry" />
-				</div>
-				<v-container>
-					<h4>엔트리 명단</h4>
-					<EntryTable
-						v-if="isInit.gameEntry"
-						:pPlayers="entry"
-						pRowBtnName="삭제"
-						@get-row-player-info="deletePlayerFromEntry"
-					/>
-				</v-container>
 				<v-container>
 					<h4>게임참가선수 목록</h4>
 					<GameJoinPlayerTable
@@ -32,6 +20,20 @@
 						@get-row-player-info="addPlayerToEntry"
 					/>
 				</v-container>
+
+				<v-container>
+					<h4>출전 선수 명단</h4>
+					<EntryTable
+						v-if="isInit.gameEntry"
+						:pPlayers="entry"
+						pRowBtnName="삭제"
+						@get-row-player-info="deletePlayerFromEntry"
+					/>
+				</v-container>
+				<div class="text-right">
+					<SaveEntryBtn pBtnName="명단 저장" @do-save="saveEntry" />
+				</div>
+
 			</v-container>
 		</v-card>
 	</v-dialog>

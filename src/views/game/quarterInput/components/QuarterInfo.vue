@@ -4,14 +4,12 @@
 			:pInitVal="this.quarterTime"
 			@select-value="selectQuarterTime"
 		/>
-		<v-container>
-			<GameQuarterInfoFrame
-				:pQuarterCodeName="this.pQuarterInfo.quarterCodeName"
-				:pQuarterTime="this.quarterTime"
-				:pHomeTeamRecords="this.pQuarterInfo.homeTeamRecords"
-				:pAwayTeamRecords="this.pQuarterInfo.awayTeamRecords"
-			/>
-		</v-container>
+		<GameQuarterInfoFrame
+			:pQuarterCodeName="this.pQuarterCodeName"
+			:pQuarterTime="this.quarterTime"
+			:pHomeTeamRecords="this.pHomeTeamRecord"
+			:pAwayTeamRecords="this.pAwayTeamRecord"
+		/>
 	</v-container>
 </template>
 
@@ -27,7 +25,11 @@
 			GameQuarterInfoFrame,
 		},
 		props: {
-			pQuarterInfo: Object,
+			pQuarterCode: String,
+			pQuarterCodeName : String,
+			pQuarterTime : String,
+			pHomeTeamRecord : Object,
+			pAwayTeamRecord : Object,
 		},
 		data() {
 			return {
@@ -36,13 +38,12 @@
 		},
 		methods: {
 			intlQuarterTime() {
-				if (ValidationUtil.isNull(this.pQuarterInfo.quarterTime)) {
+				if (ValidationUtil.isNull(this.pQuarterTime)) {
 					return '';
 				}
-				return this.pQuarterInfo.quarterTime;
+				return this.pQuarterTime;
 			},
 			selectQuarterTime(val) {
-				console.log( val );
 				this.quarterTime = val;
 				this.$emit('select-quarter-time', val);
 			},

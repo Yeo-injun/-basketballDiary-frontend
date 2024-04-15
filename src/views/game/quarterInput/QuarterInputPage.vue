@@ -1,49 +1,34 @@
 <template>
 	<div>
-		<div v-if="this.isInitData.gameQuarterRecords">
+		<div v-if="this.isInitData.gameQuarterInfo">
 			<GameInfo
-				:pGameInfo="this.gameQuarterRecords"
+				:pGameYmd="this.gameYmd"
+				:pGameStartTime="this.gameStartTime"
+				:pGameEndTime="this.gameEndTime"
 			/>
 			<QuarterInfo
-				:pQuarterInfo="this.gameQuarterRecords"
+				:pQuarterCode="this.quarterCode"
+				:pQuarterCodeName="this.quarterCodeName"
+				:pQuarterTime="this.quarterTime"
+				:pHomeTeamRecord="this.homeTeamQuarterRecord"
+				:pAwayTeamRecord="this.awayTeamQuarterRecord"
 				@select-quarter-time="setQuarterTime"
 			/>
-			<v-container>
+			<!-- <v-container>
 				<h4 v-if="$platform.isWeb">
 					<div>※ PC웹브라우저인 경우 마우스 클릭으로 입력이 안될수 있습니다.</div>
 					<div>F12를 눌러 개발도구창을 활성화 시킨 후 Ctrl + Shift + M을 눌러 태블릿 모드로 전환시켜 주세요.</div>
 				</h4>
-				<HomeAwayTeamToggle
-					:pHomeTeamName="this.gameQuarterRecords.homeTeamRecords.teamName"
-					:pHomeTeamCode="this.gameQuarterRecords.homeTeamRecords.homeAwayCode"
-					:pHomeTeamCodeName="
-						this.gameQuarterRecords.homeTeamRecords.homeAwayCodeName
-					"
-					:pAwayTeamName="this.gameQuarterRecords.awayTeamRecords.teamName"
-					:pAwayTeamCode="this.gameQuarterRecords.awayTeamRecords.homeAwayCode"
-					:pAwayTeamCodeName="
-						this.gameQuarterRecords.awayTeamRecords.homeAwayCodeName
-					"
-					@select-home-away-team="changeRecordInputTeam"
-				/>
-			</v-container>
+			</v-container> -->
 		</div>
 
 		<div v-if="this.isInitData.gameEntry">
-			<HomeTeamRecordTableSheet
-				v-if="this.isHomeTeamInputMode"
-				:pHomeAwayCode="this.homeCode"
-				:pEntry="this.homeTeamEntry"
+			<TableInputBoard 
+				:pHomeTeamEntry="this.homeTeamEntry"
+				:pAwayTeamEntry="this.awayTeamEntry"
 				@open-entry-manage-modal="saveGameQuarter"
-				@add-player-record="processInputRecordStat"
-				@save-entry="getGameEntry"
-			/>
-			<AwayTeamRecordTableSheet
-				v-else
-				:pHomeAwayCode="this.awayCode"
-				:pEntry="this.awayTeamEntry"
-				@open-entry-manage-modal="saveGameQuarter"
-				@add-player-record="processInputRecordStat"
+				@record-team-score="updateTeamScore"
+				@record-team-foul="updateTeamFoul"
 				@save-entry="getGameEntry"
 			/>
 		</div>
@@ -67,22 +52,19 @@
 </template>
 
 <script>
+	/** Backend API */
+	/** Code */
+	import { HomeAwayCode } from '@/const/code/GameCode';
+
+	/** Utils */
+	/** Components */
+	/** Emit Event */
 	import GameAPI from '@/api/GameAPI.js';
-
-	import { HomeAwayCode } from '@/const/code/GameCode.js';
-	import {
-		StatType,
-		RecordMode,
-	} from '@/components/game/stat/const/Stat.js';
-
-	import ValidationUtil from '@/common/util/ValidationUtil.js';
 
 	import GameInfo from '@/views/game/quarterInput/components/GameInfo.vue';
 	import QuarterInfo from '@/views/game/quarterInput/components/QuarterInfo.vue';
-	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
 
-	import HomeTeamRecordTableSheet from '@/views/game/quarterInput/components/TableInputBoard.vue';
-	import AwayTeamRecordTableSheet from '@/views/game/quarterInput/components/TableInputBoard.vue';
+	import TableInputBoard from '@/views/game/quarterInput/components/TableInputBoard.vue';
 
 	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
 	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
@@ -91,9 +73,7 @@
 		components: {
 			GameInfo,
 			QuarterInfo,
-			HomeAwayTeamToggle,
-			HomeTeamRecordTableSheet,
-			AwayTeamRecordTableSheet,
+			TableInputBoard,
 			SaveGameQuarterBtn,
 			DeleteGameQuarterBtn,
 		},
@@ -104,29 +84,20 @@
 				teamSeq: query.teamSeq,
 				quarterCode: query.quarterCode,
 				isInitData: {
-					gameQuarterRecords: false,
+					gameQuarterInfo: false,
 					gameEntry: false,
 				},
-				isHomeTeamInputMode: true,
-				gameQuarterRecords: {
-					gameSeq: '',
-					quarterCode: '',
-					quarterCodeName: '',
-					gameYmd: '',
-					gameStartTime: '',
-					gameEndTime: '',
-					quarterTime: '',
-					homeTeamRecords: {},
-					awayTeamRecords: {},
-				},
-				homeCode: HomeAwayCode.HOME_TEAM,
-				awayCode: HomeAwayCode.AWAY_TEAM,
+				quarterCodeName	: '',
+				gameYmd			: '',
+				gameStartTime	: '',
+				gameEndTime		: '',
+				quarterTime		: '',
+				homeTeamQuarterRecord: {},
+				awayTeamQuarterRecord: {},
 
 				homeTeamEntry: [],
 				awayTeamEntry: [],
 
-				homeTeamRecords: [],
-				awayTeamRecords: [],
 			};
 		},
 		mounted() {
@@ -141,10 +112,45 @@
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);
-				const gameQuarterRecords = res.data;
-				this.gameQuarterRecords = gameQuarterRecords;
+				const quarterInfo = res.data;
+				this.quarterCodeName	= quarterInfo.quarterCodeName;
+				this.gameYmd			= quarterInfo.gameYmd;
+				this.gameStartTime		= quarterInfo.gameStartTime;
+				this.gameEndTime		= quarterInfo.gameEndTime;
+				this.quarterTime		= quarterInfo.quarterTime;
+				this.homeTeamQuarterRecord = quarterInfo.homeTeamRecords;	// TODO 속성명 변경 요망 homeTeamRecord로
+				this.awayTeamQuarterRecord = quarterInfo.awayTeamRecords;	// TODO 속성명 변경 요망 homeTeamRecord로
+				
 
-				this.isInitData.gameQuarterRecords = true;
+				this.isInitData.gameQuarterInfo = true;
+			},
+			updateTeamScore( statInfo ) {
+				switch( statInfo.homeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM	: 
+						this.homeTeamQuarterRecord.score += statInfo.score;
+						if ( 0 > this.homeTeamQuarterRecord.score ) {
+							this.homeTeamQuarterRecord.score = 0;
+						} 
+						break;
+					case HomeAwayCode.AWAY_TEAM	: 
+						this.awayTeamQuarterRecord.score += statInfo.score;
+						if ( 0 > this.awayTeamQuarterRecord.score ) {
+							this.awayTeamQuarterRecord.score = 0;
+						} 
+						break;
+					default : throw new Error( "홈/어웨이 코드가 정상적이지 않습니다." );
+				}
+			},
+			updateTeamFoul( statInfo ) {
+				switch( statInfo.homeAwayCode ) {
+				case HomeAwayCode.HOME_TEAM	: 
+					this.homeTeamQuarterRecord.foul += statInfo.foul;
+					break;
+				case HomeAwayCode.AWAY_TEAM	: 
+					this.awayTeamQuarterRecord.foul += statInfo.foul;
+					break;
+				default : throw new Error( "홈/어웨이 코드가 정상적이지 않습니다." );
+				}
 			},
 			async getGameEntry() {
 				const params = {
@@ -164,14 +170,14 @@
 				this.isInitData.gameEntry = true;
 			},
 			setQuarterTime(targetVal) {
-				this.gameQuarterRecords.quarterTime = targetVal;
+				this.quarterTime = targetVal;
 			},
 			// 게임쿼터 저장API 호출 후 성공여부에 따라 메세지 alert창 호출
 			async saveGameQuarterWithMessageAlert() {
 				const result = await this.saveGameQuarter();
 				alert(result.message);
 			},
-			// 게임쿼터 저장API 호출
+			// 게임쿼터 저장API 호출 ( 선수교체전 현재 입력한 데이터를 저장하여 교체되는 선수의 기록을 유지하기 위함. )
 			async saveGameQuarter() {
 				try {
 					await GameAPI.saveQuarterRecords(
@@ -180,7 +186,7 @@
 							quarterCode: this.quarterCode,
 						},
 						{
-							quarterTime: this.gameQuarterRecords.quarterTime,
+							quarterTime: this.quarterTime,
 							homeTeamPlayerRecords: this.homeTeamEntry,
 							awayTeamPlayerRecords: this.awayTeamEntry,
 						}
@@ -211,146 +217,7 @@
 					},
 				});
 			},
-			changeRecordInputTeam(params) {
-				const homeAwayCode = params.homeAwayCode;
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.isHomeTeamInputMode = true;
-				} else {
-					this.isHomeTeamInputMode = false;
-				}
-			},
-			processInputRecordStat(record) {
-				console.log(record);
-				const homeAwayCode = record.homeAwayCode;
-				const targetPlayer = this.getTargetPlayer(
-					homeAwayCode,
-					record.gameJoinPlayerSeq
-				);
-				const targetTeamRecords = this.getTargetTeamRecords(homeAwayCode);
-
-				// 입력모드 체크
-				const isSuccessInput = this.inputRecored(
-					record,
-					targetPlayer,
-					targetTeamRecords
-				);
-				if (!isSuccessInput) {
-					return;
-				}
-
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.homeTeamRecords.push(record);
-				} else {
-					this.awayTeamRecords.push(record);
-				}
-			},
-			getTargetPlayer(homeAwayCode, gameJoinPlayerSeq) {
-				const isHomeTeamRecords = HomeAwayCode.HOME_TEAM == homeAwayCode;
-				if (isHomeTeamRecords) {
-					return this.homeTeamEntry.filter(function (player) {
-						return player.gameJoinPlayerSeq == gameJoinPlayerSeq;
-					})[0];
-				}
-
-				return this.awayTeamEntry.filter(function (player) {
-					return player.gameJoinPlayerSeq == gameJoinPlayerSeq;
-				})[0];
-			},
-			getTargetTeamRecords(homeAwayCode) {
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					return this.gameQuarterRecords.homeTeamRecords;
-				}
-				return this.gameQuarterRecords.awayTeamRecords;
-			},
-			inputRecored(record, targetPlayer, targetTeamRecords) {
-				const statType = record.statType;
-				if (record.mode == RecordMode.ADD) {
-					return this.addStatRecord(statType, targetPlayer, targetTeamRecords);
-				}
-				return this.cancelStatRecord(statType, targetPlayer, targetTeamRecords);
-			},
-			// 스탯 올리기
-			addStatRecord(statType, targetPlayer, targetTeamRecords) {
-				let targetStatCnt = targetPlayer[statType];
-				if (ValidationUtil.isNull(targetStatCnt)) {
-					return false;
-				}
-				targetPlayer[statType]++;
-				switch (statType) {
-					case StatType.FREE_THROW:
-						targetPlayer.tryFreeThrow++;
-						targetPlayer.totalScore++;
-						targetTeamRecords.score++;
-						return true;
-					case StatType.TWO_POINT:
-						targetPlayer.tryTwoPoint++;
-						targetPlayer.totalScore += 2;
-						targetTeamRecords.score += 2;
-						return true;
-					case StatType.THREE_POINT:
-						targetPlayer.tryThreePoint++;
-						targetPlayer.totalScore += 3;
-						targetTeamRecords.score += 3;
-						return true;
-					case StatType.FOUL:
-						targetTeamRecords.foul++;
-				}
-				return true;
-			},
-			cancelStatRecord(statType, targetPlayer, targetTeamRecords) {
-				let targetStatCnt = targetPlayer[statType];
-				if (ValidationUtil.isNull(targetStatCnt)) {
-					return false;
-				}
-				const canCancelCnt = targetStatCnt > 0;
-				if (!canCancelCnt) {
-					return false;
-				}
-
-				// TODO 득점과 관련된 속성은 시도횟수가 성공횟수보다 클경우에만 취소됨
-				switch (statType) {
-					case StatType.FREE_THROW:
-						targetPlayer.tryFreeThrow--;
-						targetPlayer.totalScore--;
-						targetTeamRecords.score--;
-						break;
-					case StatType.TWO_POINT:
-						targetPlayer.tryTwoPoint--;
-						targetPlayer.totalScore -= 2;
-						targetTeamRecords.score -= 2;
-						break;
-					case StatType.THREE_POINT:
-						targetPlayer.tryThreePoint--;
-						targetPlayer.totalScore -= 3;
-						targetTeamRecords.score -= 3;
-						break;
-
-					case StatType.FOUL:
-						targetTeamRecords.foul--;
-						break;
-
-					case StatType.TRY_FREE_THROW:
-						if (targetPlayer.freeThrow >= targetPlayer.tryFreeThrow) {
-							return false;
-						}
-						break;
-
-					case StatType.TRY_TWO_POINT:
-						if (targetPlayer.twoPoint >= targetPlayer.tryTwoPoint) {
-							return false;
-						}
-						break;
-
-					case StatType.TRY_THREE_POINT:
-						if (targetPlayer.threePoint >= targetPlayer.tryThreePoint) {
-							return false;
-						}
-						break;
-				}
-				targetPlayer[statType]--;
-				return true;
-			},
-		},
+		}
 	};
 </script>
 

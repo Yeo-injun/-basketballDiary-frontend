@@ -34,15 +34,21 @@
 		},
 		props: {
 			pHomeTeamName: String,
-			pHomeTeamCodeName: String,
-
+			pHomeTeamCodeName : {
+				type : String,
+				default() {
+					return "홈팀";
+				},
+			},
 			pAwayTeamName: String,
-			pAwayTeamCodeName: String,
+			pAwayTeamCodeName: {
+				type : String,
+				default() {
+					return "어웨이팀";
+				},
+			},
 		},
 		data() {
-			console.log('HomeAwayTeamToggle=====================');
-			console.log(this.pHomeTeamName);
-			console.log(this.pAwayTeamName);
 			return {
 				homeTeamCode: HomeAwayCode.HOME_TEAM,
 				awayTeamCode: HomeAwayCode.AWAY_TEAM,
