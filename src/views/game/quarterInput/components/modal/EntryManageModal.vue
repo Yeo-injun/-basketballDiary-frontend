@@ -92,9 +92,7 @@
 		methods: {
 			// 모달 오픈되고 이후 동작 구현을 위한 이벤트 emit
 			onOpenModal() {
-				console.log('EntryManageModal');
 				this.$emit('post-open-handle');
-				console.log('EntryManageModal==END');
 			},
 			async loadSavedEntry() {
 				const params = {
@@ -153,7 +151,6 @@
 				// 모달창 닫기
 				this.isModalOpen = false;
 			},
-
 			addPlayerToEntry(targetPlayer) {
 				const entry = this.entry;
 				const MAX_PLAYRERS = 5;
@@ -172,8 +169,7 @@
 				this.entry = ArrayUtil.deleteItemById(
 					this.entry,
 					targetPlayer,
-					// 'userSeq'
-					'email' // TODO 참가선수 등록할때 key가 email임. 맞는지 재확인 필요
+					'gameJoinPlayerSeq'
 				);
 			},
 			getHomeAwayCodeName() {
