@@ -85,7 +85,7 @@
 					timeStamp			: new Date(),
 				};
 				const targetPlayer 		= this.getTargetPlayer( stat );
-				// TODO 팀원 기록이 update돼야지만 팀기록 update하기
+				// 팀원 기록이 정상 update돼야지만 팀기록 update하기
 				if ( this.updatePlayerRecoredWithStat( stat, targetPlayer ) ) {
 					this.emitTeamRecord( stat );
 				}

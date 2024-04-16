@@ -28,9 +28,9 @@
 				:pAwayTeamName="this.awayTeamQuarterRecord.teamName"
 				:pHomeTeamEntry="this.homeTeamEntry"
 				:pAwayTeamEntry="this.awayTeamEntry"
-				@open-entry-manage-modal="saveGameQuarter"
 				@record-team-score="updateTeamScore"
 				@record-team-foul="updateTeamFoul"
+				@open-entry-manage-modal="saveGameQuarter"
 				@save-entry="getGameEntry"
 			/>
 		</div>
