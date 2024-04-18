@@ -1,17 +1,23 @@
 <template>
-	<v-container>
-		<v-row justify="center">
-			<v-col cols="1">
-				<v-btn color="error" @click="deleteGame">게임삭제</v-btn>
-			</v-col>
-		</v-row>
-	</v-container>
+	<DeleteBtn 
+		pBtnName="게임삭제" 
+		@do-delete="deleteGame"
+	/>
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
+	/** Code */
+	/** Utils */
+	/** Components */
+	import DeleteBtn from '@/components/button/FrameDeleteBtn.vue';
+	/** Emit Event */
 
 	export default {
+		components: {
+			DeleteBtn,
+		},
 		props: {
 			pGameSeq: Number,
 		},
@@ -25,10 +31,9 @@
 				if (!confirm('게임을 삭제하겠습니까?')) {
 					return;
 				}
-				const params = {
+				await GameAPI.deleteGame({
 					gameSeq: this.pGameSeq,
-				};
-				await GameAPI.deleteGame(params);
+				});
 				this.$emit(this.eventEmitName);
 			},
 		},

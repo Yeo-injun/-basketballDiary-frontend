@@ -4,8 +4,12 @@
             pLabel="비밀번호" 
             ref="passwordInput"
         />
-        <WithdrawalBtn pBtnName="회원탈퇴" @do-delete="withdrawalMembership()" />
-        <WithdrawalCancelBtn pBtnName="취소" pRoutePageName="MyProfilePage" />
+        <v-container>
+            <WithdrawalBtn pBtnName="회원탈퇴" @do-delete="withdrawalMembership()" />
+        </v-container>
+        <v-container>
+            <WithdrawalCancelBtn pBtnName="취소" pRoutePageName="MyProfilePage" />
+        </v-container>
     </v-container>
 </template>
 
@@ -18,7 +22,7 @@
   import AuthStateManager from "@/common/state/AuthStateManager";
   /** Components */
   import PasswordInput from "@/components/input/FrameTextFieldInput.vue";
-  import WithdrawalBtn from "@/components/button/FrameDeletionBtn.vue";
+  import WithdrawalBtn from "@/components/button/FrameDeleteBtn.vue";
   import WithdrawalCancelBtn from "@/components/button/FramePageMoveBtn.vue";
   /** Emit Event */
 
