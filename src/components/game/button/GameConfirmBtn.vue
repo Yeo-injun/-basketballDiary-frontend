@@ -1,17 +1,20 @@
 <template>
-	<v-container>
-		<v-row justify="center">
-			<v-col cols="1">
-				<v-btn color="primary" @click="confirmGame">게임확정</v-btn>
-			</v-col>
-		</v-row>
-	</v-container>
+	<SaveBtn pBtnName="게임확정" @do-save="confirmGame"/>
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
-
+	/** Code */
+	/** Utils */
+	/** Components */
+	import SaveBtn from '@/components/button/FrameSaveBtn.vue';
+	/** Emit Event */
+	
 	export default {
+		components:{
+			SaveBtn,
+		},
 		props: {
 			pGameSeq: Number,
 		},

@@ -23,11 +23,6 @@
 		</div>
 
 		<div v-if="this.isInitData.gameEntry">
-			<!-- TODO saveGameQuarter에서 저장하는 로직 변경 요망 
-				( 현재는 쿼터내 inGame하고 있는 선수들의 기록만 넘겨서 팀의 쿼터기록을 합산하여 저장.
-				  팀의 쿼터 기록 저장시 InGame선수 외에 벤치에 있는 선수들의 기록도 합산하여 저장해야 함.
-				  화면의 팀기록과 InGame 및 벤치 선수들의 기록합산이 상이할 경우 Exception Throw. ( 검증로직 추가 요망 )
-				    ) -->
 			<TableInputBoard
 				:pHomeTeamName="this.homeTeamQuarterRecord.teamName"
 				:pAwayTeamName="this.awayTeamQuarterRecord.teamName"
@@ -42,13 +37,13 @@
 		<v-container>
 			<v-row>
 				<v-col cols="6" justify="center">
-					<SaveGameQuarterBtn
+					<GameQuarterSaveBtn
 						pBtnName="쿼터저장"
 						@do-save="saveGameQuarterWithMessageAlert"
 					/>
 				</v-col>
 				<v-col cols="6" justify="center">
-					<DeleteGameQuarterBtn
+					<GameQuarterDeleteBtn
 						pBtnName="쿼터삭제"
 						@do-delete="deleteGameQuarter"
 					/>
@@ -73,16 +68,16 @@
 
 	import TableInputBoard from '@/views/game/quarterInput/components/TableInputBoard.vue';
 
-	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
-	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
+	import GameQuarterSaveBtn from '@/components/button/FrameSaveBtn.vue';
+	import GameQuarterDeleteBtn from '@/components/button/FrameDeleteBtn.vue';
 
 	export default {
 		components: {
 			GameInfo,
 			QuarterInfo,
 			TableInputBoard,
-			SaveGameQuarterBtn,
-			DeleteGameQuarterBtn,
+			GameQuarterSaveBtn,
+			GameQuarterDeleteBtn,
 		},
 		data() {
 			const query = this.$route.query;
