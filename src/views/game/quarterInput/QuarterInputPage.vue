@@ -23,6 +23,11 @@
 		</div>
 
 		<div v-if="this.isInitData.gameEntry">
+			<!-- TODO saveGameQuarter에서 저장하는 로직 변경 요망 
+				( 현재는 쿼터내 inGame하고 있는 선수들의 기록만 넘겨서 팀의 쿼터기록을 합산하여 저장.
+				  팀의 쿼터 기록 저장시 InGame선수 외에 벤치에 있는 선수들의 기록도 합산하여 저장해야 함.
+				  화면의 팀기록과 InGame 및 벤치 선수들의 기록합산이 상이할 경우 Exception Throw. ( 검증로직 추가 요망 )
+				    ) -->
 			<TableInputBoard
 				:pHomeTeamName="this.homeTeamQuarterRecord.teamName"
 				:pAwayTeamName="this.awayTeamQuarterRecord.teamName"
@@ -120,8 +125,8 @@
 				this.gameStartTime		= quarterInfo.gameStartTime;
 				this.gameEndTime		= quarterInfo.gameEndTime;
 				this.quarterTime		= quarterInfo.quarterTime;
-				this.homeTeamQuarterRecord = quarterInfo.homeTeamRecords;	// TODO 속성명 변경 요망 homeTeamRecord로
-				this.awayTeamQuarterRecord = quarterInfo.awayTeamRecords;	// TODO 속성명 변경 요망 homeTeamRecord로
+				this.homeTeamQuarterRecord = quarterInfo.homeTeamRecord;
+				this.awayTeamQuarterRecord = quarterInfo.awayTeamRecord;
 				
 
 				this.isInitData.gameQuarterInfo = true;
