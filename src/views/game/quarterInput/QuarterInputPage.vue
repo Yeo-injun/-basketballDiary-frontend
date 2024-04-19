@@ -23,25 +23,27 @@
 		</div>
 
 		<div v-if="this.isInitData.gameEntry">
-			<TableInputBoard 
+			<TableInputBoard
+				:pHomeTeamName="this.homeTeamQuarterRecord.teamName"
+				:pAwayTeamName="this.awayTeamQuarterRecord.teamName"
 				:pHomeTeamEntry="this.homeTeamEntry"
 				:pAwayTeamEntry="this.awayTeamEntry"
-				@open-entry-manage-modal="saveGameQuarter"
 				@record-team-score="updateTeamScore"
 				@record-team-foul="updateTeamFoul"
+				@open-entry-manage-modal="saveGameQuarter"
 				@save-entry="getGameEntry"
 			/>
 		</div>
 		<v-container>
 			<v-row>
 				<v-col cols="6" justify="center">
-					<SaveGameQuarterBtn
+					<GameQuarterSaveBtn
 						pBtnName="쿼터저장"
 						@do-save="saveGameQuarterWithMessageAlert"
 					/>
 				</v-col>
 				<v-col cols="6" justify="center">
-					<DeleteGameQuarterBtn
+					<GameQuarterDeleteBtn
 						pBtnName="쿼터삭제"
 						@do-delete="deleteGameQuarter"
 					/>
@@ -66,16 +68,16 @@
 
 	import TableInputBoard from '@/views/game/quarterInput/components/TableInputBoard.vue';
 
-	import SaveGameQuarterBtn from '@/components/button/FrameSaveBtn.vue';
-	import DeleteGameQuarterBtn from '@/components/button/FrameDeletionBtn.vue';
+	import GameQuarterSaveBtn from '@/components/button/FrameSaveBtn.vue';
+	import GameQuarterDeleteBtn from '@/components/button/FrameDeleteBtn.vue';
 
 	export default {
 		components: {
 			GameInfo,
 			QuarterInfo,
 			TableInputBoard,
-			SaveGameQuarterBtn,
-			DeleteGameQuarterBtn,
+			GameQuarterSaveBtn,
+			GameQuarterDeleteBtn,
 		},
 		data() {
 			const query = this.$route.query;
@@ -118,8 +120,8 @@
 				this.gameStartTime		= quarterInfo.gameStartTime;
 				this.gameEndTime		= quarterInfo.gameEndTime;
 				this.quarterTime		= quarterInfo.quarterTime;
-				this.homeTeamQuarterRecord = quarterInfo.homeTeamRecords;	// TODO 속성명 변경 요망 homeTeamRecord로
-				this.awayTeamQuarterRecord = quarterInfo.awayTeamRecords;	// TODO 속성명 변경 요망 homeTeamRecord로
+				this.homeTeamQuarterRecord = quarterInfo.homeTeamRecord;
+				this.awayTeamQuarterRecord = quarterInfo.awayTeamRecord;
 				
 
 				this.isInitData.gameQuarterInfo = true;

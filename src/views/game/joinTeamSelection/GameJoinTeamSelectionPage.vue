@@ -4,7 +4,6 @@
 <template>
 	<v-container>
 		<h2>게임참가팀 선택</h2>
-		<v-btn @click="onConfirmGameJoinTeam">참가팀 확정</v-btn>
 
 		<v-select
 			v-model="selectedGameType"
@@ -18,29 +17,45 @@
 			v-if="isMatchUpGame()"
 			@select-opponent="setOpponentTeamSeq"
 		/>
-		<GameDeletionBtn :pGameSeq="this.gameSeq" @delete-game="onMovePage" />
+		<v-row>
+			<v-col>
+				<GameJoinTeamConfirmBtn 
+					pBtnName="참가팀 확정"
+					@do-save="onConfirmGameJoinTeam"
+				/>
+			</v-col>
+			<v-col>
+				<GameDeleteBtn :pGameSeq="this.gameSeq" @delete-game="onMovePage" />				
+			</v-col>
+		</v-row>
 	</v-container>
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
 
+	/** Code */
+	import { GameTypeCode, GameRecordStateCode } from '@/const/code/GameCode.js';
+	/** Utils */
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
-	import { GameTypeCode } from '@/const/code/GameCode.js';
-	import { GameRecordStateCode } from '@/const/code/GameCode.js';
-
+	/** Components */
+	import GameJoinTeamConfirmBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameOpponentSearchComp from '@/components/game/GameOpponentSearchComp.vue';
-	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
+	import GameDeleteBtn from '@/components/game/button/GameDeleteBtn.vue';
+	/** Emit Event */
 
-	const SELF_GAME_CODE = GameTypeCode.SELF_GAME.code;
-	const MATCH_UP_GAME_CODE = GameTypeCode.MATCH_UP_GAME.code;
 
-	const JOIN_TEAM_CONFIRMATION_CODE =
-		GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
+
+	const SELF_GAME_CODE 		= GameTypeCode.SELF_GAME.code;
+	const MATCH_UP_GAME_CODE 	= GameTypeCode.MATCH_UP_GAME.code;
+
+	const JOIN_TEAM_CONFIRMATION_CODE = GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
 	export default {
 		components: {
+			GameJoinTeamConfirmBtn,
 			GameOpponentSearchComp,
-			GameDeletionBtn,
+			GameDeleteBtn,
 		},
 		data() {
 			const query = this.$route.query;

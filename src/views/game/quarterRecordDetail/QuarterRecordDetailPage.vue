@@ -6,18 +6,18 @@
 			<GameQuarterInfoFrame
 				:pQuarterCodeName="this.quarterCodeName"
 				:pQuarterTime="this.quarterTime"
-				:pHomeTeamRecords="this.homeTeamRecords"
-				:pAwayTeamRecords="this.awayTeamRecords"
+				:pHomeTeamRecords="this.homeTeamRecord"
+				:pAwayTeamRecords="this.awayTeamRecord"
 			/>
 		</v-container>
 		<v-container>
 			<HomeAwayTeamToggle
-				:pHomeTeamName="this.homeTeamRecords.teamName"
-				:pHomeTeamCode="this.homeTeamRecords.homeAwayCode"
-				:pHomeTeamCodeName="this.homeTeamRecords.homeAwayCodeName"
-				:pAwayTeamName="this.awayTeamRecords.teamName"
-				:pAwayTeamCode="this.awayTeamRecords.homeAwayCode"
-				:pAwayTeamCodeName="this.awayTeamRecords.homeAwayCodeName"
+				:pHomeTeamName="this.homeTeamRecord.teamName"
+				:pHomeTeamCode="this.homeTeamRecord.homeAwayCode"
+				:pHomeTeamCodeName="this.homeTeamRecord.homeAwayCodeName"
+				:pAwayTeamName="this.awayTeamRecord.teamName"
+				:pAwayTeamCode="this.awayTeamRecord.homeAwayCode"
+				:pAwayTeamCodeName="this.awayTeamRecord.homeAwayCodeName"
 				@select-home-away-team="selectTargetPlayersByHomeAwayCode"
 			/>
 		</v-container>
@@ -57,8 +57,8 @@
 				gameTime: '',
 				quarterCodeName: '',
 				quarterTime: '',
-				homeTeamRecords: {},
-				awayTeamRecords: {},
+				homeTeamRecord: {},
+				awayTeamRecord: {},
 				homeTeamPlayers: [],
 				awayTeamPlayers: [],
 				targetTeamName: '',
@@ -74,16 +74,15 @@
 				};
 
 				const res = await GameAPI.getGameQuarterRecords(params);
-				console.log('getGameQuarterRecords@@@@@@@@@@@@');
+				
 				const resMessage = res.data;
 				this.gameYmd = DateUtil.Format.toYmd(resMessage.gameYmd);
-				this.gameTime = `${DateUtil.Format.toTime(resMessage.gameStartTime)} 
-				~ ${DateUtil.Format.toTime(resMessage.gameEndTime)}`;
+				this.gameTime = `${DateUtil.Format.toTime(resMessage.gameStartTime)} ~ ${DateUtil.Format.toTime(resMessage.gameEndTime)}`;
 				this.quarterCodeName = resMessage.quarterCodeName;
 				this.quarterTime = resMessage.quarterTime;
 
-				this.homeTeamRecords = resMessage.homeTeamRecords;
-				this.awayTeamRecords = resMessage.awayTeamRecords;
+				this.homeTeamRecord = resMessage.homeTeamRecord;
+				this.awayTeamRecord = resMessage.awayTeamRecord;
 			},
 			async getALLGameJoinPlayerRecordsByQuarter() {
 				const query = this.$route.query;
@@ -93,7 +92,7 @@
 				};
 
 				const res = await GameAPI.getGameJoinPlayerRecordsByQuarter(params);
-				console.log('getALLGameJoinPlayerRecordsByQuarter@@@@@@@@@@@@');
+				
 				const resBody = res.data;
 				this.homeTeamPlayers = resBody.homeTeamPlayers;
 				this.awayTeamPlayers = resBody.awayTeamPlayers;
@@ -105,10 +104,10 @@
 				const homeAwayCode = params.homeAwayCode;
 
 				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.targetTeamName = `${this.homeTeamRecords.teamName} ( ${this.homeTeamRecords.homeAwayCodeName} )`;
+					this.targetTeamName = `${this.homeTeamRecord.teamName} ( ${this.homeTeamRecord.homeAwayCodeName} )`;
 					this.targetPlayersRecord = this.homeTeamPlayers;
 				} else {
-					this.targetTeamName = `${this.awayTeamRecords.teamName} ( ${this.awayTeamRecords.homeAwayCodeName} )`;
+					this.targetTeamName = `${this.awayTeamRecord.teamName} ( ${this.awayTeamRecord.homeAwayCodeName} )`;
 					this.targetPlayersRecord = this.awayTeamPlayers;
 				}
 			},

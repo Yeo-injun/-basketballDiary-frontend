@@ -16,7 +16,7 @@
 				/>
 			</v-col>
 			<v-col>
-				<GameDeletionBtn
+				<GameDeleteBtn
 					:pGameSeq="this.gameSeq"
 					@delete-game="moveMyTeamPage"
 				/>
@@ -34,7 +34,7 @@
 	import GameQuartersComp from '@/views/game/recordDetail/components/GameQuartersComp.vue';
 
 	import GameConfirmBtn from '@/components/game/button/GameConfirmBtn.vue';
-	import GameDeletionBtn from '@/components/game/button/GameDeletionBtn.vue';
+	import GameDeleteBtn from '@/components/game/button/GameDeleteBtn.vue';
 
 	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;
 	export default {
@@ -44,7 +44,7 @@
 			GameJoinPlayersInfoComp,
 			GameQuartersComp,
 			GameConfirmBtn,
-			GameDeletionBtn,
+			GameDeleteBtn,
 		},
 		data() {
 			const query = this.$route.query;
