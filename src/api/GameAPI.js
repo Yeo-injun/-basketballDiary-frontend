@@ -139,14 +139,15 @@ export default {
 		});
 	},
 	/**
-	 * API057 : 경기참가팀 팀원 조회
+	 * API057 : 경기기록원 후보 조회
 	 */
-	getGameJoinTeamMembers(params) {
-		return axiosService.get(`/${params.gameSeq}/teamMembers`, {
+	async getGameRecorderCandidates( params ) {
+		const { data } = await axiosService.get(`/${params.gameSeq}/recorders/candidates`, {
 			params: {
 				homeAwayCode: params.homeAwayCode,
 			},
 		});
+		return data;
 	},
 	/**
 	 * API060 엔트리 저장
