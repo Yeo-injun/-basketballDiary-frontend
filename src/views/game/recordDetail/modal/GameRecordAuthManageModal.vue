@@ -8,7 +8,7 @@
 				<v-container>
 					<GameRecordAuthManageBtn
 						@do-open="initModal"
-						pBtnName="입력권한관리"
+						pBtnName="경기기록원 관리"
 					/>
 				</v-container>
 			</div>
@@ -16,12 +16,12 @@
 
 		<v-card>
 			<v-card-title class="font-weight-medium grey lighten-2">
-				경기기록 입력권한관리
+				경기기록원 관리
 			</v-card-title>
 			<v-container>
 
 				<v-container>
-					<ModalSubTitle pTitleName="참가선수 목록" />
+					<ModalSubTitle pTitleName="경기기록원 후보 목록 ( 경기참가선수 중 회원만 가능 )" />
 					<HomeAwayTeamToggle
 						class="my-1"
 						:pHomeTeamCodeName="this.homeTeamCodeName"
@@ -37,7 +37,7 @@
 				</v-container>
 
 				<v-container>
-					<ModalSubTitle pTitleName="권한자 목록" />
+					<ModalSubTitle pTitleName="경기기록원 목록" />
 					<GameRecordersTable
 						v-if="isGetGameRecordersLoadOk"
 						:pGameRecorders="gameRecorders"
@@ -136,16 +136,10 @@
 				this.isGetGameRecorderCandidatesLoadOk = true;
 			},
 			async saveGameRecorders() {
-				// TODO 구현 예정
-				const pathVar = {
-					gameSeq: this.gameSeq,
-				};
-
-				const reqBody = {
-					gameRecorders: this.gameRecorders,
-				};
-
-				await GameAPI.saveGameRecorders(pathVar, reqBody);
+				await GameAPI.saveGameRecorders({
+					gameSeq			: this.gameSeq,
+					gameRecorders	: this.gameRecorders,
+				});
 			},
 			addGameRecorder(targetPlayer) {
 				console.log(targetPlayer);

@@ -127,26 +127,32 @@ export default {
 	 * API055 : 경기기록 권한자 목록 조회
 	 */
 	getGameRecorders(params) {
-		return axiosService.get(`/${params.gameSeq}/gameRecorders`, params);
+		return axiosService.get(`/${params.gameSeq}/recorders`, params);
 	},
 	/**
 	 * API056 : 경기기록 권한자 목록 저장
 	 */
-	saveGameRecorders(pathVar, reqBody) {
-		return axiosService.post(`/${pathVar.gameSeq}/gameRecorders`, {
-			gameSeq: pathVar.gameSeq,
-			gameRecorders: reqBody.gameRecorders,
-		});
+	saveGameRecorders( params ) {
+		return axiosService.post(
+			`/${params.gameSeq}/recorders`,
+			{
+				gameSeq			: params.gameSeq,
+				gameRecorders	: params.gameRecorders,
+			}
+		);
 	},
 	/**
 	 * API057 : 경기기록원 후보 조회
 	 */
 	async getGameRecorderCandidates( params ) {
-		const { data } = await axiosService.get(`/${params.gameSeq}/recorders/candidates`, {
-			params: {
-				homeAwayCode: params.homeAwayCode,
-			},
-		});
+		const { data } = await axiosService.get(
+			`/${params.gameSeq}/recorders/candidates`, 
+			{
+				params: {
+					homeAwayCode: params.homeAwayCode,
+				},
+			}
+		);
 		return data;
 	},
 	/**
