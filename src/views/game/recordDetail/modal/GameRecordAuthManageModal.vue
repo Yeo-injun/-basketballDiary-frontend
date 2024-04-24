@@ -8,7 +8,7 @@
 				<v-container>
 					<GameRecordAuthManageBtn
 						@do-open="initModal"
-						pBtnName="입력권한관리"
+						pBtnName="경기기록원 관리"
 					/>
 				</v-container>
 			</div>
@@ -16,28 +16,28 @@
 
 		<v-card>
 			<v-card-title class="font-weight-medium grey lighten-2">
-				경기기록 입력권한관리
+				경기기록원 관리
 			</v-card-title>
 			<v-container>
 
 				<v-container>
-					<ModalSubTitle pTitleName="참가선수 목록" />
+					<ModalSubTitle pTitleName="경기기록원 후보 목록 ( 경기참가선수 중 회원만 가능 )" />
 					<HomeAwayTeamToggle
 						class="my-1"
 						:pHomeTeamCodeName="this.homeTeamCodeName"
 						:pAwayTeamCodeName="this.awayTeamCodeName"
-						@select-home-away-team="getOneSideTeamMembers"
+						@select-home-away-team="getGameRecorderCandidatesByHomeAwayTeam"
 					/>
-					<PlayerDataTable
-						v-if="isGetGameJoinPlayersLoadOk"
-						:pPlayers="gameJoinPlayers"
+					<GameRecorderCandidates
+						v-if="isGetGameRecorderCandidatesLoadOk"
+						:pPlayers="gameRecorderCandidates"
 						pRowBtnName="추가"
 						@get-row-player-info="addGameRecorder"
 					/>
 				</v-container>
 
 				<v-container>
-					<ModalSubTitle pTitleName="권한자 목록" />
+					<ModalSubTitle pTitleName="경기기록원 목록" />
 					<GameRecordersTable
 						v-if="isGetGameRecordersLoadOk"
 						:pGameRecorders="gameRecorders"
@@ -66,7 +66,7 @@
 
 	import GameRecordAuthSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
-	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
+	import GameRecorderCandidates from '@/components/game/table/PlayerDataTable.vue';
 
 	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
 
@@ -81,7 +81,7 @@
 			GameRecordAuthManageBtn,
 			GameRecordersTable,
 			HomeAwayTeamToggle,
-			PlayerDataTable,
+			GameRecorderCandidates,
 			GameRecordAuthSaveBtn,
 		},
 		props: {
@@ -97,15 +97,15 @@
 
 				dialog: false,
 				isGetGameRecordersLoadOk: false,
-				isGetGameJoinPlayersLoadOk: false,
+				isGetGameRecorderCandidatesLoadOk: false,
 				gameRecorders: [],
-				gameJoinPlayers: [],
+				gameRecorderCandidates: [],
 			};
 		},
 		methods: {
 			initModal() {
 				this.getGameRecorders();
-				this.initGameJoinTeamMembers();
+				this.initGameRecorderCandidates();
 			},
 			async getGameRecorders() {
 				const params = {
@@ -116,39 +116,30 @@
 				this.gameRecorders = res.data.gameRecorders;
 				this.isGetGameRecordersLoadOk = true;
 			},
-			initGameJoinTeamMembers() {
-				const homeAwayCode = ValidationUtil.isNull(this.pHomeAwayCode)
-					? HomeAwayCode.HOME_TEAM
-					: this.pHomeAwayCode;
-				const params = {
-					gameSeq: this.gameSeq,
-					homeAwayCode: homeAwayCode,
-				};
-				this.getGameJoinTeamMembers(params);
+			initGameRecorderCandidates() {
+				this.getGameRecorderCandidates({
+					gameSeq			: this.gameSeq,
+					homeAwayCode	: ValidationUtil.isNull( this.pHomeAwayCode )
+										? HomeAwayCode.HOME_TEAM
+										: this.pHomeAwayCode,
+				});
 			},
-			getOneSideTeamMembers(emitParams) {
-				const params = {
-					gameSeq: this.gameSeq,
-					homeAwayCode: emitParams.homeAwayCode,
-				};
-				this.getGameJoinTeamMembers(params);
+			getGameRecorderCandidatesByHomeAwayTeam(emitParams) {
+				this.getGameRecorderCandidates({
+					gameSeq			: this.gameSeq,
+					homeAwayCode	: emitParams.homeAwayCode,
+				});
 			},
-			async getGameJoinTeamMembers(params) {
-				const res = await GameAPI.getGameJoinTeamMembers(params);
-				this.gameJoinPlayers = res.data.gameJoinTeamMembers;
-				this.isGetGameJoinPlayersLoadOk = true;
+			async getGameRecorderCandidates( params ) {
+				const data = await GameAPI.getGameRecorderCandidates( params );
+				this.gameRecorderCandidates = data.candidates;
+				this.isGetGameRecorderCandidatesLoadOk = true;
 			},
 			async saveGameRecorders() {
-				// TODO 구현 예정
-				const pathVar = {
-					gameSeq: this.gameSeq,
-				};
-
-				const reqBody = {
-					gameRecorders: this.gameRecorders,
-				};
-
-				await GameAPI.saveGameRecorders(pathVar, reqBody);
+				await GameAPI.saveGameRecorders({
+					gameSeq			: this.gameSeq,
+					gameRecorders	: this.gameRecorders,
+				});
 			},
 			addGameRecorder(targetPlayer) {
 				console.log(targetPlayer);
