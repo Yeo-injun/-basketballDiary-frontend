@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<h2>게임참가선수</h2>
+		<h2>경기참가선수</h2>
 		<v-container v-if="this.isLoadingComplete">
 			<v-row dense>
 				<v-col cols="6">
