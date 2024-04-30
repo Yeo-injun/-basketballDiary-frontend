@@ -89,54 +89,43 @@
 		// TODO 모달을 공통 컴포넌트로 구현하고 대체하기
 		watch: {
 			isModalOpen(isOpen) {
-				// 모달이 OPEN됐을때 동작
-				if (isOpen) {
-					this.getGameJoinPlayers();
+				if (!isOpen) {
 					return;
 				}
-				// 모달이 닫혔을때 동작
+				this.getGameJoinPlayers();
 			},
 		},
 		methods: {
-			async registerPlayers() {
-				const pathVariables = {
+			async getGameJoinPlayers() {
+				const { data } = await GameAPI.getGameJoinPlayers({
 					gameSeq: this.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
-				};
-
-				const reqBody = {
-					gameJoinPlayers: this.gameJoinPlayers,
-				};
-
-				const res = await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
-				// TODO 개발서버에서도 Location 속성에 접근가능한지 확인 필요 ( CORS 설정때문에 해당 헤더속성에 접근못하고 있음 (local Backend서버에는 설정 추가함 ) )
-				console.log( ["============게임참가선수등록========", res.headers, res.headers.location ]);
-				
-				this.isModalOpen = false;
-				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
-				this.$emit('register-complete', {
 					homeAwayCode: this.pHomeAwayCode,
 				});
-			},
-			async getGameJoinPlayers() {
-				const params = {
-					gameSeq: this.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
-				};
-
-				const res = await GameAPI.getGameJoinPlayers(params);
 
 				switch (this.pHomeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:
-						this.teamSeq = res.data.homeTeam.teamSeq;
-						this.gameJoinPlayers = res.data.homeTeam.players;
+						this.teamSeq 			= data.homeTeam.teamSeq;
+						this.gameJoinPlayers 	= data.homeTeam.players;
 						break;
 					case HomeAwayCode.AWAY_TEAM:
-						this.teamSeq = res.data.awayTeam.teamSeq;
-						this.gameJoinPlayers = res.data.awayTeam.players;
+						this.teamSeq 			= data.awayTeam.teamSeq;
+						this.gameJoinPlayers 	= data.awayTeam.players;
 						break;
 				}
 				this.isGetGameJoinPlayersLoadOk = true;
+			},
+			async registerPlayers() {
+				await GameAPI.registerGameJoinPlayers({
+					gameSeq			: this.gameSeq,
+					homeAwayCode	: this.pHomeAwayCode,
+					gameJoinPlayers	: this.gameJoinPlayers,
+				});
+				
+				this.isModalOpen = false;
+				// 모달 닫히고, 이벤트를 부모 컴포넌트로 전달해서 등록된 선수 목록을 API재호출 할 수 있도록 처리
+				this.$emit('register-complete', {
+					homeAwayCode: this.pHomeAwayCode,
+				});
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			deleteGameJoinPlayer(targetPlayer) {
