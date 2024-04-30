@@ -8,7 +8,7 @@
 		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
 		<GameQuartersComp :pGameSeq="this.gameSeq" :pTeamSeq="this.teamSeq" />
 		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
-		<v-row v-if="isShowGameManageBtn()">
+		<v-row v-if="enableGameRecord()">
 			<v-col>
 				<GameConfirmBtn
 					:pGameSeq="this.gameSeq"
@@ -57,7 +57,7 @@
 			};
 		},
 		methods: {
-			isShowGameManageBtn() {
+			enableGameRecord() {
 				const isGameConfirmed = this.gameRecordState == GAME_CONFIRMATION_CODE;
 				if (isGameConfirmed) {
 					return false;

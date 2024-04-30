@@ -17,11 +17,11 @@ export default {
 	/**
 	 * API035 게임참가 선수등록하기
 	 */
-	registerGameJoinPlayers(pathVar, reqBody) {
+	registerGameJoinPlayers( params ) {
 		return axiosService.post(
-			`/${pathVar.gameSeq}/homeAwayCode/${pathVar.homeAwayCode}/players`,
+			`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`,
 			{
-				gameJoinPlayers: reqBody.gameJoinPlayers,
+				gameJoinPlayers: params.gameJoinPlayers,
 			}
 		);
 	},
