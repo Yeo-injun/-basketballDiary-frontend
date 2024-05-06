@@ -123,7 +123,7 @@
 					homeAwayCode: homeAwayCode,
 				};
 
-				const res = await GameAPI.getGameJoinPlayers(params);
+				const res = await GameAPI.getAllGameJoinPlayers(params);
 
 				switch (homeAwayCode) {
 					case HomeAwayCode.HOME_TEAM:

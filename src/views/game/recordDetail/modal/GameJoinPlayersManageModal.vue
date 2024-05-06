@@ -23,10 +23,15 @@
 
 			<v-container>
 				<PlayerSubTitle pTitleName="참가선수 목록" />
-				<PlayerDataTable
+				<PlayerTable
 					v-if="isGetGameJoinPlayersLoadOk"
-					:pPlayers="gameJoinPlayers"
+					:pPlayers="playersItems"
+					:pTotalCount="pagination.totalCount"
+					:pPageCount="pagination.totalPageCount"
+					:pRowCount="pagination.rowCount"
+					:pLoading="playersLoading"
 					pRowBtnName="삭제"
+					@fetch-paging-items="getGameJoinPlayers"
 					@get-row-player-info="deleteGameJoinPlayer"
 				/>
 				<v-container>
@@ -43,8 +48,6 @@
 	import GameAPI from '@/api/GameAPI.js';
 
 	/** CODE */
-	import { HomeAwayCode } from '@/const/code/GameCode.js';
-
 	/** Utils */
 	import ArrayUtil from '@/common/util/ArrayUtil.js';
 
@@ -53,20 +56,17 @@
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 
 	import PlayerSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
+	import PlayerTable from '@/components/game/table/PlayerPaginationTable.vue';
 
 	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 	import { PlayerTypeCode } from '@/const/code/PlayerCode';
 	
 	export default {
-		mounted() {
-			this.getGameJoinPlayers();
-		},
 		components: {
 			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
 			PlayerSubTitle,
-			PlayerDataTable,
+			PlayerTable,
 			GameJoinPlayerSelectionTabs,
 		},
 		props: {
@@ -80,7 +80,13 @@
 				gameSeq: query.gameSeq,
 				teamSeq: '',
 				isGetGameJoinPlayersLoadOk: false,
-				gameJoinPlayers: [],
+				playersItems			: [],
+				pagination : {
+					totalCount 		: 0,
+					totalPageCount 	: 1,
+					rowCount 		: 5,
+				},
+				playersLoading 			: false,
 			};
 		},
 		// 참고자료 : https://velog.io/@yeoonnii/Vue.js-watch-%EC%86%8D%EC%84%B1
@@ -92,33 +98,34 @@
 				if (!isOpen) {
 					return;
 				}
-				this.getGameJoinPlayers();
+				// 모달이 열리면 참가선수 세팅 기본값 : 첫번째 페이지 세팅 
+				this.getGameJoinPlayers( { pageNo : 1 } );
 			},
 		},
 		methods: {
-			async getGameJoinPlayers() {
+			async getGameJoinPlayers( { pageNo } ) {
+				this.playersLoading = true;
 				const { data } = await GameAPI.getGameJoinPlayers({
-					gameSeq: this.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
+					gameSeq			: this.gameSeq,
+					homeAwayCode	: this.pHomeAwayCode,
+					pageNo 			: pageNo,
 				});
 
-				switch (this.pHomeAwayCode) {
-					case HomeAwayCode.HOME_TEAM:
-						this.teamSeq 			= data.homeTeam.teamSeq;
-						this.gameJoinPlayers 	= data.homeTeam.players;
-						break;
-					case HomeAwayCode.AWAY_TEAM:
-						this.teamSeq 			= data.awayTeam.teamSeq;
-						this.gameJoinPlayers 	= data.awayTeam.players;
-						break;
-				}
+				this.teamSeq 			= data.teamSeq;
+				this.playersItems 		= data.players;
+				
+				const pagination = this.pagination;
+				pagination.totalCount 		= data.pagination.totalCount;
+				pagination.totalPageCount	= data.pagination.totalPageCount;
+
 				this.isGetGameJoinPlayersLoadOk = true;
+				this.playersLoading				= false;
 			},
 			async registerPlayers() {
 				await GameAPI.registerGameJoinPlayers({
 					gameSeq			: this.gameSeq,
 					homeAwayCode	: this.pHomeAwayCode,
-					gameJoinPlayers	: this.gameJoinPlayers,
+					gameJoinPlayers	: this.playersItems,
 				});
 				
 				this.isModalOpen = false;
@@ -128,24 +135,34 @@
 				});
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
-			deleteGameJoinPlayer(targetPlayer) {
+			async deleteGameJoinPlayer(targetPlayer) {
+				console.log( targetPlayer );
+				// TODO 추가 로직을 API로 만들때 화면 삭제 로직 참고.
+				await GameAPI.deleteGameJoinPlayer({
+					gameJoinPlayerSeq	: targetPlayer.gameJoinPlayerSeq,
+					gameSeq 			: targetPlayer.gameSeq,
+					homeAwayCode 		: targetPlayer.homeAwayCode,
+				});
+
+
 				// 비회원일떄는 email로 지우고
 				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
-					this.gameJoinPlayers = ArrayUtil.deleteItemById(
-						this.gameJoinPlayers,
+					this.playersItems = ArrayUtil.deleteItemById(
+						this.playersItems,
 						targetPlayer,
 						'email'
 					);
-					return;
+				} else {
+					// 회원일떄는 userSeq로 지우기
+					this.playersItems = ArrayUtil.deleteItemById(
+						this.playersItems,
+						targetPlayer,
+						'userSeq'
+					);
 				}
-				// 회원일떄는 userSeq로 지우기
-				this.gameJoinPlayers = ArrayUtil.deleteItemById(
-					this.gameJoinPlayers,
-					targetPlayer,
-					'userSeq'
-				);
+				this.updatePlayersPagination();
 			},
-			addGameJoinPlayer(targetPlayer) {
+			async addGameJoinPlayer(targetPlayer) {
 				if (this.checkDuplicate(targetPlayer)) {
 					return;
 				}
@@ -154,17 +171,33 @@
 					return;
 				}
 
-				this.gameJoinPlayers.unshift(targetPlayer);
+				await GameAPI.addGameJoinPlayer({
+					gameSeq 		: this.gameSeq,
+					homeAwayCode 	: this.pHomeAwayCode,
+   					playerTypeCode	: targetPlayer.playerTypeCode,      // 선수유형코드
+   					userSeq			: targetPlayer.userSeq,             // 사용자Seq
+   					userName		: targetPlayer.userName,            // 사용자이름
+   					backNumber		: targetPlayer.backNumber,          // 등번호
+   					positionCode	: targetPlayer.positionCode,        // 포지션코드
+   					email			: targetPlayer.email,               // 이메일
+				});
+				this.playersItems.unshift(targetPlayer);
+				this.updatePlayersPagination();
+			},
+			updatePlayersPagination() {
+				const pagination = this.pagination;
+				pagination.totalCount 		= this.playersItems.length;
+				pagination.totalPageCount 	= Math.ceil( pagination.totalCount / pagination.rowCount );
 			},
 			checkDuplicate(targetPlayer) {
 				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
-					if (ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'email')) {
+					if (ArrayUtil.hasItem(this.playersItems, targetPlayer, 'email')) {
 						alert('선수 등록시 이메일이 중복되면 안됩니다.');
 						return true;
 					}
 				} else {
 					if (
-						ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'userSeq')
+						ArrayUtil.hasItem(this.playersItems, targetPlayer, 'userSeq')
 					) {
 						alert('이미 등록되어 있는 선수입니다.');
 						return true;
@@ -172,7 +205,7 @@
 				}
 
 				if (
-					ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'backNumber')
+					ArrayUtil.hasItem(this.playersItems, targetPlayer, 'backNumber')
 				) {
 					alert('등번호가 중복됩니다. 등번호를 수정해주세요.');
 					return true;
