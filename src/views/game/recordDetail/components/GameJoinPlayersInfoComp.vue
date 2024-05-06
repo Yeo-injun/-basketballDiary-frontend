@@ -56,7 +56,7 @@
 		},
 		methods: {
 			async getAllGameJoinPlayers() {
-				const { data } = await GameAPI.getGameJoinPlayers({
+				const { data } = await GameAPI.getAllGameJoinPlayers({
 							  	     gameSeq: this.pGameSeq,
 							     });
 				this.homeTeamPlayers = data.homeTeam.players;
@@ -70,6 +70,7 @@
 					homeAwayCode: homeAwayCode,
 				});
 
+				// TODO 메세지 구조 변경에 따른 수정 필요
 				switch( homeAwayCode ) {
 					case HomeAwayCode.HOME_TEAM : this.homeTeamPlayers = data.homeTeam.players; break;
 					case HomeAwayCode.AWAY_TEAM : this.awayTeamPlayers = data.awayTeam.players; break;

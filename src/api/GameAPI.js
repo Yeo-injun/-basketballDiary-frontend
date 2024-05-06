@@ -26,6 +26,31 @@ export default {
 		);
 	},
 	/**
+	 * API067 경기참가선수 추가 TODO 설계 필요
+	 */
+	addGameJoinPlayer( params ) {
+		return axiosService.post(
+			`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/player`,
+			{
+				playerTypeCode	: params.playerTypeCode,      // 선수유형코드
+				userSeq			: params.userSeq,             // 사용자Seq
+				userName		: params.userName,            // 사용자이름
+				backNumber		: params.backNumber,          // 등번호
+				positionCode	: params.positionCode,        // 포지션코드
+				email			: params.email,               // 이메일
+			}
+		);
+	},
+	/**
+	 * API068 경기참가선수 삭제
+	 * TODO API 설계서에 추가 요망
+	 */
+	deleteGameJoinPlayer( params ) {
+		return axiosService.delete(
+			`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players/${params.gameJoinPlayerSeq}`
+		);
+	},
+	/**
 	 * API038 쿼터기록 저장하기
 	 */
 	saveQuarterRecords(pathVar, reqBody) {
@@ -162,12 +187,23 @@ export default {
 		return axiosService.post(`/${params.gameSeq}/entry`, params);
 	},
 	/**
-	 * API061 경기참가선수 조회
+	 * API061 경기 전체 참가선수 조회 ( 홈/어웨이 팀 모두 )
 	 */
-	getGameJoinPlayers(params) {
+	getAllGameJoinPlayers(params) {
 		return axiosService.get(`/${params.gameSeq}/players`, {
 			params: {
 				homeAwayCode: params.homeAwayCode,
+				pageNo 		: params.pageNo,
+			},
+		});
+	},
+	/**
+	 * API066 경기참가선수 조회 (홈/어웨이 팀별로 )
+	 */
+	getGameJoinPlayers(params) {
+		return axiosService.get(`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`, {
+			params: {
+				pageNo 		: params.pageNo,
 			},
 		});
 	},
