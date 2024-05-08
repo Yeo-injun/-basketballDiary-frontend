@@ -31,7 +31,7 @@ export default {
 	getGameJoinPlayers(params) {
 		return axiosService.get(`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`, {
 			params: {
-				pageNo 		: params.pageNo,
+				pageNo 		: params.pageNo, // null 이거나 0일때 페이징처리 안되고 전체 조회
 			},
 		});
 	},

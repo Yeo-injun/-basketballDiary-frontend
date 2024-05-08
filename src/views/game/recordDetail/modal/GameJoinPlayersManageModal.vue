@@ -105,17 +105,16 @@
 					return;
 				}
 				// 모달이 열리면 참가선수 세팅 기본값 : 첫번째 페이지 세팅 
-				this.getGameJoinPlayers( { pageNo : 1 } );
+				this.getGameJoinPlayers();
 			},
 		},
 		methods: {
-			// TODO 페이징 처리 없이 조회하기
-			async getGameJoinPlayers( { pageNo } ) {
+			async getGameJoinPlayers() {
 				this.playersLoading = true;
+				// 서버 페이징처리 없이 전체 조회 ( pageNo에 값이 1이상이면 페이징 처리됨 )
 				const { data } = await GameAPI.getGameJoinPlayers({
 					gameSeq			: this.gameSeq,
 					homeAwayCode	: this.pHomeAwayCode,
-					pageNo 			: pageNo,
 				});
 
 				this.teamSeq 			= data.teamSeq;
