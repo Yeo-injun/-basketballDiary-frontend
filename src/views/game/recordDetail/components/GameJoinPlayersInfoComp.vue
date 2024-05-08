@@ -72,8 +72,8 @@
 
 				// TODO 메세지 구조 변경에 따른 수정 필요
 				switch( homeAwayCode ) {
-					case HomeAwayCode.HOME_TEAM : this.homeTeamPlayers = data.homeTeam.players; break;
-					case HomeAwayCode.AWAY_TEAM : this.awayTeamPlayers = data.awayTeam.players; break;
+					case HomeAwayCode.HOME_TEAM : this.homeTeamPlayers = data.players; break;
+					case HomeAwayCode.AWAY_TEAM : this.awayTeamPlayers = data.players; break;
 					default : 
 						throw new Error( "유효하지 않은 HOME_AWAY_CODE값입니다." );
 				}
