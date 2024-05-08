@@ -15,15 +15,25 @@ const axiosService = axios.createAxiosInstance('/games');
  */
 export default {
 	/**
-	 * API035 게임참가 선수등록하기
+	 * API061 경기 전체 참가선수 조회 ( 홈/어웨이 팀 모두 )
 	 */
-	registerGameJoinPlayers( params ) {
-		return axiosService.post(
-			`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`,
-			{
-				gameJoinPlayers: params.gameJoinPlayers,
-			}
-		);
+	getAllGameJoinPlayers(params) {
+		return axiosService.get(`/${params.gameSeq}/players`, {
+			params: {
+				homeAwayCode: params.homeAwayCode,
+				pageNo 		: params.pageNo,
+			},
+		});
+	},
+	/**
+	 * API066 경기참가선수 조회 (홈/어웨이 팀별로 )
+	 */
+	getGameJoinPlayers(params) {
+		return axiosService.get(`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`, {
+			params: {
+				pageNo 		: params.pageNo,
+			},
+		});
 	},
 	/**
 	 * API067 경기참가선수 추가 TODO 설계 필요
@@ -186,28 +196,6 @@ export default {
 	saveEntry(params) {
 		return axiosService.post(`/${params.gameSeq}/entry`, params);
 	},
-	/**
-	 * API061 경기 전체 참가선수 조회 ( 홈/어웨이 팀 모두 )
-	 */
-	getAllGameJoinPlayers(params) {
-		return axiosService.get(`/${params.gameSeq}/players`, {
-			params: {
-				homeAwayCode: params.homeAwayCode,
-				pageNo 		: params.pageNo,
-			},
-		});
-	},
-	/**
-	 * API066 경기참가선수 조회 (홈/어웨이 팀별로 )
-	 */
-	getGameJoinPlayers(params) {
-		return axiosService.get(`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`, {
-			params: {
-				pageNo 		: params.pageNo,
-			},
-		});
-	},
-
 	/**
 	 * API062 게임참가팀 확정
 	 */

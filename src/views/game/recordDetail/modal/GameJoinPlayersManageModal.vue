@@ -35,7 +35,7 @@
 					@get-row-player-info="deleteGameJoinPlayer"
 				/>
 				<v-container>
-					<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
+					<ModalCloseBtn pBtnName="닫기" @do-close="closeModal"/>
 				</v-container>
 			</v-container>
 
@@ -48,26 +48,28 @@
 	import GameAPI from '@/api/GameAPI.js';
 
 	/** CODE */
+	import { PlayerTypeCode } from '@/const/code/PlayerCode';
+
 	/** Utils */
 	import ArrayUtil from '@/common/util/ArrayUtil.js';
 
 	/** Components */
-	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
+
+	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 
 	import PlayerSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import PlayerTable from '@/components/game/table/PlayerPaginationTable.vue';
 
-	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
-	import { PlayerTypeCode } from '@/const/code/PlayerCode';
+	import ModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
 	
 	export default {
 		components: {
-			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
+			GameJoinPlayerSelectionTabs,
 			PlayerSubTitle,
 			PlayerTable,
-			GameJoinPlayerSelectionTabs,
+			ModalCloseBtn,
 		},
 		props: {
 			pModalTitlePrefix: String,
@@ -96,6 +98,10 @@
 		watch: {
 			isModalOpen(isOpen) {
 				if (!isOpen) {
+					// 모달 닫히고, 이벤트를 부모 컴포넌트로 전달해서 등록된 선수 목록을 API재호출 할 수 있도록 처리
+					this.$emit('register-complete', {
+						homeAwayCode: this.pHomeAwayCode,
+					});
 					return;
 				}
 				// 모달이 열리면 참가선수 세팅 기본값 : 첫번째 페이지 세팅 
@@ -103,6 +109,7 @@
 			},
 		},
 		methods: {
+			// TODO 페이징 처리 없이 조회하기
 			async getGameJoinPlayers( { pageNo } ) {
 				this.playersLoading = true;
 				const { data } = await GameAPI.getGameJoinPlayers({
@@ -121,19 +128,6 @@
 				this.isGetGameJoinPlayersLoadOk = true;
 				this.playersLoading				= false;
 			},
-			async registerPlayers() {
-				await GameAPI.registerGameJoinPlayers({
-					gameSeq			: this.gameSeq,
-					homeAwayCode	: this.pHomeAwayCode,
-					gameJoinPlayers	: this.playersItems,
-				});
-				
-				this.isModalOpen = false;
-				// 모달 닫히고, 이벤트를 부모 컴포넌트로 전달해서 등록된 선수 목록을 API재호출 할 수 있도록 처리
-				this.$emit('register-complete', {
-					homeAwayCode: this.pHomeAwayCode,
-				});
-			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			async deleteGameJoinPlayer(targetPlayer) {
 				console.log( targetPlayer );
@@ -143,7 +137,6 @@
 					gameSeq 			: targetPlayer.gameSeq,
 					homeAwayCode 		: targetPlayer.homeAwayCode,
 				});
-
 
 				// 비회원일떄는 email로 지우고
 				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
@@ -226,6 +219,12 @@
 
 				return true;
 			},
+			// 모달 Open/Close 상태 변경
+			closeModal() {
+				this.isModalOpen = false;
+			},
+			
+
 		},
 	};
 </script>
