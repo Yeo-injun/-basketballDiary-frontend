@@ -15,14 +15,49 @@ const axiosService = axios.createAxiosInstance('/games');
  */
 export default {
 	/**
-	 * API035 게임참가 선수등록하기
+	 * API061 경기 전체 참가선수 조회 ( 홈/어웨이 팀 모두 )
 	 */
-	registerGameJoinPlayers(pathVar, reqBody) {
+	getAllGameJoinPlayers(params) {
+		return axiosService.get(`/${params.gameSeq}/players`, {
+			params: {
+				homeAwayCode: params.homeAwayCode,
+				pageNo 		: params.pageNo,
+			},
+		});
+	},
+	/**
+	 * API066 경기참가선수 조회 (홈/어웨이 팀별로 )
+	 */
+	getGameJoinPlayers(params) {
+		return axiosService.get(`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`, {
+			params: {
+				pageNo 		: params.pageNo, // null 이거나 0일때 페이징처리 안되고 전체 조회
+			},
+		});
+	},
+	/**
+	 * API067 경기참가선수 추가 TODO 설계 필요
+	 */
+	addGameJoinPlayer( params ) {
 		return axiosService.post(
-			`/${pathVar.gameSeq}/homeAwayCode/${pathVar.homeAwayCode}/players`,
+			`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/player`,
 			{
-				gameJoinPlayers: reqBody.gameJoinPlayers,
+				playerTypeCode	: params.playerTypeCode,      // 선수유형코드
+				userSeq			: params.userSeq,             // 사용자Seq
+				userName		: params.userName,            // 사용자이름
+				backNumber		: params.backNumber,          // 등번호
+				positionCode	: params.positionCode,        // 포지션코드
+				email			: params.email,               // 이메일
 			}
+		);
+	},
+	/**
+	 * API068 경기참가선수 삭제
+	 * TODO API 설계서에 추가 요망
+	 */
+	deleteGameJoinPlayer( params ) {
+		return axiosService.delete(
+			`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players/${params.gameJoinPlayerSeq}`
 		);
 	},
 	/**
@@ -161,17 +196,6 @@ export default {
 	saveEntry(params) {
 		return axiosService.post(`/${params.gameSeq}/entry`, params);
 	},
-	/**
-	 * API061 경기참가선수 조회
-	 */
-	getGameJoinPlayers(params) {
-		return axiosService.get(`/${params.gameSeq}/players`, {
-			params: {
-				homeAwayCode: params.homeAwayCode,
-			},
-		});
-	},
-
 	/**
 	 * API062 게임참가팀 확정
 	 */

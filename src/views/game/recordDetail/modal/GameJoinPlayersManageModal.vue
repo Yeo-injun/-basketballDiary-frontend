@@ -23,14 +23,19 @@
 
 			<v-container>
 				<PlayerSubTitle pTitleName="참가선수 목록" />
-				<PlayerDataTable
+				<PlayerTable
 					v-if="isGetGameJoinPlayersLoadOk"
-					:pPlayers="gameJoinPlayers"
+					:pPlayers="playersItems"
+					:pTotalCount="pagination.totalCount"
+					:pPageCount="pagination.totalPageCount"
+					:pRowCount="pagination.rowCount"
+					:pLoading="playersLoading"
 					pRowBtnName="삭제"
+					@fetch-paging-items="getGameJoinPlayers"
 					@get-row-player-info="deleteGameJoinPlayer"
 				/>
 				<v-container>
-					<GameJoinPlayerSaveBtn pBtnName="등록" @do-save="registerPlayers" />
+					<ModalCloseBtn pBtnName="닫기" @do-close="closeModal"/>
 				</v-container>
 			</v-container>
 
@@ -43,31 +48,28 @@
 	import GameAPI from '@/api/GameAPI.js';
 
 	/** CODE */
-	import { HomeAwayCode } from '@/const/code/GameCode.js';
+	import { PlayerTypeCode } from '@/const/code/PlayerCode';
 
 	/** Utils */
 	import ArrayUtil from '@/common/util/ArrayUtil.js';
 
 	/** Components */
-	import GameJoinPlayerSaveBtn from '@/components/button/FrameSaveBtn.vue';
 	import GameJoinPlayerManageBtn from '@/components/button/FrameOpenBtn.vue';
 
-	import PlayerSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
-
 	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
-	import { PlayerTypeCode } from '@/const/code/PlayerCode';
+
+	import PlayerSubTitle from '@/components/title/FrameTabSubTitle.vue';
+	import PlayerTable from '@/components/game/table/PlayerPaginationTable.vue';
+
+	import ModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
 	
 	export default {
-		mounted() {
-			this.getGameJoinPlayers();
-		},
 		components: {
-			GameJoinPlayerSaveBtn,
 			GameJoinPlayerManageBtn,
-			PlayerSubTitle,
-			PlayerDataTable,
 			GameJoinPlayerSelectionTabs,
+			PlayerSubTitle,
+			PlayerTable,
+			ModalCloseBtn,
 		},
 		props: {
 			pModalTitlePrefix: String,
@@ -80,7 +82,13 @@
 				gameSeq: query.gameSeq,
 				teamSeq: '',
 				isGetGameJoinPlayersLoadOk: false,
-				gameJoinPlayers: [],
+				playersItems			: [],
+				pagination : {
+					totalCount 		: 0,
+					totalPageCount 	: 1,
+					rowCount 		: 5,
+				},
+				playersLoading 			: false,
 			};
 		},
 		// 참고자료 : https://velog.io/@yeoonnii/Vue.js-watch-%EC%86%8D%EC%84%B1
@@ -89,74 +97,64 @@
 		// TODO 모달을 공통 컴포넌트로 구현하고 대체하기
 		watch: {
 			isModalOpen(isOpen) {
-				// 모달이 OPEN됐을때 동작
-				if (isOpen) {
-					this.getGameJoinPlayers();
+				if (!isOpen) {
+					// 모달 닫히고, 이벤트를 부모 컴포넌트로 전달해서 등록된 선수 목록을 API재호출 할 수 있도록 처리
+					this.$emit('register-complete', {
+						homeAwayCode: this.pHomeAwayCode,
+					});
 					return;
 				}
-				// 모달이 닫혔을때 동작
+				// 모달이 열리면 참가선수 세팅 기본값 : 첫번째 페이지 세팅 
+				this.getGameJoinPlayers();
 			},
 		},
 		methods: {
-			async registerPlayers() {
-				const pathVariables = {
-					gameSeq: this.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
-				};
-
-				const reqBody = {
-					gameJoinPlayers: this.gameJoinPlayers,
-				};
-
-				const res = await GameAPI.registerGameJoinPlayers(pathVariables, reqBody);
-				// TODO 개발서버에서도 Location 속성에 접근가능한지 확인 필요 ( CORS 설정때문에 해당 헤더속성에 접근못하고 있음 (local Backend서버에는 설정 추가함 ) )
-				console.log( ["============게임참가선수등록========", res.headers, res.headers.location ]);
-				
-				this.isModalOpen = false;
-				// TODO 모달 닫히고, 이벤트를 에밋해서 모달의 부모 컴포넌트에서 API재호출 할 수 있도록 처리
-				this.$emit('register-complete', {
-					homeAwayCode: this.pHomeAwayCode,
-				});
-			},
 			async getGameJoinPlayers() {
-				const params = {
-					gameSeq: this.gameSeq,
-					homeAwayCode: this.pHomeAwayCode,
-				};
+				this.playersLoading = true;
+				// 서버 페이징처리 없이 전체 조회 ( pageNo에 값이 1이상이면 페이징 처리됨 )
+				const { data } = await GameAPI.getGameJoinPlayers({
+					gameSeq			: this.gameSeq,
+					homeAwayCode	: this.pHomeAwayCode,
+				});
 
-				const res = await GameAPI.getGameJoinPlayers(params);
+				this.teamSeq 			= data.teamSeq;
+				this.playersItems 		= data.players;
+				
+				const pagination = this.pagination;
+				pagination.totalCount 		= data.pagination.totalCount;
+				pagination.totalPageCount	= data.pagination.totalPageCount;
 
-				switch (this.pHomeAwayCode) {
-					case HomeAwayCode.HOME_TEAM:
-						this.teamSeq = res.data.homeTeam.teamSeq;
-						this.gameJoinPlayers = res.data.homeTeam.players;
-						break;
-					case HomeAwayCode.AWAY_TEAM:
-						this.teamSeq = res.data.awayTeam.teamSeq;
-						this.gameJoinPlayers = res.data.awayTeam.players;
-						break;
-				}
 				this.isGetGameJoinPlayersLoadOk = true;
+				this.playersLoading				= false;
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
-			deleteGameJoinPlayer(targetPlayer) {
+			async deleteGameJoinPlayer(targetPlayer) {
+				console.log( targetPlayer );
+				// TODO 추가 로직을 API로 만들때 화면 삭제 로직 참고.
+				await GameAPI.deleteGameJoinPlayer({
+					gameJoinPlayerSeq	: targetPlayer.gameJoinPlayerSeq,
+					gameSeq 			: targetPlayer.gameSeq,
+					homeAwayCode 		: targetPlayer.homeAwayCode,
+				});
+
 				// 비회원일떄는 email로 지우고
 				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
-					this.gameJoinPlayers = ArrayUtil.deleteItemById(
-						this.gameJoinPlayers,
+					this.playersItems = ArrayUtil.deleteItemById(
+						this.playersItems,
 						targetPlayer,
 						'email'
 					);
-					return;
+				} else {
+					// 회원일떄는 userSeq로 지우기
+					this.playersItems = ArrayUtil.deleteItemById(
+						this.playersItems,
+						targetPlayer,
+						'userSeq'
+					);
 				}
-				// 회원일떄는 userSeq로 지우기
-				this.gameJoinPlayers = ArrayUtil.deleteItemById(
-					this.gameJoinPlayers,
-					targetPlayer,
-					'userSeq'
-				);
+				this.updatePlayersPagination();
 			},
-			addGameJoinPlayer(targetPlayer) {
+			async addGameJoinPlayer(targetPlayer) {
 				if (this.checkDuplicate(targetPlayer)) {
 					return;
 				}
@@ -165,17 +163,33 @@
 					return;
 				}
 
-				this.gameJoinPlayers.unshift(targetPlayer);
+				await GameAPI.addGameJoinPlayer({
+					gameSeq 		: this.gameSeq,
+					homeAwayCode 	: this.pHomeAwayCode,
+   					playerTypeCode	: targetPlayer.playerTypeCode,      // 선수유형코드
+   					userSeq			: targetPlayer.userSeq,             // 사용자Seq
+   					userName		: targetPlayer.userName,            // 사용자이름
+   					backNumber		: targetPlayer.backNumber,          // 등번호
+   					positionCode	: targetPlayer.positionCode,        // 포지션코드
+   					email			: targetPlayer.email,               // 이메일
+				});
+				this.playersItems.unshift(targetPlayer);
+				this.updatePlayersPagination();
+			},
+			updatePlayersPagination() {
+				const pagination = this.pagination;
+				pagination.totalCount 		= this.playersItems.length;
+				pagination.totalPageCount 	= Math.ceil( pagination.totalCount / pagination.rowCount );
 			},
 			checkDuplicate(targetPlayer) {
 				if (this.isUnauthGuest(targetPlayer.playerTypeCode)) {
-					if (ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'email')) {
+					if (ArrayUtil.hasItem(this.playersItems, targetPlayer, 'email')) {
 						alert('선수 등록시 이메일이 중복되면 안됩니다.');
 						return true;
 					}
 				} else {
 					if (
-						ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'userSeq')
+						ArrayUtil.hasItem(this.playersItems, targetPlayer, 'userSeq')
 					) {
 						alert('이미 등록되어 있는 선수입니다.');
 						return true;
@@ -183,7 +197,7 @@
 				}
 
 				if (
-					ArrayUtil.hasItem(this.gameJoinPlayers, targetPlayer, 'backNumber')
+					ArrayUtil.hasItem(this.playersItems, targetPlayer, 'backNumber')
 				) {
 					alert('등번호가 중복됩니다. 등번호를 수정해주세요.');
 					return true;
@@ -204,6 +218,12 @@
 
 				return true;
 			},
+			// 모달 Open/Close 상태 변경
+			closeModal() {
+				this.isModalOpen = false;
+			},
+			
+
 		},
 	};
 </script>

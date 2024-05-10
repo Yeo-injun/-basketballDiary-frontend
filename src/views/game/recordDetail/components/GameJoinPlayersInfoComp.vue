@@ -1,13 +1,13 @@
 <template>
 	<v-container>
-		<h2>게임참가선수</h2>
+		<h2>경기참가선수</h2>
 		<v-container v-if="this.isLoadingComplete">
 			<v-row dense>
 				<v-col cols="6">
 					<HomeTeamPlayersManageModal
 						pModalTitlePrefix="홈팀"
 						:pHomeAwayCode="this.homeTeamCode"
-						@register-complete="setSelectedPlayers"
+						@register-complete="getRegisteredPlayers"
 					/>
 					<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
 				</v-col>
@@ -15,7 +15,7 @@
 					<AwayTeamPlayersManageModal
 						pModalTitlePrefix="어웨이팀"
 						:pHomeAwayCode="this.awayTeamCode"
-						@register-complete="setSelectedPlayers"
+						@register-complete="getRegisteredPlayers"
 					/>
 					<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
 				</v-col>
@@ -50,52 +50,33 @@
 				isLoadingComplete: false,
 				homeTeamCode: HomeAwayCode.HOME_TEAM,
 				awayTeamCode: HomeAwayCode.AWAY_TEAM,
-				homeTeamInfo: {}, // TODO 삭제 예정
-				awayTeamInfo: {}, // TODO 삭제 예정
 				homeTeamPlayers: [],
 				awayTeamPlayers: [],
 			};
 		},
 		methods: {
 			async getAllGameJoinPlayers() {
-				const params = {
-					gameSeq: this.pGameSeq,
-				};
-
-				const res = await GameAPI.getGameJoinPlayers(params);
-
-				const homeTeam = res.data.homeTeam;
-				this.homeTeamInfo = {
-					homeAwayCode: HomeAwayCode.HOME_TEAM,
-					gameJoinTeamSeq: homeTeam.gameJoinTeamSeq,
-					teamSeq: homeTeam.teamSeq,
-				};
-				this.homeTeamPlayers = homeTeam.players;
-
-				const awayTeam = res.data.awayTeam;
-				this.awayTeamInfo = {
-					homeAwayCode: HomeAwayCode.AWAY_TEAM,
-					gameJoinTeamSeq: awayTeam.gameJoinTeamSeq,
-					teamSeq: awayTeam.teamSeq,
-				};
-				this.awayTeamPlayers = awayTeam.players;
+				const { data } = await GameAPI.getAllGameJoinPlayers({
+							  	     gameSeq: this.pGameSeq,
+							     });
+				this.homeTeamPlayers = data.homeTeam.players;
+				this.awayTeamPlayers = data.awayTeam.players;
 				this.isLoadingComplete = true;
 			},
-			async setSelectedPlayers(eventParams) {
-				console.log(eventParams);
+			async getRegisteredPlayers(eventParams) {
 				const homeAwayCode = eventParams.homeAwayCode;
-				const params = {
+				const { data } = await GameAPI.getGameJoinPlayers({
 					gameSeq: this.pGameSeq,
 					homeAwayCode: homeAwayCode,
-				};
+				});
 
-				const res = await GameAPI.getGameJoinPlayers(params);
-
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.homeTeamPlayers = res.data.homeTeam.players;
-					return;
+				// TODO 메세지 구조 변경에 따른 수정 필요
+				switch( homeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM : this.homeTeamPlayers = data.players; break;
+					case HomeAwayCode.AWAY_TEAM : this.awayTeamPlayers = data.players; break;
+					default : 
+						throw new Error( "유효하지 않은 HOME_AWAY_CODE값입니다." );
 				}
-				this.awayTeamPlayers = res.data.awayTeam.players;
 			},
 		},
 		mounted() {

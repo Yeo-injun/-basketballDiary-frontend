@@ -135,21 +135,16 @@
 					return;
 				}
 				const query = this.$route.query;
-
-				const reqBody = {
-					gameCreationInfo: {
-						teamSeq: query.teamSeq,
-						gameYmd: this.gameYmd,
-						gameStartTime: this.gameStartTime,
-						gameEndTime: this.gameEndTime,
-						gamePlaceAddress: this.gamePlaceAddress,
-						gamePlaceName: this.gamePlaceName,
-						sidoCode: this.sidoCode,
-						sigunguCode: this.sigunguCode,
-					},
-				};
-
-				const { data } = await GameAPI.createGame(reqBody);
+				const { data } = await GameAPI.createGame({
+					teamSeq				: query.teamSeq,
+					gameYmd				: this.gameYmd,
+					gameStartTime		: this.gameStartTime,
+					gameEndTime			: this.gameEndTime,
+					gamePlaceAddress	: this.gamePlaceAddress,
+					gamePlaceName		: this.gamePlaceName,
+					sidoCode			: this.sidoCode,
+					sigunguCode			: this.sigunguCode,
+				});
 
 				this.$router.push({
 					name: 'GameJoinTeamSelectionPage',
