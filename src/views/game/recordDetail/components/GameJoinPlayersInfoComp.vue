@@ -63,14 +63,14 @@
 				this.awayTeamPlayers = data.awayTeam.players;
 				this.isLoadingComplete = true;
 			},
+			/** 경기참가선수가 추가(서버에 1명씩 저장됨)되면 저장된 정보 재조회하는 구조 */
 			async getRegisteredPlayers(eventParams) {
 				const homeAwayCode = eventParams.homeAwayCode;
 				const { data } = await GameAPI.getGameJoinPlayers({
-					gameSeq: this.pGameSeq,
-					homeAwayCode: homeAwayCode,
+					gameSeq			: this.pGameSeq,
+					homeAwayCode	: homeAwayCode,
 				});
 
-				// TODO 메세지 구조 변경에 따른 수정 필요
 				switch( homeAwayCode ) {
 					case HomeAwayCode.HOME_TEAM : this.homeTeamPlayers = data.players; break;
 					case HomeAwayCode.AWAY_TEAM : this.awayTeamPlayers = data.players; break;
