@@ -26,17 +26,18 @@ export default {
 		});
 	},
 	/**
-	 * API066 경기참가선수 조회 (홈/어웨이 팀별로 )
+	 * API066 경기참가선수 조회 ( 홈/어웨이 팀별로 )
 	 */
 	getGameJoinPlayers(params) {
 		return axiosService.get(`/${params.gameSeq}/homeAwayCode/${params.homeAwayCode}/players`, {
 			params: {
-				pageNo 		: params.pageNo, // null 이거나 0일때 페이징처리 안되고 전체 조회
+				pageNo : params.pageNo, // null 이거나 0일때 페이징처리 안되고 전체 조회
 			},
 		});
 	},
 	/**
-	 * API067 경기참가선수 추가 TODO 설계 필요
+	 * API067 경기참가선수 추가 
+	 * TODO API 설계서에 추가 요망 ( 구현 완 )
 	 */
 	addGameJoinPlayer( params ) {
 		return axiosService.post(
@@ -53,7 +54,7 @@ export default {
 	},
 	/**
 	 * API068 경기참가선수 삭제
-	 * TODO API 설계서에 추가 요망
+	 * TODO API 설계서에 추가 요망 ( 구현 완 )
 	 */
 	deleteGameJoinPlayer( params ) {
 		return axiosService.delete(
