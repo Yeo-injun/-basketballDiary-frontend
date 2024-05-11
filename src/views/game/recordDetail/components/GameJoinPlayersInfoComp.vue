@@ -59,8 +59,8 @@
 				const { data } = await GameAPI.getAllGameJoinPlayers({
 							  	     gameSeq: this.pGameSeq,
 							     });
-				this.homeTeamPlayers = data.homeTeam.players;
-				this.awayTeamPlayers = data.awayTeam.players;
+				this.homeTeamPlayers = data.homePlayers;
+				this.awayTeamPlayers = data.awayPlayers;
 				this.isLoadingComplete = true;
 			},
 			/** 경기참가선수가 추가(서버에 1명씩 저장됨)되면 저장된 정보 재조회하는 구조 */
