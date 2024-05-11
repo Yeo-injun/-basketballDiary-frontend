@@ -12,7 +12,7 @@
 			<v-card-title class="grey lighten-2">{{ this.homeAwayCodeName }} 출전선수 관리</v-card-title>
 			<v-container>
 				<v-container>
-					<h4>게임참가선수 목록</h4>
+					<h4>경기참가선수 목록</h4>
 					<GameJoinPlayerTable
 						v-if="isInit.gameJoinPlayers"
 						:pPlayers="gameJoinPlayers"
@@ -115,25 +115,14 @@
 				// 비동기 통신 완료 후 자식 컴포넌트 생성 제어
 				this.isInit.gameEntry = true;
 			},
-			// 게임참가선수 목록 조회
+			// 경기참가선수 목록 조회
 			async loadGameJoinPlayers() {
-				const homeAwayCode = this.pHomeAwayCode;
-				const params = {
-					gameSeq: this.gameSeq,
-					homeAwayCode: homeAwayCode,
-				};
+				const { data } = await GameAPI.getGameJoinPlayers({
+					gameSeq			: this.gameSeq,
+					homeAwayCode	: this.pHomeAwayCode,
+				});
 
-				const res = await GameAPI.getAllGameJoinPlayers(params);
-
-				switch (homeAwayCode) {
-					case HomeAwayCode.HOME_TEAM:
-						this.gameJoinPlayers = res.data.homeTeam.players;
-						break;
-					case HomeAwayCode.AWAY_TEAM:
-						this.gameJoinPlayers = res.data.awayTeam.players;
-						break;
-				}
-
+				this.gameJoinPlayers = data.players;
 				this.isInit.gameJoinPlayers = true;
 			},
 			// 엔트리 저장 및 모달 닫기
