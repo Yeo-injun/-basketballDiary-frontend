@@ -1,10 +1,11 @@
 <template>
 	<v-container>
-		<h2>상대팀 검색</h2>
+		<PageSubTitle pTitleName="상대팀 검색" />
 		<v-text-field label="팀명" v-model="searchCond.teamName" />
 		<v-text-field label="팀장이름" v-model="searchCond.leaderName" />
-		<v-btn @click="searchOpponents()">검색</v-btn>
+		<SearchBtn @do-search="searchOpponents()" />
 
+		<!-- Page처리 필요 -->
 		<v-data-table
 			:single-select="true"
 			:headers="headers"
@@ -18,13 +19,23 @@
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
-	// import SearchBtn from '@/components/button/SearcheBtn.vue';
+
+	/** Code */
+	/** Utils */
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
+
+	/** Components */
+	import PageSubTitle from '@/components/title/FramePageSubTitle.vue';
+	import SearchBtn from '@/components/button/FrameSearchBtn.vue';
+
+	/** Emit Event */
 
 	export default {
 		components: {
-			// SearchBtn,
+			PageSubTitle,
+			SearchBtn,
 		},
 		data() {
 			return {
@@ -55,11 +66,11 @@
 		},
 		methods: {
 			/** API044 농구팀 목록 조회 */
+			// TODO 페이징 처리 추가 요망
 			async searchOpponents() {
 				const queryStrings = this.searchCond;
-				const res = await GameAPI.searchOpponents(queryStrings);
-				const opponents = res.data.opponents;
-				this.opponents = opponents;
+				const { data } = await GameAPI.searchOpponents(queryStrings);
+				this.opponents = data.opponents;
 			},
 		},
 		mounted() {
