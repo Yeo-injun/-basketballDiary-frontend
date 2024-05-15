@@ -19,7 +19,7 @@
 			DeleteBtn,
 		},
 		props: {
-			pGameSeq: Number,
+			pGameSeq: String,
 		},
 		data() {
 			return {
