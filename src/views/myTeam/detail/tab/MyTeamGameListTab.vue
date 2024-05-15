@@ -9,6 +9,7 @@
 			:pPagination="pagination"
 			@click-page="searchMyTeamGames"
 		>
+		<!-- TODO 참가팀 선택단계에서 임시저장된 건 조회시 오류 발생 ( null객체가 전달되는 것으로 추정됨 )-->
 			<template v-slot:itemSlot="data">
 				<MyTeamGameRecordComp :pGame="data.item" :pTeamSeq="pTeamSeq" />
 			</template>

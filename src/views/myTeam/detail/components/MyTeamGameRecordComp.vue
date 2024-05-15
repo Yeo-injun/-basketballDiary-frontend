@@ -78,9 +78,9 @@
 			},
 			_getRouteParams() {
 				return {
-					gameSeq: this.pGame.gameSeq,
-					gameRecordState: this.pGame.gameRecordStateCode,
-					teamSeq: this.pTeamSeq,
+					gameSeq			: String( this.pGame.gameSeq ), // gameSeq와 같은 key값은 String type으로 관리 ( 다양한 case에 유연하게 대응 가능 )
+					gameRecordState	: this.pGame.gameRecordStateCode,
+					teamSeq			: this.pTeamSeq,  // TODO String으로 변환 처리 요망
 				};
 			},
 		},
