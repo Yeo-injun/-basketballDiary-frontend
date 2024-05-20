@@ -3,7 +3,7 @@
 
 <template>
 	<v-container>
-		<h2>게임참가팀 선택</h2>
+		<h2>경기참가팀 선택</h2>
 
 		<v-select
 			v-model="selectedGameType"
