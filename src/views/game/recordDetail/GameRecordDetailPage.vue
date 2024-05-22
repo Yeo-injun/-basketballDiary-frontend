@@ -50,8 +50,8 @@
 			const query = this.$route.query;
 
 			return {
-				gameSeq: Number(query.gameSeq),
-				teamSeq: Number(query.teamSeq),
+				gameSeq: String( query.gameSeq ),
+				teamSeq: query.teamSeq,
 				teamName: query.teamName,
 				gameRecordState: query.gameRecordState,
 			};
