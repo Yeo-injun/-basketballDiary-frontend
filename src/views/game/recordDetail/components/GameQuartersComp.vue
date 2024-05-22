@@ -50,7 +50,7 @@
 		},
 		props: {
 			pGameSeq: String,
-			pTeamSeq: Number,
+			pTeamSeq: String,
 		},
 		data() {
 			return {

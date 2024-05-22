@@ -50,9 +50,9 @@
 			QuarterCreateBtn,
 		},
 		props: {
-			pGameSeq: String,
-			pTeamSeq: Number,
-			pQuarterCode: String,
+			pGameSeq			: String,
+			pTeamSeq			: String,
+			pQuarterCode		: String,
 			pGameRecordStateCode: String,
 			pTeamsQuarterRecords: Object,
 		},
