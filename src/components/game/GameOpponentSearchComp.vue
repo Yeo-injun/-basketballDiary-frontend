@@ -47,8 +47,6 @@
 
 	/** Emit Event */
 
-	// const FETCH_SEARCH_BUTTON 	= "search";
-	// const FETCH_PAGINATION		= "pagination";
 	export default {
 		components: {
 			PageSubTitle,
@@ -56,7 +54,7 @@
 		},
 		data() {
 			return {
-				pagable : false,
+				pagable : false,	// 페이징 번호를 클릭하여 조회할 수 있는 상태인지 cf. false면 페이징 번호로 조회 불가
 				searchCond: {
 					teamName	: '',
 					leaderName	: '',
@@ -116,7 +114,10 @@
 					teamName	: this.searchCond.teamName		,
 					leaderName	: this.searchCond.leaderName	,
 					pageNo		: this.pagination.pageNo		,
-				})
+				});
+				// 페이징 번호 변경으로 새로운 목록 데이터를 조회한 후 기존에 선택된 값 초기화를 위해 event emit
+				this.selectedOpponentInfo = [];
+				this.$emit('init-selected');
 			},
 			async getOpponents( searchParams ) {
 				/** API044 상대팀 목록 조회 */
