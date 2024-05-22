@@ -33,7 +33,7 @@
 
 	export default {
 		props: {
-			pGameSeq: Number,
+			pGameSeq: String,
 		},
 		data() {
 			return {
