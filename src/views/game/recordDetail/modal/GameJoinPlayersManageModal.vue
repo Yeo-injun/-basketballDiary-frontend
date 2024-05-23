@@ -23,13 +23,12 @@
 
 			<v-container>
 				<PlayerSubTitle pTitleName="참가선수 목록" />
-				<PlayerTable
+				<PlayerPaginationTable
 					v-if="isGetGameJoinPlayersLoadOk"
 					:pPlayers="playersItems"
 					:pTotalCount="pagination.totalCount"
 					:pPageCount="pagination.totalPageCount"
 					:pRowCount="pagination.rowCount"
-					:pLoading="playersLoading"
 					pRowBtnName="삭제"
 					@fetch-paging-items="getGameJoinPlayers"
 					@get-row-player-info="deleteGameJoinPlayer"
@@ -59,7 +58,7 @@
 	import GameJoinPlayerSelectionTabs from '@/views/game/recordDetail/modal/tab/GameJoinPlayerSelectionTabs.vue';
 
 	import PlayerSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import PlayerTable from '@/components/game/table/PlayerPaginationTable.vue';
+	import PlayerPaginationTable from '@/components/game/table/PlayerPaginationTable.vue';
 
 	import ModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
 	
@@ -68,7 +67,7 @@
 			GameJoinPlayerManageBtn,
 			GameJoinPlayerSelectionTabs,
 			PlayerSubTitle,
-			PlayerTable,
+			PlayerPaginationTable,
 			ModalCloseBtn,
 		},
 		props: {
@@ -88,7 +87,6 @@
 					totalPageCount 	: 1,
 					rowCount 		: 5,
 				},
-				playersLoading 			: false,
 			};
 		},
 		// 참고자료 : https://velog.io/@yeoonnii/Vue.js-watch-%EC%86%8D%EC%84%B1
@@ -110,7 +108,6 @@
 		},
 		methods: {
 			async getGameJoinPlayers() {
-				this.playersLoading = true;
 				// 서버 페이징처리 없이 전체 조회 ( pageNo에 값이 1이상이면 페이징 처리됨 )
 				const { data } = await GameAPI.getGameJoinPlayers({
 					gameSeq			: this.gameSeq,
@@ -125,7 +122,6 @@
 				pagination.totalPageCount	= data.pagination.totalPageCount;
 
 				this.isGetGameJoinPlayersLoadOk = true;
-				this.playersLoading				= false;
 			},
 			/** userSeq는 게임참가선수로 등록되기 전에도 가지고 있기 때문 */
 			async deleteGameJoinPlayer(targetPlayer) {

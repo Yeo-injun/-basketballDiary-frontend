@@ -3,10 +3,14 @@
 		<!-- 검색창 -->
 		<v-text-field label="이름" v-model="playerName" />
 		<TeamMemberSearchBtn @do-search="searchAllTeamMember" />
-		<PlayerDataTable
+		<PlayerPaginationTable
 			v-if="isLoadingOk"
-			pRowBtnName="추가"
 			:pPlayers="teamMembers"
+			:pTotalCount="pagination.totalCount"
+			:pPageCount="pagination.totalPageCount"
+			:pRowCount="pagination.rowCount"
+			pRowBtnName="추가"
+			@fetch-paging-items="searchAllTeamMember"
 			@get-row-player-info="addGameJoinPlayer"
 		/>
 	</v-container>
@@ -33,12 +37,13 @@
 	import { GameJoinPlayerManageTabs } from '@/views/game/recordDetail/const/CompConst.js';
 
 	/** Components */
-	import PlayerDataTable from '@/components/game/table/PlayerDataTable.vue';
+	import PlayerPaginationTable from '@/components/game/table/PlayerPaginationTable.vue';
+
 	import TeamMemberSearchBtn from '@/components/button/FrameSearchBtn.vue';
 
 	export default {
 		components: {
-			PlayerDataTable,
+			PlayerPaginationTable,
 			TeamMemberSearchBtn,
 		},
 		props: {
@@ -57,21 +62,30 @@
 		data() {
 			return {
 				isLoadingOk: false,
+				pagination : {
+					totalCount 		: 0,
+					totalPageCount 	: 1,
+					rowCount 		: 5,
+				},
 				playerName: '',
 				teamMembers: [],
 			};
 		},
 		methods: {
-			async searchAllTeamMember() {
-				const params = {
-					teamSeq: this.pTeamSeq,
-					playerName: this.playerName,
-					pageNo: 0,
-				};
+			async searchAllTeamMember( paginationParam ) {
+				const { data } = await MyTeamAPI.searchAllTeamMembers({
+					teamSeq		: this.pTeamSeq,
+					playerName	: this.playerName,
+					pageNo		: ValidationUtil.isNotNull( paginationParam )
+								  ? paginationParam.pageNo : 0,
+				});
+				
+				this.teamMembers = data.teamMembers;
 
-				const res = await MyTeamAPI.searchAllTeamMembers(params);
-				console.log(res);
-				this.teamMembers = res.data.teamMembers;
+				const pagination = this.pagination;
+				pagination.totalCount 		= data.pagination.totalCount;
+				pagination.totalPageCount	= data.pagination.totalPageCount;
+
 			},
 			addGameJoinPlayer(targetPlayer) {
 				const backNumber = UIPrompter.backNumber(targetPlayer.backNumber);
