@@ -50,7 +50,6 @@
 				type : Number,
 				default() { return 1 }
 			},
-			pLoading: Boolean,
 			pRowBtnName: {
 				type: String,
 				default: '삭제',
