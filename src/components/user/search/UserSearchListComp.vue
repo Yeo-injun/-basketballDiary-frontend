@@ -22,7 +22,13 @@
         <v-data-table
             :headers="userListHeader"
             :items="users"
-			:items-per-page="pRowCount"
+			item-key="userSeq"
+			:options="{
+				page 			: pagination.pageNo,
+				itemsPerPage 	: pagination.rowCount
+			}"
+			hide-default-footer
+			class="elevation-1"
         >
 			<!-- row별 버튼 -->
 			<template v-if="pRowBtnName" v-slot:[`item.button`]="{ item }">
@@ -33,6 +39,15 @@
 				</template>
 			</template>
         </v-data-table>
+		<!-- 하단 페이지네이션 -->
+		<div class="text-center pt-2">
+			<v-pagination
+				v-model="pagination.pageNo"
+				:length="pagination.totalPageCount"
+				@input="searchUsers"
+			/>
+		</div>
+
     </div>
 </template>
 
@@ -59,10 +74,16 @@
             pRowBtnName : String,
 		},
         mounted() {
-            this.searchUsers();
+            this.searchUsers({ pageNo : 1 });
         },
 		data() {
 			return {
+				pagination : {
+					pageNo 			: 1,
+					totalCount 		: 0,
+					totalPageCount 	: 1,
+					rowCount 		: this.pRowCount,
+				},
 				searchCondType	: 'userName',
 				searchCondTypes	: [
 					{ text: '이름', value: 'userName' },
@@ -87,13 +108,14 @@
 					alert('검색 유형을 선택해주세요.');
 					return;
 				}
-				this.searchUsers();
+				this.searchUsers({ pageNo : 1});
 			},
-			async searchUsers() {
-				const data = await UserAPI.getUsersExcludingTeamMembers(
-					{ teamSeq: this.pTeamSeq },
-					this.getSearchParams()
-				);
+			async searchUsers( { pageNo } ) {
+				this.pagination.pageNo = pageNo;
+				const params = this.getSearchParams();
+				params.teamSeq 	= this.pTeamSeq;
+				params.pageNo	= this.pagination.pageNo; 
+				const data = await UserAPI.getUsersExcludingTeamMembers( params );
 				this.users = data.users;
 			},
 			getSearchParams() {
