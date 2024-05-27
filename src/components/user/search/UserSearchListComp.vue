@@ -22,7 +22,13 @@
         <v-data-table
             :headers="userListHeader"
             :items="users"
-			:items-per-page="pRowCount"
+			item-key="userSeq"
+			:options="{
+				page 			: pagination.pageNo,
+				itemsPerPage 	: pagination.rowCount
+			}"
+			hide-default-footer
+			class="elevation-1"
         >
 			<!-- row별 버튼 -->
 			<template v-if="pRowBtnName" v-slot:[`item.button`]="{ item }">
@@ -33,6 +39,15 @@
 				</template>
 			</template>
         </v-data-table>
+		<!-- 하단 페이지네이션 -->
+		<div class="text-center pt-2">
+			<v-pagination
+				v-model="pagination.pageNo"
+				:length="pagination.totalPageCount"
+				@input="searchUsers"
+			/>
+		</div>
+
     </div>
 </template>
 
@@ -43,6 +58,7 @@
     /** Code */
     /** Utils */
     /** Components */
+	import Pagination from '@/components/list/Pagination';
     import UserSearchBtn from '@/components/button/FrameSearchBtn.vue';
     /** Emit Event */
 
@@ -51,11 +67,7 @@
             UserSearchBtn,
         },
 		props: {
-			pTeamSeq: Number,
-			pRowCount: {
-				type : Number,
-				default() { return 5; },
-			},
+			pTeamSeq	: Number,
             pRowBtnName : String,
 		},
         mounted() {
@@ -63,6 +75,7 @@
         },
 		data() {
 			return {
+				pagination 		: Pagination.init(),
 				searchCondType	: 'userName',
 				searchCondTypes	: [
 					{ text: '이름', value: 'userName' },
@@ -89,29 +102,27 @@
 				}
 				this.searchUsers();
 			},
-			async searchUsers() {
-				const data = await UserAPI.getUsersExcludingTeamMembers(
-					{ teamSeq: this.pTeamSeq },
-					this.getSearchParams()
-				);
-				this.users = data.users;
+			async searchUsers( pageNo ) {
+				// 페이지 정보 세팅
+				const data = await UserAPI.getUsersExcludingTeamMembers( this.getSearchParams( pageNo ) );
+				// 결과 세팅
+				this.users 		= data.users;
+				this.pagination = Pagination.of( data.pagination );
 			},
-			getSearchParams() {
-				switch ( this.searchCondType ) {
-					case 'userName':
-						return {
-							userName: this.searchKeyword,
-						};
-					case 'email':
-						return {
-							email: this.searchKeyword,
-						};
-					default:
-						return {
-							userName: '',
-							email: '',
-						};
+			getSearchParams( pageNo ) {
+				const params = {
+					teamSeq 	: this.pTeamSeq,
+					pageNo		: Pagination.getPageNo( pageNo ), 
+					userName	: "",
+					email		: "",
 				}
+				switch ( this.searchCondType ) {
+					case 'userName'	: params.userName 	= this.searchKeyword; break;
+					case 'email'	: params.email		= this.searchKeyword; break;
+					default:
+					throw new Error( "유효한 검색항목이 아닙니다." );
+				}
+				return params;
 			},
             emitEventClickRowBtn( userInfo ) {
                 this.$emit( 'click-row-btn', userInfo );

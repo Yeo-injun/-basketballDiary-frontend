@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-container>
-			<UserSearchComp
+			<UserSearchListComp
 				:pTeamSeq="this.pTeamSeq"
 				pRowBtnName="선수추가"
 				@click-row-btn="addGameJoinPlayer"
@@ -30,11 +30,11 @@
 	import { GuestMemberSearchTabEvent } from '@/views/game/recordDetail/const/EventConst.js';
 
 	/** Components */
-	import UserSearchComp from '@/components/user/search/UserSearchListComp.vue';
+	import UserSearchListComp from '@/components/user/search/UserSearchListComp.vue';
 
 	export default {
 		components: {
-			UserSearchComp,
+			UserSearchListComp,
 		},
 		data() {
 			return {

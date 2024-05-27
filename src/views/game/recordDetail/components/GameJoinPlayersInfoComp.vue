@@ -43,7 +43,7 @@
 			AwayTeamPlayersManageModal,
 		},
 		props: {
-			pGameSeq: Number,
+			pGameSeq: String,
 		},
 		data() {
 			return {

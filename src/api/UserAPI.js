@@ -8,13 +8,14 @@ export default {
 	/**
 	 * API006 사용자 검색
 	 */
-	async getUsersExcludingTeamMembers(pathVar, queryString) {
+	async getUsersExcludingTeamMembers( params ) {
 		const { data } = await axiosService.get(
-						`/excludeTeam/${pathVar.teamSeq}`, 
+						`/excludeTeam/${params.teamSeq}`, 
 						{
 							params : {
-								userName 	: ValidationUtil.isNull( queryString.userName ) ? null : queryString.userName,
-								email 		: ValidationUtil.isNull( queryString.email ) 	? null : queryString.email,
+								userName 	: ValidationUtil.isNull( params.userName ) 	? null : params.userName,
+								email 		: ValidationUtil.isNull( params.email ) 	? null : params.email,
+								pageNo 		: ValidationUtil.isNull( params.pageNo ) 	? null : params.pageNo,
 							},	
 						}
 					);

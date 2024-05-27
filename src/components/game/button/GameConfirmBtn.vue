@@ -16,7 +16,7 @@
 			SaveBtn,
 		},
 		props: {
-			pGameSeq: Number,
+			pGameSeq: String,
 		},
 		data() {
 			return {

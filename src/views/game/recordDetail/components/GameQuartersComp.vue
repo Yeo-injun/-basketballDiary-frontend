@@ -49,8 +49,8 @@
 			GameQuarterComp,
 		},
 		props: {
-			pGameSeq: Number,
-			pTeamSeq: Number,
+			pGameSeq: String,
+			pTeamSeq: String,
 		},
 		data() {
 			return {

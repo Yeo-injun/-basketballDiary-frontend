@@ -64,7 +64,7 @@
 		},
 		props: {
 			pGameJoinTeamsInfo: Object,
-			pGameSeq: Number,
+			pGameSeq: String,
 		},
 		data() {
 			return {

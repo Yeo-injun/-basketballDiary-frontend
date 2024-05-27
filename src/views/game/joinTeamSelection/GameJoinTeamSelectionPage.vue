@@ -3,7 +3,7 @@
 
 <template>
 	<v-container>
-		<h2>게임참가팀 선택</h2>
+		<h2>경기참가팀 선택</h2>
 
 		<v-select
 			v-model="selectedGameType"
@@ -16,6 +16,7 @@
 		<GameOpponentSearchComp
 			v-if="isMatchUpGame()"
 			@select-opponent="setOpponentTeamSeq"
+			@init-selected="initOpponentTeamSeq"
 		/>
 		<v-row>
 			<v-col>
@@ -25,7 +26,7 @@
 				/>
 			</v-col>
 			<v-col>
-				<GameDeleteBtn :pGameSeq="this.gameSeq" @delete-game="onMovePage" />				
+				<GameDeleteBtn :pGameSeq="this.qGameSeq" @delete-game="toMyTeamDetailPage" />				
 			</v-col>
 		</v-row>
 	</v-container>
@@ -60,6 +61,8 @@
 		data() {
 			const query = this.$route.query;
 			return {
+				qGameSeq			: String( query.gameSeq ),
+				qTeamSeq			: String( query.teamSeq ),
 				selectItems: [
 					{
 						gameTypeCodeName: '자체전',
@@ -71,8 +74,7 @@
 					},
 				],
 				selectedGameType: SELF_GAME_CODE,
-				gameSeq: query.gameSeq,
-				opponentTeamSeq: '',
+				opponentTeamSeq	: '',
 			};
 		},
 		methods: {
@@ -85,29 +87,16 @@
 			setOpponentTeamSeq(opponentTeamSeq) {
 				this.opponentTeamSeq = opponentTeamSeq;
 			},
-			async onConfirmGameJoinTeam() {
-				const params = {
-					gameSeq: this.gameSeq,
-					gameJoinTeamInfo: this.getGameJoinTeamInfo(),
-				};
-
-				await GameAPI.confirmJoinTeam(params);
-				this.$router.push({
-					name: 'GameRecordDetailPage',
-					query: {
-						gameSeq: this.gameSeq,
-						gameRecordState: JOIN_TEAM_CONFIRMATION_CODE,
-					},
-				});
+			initOpponentTeamSeq() {
+				this.opponentTeamSeq = "";
 			},
-			onMovePage() {
-				this.$router.push({
-					name: 'MyTeamDetailPage',
-					query: {
-						gameSeq: this.gameSeq,
-						teamSeq: this.$route.query.teamSeq,
-					},
+			async onConfirmGameJoinTeam() {
+				await GameAPI.confirmJoinTeam({
+					gameSeq			: this.qGameSeq,
+					gameJoinTeamInfo: this.getGameJoinTeamInfo(),
 				});
+
+				this.toGameRecordDetailPage();
 			},
 			getGameJoinTeamInfo() {
 				if (this.selectedGameType == SELF_GAME_CODE) {
@@ -122,9 +111,28 @@
 					throw new Error(message);
 				}
 				return {
-					gameTypeCode: MATCH_UP_GAME_CODE,
-					opponentTeamSeq: this.opponentTeamSeq,
+					gameTypeCode	: MATCH_UP_GAME_CODE,
+					opponentTeamSeq	: this.opponentTeamSeq,
 				};
+			},
+			toGameRecordDetailPage() {
+				this.$router.push({
+					name: 'GameRecordDetailPage',
+					query: {
+						gameSeq			: this.qGameSeq,
+						gameRecordState	: JOIN_TEAM_CONFIRMATION_CODE,
+						teamSeq			: this.qTeamSeq,
+					},
+				});
+			},
+			toMyTeamDetailPage() {
+				this.$router.push({
+					name: 'MyTeamDetailPage',
+					query: {
+						gameSeq	: this.qGameSeq,
+						teamSeq	: this.qTeamSeq,
+					},
+				});
 			},
 		},
 	};

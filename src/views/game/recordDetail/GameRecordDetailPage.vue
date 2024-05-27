@@ -3,21 +3,21 @@
 
 <template>
 	<v-container>
-		<GameInfoComp :pGameSeq="this.gameSeq" />
-		<GameJoinTeamsInfoComp :pGameSeq="this.gameSeq" />
-		<GameJoinPlayersInfoComp :pGameSeq="this.gameSeq" />
-		<GameQuartersComp :pGameSeq="this.gameSeq" :pTeamSeq="this.teamSeq" />
+		<GameInfoComp :pGameSeq="this.qGameSeq" />
+		<GameJoinTeamsInfoComp :pGameSeq="this.qGameSeq" />
+		<GameJoinPlayersInfoComp :pGameSeq="this.qGameSeq" />
+		<GameQuartersComp :pGameSeq="this.qGameSeq" :pTeamSeq="this.qTeamSeq" />
 		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
 		<v-row v-if="enableGameRecord()">
 			<v-col>
 				<GameConfirmBtn
-					:pGameSeq="this.gameSeq"
+					:pGameSeq="this.qGameSeq"
 					@confirm-game="moveMyTeamPage"
 				/>
 			</v-col>
 			<v-col>
 				<GameDeleteBtn
-					:pGameSeq="this.gameSeq"
+					:pGameSeq="this.qGameSeq"
 					@delete-game="moveMyTeamPage"
 				/>
 			</v-col>
@@ -50,8 +50,8 @@
 			const query = this.$route.query;
 
 			return {
-				gameSeq: Number(query.gameSeq),
-				teamSeq: Number(query.teamSeq),
+				qGameSeq: String( query.gameSeq ),
+				qTeamSeq: String( query.teamSeq ),
 				teamName: query.teamName,
 				gameRecordState: query.gameRecordState,
 			};
@@ -70,9 +70,9 @@
 				this.$router.push({
 					name: 'MyTeamDetailPage',
 					query: {
-						teamSeq: this.teamSeq,
+						teamSeq	: this.qTeamSeq,
 						teamName: this.teamName,
-						tabName: 'MyTeamGamesTab',
+						tabName	: 'MyTeamGamesTab',
 					},
 				});
 			},
