@@ -7,7 +7,7 @@
 				:pData="this.userName"
 				:pRequired="true"
 			/>
-			<EmailInput pLabel="이메일"
+			<EmailInput 
 				ref="emailInput"
 				:pData="email"
 				:pRequired="true"
@@ -57,14 +57,18 @@
 			/>
 		
 			<ProfileUpdateBtn @do-update="updateProfile" pBtnName="수정" />
-			<PasswordUpdatePageMoveBtn
-				pRoutePageName="PasswordUpdatePage"
-				pBtnName="비밀번호 변경"
-			/>
-			<RemoveUserPageMoveBtn
-				pRoutePageName="AccountSignOutPage"
-				pBtnName="회원 탈퇴"
-			/>
+			<v-container>
+				<PasswordUpdatePageMoveBtn
+					pRoutePageName="PasswordUpdatePage"
+					pBtnName="비밀번호 변경"
+				/>
+			</v-container>
+			<v-container>
+				<RemoveUserPageMoveBtn
+					pRoutePageName="AccountSignOutPage"
+					pBtnName="회원 탈퇴"
+				/>
+			</v-container>
 		</v-container>
 	</v-container>
 </template>
@@ -78,7 +82,7 @@
 	import MainTitle from '@/components/title/FrameTabMainTitle.vue';
 
 	import UserNameInput from '@/components/input/FrameTextFieldInput.vue';
-	import EmailInput from '@/components/input/FrameTextFieldInput.vue';
+	import EmailInput from '@/components/input/EmailInput.vue';
 
 	import HeightInput from '@/components/input/FrameTextFieldInput.vue';
 	import WeightInput from '@/components/input/FrameTextFieldInput.vue';
