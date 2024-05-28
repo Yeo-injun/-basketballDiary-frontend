@@ -12,6 +12,9 @@
     import InputRuleChecker from '@/common/input/InputRuleChecker';
     
     export default {
+        mounted() {
+            console.log( "Child Comp Mounted");
+        },
         props : {
             pLabel      : String    ,   // input의 Label명칭
             pData       : String    ,   // input의 초기화 데이터
@@ -19,10 +22,12 @@
             pRequired   : Boolean   ,   // input 입력값의 필수여부 ( 입력 정책 추가 및 별도 표시용 )
         },
         data() {
+            console.log( "Child Comp Data Done");
             const defaultRules = [];
             if ( this.pRequired === true ) {
                 defaultRules.push( (value) => ValidationUtil.input.checkNotEmpty(value) );
             }
+            console.log( this.pData )
             return {
                 model : ValidationUtil.isNotNull( this.pData ) ? this.pData : "",
                 rules : ValidationUtil.isNotNull( this.pRules ) 
