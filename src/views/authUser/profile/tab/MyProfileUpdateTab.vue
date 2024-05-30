@@ -1,60 +1,52 @@
 <template>
 	<v-container>
 		<MainTitle pTitleName="내정보" />
-		<v-container v-if="dataInit">
-			<UserNameInput pLabel="이름"
-				ref="userNameInput"
-				:pData="this.userName"
-				:pRequired="true"
-			/>
-			<EmailInput 
-				ref="emailInput"
-				:pData="email"
-				:pRequired="true"
-			/>
-			<v-row>
-				<v-col>성별 :</v-col>
-				<v-col>
-					<v-radio-group v-model="gender">
-						<v-radio label="남" value="01"></v-radio>
-						<v-radio label="여" value="02"></v-radio>
-					</v-radio-group>
-				</v-col>
-			</v-row>
-			<v-row>
-				<v-col>포지션 : </v-col>
-				<v-col>
-					<v-row>
-						<v-radio-group v-model="positionCode">
-							<v-radio label="포인트 가드" value="11"></v-radio>
-							<v-radio label="슈팅가드" value="12"></v-radio>
-							<v-radio label="스몰포워드" value="21"></v-radio>
-							<v-radio label="파워포워드" value="22"></v-radio>
-							<v-radio label="센터" value="30"></v-radio>
-						</v-radio-group>
-					</v-row>
-				</v-col>
-			</v-row>
-			<HeightInput pLabel="신장(cm)" 
-				ref="heightInput"
-				:pData="this.height"
-				:pRequired="true"
-			/>
-			<WeightInput
-				ref="weightInput"
-				pLabel="몸무게(kg)" 
-				:pData="this.weight"
-				:pRequired="true"
-			/>
+		<v-container v-if="dataInit" >
 			
-			<ProfileAddressInput pLabel="주소검색"
-				ref="profileAddressInput"
-				:pData="{
-					address		: this.roadAddress,
-					sidoCode	: this.sidoCode,
-					sigunguCode	: this.sigunguCode,
-				}"
-			/>
+			<v-form ref="profileUpdateForm">
+				<UserNameInput pLabel="이름"
+					ref="userNameInput"
+					:pData="this.userName"
+					:pRequired="true"
+				/>
+				<EmailInput 
+					ref="emailInput"
+					:pData="email"
+					:pRequired="true"
+				/>
+				<GenderRadioInput pLabel="성별"
+					ref="genderRadioInput"
+					:pRadioList="this.genderRadio"
+					:pRequired="true"
+					:pData="this.gender"
+				/>
+				<PositionRadioInput pLabel="포지션"
+					ref="positionRadioInput"
+					:pRadioList="this.positionRadio"
+					:pRequired="true"
+					:pData="this.positionCode"
+				/>
+				<HeightInput pLabel="신장(cm)" 
+					ref="heightInput"
+					:pData="this.height"
+					:pRequired="true"
+				/>
+				<WeightInput
+					ref="weightInput"
+					pLabel="몸무게(kg)" 
+					:pData="this.weight"
+					:pRequired="true"
+				/>
+				
+				<ProfileAddressInput pLabel="주소검색"
+					ref="profileAddressInput"
+					:pData="{
+						address		: this.roadAddress,
+						sidoCode	: this.sidoCode,
+						sigunguCode	: this.sigunguCode,
+					}"
+				/>
+			</v-form>
 		
 			<ProfileUpdateBtn @do-update="updateProfile" pBtnName="수정" />
 			<v-container>
@@ -84,6 +76,8 @@
 	import UserNameInput from '@/components/input/FrameTextFieldInput.vue';
 	import EmailInput from '@/components/input/EmailInput.vue';
 
+	import GenderRadioInput from '@/components/input/FrameRadioInput.vue';
+	import PositionRadioInput from '@/components/input/FrameRadioInput.vue';
 	import HeightInput from '@/components/input/FrameTextFieldInput.vue';
 	import WeightInput from '@/components/input/FrameTextFieldInput.vue';
 	import ProfileAddressInput from '@/components/input/AddressInput.vue';
@@ -99,6 +93,8 @@
 			MainTitle,
 			UserNameInput,
 			EmailInput,
+			GenderRadioInput,
+			PositionRadioInput,
 			HeightInput,
 			WeightInput,
 			ProfileAddressInput,
@@ -114,6 +110,17 @@
 		data() {
 			return {
 				dataInit		: false,
+				genderRadio 	: [
+					{ label : "남성"		, value : "01" },
+					{ label : "여성"		, value : "02" },
+				],
+				positionRadio 	: [
+					{ label : "포인트가드"		, value : "11" },
+					{ label : "슈팅가드"		, value : "12" },
+					{ label : "스몰포워드"		, value : "21" },
+					{ label : "파워포워드"		, value : "22" },
+					{ label : "센터"		, value : "30" },
+				],
 				userName		: '',
 				email			: '',
 				gender			: '',
@@ -145,12 +152,15 @@
 			},
 			async updateProfile() {
 				const refs 			= this.$refs;
+				if ( !refs.profileUpdateForm.validate() ) {
+					return;
+				}
 				const addressInput 	= refs.profileAddressInput.getValue();
 				await UserAPI.updateMyProfile({
 					userName 		: refs.userNameInput.getValue(),
 					email 			: refs.emailInput.getValue(),
-					gender 			: this.gender,
-					positionCode 	: this.positionCode,
+					gender 			: refs.genderRadioInput.getSelected(),
+					positionCode 	: refs.positionRadioInput.getSelected(),
 					height 			: refs.heightInput.getValue(),
 					weight 			: refs.weightInput.getValue(),
 					roadAddress 	: addressInput.address,
