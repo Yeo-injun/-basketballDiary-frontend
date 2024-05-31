@@ -23,7 +23,7 @@
 				<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
 			</TestSlot>
 			<StatInput pType="freeThrow" :pCount=3 />
-			<RadioInput pLabel="테스트라디오버튼" :pRadioList="radioList"/>
+			<RadioInput pLabel="테스트라디오버튼" :pButtons="radioList" pArrangeType="row"/>
 		</div>
 	</div>
 </template>

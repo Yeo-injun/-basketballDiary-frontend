@@ -16,13 +16,13 @@
 				/>
 				<GenderRadioInput pLabel="성별"
 					ref="genderRadioInput"
-					:pRadioList="this.genderRadio"
+					:pButtons="this.genderRadio"
 					:pRequired="true"
 					:pData="this.gender"
 				/>
 				<PositionRadioInput pLabel="포지션"
 					ref="positionRadioInput"
-					:pRadioList="this.positionRadio"
+					:pButtons="this.positionRadio"
 					:pRequired="true"
 					:pData="this.positionCode"
 				/>
@@ -31,13 +31,11 @@
 					:pData="this.height"
 					:pRequired="true"
 				/>
-				<WeightInput
+				<WeightInput pLabel="몸무게(kg)"
 					ref="weightInput"
-					pLabel="몸무게(kg)" 
 					:pData="this.weight"
 					:pRequired="true"
 				/>
-				
 				<ProfileAddressInput pLabel="주소검색"
 					ref="profileAddressInput"
 					:pData="{
