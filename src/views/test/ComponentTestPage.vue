@@ -23,6 +23,7 @@
 				<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
 			</TestSlot>
 			<StatInput pType="freeThrow" :pCount=3 />
+			<RadioInput pLabel="테스트라디오버튼" :pButtons="radioList" pArrangeType="row"/>
 		</div>
 	</div>
 </template>
@@ -36,6 +37,8 @@
 	import TestBtn from '@/components/button/FrameAddBtn.vue';
 	/** 스탯 버튼 테스트 */
 	import StatInput from '@/components/game/stat/StatClickInputComp.vue';
+	// 라디오 컴포넌트
+	import RadioInput from '@/components/input/FrameRadioInput.vue';
 
 	import BytesUtil from '@/common/util/BytesUtil';
 
@@ -46,6 +49,7 @@
 			TestSlot,
 			TestBtn,
 			StatInput,
+			RadioInput,
 		},
 		data() {
 			const userAgentType = navigator.userAgent;
@@ -56,6 +60,7 @@
 				pagination: null,
 				dataSize : "",
 				agentType : userAgentType,
+				radioList : [{ value : "1", label : "테스트" }, { value : "2", label : "테스트ㅇ" }],
 			};
 		},
 		methods: {
