@@ -1,23 +1,23 @@
 <template>
 	<v-container>
-		<h2>경기 정보</h2>
 		<v-container>
+			<GameInfoTitle pTitleName="경기정보" />
 			<v-card>
 				<v-row>
 					<v-col no-gutters>
 						<v-row no-gutters
-							>경기일자 : {{ this.gameBasicInfo.gameYmd }}</v-row
+							>경기일자 : {{ this.gameYmd }}</v-row
 						>
 						<v-row no-gutters
-							>경기시간 : {{ this.gameBasicInfo.gameTime }}</v-row
+							>경기시간 : {{ this.gameTime }}</v-row
 						>
 					</v-col>
 					<v-col no-gutters>
 						<v-row no-gutters
-							>주소 : {{ this.gameBasicInfo.gamePlaceAddress }}</v-row
+							>주소 : {{ this.gamePlaceAddress }}</v-row
 						>
 						<v-row no-gutters
-							>경기장명 : {{ this.gameBasicInfo.gamePlaceName }}</v-row
+							>경기장명 : {{ this.gamePlaceName }}</v-row
 						>
 					</v-col>
 				</v-row>
@@ -27,41 +27,50 @@
 </template>
 
 <script>
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
 
+	/** Code */
+	/** Utils */
 	import DateUtil from '@/common/DateUtil.js';
 
+	/** Components */
+	import GameInfoTitle from '@/components/title/FramePageSubTitle.vue';
+	/** Emit Event */
+
+
 	export default {
+		components :{
+			GameInfoTitle,
+		},
 		props: {
 			pGameSeq: String,
 		},
 		data() {
 			return {
-				gameBasicInfo: {},
+				gameYmd				: "",
+				gameTime			: "",
+				gamePlaceAddress	: "",
+				gamePlaceName		: "",
 			};
 		},
 		methods: {
 			async getGameBasicInfo() {
-				console.log('getGameInfo 호출되는 시점');
-				const params = {
-					gameSeq: this.pGameSeq,
-				};
 
-				const res = await GameAPI.getGameBasicInfo(params);
-				const gameInfo = res.data;
+				const { data } = await GameAPI.getGameBasicInfo({
+					gameSeq: this.pGameSeq,
+				});
+				const gameInfo = data;
 
 				const startTime = DateUtil.Format.toTime(gameInfo.gameStartTime);
-				const endTime = DateUtil.Format.toTime(gameInfo.gameEndTime);
-				this.gameBasicInfo = {
-					gameYmd: DateUtil.Format.toYmd(gameInfo.gameYmd),
-					gameTime: `${startTime} ~ ${endTime}`,
-					gamePlaceAddress: gameInfo.gamePlaceAddress,
-					gamePlaceName: gameInfo.gamePlaceName,
-				};
+				const endTime 	= DateUtil.Format.toTime(gameInfo.gameEndTime);
+				this.gameYmd			= DateUtil.Format.toYmd(gameInfo.gameYmd);
+				this.gameTime			= `${startTime} ~ ${endTime}`;
+				this.gamePlaceAddress	= gameInfo.gamePlaceAddress;
+				this.gamePlaceName		= gameInfo.gamePlaceName;
 			},
 		},
 		mounted() {
-			console.log('마운트되는 시점');
 			this.getGameBasicInfo();
 		},
 	};
