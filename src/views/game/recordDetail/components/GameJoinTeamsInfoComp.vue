@@ -1,17 +1,12 @@
-<template>
-	<v-container>
-		<h2>팀 정보</h2>
-		<v-container v-if="this.isLoadingComplete">
-			<v-row dense>
-				<HomeTeamInfoComp
-					:pGameJoinTeamInfo="this.gameJoinTeamsInfo.homeTeamInfo"
-				/>
-				<AwayTeamInfoComp
-					:pGameJoinTeamInfo="this.gameJoinTeamsInfo.awayTeamInfo"
-				/>
-			</v-row>
-		</v-container>
-	</v-container>
+<template v-if="this.isLoadingComplete">
+	<v-row dense>
+		<HomeTeamInfoComp
+			:pGameJoinTeamInfo="this.gameJoinTeamsInfo.homeTeamInfo"
+		/>
+		<AwayTeamInfoComp
+			:pGameJoinTeamInfo="this.gameJoinTeamsInfo.awayTeamInfo"
+		/>
+	</v-row>
 </template>
 
 <script>
