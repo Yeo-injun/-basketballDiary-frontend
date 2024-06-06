@@ -1,10 +1,10 @@
-<template v-if="this.isLoadingComplete">
-	<v-row dense>
+<template >
+	<v-row dense v-if="initData">
 		<HomeTeamInfoComp
-			:pGameJoinTeamInfo="this.gameJoinTeamsInfo.homeTeamInfo"
+			:pGameJoinTeamInfo="this.homeTeamInfo"
 		/>
 		<AwayTeamInfoComp
-			:pGameJoinTeamInfo="this.gameJoinTeamsInfo.awayTeamInfo"
+			:pGameJoinTeamInfo="this.awayTeamInfo"
 		/>
 	</v-row>
 </template>
@@ -58,32 +58,37 @@
 			AwayTeamInfoComp,
 		},
 		props: {
-			pGameJoinTeamsInfo: Object,
 			pGameSeq: String,
 		},
 		data() {
 			return {
-				isLoadingComplete: false,
-				gameJoinTeamsInfo: {},
+				initData: false,
+				homeTeamInfo : {},
+				awayTeamInfo : {},
 			};
 		},
 		methods: {
-			async getGameJoinTeamsInfo() {
-				const res = await GameAPI.getGameJoinTeamsInfo({
+			async initComponentData() {
+				const { data } = await GameAPI.getGameJoinTeamsInfo({
 					gameSeq: this.pGameSeq,
 				});
-				// TODO mounted() 되는 시점과 data() 내부의 메소드가 호출되는 시점을 비교할 필요가 있음
-				// 데이터 초기화를 위한 메소드를 언제 호출할 것인지 고민 필요
-				// mounted()는 재렌더링이 안되는지..?
-				this.gameJoinTeamsInfo = {
-					homeTeamInfo: res.data.homeTeamInfo,
-					awayTeamInfo: res.data.awayTeamInfo,
-				};
-				this.isLoadingComplete = true;
+				this.homeTeamInfo = data.homeTeamInfo,
+				this.awayTeamInfo = data.awayTeamInfo,
+				// 자식컴포넌트에 API데이터를 props로 내려줄때 자식컴포넌트를 v-if로 제어 필요
+				// 데이터 세팅 완료 후 자식컴포넌트가 created()되도록 제어.
+				// 데이터 세팅전 자식컴포넌트 created()시 props데이터가 내려가지 않음. 
+				this.initData = true;	
 			},
 		},
-		mounted() {
-			this.getGameJoinTeamsInfo();
+		/**
+		 * 24.06.07 ( 금 )
+		 * 컴포넌트의 생명주기상 부모 -> 자식 순으로 created()훅이 호출됨.
+		 * 따라서 자식 컴포넌트의 created()되기 전에 부모의 created()가 먼저 호출됨.
+		 * 이에 따라 부모에서 자식으로 props를 넘겨준다면 해당 props를 부모의 created()가 호출되는 시점에 초기화시켜주는 것이 순서상 맞음.
+		 * cf. 하지만, 비동기 API통신을 통해 데이터를 세팅해줄 경우 호출 순서가 예상처럼 동작하진 않음...
+		 */
+		created() {
+			this.initComponentData();
 		},
 	};
 </script>
