@@ -1,5 +1,5 @@
 <template >
-	<v-row dense v-if="initData">
+	<v-row dense>
 		<HomeTeamInfoComp
 			:pGameJoinTeamInfo="this.homeTeamInfo"
 		/>
@@ -62,7 +62,6 @@
 		},
 		data() {
 			return {
-				initData: false,
 				homeTeamInfo : {},
 				awayTeamInfo : {},
 			};
@@ -72,12 +71,8 @@
 				const { data } = await GameAPI.getGameJoinTeamsInfo({
 					gameSeq: this.pGameSeq,
 				});
-				this.homeTeamInfo = data.homeTeamInfo,
-				this.awayTeamInfo = data.awayTeamInfo,
-				// 자식컴포넌트에 API데이터를 props로 내려줄때 자식컴포넌트를 v-if로 제어 필요
-				// 데이터 세팅 완료 후 자식컴포넌트가 created()되도록 제어.
-				// 데이터 세팅전 자식컴포넌트 created()시 props데이터가 내려가지 않음. 
-				this.initData = true;	
+				this.homeTeamInfo = data.homeTeamInfo;
+				this.awayTeamInfo = data.awayTeamInfo;
 			},
 		},
 		/**
@@ -86,6 +81,7 @@
 		 * 따라서 자식 컴포넌트의 created()되기 전에 부모의 created()가 먼저 호출됨.
 		 * 이에 따라 부모에서 자식으로 props를 넘겨준다면 해당 props를 부모의 created()가 호출되는 시점에 초기화시켜주는 것이 순서상 맞음.
 		 * cf. 하지만, 비동기 API통신을 통해 데이터를 세팅해줄 경우 호출 순서가 예상처럼 동작하진 않음...
+		 * 	   자식 컴포넌트의 props 오류 발생을 회피 방법 : props가 없을 경우 기본값을 세팅하거나 null처리를 추가.
 		 */
 		created() {
 			this.initComponentData();
