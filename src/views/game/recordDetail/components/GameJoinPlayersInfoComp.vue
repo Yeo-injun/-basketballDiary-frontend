@@ -1,27 +1,22 @@
-<template>
-	<v-container>
-		<h2>경기참가선수</h2>
-		<v-container v-if="this.isLoadingComplete">
-			<v-row dense>
-				<v-col cols="6">
-					<HomeTeamPlayersManageModal
-						pModalTitlePrefix="홈팀"
-						:pHomeAwayCode="this.homeTeamCode"
-						@register-complete="getRegisteredPlayers"
-					/>
-					<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
-				</v-col>
-				<v-col cols="6">
-					<AwayTeamPlayersManageModal
-						pModalTitlePrefix="어웨이팀"
-						:pHomeAwayCode="this.awayTeamCode"
-						@register-complete="getRegisteredPlayers"
-					/>
-					<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
-				</v-col>
-			</v-row>
-		</v-container>
-	</v-container>
+<template v-if="this.isLoadingComplete">
+	<v-row dense>
+		<v-col cols="6">
+			<HomeTeamPlayersManageModal
+				pModalTitlePrefix="홈팀"
+				:pHomeAwayCode="this.homeTeamCode"
+				@register-complete="getRegisteredPlayers"
+			/>
+			<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
+		</v-col>
+		<v-col cols="6">
+			<AwayTeamPlayersManageModal
+				pModalTitlePrefix="어웨이팀"
+				:pHomeAwayCode="this.awayTeamCode"
+				@register-complete="getRegisteredPlayers"
+			/>
+			<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
+		</v-col>
+	</v-row>
 </template>
 
 <script>

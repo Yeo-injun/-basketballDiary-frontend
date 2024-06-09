@@ -27,11 +27,6 @@
 	import TeamLogoImage from '@/components/image/FrameImageComp.vue';
 
 	/**
-	 * Utils
-	 */
-	import ValidationUtil from '@/common/util/ValidationUtil.js';
-
-	/**
 	 * Code
 	 */
 	import { HomeAwayCode } from '@/const/code/GameCode.js';
@@ -41,22 +36,27 @@
 			TeamLogoImage,
 		},
 		props: {
-			pGameJoinTeamInfo: Object,
+			pGameJoinTeamInfo: {
+				type 	: Object,
+				default() {
+					return {
+						teamName			: "",
+						homeAwayCodeName	: "",
+						teamImagePath		: "",
+						leaderName			: "", 
+						hometown			: "",
+					}
+				}
+			}
 		},
 		computed: {
 			titleColor() {
-				if (ValidationUtil.isNull(this.pGameJoinTeamInfo)) {
-					return '';
-				}
 				const homeAwayCode = this.pGameJoinTeamInfo.homeAwayCode;
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					return 'red lighten-4';
+				switch ( homeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM : return 'red lighten-4';
+					case HomeAwayCode.AWAY_TEAM : return 'blue lighten-4';
+					default : return '';
 				}
-
-				if (HomeAwayCode.AWAY_TEAM == homeAwayCode) {
-					return 'blue lighten-4';
-				}
-				return '';
 			},
 		},
 	};
