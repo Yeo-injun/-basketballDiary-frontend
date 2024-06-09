@@ -53,6 +53,17 @@
 	import AwayTeamInfoComp from '@/views/game/recordDetail/components/team/GameJoinTeamInfoComp.vue';
 
 	export default {
+		/**
+		 * 24.06.07 ( 금 )
+		 * 컴포넌트의 생명주기상 부모 -> 자식 순으로 created()훅이 호출됨.
+		 * 따라서 자식 컴포넌트의 created()되기 전에 부모의 created()가 먼저 호출됨.
+		 * 이에 따라 부모에서 자식으로 props를 넘겨준다면 해당 props를 부모의 created()가 호출되는 시점에 초기화시켜주는 것이 순서상 맞음.
+		 * cf. 하지만, 비동기 API통신을 통해 데이터를 세팅해줄 경우 호출 순서가 예상처럼 동작하진 않음...
+		 * 	   자식 컴포넌트의 props 오류 발생을 회피 방법 : props가 없을 경우 기본값을 세팅하거나 null처리를 추가.
+		 */
+		created() {
+			this.initComponentData();
+		},
 		components: {
 			HomeTeamInfoComp,
 			AwayTeamInfoComp,
@@ -74,17 +85,6 @@
 				this.homeTeamInfo = data.homeTeamInfo;
 				this.awayTeamInfo = data.awayTeamInfo;
 			},
-		},
-		/**
-		 * 24.06.07 ( 금 )
-		 * 컴포넌트의 생명주기상 부모 -> 자식 순으로 created()훅이 호출됨.
-		 * 따라서 자식 컴포넌트의 created()되기 전에 부모의 created()가 먼저 호출됨.
-		 * 이에 따라 부모에서 자식으로 props를 넘겨준다면 해당 props를 부모의 created()가 호출되는 시점에 초기화시켜주는 것이 순서상 맞음.
-		 * cf. 하지만, 비동기 API통신을 통해 데이터를 세팅해줄 경우 호출 순서가 예상처럼 동작하진 않음...
-		 * 	   자식 컴포넌트의 props 오류 발생을 회피 방법 : props가 없을 경우 기본값을 세팅하거나 null처리를 추가.
-		 */
-		created() {
-			this.initComponentData();
 		},
 	};
 </script>

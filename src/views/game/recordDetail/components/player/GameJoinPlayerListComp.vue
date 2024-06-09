@@ -10,7 +10,12 @@
 <script>
 	export default {
 		props: {
-			pGameJoinPlayers: Array,
+			pGameJoinPlayers: {
+				type 	: Array,
+				default() { 
+					return []; 
+				},
+			}
 		},
 		data() {
 			return {
