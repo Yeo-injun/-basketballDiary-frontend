@@ -40,9 +40,8 @@
 	/*-----------------------------
 	/*	코드값 
 	/*-----------------------------*/
-	const JOIN_TEAM_CONFIRMATION_CODE =
-		GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
-	const GAME_CONFIRMATION_CODE = GameRecordStateCode.GAME_CONFIRMATION.code;
+	const JOIN_TEAM_CONFIRMATION_CODE 	= GameRecordStateCode.JOIN_TEAM_CONFIRMATION.code;
+	const GAME_CONFIRMATION_CODE 		= GameRecordStateCode.GAME_CONFIRMATION.code;
 
 	export default {
 		components: {
@@ -50,24 +49,40 @@
 			QuarterCreateBtn,
 		},
 		props: {
-			pGameSeq			: String,
-			pTeamSeq			: String,
-			pQuarterCode		: String,
-			pGameRecordStateCode: String,
-			pTeamsQuarterRecords: Object,
+			pGameSeq			: {
+				type 	: String,
+				default : "",
+			},
+			pTeamSeq			: {
+				type 	: String,
+				default : "",
+			},
+			pQuarterCode		: {
+				type 	: String,
+				default : "",
+			},
+			pGameRecordStateCode: {
+				type 	: String,
+				default : "",
+			},
+			pTeamsQuarterRecords: {
+				type 	: Object,
+				default() {
+					return {
+						quarterCodeName	: "",
+						quarterTime		: "",
+						homeTeamRecords	: {},
+						awayTeamRecords	: {},
+					}
+				}
+			},
 		},
 		methods: {
-			hasQuarterRecords(quarterRecords) {
-				if (ValidationUtil.isNull(quarterRecords)) {
-					return false;
-				}
-				return true;
+			hasQuarterRecords() {
+				return !ValidationUtil.isNull( this.pTeamsQuarterRecords );
 			},
 			isGameConfirmed() {
-				if (GAME_CONFIRMATION_CODE == this.pGameRecordStateCode) {
-					return true;
-				}
-				return false;
+				return GAME_CONFIRMATION_CODE == this.pGameRecordStateCode;
 			},
 			moveQuarterRecordInputBoardPage() {
 				switch (this.pGameRecordStateCode) {
@@ -90,6 +105,9 @@
 								quarterCode: this.pQuarterCode,
 							},
 						});
+						break;
+					default : 
+						throw new Error( "유효하지 않은 경기기록상태값입니다." );
 				}
 			},
 			async createGameQuarterBasicInfo() {

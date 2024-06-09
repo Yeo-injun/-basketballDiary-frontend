@@ -19,12 +19,10 @@
 			DeleteBtn,
 		},
 		props: {
-			pGameSeq: String,
-		},
-		data() {
-			return {
-				eventEmitName: 'delete-game',
-			};
+			pGameSeq : {
+				type 	: String,
+				default : "",
+			},
 		},
 		methods: {
 			async deleteGame() {
@@ -34,7 +32,7 @@
 				await GameAPI.deleteGame({
 					gameSeq: this.pGameSeq,
 				});
-				this.$emit(this.eventEmitName);
+				this.$emit( 'delete-game' );
 			},
 		},
 	};
