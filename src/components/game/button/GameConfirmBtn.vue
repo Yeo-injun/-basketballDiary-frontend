@@ -16,12 +16,10 @@
 			SaveBtn,
 		},
 		props: {
-			pGameSeq: String,
-		},
-		data() {
-			return {
-				eventEmitName: 'confirm-game',
-			};
+			pGameSeq : {
+				type 	: String,
+				default : "",
+			},
 		},
 		methods: {
 			async confirmGame() {
@@ -32,7 +30,7 @@
 				await GameAPI.confirmGame({
 					gameSeq: this.pGameSeq,
 				});
-				this.$emit(this.eventEmitName);
+				this.$emit( 'confirm-game' );
 			},
 		},
 	};

@@ -1,4 +1,4 @@
-<template v-if="this.isLoadingComplete">
+<template>
 	<v-row dense>
 		<v-col cols="6">
 			<HomeTeamPlayersManageModal
@@ -31,6 +31,9 @@
 	import AwayTeamPlayersManageModal from '@/views/game/recordDetail/modal/GameJoinPlayersManageModal.vue';
 
 	export default {
+		created() {
+			this.getAllGameJoinPlayers();
+		},
 		components: {
 			HomeTeamPlayerList,
 			HomeTeamPlayersManageModal,
@@ -42,7 +45,6 @@
 		},
 		data() {
 			return {
-				isLoadingComplete: false,
 				homeTeamCode: HomeAwayCode.HOME_TEAM,
 				awayTeamCode: HomeAwayCode.AWAY_TEAM,
 				homeTeamPlayers: [],
@@ -56,7 +58,6 @@
 							     });
 				this.homeTeamPlayers = data.homePlayers;
 				this.awayTeamPlayers = data.awayPlayers;
-				this.isLoadingComplete = true;
 			},
 			/** 경기참가선수가 추가(서버에 1명씩 저장됨)되면 저장된 정보 재조회하는 구조 */
 			async getRegisteredPlayers(eventParams) {
@@ -73,9 +74,6 @@
 						throw new Error( "유효하지 않은 HOME_AWAY_CODE값입니다." );
 				}
 			},
-		},
-		mounted() {
-			this.getAllGameJoinPlayers();
 		},
 	};
 </script>

@@ -1,4 +1,4 @@
-<template v-if="this.isLoadingComplete">
+<template >
 	<div>
 		<GameRecordAuthManageModal />
 		<GameQuarterComp
@@ -45,13 +45,21 @@
 			GameRecordAuthManageModal,
 			GameQuarterComp,
 		},
+		created() {
+			this.getGameAllQuartersRecords();
+		},
 		props: {
-			pGameSeq: String,
-			pTeamSeq: String,
+			pGameSeq: {
+				type 	: String,
+				default : "",
+			},
+			pTeamSeq: {
+				type 	: String,
+				default : "",
+			},
 		},
 		data() {
 			return {
-				isLoadingComplete: false,
 				quarter1st: QuarterCode.QUARTER_1ST,
 				quarter2nd: QuarterCode.QUARTER_2ND,
 				quarter3rd: QuarterCode.QUARTER_3RD,
@@ -65,21 +73,15 @@
 		},
 		methods: {
 			async getGameAllQuartersRecords() {
-				const params = {
+				const { data } = await GameAPI.getGameAllQuartersRecords({
 					gameSeq: this.pGameSeq,
-				};
-
-				const res = await GameAPI.getGameAllQuartersRecords(params);
-				this.gameRecordStateCode = res.data.gameRecordStateCode;
-				this.teamsRecords1stQuarter = res.data.teamsRecords1stQuarter;
-				this.teamsRecords2ndQuarter = res.data.teamsRecords2ndQuarter;
-				this.teamsRecords3rdQuarter = res.data.teamsRecords3rdQuarter;
-				this.teamsRecords4thQuarter = res.data.teamsRecords4thQuarter;
-				this.isLoadingComplete = true;
+				});
+				this.gameRecordStateCode 	= data.gameRecordStateCode;
+				this.teamsRecords1stQuarter = data.teamsRecords1stQuarter;
+				this.teamsRecords2ndQuarter = data.teamsRecords2ndQuarter;
+				this.teamsRecords3rdQuarter = data.teamsRecords3rdQuarter;
+				this.teamsRecords4thQuarter = data.teamsRecords4thQuarter;
 			},
-		},
-		mounted() {
-			this.getGameAllQuartersRecords();
 		},
 	};
 </script>

@@ -34,8 +34,14 @@
 
 
 	export default {
+		created() {
+			this.getGameBasicInfo();
+		},
 		props: {
-			pGameSeq: String,
+			pGameSeq: {
+				type 	: String,
+				default : "",
+			}
 		},
 		data() {
 			return {
@@ -60,9 +66,6 @@
 				this.gamePlaceAddress	= gameInfo.gamePlaceAddress;
 				this.gamePlaceName		= gameInfo.gamePlaceName;
 			},
-		},
-		mounted() {
-			this.getGameBasicInfo();
 		},
 	};
 </script>
