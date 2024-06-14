@@ -31,6 +31,10 @@
 	/** Utils */
 
 	export default {
+		// DOM 생성 전(mounted되기 전)에 data세팅
+		created() {
+			this.getMyTeams();
+		},
 		components: {
 			MyTeamList,
 			MyTeamComp,
@@ -46,15 +50,12 @@
 			async getMyTeams() {
 				// 비동기적인 console.log 처리로 인해 발생하는 현상
 				// https://kkangdda.tistory.com/81
-				const res = await MyTeamAPI.getMyTeams({
+				const { data } = await MyTeamAPI.getMyTeams({
 					pageNo: this.pagination.pageNo,
 				});
-				this.myTeams = res.data.myTeams;
-				this.pagination = res.data.pagination;
+				this.myTeams 	= data.myTeams;
+				this.pagination = data.pagination;
 			},
-		},
-		mounted() {
-			this.getMyTeams();
 		},
 	};
 </script>
