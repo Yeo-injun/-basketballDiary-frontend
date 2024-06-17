@@ -55,7 +55,20 @@
 			MyTeamLogoImage,
 		},
 		props: {
-			pTeamInfo: Object,
+			pTeamInfo: {
+				type 	: Object,
+				default() {
+					return {
+						teamSeq			: "",
+						teamName 		: "",
+						teamImagePath 	: "",
+						hometown 		: "",
+						totMember 		: 0,
+						foundationYmd 	: "",
+						introduction 	: "",
+					}
+				},
+			}
 		},
 		methods: {
 			moveMyTeamDetailPage() {
