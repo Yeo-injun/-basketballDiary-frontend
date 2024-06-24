@@ -2,7 +2,7 @@
 	<v-card>
 		<v-card-title :class="this.getTitleColor()" @click="clickEmit()">
 			<div class="font-weight-bold">
-				{{ this.teamTitleText }}
+				{{ this.getTeamTitleText() }}
 			</div>
 		</v-card-title>
 	</v-card>
@@ -15,9 +15,16 @@
 
 	export default {
 		props: {
-			pTeamName: String,
-			pHomeAwayCode: String,
-			pHomeAwayCodeName: String,
+			pTeamName		: {
+				type : String, 
+			},
+			pHomeAwayCode	: {
+				type 		: String,
+				required 	: true, 
+			},
+			pHomeAwayCodeName: {
+				type 		: String, 
+			},
 			pIsSelected: {
 				default() {
 					return false;
@@ -25,39 +32,20 @@
 				Type: Boolean,
 			},
 		},
-		data() {
-			console.log(
-				` data()호출 : props 1 - ${this.pTeamName} / props 2 - ${this.pHomeAwayCode}`
-			);
-			return {
-				teamTitleText: this.getTeamTitleText(
-					this.pTeamName,
-					this.pHomeAwayCodeName
-				),
-			};
-		},
 		methods: {
-			getTeamTitleText(teamName, homeAwayName) {
-				console.log(
-					` getTeamTitleText()호출 : props 1 - ${this.pTeamName} / props 2 - ${this.pHomeAwayCode}`
-				);
-
-				if (ValidationUtil.isNotNull(teamName)) {
-					return `${teamName} ( ${homeAwayName} )`;
+			getTeamTitleText() {
+				if ( ValidationUtil.isNotNull( this.pTeamName ) ) {
+					return `[ ${this.pHomeAwayCodeName} ] ${this.pTeamName}`;
 				}
-				return homeAwayName;
+				return this.pHomeAwayCodeName;
 			},
 			getTitleColor() {
 				const selectedState = this.pIsSelected ? '3' : '5';
-				const homeAwayCode = this.pHomeAwayCode;
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					return `red lighten-${selectedState}`;
+				switch ( this.pHomeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM : return `red lighten-${selectedState}`;
+					case HomeAwayCode.AWAY_TEAM : return `blue lighten-${selectedState}`;
+					default : return '';
 				}
-
-				if (HomeAwayCode.AWAY_TEAM == homeAwayCode) {
-					return `blue lighten-${selectedState}`;
-				}
-				return '';
 			},
 			clickEmit() {
 				this.$emit('click-title', {
