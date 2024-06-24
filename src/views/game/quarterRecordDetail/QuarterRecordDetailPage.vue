@@ -1,9 +1,9 @@
 <template>
-	<v-container v-if="this.init.isDone">
-		<h2>농구게임 쿼터조회</h2>
+	<v-container>
+		<PageMainTitle pTitleName="쿼터 기록 조회" />
 		<v-container>
 			경기일자 : {{ this.gameYmd }} / 경기시간 : {{ this.gameTime }}
-			<GameQuarterInfoFrame
+			<GameQuarterInfo
 				:pQuarterCodeName="this.quarterCodeName"
 				:pQuarterTime="this.quarterTime"
 				:pHomeTeamRecords="this.homeTeamRecord"
@@ -21,38 +21,44 @@
 				@select-home-away-team="selectTargetPlayersByHomeAwayCode"
 			/>
 		</v-container>
-		<h2>{{ this.targetTeamName }} 선수기록</h2>
-		<v-container>
-			<QuarterPlayerRecordsComp :pPlayersRecord="this.targetPlayersRecord" />
-		</v-container>
+		<PlayerRecordTable
+			:pPlayersRecord="this.targetPlayersRecord"
+		/>
 	</v-container>
 </template>
 
 <script>
-	import DateUtil from '@/common/DateUtil.js';
-
+	/** Backend API */
 	import GameAPI from '@/api/GameAPI.js';
 
-	import GameQuarterInfoFrame from '@/components/game/quarter/GameQuarterInfoFrame.vue';
-	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
+	/** Code */
 	import { HomeAwayCode } from '@/const/code/GameCode';
 
-	import QuarterPlayerRecordsComp from '@/views/game/quarterRecordDetail/components/QuarterPlayerRecordComp.vue';
+	/** Utils */
+	import DateUtil from '@/common/DateUtil.js';
+
+	/** Components */
+	import PageMainTitle from '@/components/title/FramePageMainTitle.vue';
+	import GameQuarterInfo from '@/components/game/quarter/GameQuarterInfoFrame.vue';
+	import HomeAwayTeamToggle from '@/components/game/toggle/HomeAwayTeamToggle.vue';
+	import PlayerRecordTable from '@/components/game/table/PlayerRecordTable.vue';
 
 	export default {
+		async created() {
+			await this.getGameQuarterRecords();
+			await this.getAllGameJoinPlayerRecordsByQuarter();
+		},
 		components: {
-			GameQuarterInfoFrame,
+			PageMainTitle,
+			GameQuarterInfo,
 			HomeAwayTeamToggle,
-			QuarterPlayerRecordsComp,
+			PlayerRecordTable,
 		},
 		props: {
 			pGameQuarterRecords: Object,
 		},
 		data() {
 			return {
-				init: {
-					isDone: false,
-				},
 				gameYmd: '',
 				gameTime: '',
 				quarterCodeName: '',
@@ -67,55 +73,66 @@
 		},
 		methods: {
 			async getGameQuarterRecords() {
-				const query = this.$route.query;
-				const params = {
-					gameSeq: query.gameSeq,
-					quarterCode: query.quarterCode,
-				};
-
-				const res = await GameAPI.getGameQuarterRecords(params);
+				const query 	= this.$route.query;
+				const { data } 	= await GameAPI.getGameQuarterRecords({
+					gameSeq		: query.gameSeq,
+					quarterCode	: query.quarterCode,
+				});
 				
-				const resMessage = res.data;
-				this.gameYmd = DateUtil.Format.toYmd(resMessage.gameYmd);
-				this.gameTime = `${DateUtil.Format.toTime(resMessage.gameStartTime)} ~ ${DateUtil.Format.toTime(resMessage.gameEndTime)}`;
-				this.quarterCodeName = resMessage.quarterCodeName;
-				this.quarterTime = resMessage.quarterTime;
+				this.gameYmd 			= DateUtil.Format.toYmd( data.gameYmd );
+				this.gameTime 			= `${DateUtil.Format.toTime( data.gameStartTime )} ~ ${DateUtil.Format.toTime( data.gameEndTime )}`;
+				this.quarterCodeName 	= data.quarterCodeName;
+				this.quarterTime 		= data.quarterTime;
 
-				this.homeTeamRecord = resMessage.homeTeamRecord;
-				this.awayTeamRecord = resMessage.awayTeamRecord;
+				this.homeTeamRecord = data.homeTeamRecord;
+				this.awayTeamRecord = data.awayTeamRecord;
 			},
-			async getALLGameJoinPlayerRecordsByQuarter() {
-				const query = this.$route.query;
-				const params = {
-					gameSeq: query.gameSeq,
-					quarterCode: query.quarterCode,
-				};
-
-				const res = await GameAPI.getGameJoinPlayerRecordsByQuarter(params);
+			async getAllGameJoinPlayerRecordsByQuarter() {
+				const query 	= this.$route.query;
+				const { data } 	= await GameAPI.getGameJoinPlayerRecordsByQuarter({
+					gameSeq		: query.gameSeq,
+					quarterCode	: query.quarterCode,
+				});
 				
-				const resBody = res.data;
-				this.homeTeamPlayers = resBody.homeTeamPlayers;
-				this.awayTeamPlayers = resBody.awayTeamPlayers;
+				this.homeTeamPlayers = data.homeTeamPlayers;
+				this.awayTeamPlayers = data.awayTeamPlayers;
 				this.selectTargetPlayersByHomeAwayCode({
 					homeAwayCode: HomeAwayCode.HOME_TEAM,
 				});
 			},
 			selectTargetPlayersByHomeAwayCode(params) {
 				const homeAwayCode = params.homeAwayCode;
-
-				if (HomeAwayCode.HOME_TEAM == homeAwayCode) {
-					this.targetTeamName = `${this.homeTeamRecord.teamName} ( ${this.homeTeamRecord.homeAwayCodeName} )`;
-					this.targetPlayersRecord = this.homeTeamPlayers;
-				} else {
-					this.targetTeamName = `${this.awayTeamRecord.teamName} ( ${this.awayTeamRecord.homeAwayCodeName} )`;
-					this.targetPlayersRecord = this.awayTeamPlayers;
+				switch( homeAwayCode ) {
+					case HomeAwayCode.HOME_TEAM : 
+						this.targetPlayersRecord = this._toPlayerRecordList( this.homeTeamPlayers );
+						break;
+					case HomeAwayCode.AWAY_TEAM : 
+						this.targetPlayersRecord = this._toPlayerRecordList( this.awayTeamPlayers );
+						break;
+					default : 
+						throw new Error( "유효하지 않은 홈/어웨이 코드입니다." );
 				}
 			},
-		},
-		async mounted() {
-			await this.getGameQuarterRecords();
-			await this.getALLGameJoinPlayerRecordsByQuarter();
-			this.init.isDone = true;
+			_toPlayerRecordList( players ) {
+				const result = []; 
+				players.forEach( function( item ) {
+					result.push({
+						backNumber	: item.backNumber, 
+						playerInfo	: `${item.name} | ${item.positionCodeName} `, 
+						totalScore	: item.totalScore, 
+						freeThrow	: `${item.freeThrow} / ${item.tryFreeThrow}` , 
+						twoPoint	: `${item.twoPoint} / ${item.tryTwoPoint}` , 
+						threePoint	: `${item.threePoint} / ${item.tryThreePoint}` , 
+						assist		: item.assist, 
+						rebound		: item.rebound, 
+						steal		: item.steal, 
+						block		: item.block, 
+						turnover	: item.turnover, 
+						foul		: item.foul, 
+					});
+				});
+				return result;
+			}
 		},
 	};
 </script>
