@@ -2,34 +2,32 @@
 	<v-container>
 		<v-card>
 			<v-row no-gutters>
-				<v-col cols="12" sm="4" align-self="center">
+
+				<v-col v-if="this.isAwayTeam()" cols="12" sm="5" align-self="center">
 					<v-row no-gutters align-content="center" justify="center">
-						<div v-if="this.isHomeTeam()">
-							<FoulCountComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
-						</div>
-						<div v-else>
-							<h2>{{ this.pTeamQuarterRecords.score }}</h2>
-						</div>
+						<h2>{{ this.pTeamQuarterRecords.score }}</h2>
+					</v-row>
+					<v-row no-gutters align-content="center" justify="center">
+						<FoulCountComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
+					</v-row>
+
+				</v-col>
+
+				<v-col cols="12" sm="7" align-self="center">
+					<v-row no-gutters justify="center">
+						{{ this.pTeamQuarterRecords.homeAwayCodeName }}
+					</v-row>
+					<v-row no-gutters justify="center">
+						{{ this.pTeamQuarterRecords.teamName }}
 					</v-row>
 				</v-col>
 
-				<v-col cols="12" sm="4">
-					<v-row no-gutters justify="center">{{
-						this.pTeamQuarterRecords.homeAwayCodeName
-					}}</v-row>
-					<v-row no-gutters justify="center">{{
-						this.pTeamQuarterRecords.teamName
-					}}</v-row>
-				</v-col>
-
-				<v-col cols="12" sm="4" align-self="center">
-					<v-row no-gutters justify="center">
-						<div v-if="this.isHomeTeam()">
-							<h2>{{ this.pTeamQuarterRecords.score }}</h2>
-						</div>
-						<div v-else>
-							<FoulCountComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
-						</div>
+				<v-col v-if="this.isHomeTeam()" cols="12" sm="5" align-self="center">
+					<v-row no-gutters align-content="center" justify="center">
+						<h2>{{ this.pTeamQuarterRecords.score }}</h2>
+					</v-row>
+					<v-row no-gutters align-content="center" justify="center">
+						<FoulCountComp :pFoulCnt="this.pTeamQuarterRecords.foul" />
 					</v-row>
 				</v-col>
 			</v-row>
@@ -50,10 +48,11 @@
 		},
 		methods: {
 			isHomeTeam() {
-				if (this.pTeamQuarterRecords.homeAwayCode == HomeAwayCode.HOME_TEAM) {
-					return true;
-				}
-				return false;
+				return this.pTeamQuarterRecords.homeAwayCode == HomeAwayCode.HOME_TEAM;
+			},
+			isAwayTeam() {
+				return this.pTeamQuarterRecords.homeAwayCode == HomeAwayCode.AWAY_TEAM;
+
 			},
 		},
 	};
