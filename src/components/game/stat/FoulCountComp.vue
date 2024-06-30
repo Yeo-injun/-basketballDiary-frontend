@@ -1,17 +1,15 @@
 <template>
-	<div>
-		<v-chip-group>
-			<v-chip
-				class="foulCnt"
-				v-for="foulInfo in foulInfoList"
-				:key="foulInfo.number"
-				:color="foulInfo.color"
-				:text-color="foulInfo.textColor"
-			>
-				{{ foulInfo.number }}
-			</v-chip>
-		</v-chip-group>
-	</div>
+	<v-chip-group>
+		<v-chip
+			class="foulCnt"
+			v-for="foulInfo in foulInfoList"
+			:key="foulInfo.number"
+			:color="foulInfo.color"
+			:text-color="foulInfo.textColor"
+		>
+			{{ foulInfo.number }}
+		</v-chip>
+	</v-chip-group>
 </template>
 
 <script>
