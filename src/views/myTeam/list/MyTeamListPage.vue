@@ -1,7 +1,7 @@
 <template>
 	<v-container>
+		<MyTeamListMainTitle pTitleName="소속팀 목록" />
 		<TeamCreationBtn />
-		<h1>소속팀 목록</h1>
 		<MyTeamList
 			:pList="myTeams"
 			:pPagination="pagination"
@@ -19,6 +19,7 @@
 
 <script>
 	/** Components */
+	import MyTeamListMainTitle from '@/components/title/FramePageMainTitle.vue';
 	import MyTeamList from '@/components/list/FramePaginationList.vue';
 	import MyTeamComp from '@/views/myTeam/list/components/MyTeamComp.vue';
 
@@ -36,6 +37,7 @@
 			this.getMyTeams();
 		},
 		components: {
+			MyTeamListMainTitle,
 			MyTeamList,
 			MyTeamComp,
 			TeamCreationBtn,

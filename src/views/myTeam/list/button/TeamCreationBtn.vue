@@ -1,24 +1,16 @@
 <template>
-	<AbstractPageMoveBtn :pRouteInfo="this.routeInfo" :pBtnInfo="this.btnInfo" />
+	<FramePageMoveBtn 
+		pBtnName="팀 생성" 
+		pRoutePageName="TeamRegistrationPage" 
+	/>
 </template>
 
 <script>
-	import AbstractPageMoveBtn from '@/components/button/AbstractPageMoveBtn.vue';
+	import FramePageMoveBtn from '@/components/button/FramePageMoveBtn.vue';
 
 	export default {
 		components: {
-			AbstractPageMoveBtn,
-		},
-		data() {
-			return {
-				btnInfo: {
-					name: '팀생성',
-				},
-				routeInfo: {
-					name: 'TeamRegistrationPage',
-					params: '',
-				},
-			};
+			FramePageMoveBtn,
 		},
 	};
 </script>
