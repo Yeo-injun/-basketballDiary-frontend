@@ -13,7 +13,9 @@
 			@click-page="searchTeams"
 		>
 			<template v-slot:itemSlot="data">
-				<TeamComp :pTeam="data.item" />
+				<v-container>
+					<TeamComp :pTeam="data.item" />
+				</v-container>
 			</template>
 			<template v-slot:itemEmptySlot> 검색결과가 없습니다. </template>
 		</TeamList>
