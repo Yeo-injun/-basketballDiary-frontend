@@ -1,22 +1,26 @@
 <template>
-	<!-- <v-container> -->
-		<v-btn block color="primary" @click="doAdd">{{ this.pBtnName }}</v-btn>
-	<!-- </v-container> -->
+	<v-btn block color="primary" :disabled="this._disabled" @click="doAdd">{{ this.pBtnName }}</v-btn>
 </template>
 
 <script>
 	export default {
 		props: {
-			pBtnName: String,
-		},
-		data() {
-			return {
-				eventEmitName: 'do-add',
-			};
+			pBtnName: {
+				type	: String,
+				default() {
+					return "추가"
+				},
+			},
+			_disabled: {
+				type	: Boolean,
+				default() {
+					return false;
+				},
+			},
 		},
 		methods: {
 			doAdd() {
-				this.$emit(this.eventEmitName);
+				this.$emit( "do-add" );
 			},
 		},
 	};

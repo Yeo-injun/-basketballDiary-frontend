@@ -55,7 +55,7 @@ function setAuthInfo( authInfo ) {
 		console.log( "[ Error ] 권한정보가 존재하지 않습니다. ");
 		return;
 	}
-	AuthStateManager.mutations.processLogin(authInfo);
+	AuthStateManager.mutations.init(authInfo);
 }
 
 function getTeamAuth( teamSeq ) {

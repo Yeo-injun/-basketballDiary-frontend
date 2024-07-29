@@ -1,25 +1,34 @@
 <template>
 	<v-card>
 		<TeamMainInfo :pTeamInfo="this.pTeam" />
-		<v-btn
-			v-if="!this.isTeamMember( this.pTeam.teamSeq )"
-			class="ma-3"
-			@click="sendJoinRequest"
-			>팀가입요청</v-btn
-		>
+		<v-container>
+			<JoinRequestBtn 
+				pBtnName="팀가입요청"
+				@do-add="sendJoinRequest"
+				:_disabled="this.isTeamMember( this.pTeam.teamSeq )"
+			/>
+		</v-container>
 	</v-card>
 </template>
 
 <script>
-	import TeamMainInfo from '@/components/team/FrameTeamMainInfoComp.vue';
-
+	/** Backend API */
 	import AuthUserAPI from '@/api/AuthUserAPI.js';
 
+	/** Code */
+	/** Utils */
 	import AuthManager from '@/common/auth/AuthManager.js';
+
+	/** Components */
+	import TeamMainInfo from '@/components/team/FrameTeamMainInfoComp.vue';
+	import JoinRequestBtn from '@/components/button/FrameAddBtn.vue';
+	/** Emit Event */
+
 
 	export default {
 		components: {
 			TeamMainInfo,
+			JoinRequestBtn,
 		},
 		props: {
 			pTeam: {
@@ -38,9 +47,6 @@
 			},
 			isTeamMember( teamSeq ) {
 				return AuthManager.isTeamMemeber(teamSeq);
-			},
-			hasExcercises() {
-				return this.pTeam.teamRegularExercises.length > 0;
 			},
 		},
 	};
