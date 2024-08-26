@@ -63,7 +63,7 @@ export default {
 	 * injun
 	 */
 	/* API005 : 소속팀의 초대한 선수목록 조회 */
-	searchInvitedPlayer(teamSeq, inviteState) {
+	getInvitations(teamSeq, inviteState) {
 		// TODO 왜 2번째 인자를 {}로 감싸야만 하는지 확인 -> 2번째 파라미터 자체가 객체여야 하고, 쿼리스트링으로 사용하기 위해서는 params속성의 값이 쿼리스트링이 됨
 		return axiosService.get(`/${teamSeq}/joinRequestsTo`, {
 			params: { state: inviteState },
