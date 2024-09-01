@@ -8,7 +8,7 @@
 					:items="filterConds"
 					item-text="text"
 					item-value="value"
-					@change="searchJoinRequestPlayer"
+					@change="getReceivedJoinRequests"
 					label="초대상태"
 				></v-select>
 			</v-card-subtitle>
@@ -77,22 +77,14 @@
 		},
 		methods: {
 			async initLoad() {
-				await this.searchJoinRequestPlayer();
+				await this.getReceivedJoinRequests();
 			},
-			async searchJoinRequestPlayer() {
-				// this를 어디서 호출하느냐에 따라서 지칭하는 대상이 달라짐.
-				const filterCond = this.filterCond;
-
-				const params = {
-					teamSeq: this.getPropTeamSeq(), // TODO 테스트용 화면에서 데이터 받아오기
-					state: filterCond,
-				};
-				try {
-					const res = await MyTeamAPI.searchJoinRequestPlayer(params);
-					this.joinRequestPlayers = res.data;
-				} catch (e) {
-					console.log(e);
-				}
+			async getReceivedJoinRequests() {
+				const { data } = await MyTeamAPI.getReceivedJoinRequests({
+					teamSeq	: this.getPropTeamSeq(), 
+					state	: this.filterCond,
+				});
+				this.joinRequestPlayers = data.joinRequests;
 			},
 			async clickApproval(item) {
 				if (!confirm('가입요청을 승낙하시겠습니까?')) {
