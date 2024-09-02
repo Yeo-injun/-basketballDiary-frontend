@@ -20,7 +20,7 @@
 						{{ pTeamInfo.totMember }}
 					</v-chip>
 				</div>
-				<div><strong>설립일 |</strong> {{ formattedFoundationYmd }}</div>
+				<div><strong>설립일 | </strong>{{ formattedFoundationYmd }}</div>
 				<div><strong>연고지 | </strong>{{ pTeamInfo.hometown }}</div>
 				<div><strong>팀소개 | </strong>{{ pTeamInfo.introduction }}</div>
 			</v-col>
