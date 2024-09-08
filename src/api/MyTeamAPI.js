@@ -20,14 +20,14 @@ export default {
 		});
 	},
 	/* API012 소속팀 개인프로필 수정 */
-	modifyMyTeamsProfile(messge) {
+	modifyProfile(messge) {
 		return axiosService.postWithMultipart(`/${messge.teamSeq}/profile`, messge);
 	},
 	/**
 	 * changgi
 	 */
 	/* API011 소속팀 개인프로필 조회 */
-	async findMyTeamsProfile(teamSeq) {
+	async getProfile(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/profile`);
 		return data;
 	},

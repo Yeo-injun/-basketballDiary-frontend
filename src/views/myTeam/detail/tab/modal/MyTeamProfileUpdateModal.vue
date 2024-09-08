@@ -119,13 +119,17 @@
 					return;
 				}
 
-				const msg = {
-					teamSeq		: this.pTeamSeq,
-					backNumber	: refs.backNumberInput.getValue(),
-					imageFile	: refs.profileImageInput.getImage(),
-				};
+				await MyTeamAPI.modifyProfile({
+					teamSeq			: this.pTeamSeq,
+					backNumber		: refs.backNumberInput.getValue(),
+					profileImage	: refs.profileImageInput.getImage(),
+				});
 
-				await MyTeamAPI.modifyMyTeamsProfile(msg);
+				// 정상 수정 메세지에 따라서 안내창 띄우고, 업로드한 파일 input clear하고, 닫히게 만들기
+				alert( "프로필이 수정됐습니다." );
+				// TODO input이 안비워짐.. 버그 확인... 
+				refs.profileImageInput.clearImageInput();
+
 				this.$emit('modal-close', false);
 			},
 		},
