@@ -1,6 +1,5 @@
-<template v-if="this.isAsyncComplete">
-	<v-container class="px-15">
-		
+<template>
+	<v-container class="px-15"  v-if="this.isAsyncComplete">
 		<v-row>
 			<v-col>
 				<ProfileUpdateBtn
@@ -133,7 +132,7 @@
 				await this.getManagers();
 			},
 			async getProflie() {
-				this.profile = await MyTeamAPI.findMyTeamsProfile(this.teamSeq);
+				this.profile = await MyTeamAPI.getProfile(this.teamSeq);
 			},
 			async getManagers() {
 				const response = await MyTeamAPI.getManagers(this.teamSeq);
@@ -144,9 +143,6 @@
 					{ teamSeq: this.teamSeq },
 					{ pageNo: this.pagination.pageNo }
 				);
-				// TODO 자식컴포넌트와 호출 순서 확인 및 제어 필요
-				console.log('getTeamMembers호출!!');
-				console.log(data);
 				this.teamMembers = data.teamMembers;
 				this.pagination = data.pagination;
 			},
