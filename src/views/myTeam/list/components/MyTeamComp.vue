@@ -8,8 +8,14 @@
 				<MoveMyTeamDetailBtn pBtnName="상세보기"
 					pRoutePageName="MyTeamDetailPage"
 					:pRouteParams="{
-						teamSeq		: this.pTeamInfo.teamSeq,
-						teamName	: this.pTeamInfo.teamName,
+						teamSeq			: this.pTeamInfo.teamSeq,
+						teamName		: this.pTeamInfo.teamName,
+						teamImagePath 	: this.pTeamInfo.teamImagePath,
+						hometown 		: this.pTeamInfo.hometown,
+						totMember 		: this.pTeamInfo.totMember,
+						foundationYmd 	: this.pTeamInfo.foundationYmd,
+						introduction 	: this.pTeamInfo.introduction,
+
 					}"
 				/>
 			</v-container>

@@ -20,14 +20,14 @@ export default {
 		});
 	},
 	/* API012 소속팀 개인프로필 수정 */
-	modifyMyTeamsProfile(messge) {
+	modifyProfile(messge) {
 		return axiosService.postWithMultipart(`/${messge.teamSeq}/profile`, messge);
 	},
 	/**
 	 * changgi
 	 */
 	/* API011 소속팀 개인프로필 조회 */
-	async findMyTeamsProfile(teamSeq) {
+	async getProfile(teamSeq) {
 		const { data } = await axiosService.get(`/${teamSeq}/profile`);
 		return data;
 	},
@@ -63,8 +63,7 @@ export default {
 	 * injun
 	 */
 	/* API005 : 소속팀의 초대한 선수목록 조회 */
-	searchInvitedPlayer(teamSeq, inviteState) {
-		// TODO 왜 2번째 인자를 {}로 감싸야만 하는지 확인 -> 2번째 파라미터 자체가 객체여야 하고, 쿼리스트링으로 사용하기 위해서는 params속성의 값이 쿼리스트링이 됨
+	getInvitations(teamSeq, inviteState) {
 		return axiosService.get(`/${teamSeq}/joinRequestsTo`, {
 			params: { state: inviteState },
 		});
@@ -76,7 +75,7 @@ export default {
 		);
 	},
 	/* API008 : 소속팀이 받은 가입요청목록 조회 */
-	searchJoinRequestPlayer(messge) {
+	getReceivedJoinRequests( messge ) {
 		return axiosService.get(`/${messge.teamSeq}/joinRequestsFrom`, {
 			params: { state: messge.state },
 		});

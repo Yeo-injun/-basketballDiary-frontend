@@ -67,11 +67,11 @@
 		},
 		methods: {
 			async searchInvitedPlayer() {
-				const res = await MyTeamAPI.searchInvitedPlayer(
+				const { data } = await MyTeamAPI.getInvitations(
 					this.pTeamSeq,
 					this.filterCond
 				);
-				this.invitedPlayers = res.data;
+				this.invitedPlayers = data.invitations;
 			},
 		},
 		beforeMount() {
