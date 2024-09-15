@@ -56,6 +56,7 @@ export default {
 		 */
 		return axiosService.postWithMultipart(`/${teamSeq}/info`, {
 			teamInfo: teamInfo,
+			teamRegularExercises : teamInfo.teamRegularExercises,
 			teamLogo: teamLogoImageFile,
 		});
 	},
