@@ -26,8 +26,16 @@
 </template>
 
 <script>
+	/** Backend API */
+	import MyTeamAPI from '@/api/MyTeamAPI';
+	
+	/** Code */
+	/** Utils */
+	/** Components */
 	import MyTeamMainInfo from '@/components/team/FrameTeamMainInfoComp.vue';
 	import MyTeamDetailTabs from '@/views/myTeam/detail/tab/MyTeamDetailTabs.vue';
+
+	/** Emit Event */
 
 	export default {
 		components: {
@@ -38,16 +46,31 @@
 			const query = this.$route.query;
 			return {
 				tabName: query.tabName,
-				// 팀정보 세팅 TODO 팀정보 서버에서 조회 ( 팀정보 혹은 팀원이 변경될 수 있으므로... )
-				teamSeq			: Number(query.teamSeq),
-				teamName		: query.teamName,
-				teamImagePath 	: query.teamImagePath,
-				hometown 		: query.hometown,
-				totMember 		: query.totMember,
-				foundationYmd 	: query.foundationYmd,
-				introduction 	: query.introduction,
+				// 팀정보 세팅 
+				teamSeq			: "",
+				teamName		: "",
+				teamImagePath 	: "",
+				hometown 		: "",
+				totMember 		: "",
+				foundationYmd 	: "",
+				introduction 	: "",
 			};
 		},
+		methods : {
+			async intlTeamInfo() {
+				const query = this.$route.query;
+				const data 	= await MyTeamAPI.getTeamInfo( query.teamSeq );
+				this.teamSeq		= data.teamSeq;
+				this.teamName		= data.teamName;
+				this.teamImagePath 	= data.teamLogoImagePath;
+				this.hometown		= data.hometown;
+				this.foundationYmd	= data.foundationYmd;
+				this.introduction	= data.introduction;
+			},
+		},
+		mounted() {
+			this.intlTeamInfo();	
+		}
 	};
 </script>
 
