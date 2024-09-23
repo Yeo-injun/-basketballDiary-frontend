@@ -1,9 +1,7 @@
 <template>
 	<div>
 		<v-container>
-			<v-card 
-				class="mx-auto mt-6" max-width="1100" outlined
-			>
+			<v-card class="mx-auto mt-6" max-width="1100" outlined >
 				<MyTeamMainInfo class="pt-2 pb-2"
 					:pTeamInfo="{
 					teamName		: this.teamName,
@@ -12,6 +10,7 @@
 					totMember 		: this.totMember,
 					foundationYmd 	: this.foundationYmd,
 					introduction 	: this.introduction,
+					totMember		: this.memberCount,
 				}"/>
 			</v-card>
 		</v-container>
@@ -54,6 +53,7 @@
 				totMember 		: "",
 				foundationYmd 	: "",
 				introduction 	: "",
+				memberCount		: 0,
 			};
 		},
 		methods : {
@@ -66,6 +66,7 @@
 				this.hometown		= data.hometown;
 				this.foundationYmd	= data.foundationYmd;
 				this.introduction	= data.introduction;
+				this.memberCount	= data.memberCount;
 			},
 		},
 		mounted() {
