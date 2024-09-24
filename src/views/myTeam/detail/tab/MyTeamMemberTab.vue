@@ -7,7 +7,7 @@
 					pBtnName="프로필 수정"
 				/>
 				<ProfileUpdateModal
-					:pTeamSeq="teamSeq"
+					:pTeamSeq="this.pTeamSeq"
 					:pIsActivated="isActivatedProfileModal"
 					:pBackNumber="this.profile.backNumber"
 					:pImageUrl="profile.imageUrl"
@@ -23,7 +23,7 @@
 				<MyTeamInfoUpdateModal
 					v-model="isActivatedTeamInfoModal"
 					@input="isActivatedTeamInfoModal = $event"
-					:pTeamSeq="teamSeq"
+					:pTeamSeq="this.pTeamSeq"
 				/>
 			</v-col>
 			<v-col>
@@ -43,9 +43,10 @@
 
 		<v-container>
 			<ManagerSubTitle pTitleName="운영진 목록" />
-			<div v-for="(manager, index) in managers" v-bind:key="index">
-				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
-			</div>
+			<MyTeamManagersComp 
+				:pTeamSeq="this.pTeamSeq"
+				:pTeamManagers="managers"
+			/>
 		</v-container>
 
 		<v-container>
@@ -56,7 +57,7 @@
 				@click-page="getTeamMembers"
 			>
 				<template v-slot:itemSlot="data">
-					<MyTeamMemberComp :pTeamMember="data.item" :pTeamSeq="teamSeq" />
+					<MyTeamMemberComp :pTeamMember="data.item" :pTeamSeq="pTeamSeq" />
 				</template>
 				<template v-slot:itemEmptySlot> 등록된 팀원이 없습니다. </template>
 			</TeamMemberList>
@@ -84,7 +85,7 @@
 	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
 
 	import ManagerSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import MyTeamManagerComp from '@/views/myTeam/detail/components/MyTeamManagerComp.vue';
+	import MyTeamManagersComp from '@/views/myTeam/detail/components/TeamManagersComp.vue';
 	
 	import TeamMemberSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import TeamMemberList from '@/components/list/FramePaginationList.vue';
@@ -106,11 +107,17 @@
 			MyTeamProfileComp,
 			
 			ManagerSubTitle,
-			MyTeamManagerComp,
-			
+			MyTeamManagersComp,
+
 			TeamMemberSubTitle,
 			TeamMemberList,
 			MyTeamMemberComp,
+		},
+		props: {
+			pTeamSeq : {
+				type : Number,
+				required : true,
+			},
 		},
 		data() {
 			return {
@@ -118,7 +125,6 @@
 				isActivatedProfileModal: false,
 
 				isAsyncComplete: false,
-				teamSeq: Number(this.$route.query.teamSeq),
 				profile: {},
 				managers: [],
 				teamMembers: [],
@@ -132,32 +138,32 @@
 				await this.getManagers();
 			},
 			async getProflie() {
-				this.profile = await MyTeamAPI.getProfile(this.teamSeq);
+				this.profile = await MyTeamAPI.getProfile(this.pTeamSeq);
 			},
 			async getManagers() {
-				const response = await MyTeamAPI.getManagers(this.teamSeq);
+				const response = await MyTeamAPI.getManagers(this.pTeamSeq);
 				this.managers = response.data.managers;
 			},
 			async getTeamMembers() {
 				const { data } = await MyTeamAPI.getTeamMembers(
-					{ teamSeq: this.teamSeq },
+					{ teamSeq: this.pTeamSeq },
 					{ pageNo: this.pagination.pageNo }
 				);
 				this.teamMembers = data.teamMembers;
 				this.pagination = data.pagination;
 			},
 			clickAddTeamMember() {
-				const teamSeq = this.teamSeq;
+				const teamSeq = this.pTeamSeq;
 				this.$router.push({
 					name: 'MyTeamMemberManagePage',
 					query: { teamSeq: teamSeq },
 				});
 			},
 			isManager() {
-				return AuthManager.isManager( this.teamSeq );
+				return AuthManager.isManager( this.pTeamSeq );
 			},
 			isLeader() {
-				return AuthManager.isLeader(this.teamSeq);
+				return AuthManager.isLeader( this.pTeamSeq );
 			},
 			/**-----------------------------
 			 * Modal 제어

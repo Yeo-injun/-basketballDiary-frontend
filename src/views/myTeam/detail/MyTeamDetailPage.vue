@@ -17,7 +17,7 @@
 		<v-container>
 			<MyTeamDetailTabs
 				:pTabName="tabName"
-				:pTeamSeq="teamSeq"
+				:pTeamSeq="Number( teamSeq )"
 				:pTeamName="teamName"
 			/>
 		</v-container>
@@ -46,7 +46,7 @@
 			return {
 				tabName: query.tabName,
 				// 팀정보 세팅 
-				teamSeq			: "",
+				teamSeq			: query.teamSeq,
 				teamName		: "",
 				teamImagePath 	: "",
 				hometown 		: "",
