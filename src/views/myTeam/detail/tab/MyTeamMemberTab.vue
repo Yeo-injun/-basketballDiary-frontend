@@ -43,7 +43,7 @@
 
 		<v-container>
 			<ManagerSubTitle pTitleName="운영진 목록" />
-			<MyTeamManagersComp 
+			<TeamManagersComp 
 				:pTeamSeq="this.pTeamSeq"
 				:pTeamManagers="managers"
 			/>
@@ -57,7 +57,8 @@
 				@click-page="getTeamMembers"
 			>
 				<template v-slot:itemSlot="data">
-					<MyTeamMemberComp :pTeamMember="data.item" :pTeamSeq="pTeamSeq" />
+					<TeamMemberComp :pTeamMember="data.item" :pTeamSeq="pTeamSeq" />
+					<v-divider v-if="data.idx < teamMembers.length - 1"/>
 				</template>
 				<template v-slot:itemEmptySlot> 등록된 팀원이 없습니다. </template>
 			</TeamMemberList>
@@ -85,11 +86,11 @@
 	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
 
 	import ManagerSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import MyTeamManagersComp from '@/views/myTeam/detail/components/TeamManagersComp.vue';
+	import TeamManagersComp from '@/views/myTeam/detail/components/TeamManagersComp.vue';
 	
 	import TeamMemberSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import TeamMemberList from '@/components/list/FramePaginationList.vue';
-	import MyTeamMemberComp from '@/views/myTeam/detail/components/MyTeamMemberComp.vue';
+	import TeamMemberComp from '@/views/myTeam/detail/components/TeamMemberComp.vue';
 
 	// TODO 팀원추가 화면을 Layer로 구현하는 것을 고민... FrameOpenBtn 으로 대체 예정
 	// ( FrameAddBtn은 API를 호출해서 데이터가 추가되는 동작일 경우 사용 )
@@ -107,11 +108,11 @@
 			MyTeamProfileComp,
 			
 			ManagerSubTitle,
-			MyTeamManagersComp,
+			TeamManagersComp,
 
 			TeamMemberSubTitle,
 			TeamMemberList,
-			MyTeamMemberComp,
+			TeamMemberComp,
 		},
 		props: {
 			pTeamSeq : {

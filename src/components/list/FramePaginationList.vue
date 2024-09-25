@@ -5,7 +5,7 @@
 		<div v-for="(item, idx) in pList" :key="idx">
 			<!-- 목록 데이터의 요소데이터를 상위 컴포넌트에서 정의한 컴포넌트에 전달. 
             상위 컴포넌트에서는 상위컴포넌트 변수명을 정의한후 .items로 데이터 접근가능 -->
-			<slot name="itemSlot" :item="item"></slot>
+			<slot name="itemSlot" :item="item" :idx="idx"></slot>
 		</div>
 
 		<!-- 보여줄 데이터가 없을 경우 -->
