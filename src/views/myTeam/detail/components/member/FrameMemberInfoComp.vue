@@ -2,7 +2,7 @@
 	<v-list-item>
 		<!-- 왼쪽 영역 -->
 		<v-list-item-avatar>
-			<ProfileImage/>
+			<ProfileImage :pImageUrl="pProfileImageUrl"/>
 		</v-list-item-avatar>
 
 		<!-- 중앙 영역 -->
@@ -40,12 +40,13 @@
 			ProfileImage,
 		},
 		props: {
+			pProfileImageUrl	: { type : String, default() { return ""; } },
 			pUserName 			: { type : String, required : true },
-			pBirthYmd 			: { type : String, default : "99991231" },
+			pBirthYmd 			: { type : String, default() { return "99991231"; } },
 			pHeight 			: { type : String, required : true },
 			pWeight 			: { type : String, required : true },
 			pPositionCodeName 	: { type : String, required : true },
-			pBackNumber 		: { type : String, required : true },
+			pBackNumber 		: { type : String, default() { return "-"; } },
 			pJoinYmd 			: { type : String, required : true },
 			pTotalGameCount 	: { type : String, },
 			pTeamAuthCode		: { type : String, required : true },
@@ -63,6 +64,11 @@
 				}
 			},
 		},
+		mounted() {
+			console.log( "프레임팀원정보");
+			console.log( this.pUserName );
+		}
+
 	};
 </script>
 

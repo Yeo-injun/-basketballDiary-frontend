@@ -3,6 +3,7 @@
 		<template v-for="(item, idx) in this.pTeamManagers">
 			<div :key="idx">
 				<MemberInfoComp
+					:pProfileImageUrl="item.profileImageUrl"
 					:pUserName="item.userName"
 					:pBirthYmd="item.birthYmd"
 					:pHeight="item.height"
@@ -37,7 +38,7 @@
 	import AuthManager from '@/common/auth/AuthManager.js';
 	
 	/** Components */
-	import MemberInfoComp from '@/views/myTeam/detail/components/frame/FrameMemberInfoComp.vue';
+	import MemberInfoComp from '@/views/myTeam/detail/components/member/FrameMemberInfoComp.vue';
 	import ManagerDismissalBtn from '@/components/button/ManagerDismissalBtn.vue';
 
 	export default {
