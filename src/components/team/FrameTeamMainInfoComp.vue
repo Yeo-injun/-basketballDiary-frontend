@@ -51,7 +51,7 @@
 						teamName 		: "",
 						teamImagePath 	: "",
 						hometown 		: "",
-						totMember 		: 0,
+						totMember 		: 0,	
 						foundationYmd 	: "",
 						introduction 	: "",
 					}

@@ -2,12 +2,12 @@
 
 <template>
 	<v-container>
-		<MyTeamGameRecordSearchComp @do-search="searchMyTeamGames"/>
+		<MyTeamGameRecordSearchComp @do-search="searchTeamGames"/>
 		<div>총 {{ pagination.totalCount }}개</div>
 		<MyTeamGameRecordList
 			:pList="games"
 			:pPagination="pagination"
-			@click-page="searchMyTeamGames"
+			@click-page="searchTeamGames"
 		>
 		<!-- TODO 참가팀 선택단계에서 임시저장된 건 조회시 오류 발생 ( null객체가 전달되는 것으로 추정됨 )-->
 			<template v-slot:itemSlot="data">
@@ -20,7 +20,7 @@
 
 <script>
 	/** Backend API */
-	import MyTeamAPI from '@/api/MyTeamAPI';
+	import TeamAPI from '@/api/TeamAPI';
 
 	/** Code */
 	/** Utils */
@@ -54,10 +54,8 @@
 			pTeamName: String,
 		},
 		methods: {
-			/* API052 : 소속팀 게임목록조회 */
-			async searchMyTeamGames( searchCond ) {
-
-				const { data } = await MyTeamAPI.searchMyTeamGames(
+			async searchTeamGames( searchCond ) {
+				const { data } = await TeamAPI.searchTeamGames(
 					{ teamSeq: this.pTeamSeq },
 					this.toQueryParams( searchCond ),
 				);
@@ -79,7 +77,7 @@
 			},
 		},
 		mounted() {
-			this.searchMyTeamGames();
+			this.searchTeamGames();
 		},
 	};
 

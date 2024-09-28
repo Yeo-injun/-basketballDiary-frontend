@@ -7,9 +7,9 @@
 					pBtnName="프로필 수정"
 				/>
 				<ProfileUpdateModal
-					:pTeamSeq="teamSeq"
+					:pTeamSeq="this.pTeamSeq"
 					:pIsActivated="isActivatedProfileModal"
-					:pBackNumber="this.profile.backNumber"
+					:pBackNumber="profile.backNumber"
 					:pImageUrl="profile.imageUrl"
 					@modal-close="closeProfileUpdateModal()"
 				/>
@@ -23,7 +23,7 @@
 				<MyTeamInfoUpdateModal
 					v-model="isActivatedTeamInfoModal"
 					@input="isActivatedTeamInfoModal = $event"
-					:pTeamSeq="teamSeq"
+					:pTeamSeq="this.pTeamSeq"
 				/>
 			</v-col>
 			<v-col>
@@ -43,23 +43,20 @@
 
 		<v-container>
 			<ManagerSubTitle pTitleName="운영진 목록" />
-			<div v-for="(manager, index) in managers" v-bind:key="index">
-				<MyTeamManagerComp :pTeamManager="manager" :pTeamSeq="teamSeq" />
-			</div>
+			<Managers 
+				:pTeamSeq="this.pTeamSeq"
+				:pTeamManagers="managers"
+			/>
 		</v-container>
 
 		<v-container>
 			<TeamMemberSubTitle pTitleName="팀원 목록" />
-			<TeamMemberList
-				:pList="teamMembers"
+			<TeamMembersComp
+				:pTeamSeq="this.pTeamSeq"
+				:pTeamMembers="teamMembers"
 				:pPagination="pagination"
 				@click-page="getTeamMembers"
-			>
-				<template v-slot:itemSlot="data">
-					<MyTeamMemberComp :pTeamMember="data.item" :pTeamSeq="teamSeq" />
-				</template>
-				<template v-slot:itemEmptySlot> 등록된 팀원이 없습니다. </template>
-			</TeamMemberList>
+			/>
 		</v-container>
 
 	</v-container>
@@ -84,11 +81,10 @@
 	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
 
 	import ManagerSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import MyTeamManagerComp from '@/views/myTeam/detail/components/MyTeamManagerComp.vue';
+	import Managers from '@/views/myTeam/detail/components/member/TeamManagersComp.vue';
 	
 	import TeamMemberSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import TeamMemberList from '@/components/list/FramePaginationList.vue';
-	import MyTeamMemberComp from '@/views/myTeam/detail/components/MyTeamMemberComp.vue';
+	import TeamMembersComp from '@/views/myTeam/detail/components/member/TeamMembersComp.vue';
 
 	// TODO 팀원추가 화면을 Layer로 구현하는 것을 고민... FrameOpenBtn 으로 대체 예정
 	// ( FrameAddBtn은 API를 호출해서 데이터가 추가되는 동작일 경우 사용 )
@@ -106,11 +102,16 @@
 			MyTeamProfileComp,
 			
 			ManagerSubTitle,
-			MyTeamManagerComp,
-			
+			Managers,
+
 			TeamMemberSubTitle,
-			TeamMemberList,
-			MyTeamMemberComp,
+			TeamMembersComp,
+		},
+		props: {
+			pTeamSeq : {
+				type : Number,
+				required : true,
+			},
 		},
 		data() {
 			return {
@@ -118,7 +119,6 @@
 				isActivatedProfileModal: false,
 
 				isAsyncComplete: false,
-				teamSeq: Number(this.$route.query.teamSeq),
 				profile: {},
 				managers: [],
 				teamMembers: [],
@@ -132,32 +132,29 @@
 				await this.getManagers();
 			},
 			async getProflie() {
-				this.profile = await MyTeamAPI.getProfile(this.teamSeq);
+				this.profile = await MyTeamAPI.getProfile(this.pTeamSeq);
 			},
 			async getManagers() {
-				const response = await MyTeamAPI.getManagers(this.teamSeq);
+				const response = await MyTeamAPI.getManagers(this.pTeamSeq);
 				this.managers = response.data.managers;
 			},
 			async getTeamMembers() {
 				const { data } = await MyTeamAPI.getTeamMembers(
-					{ teamSeq: this.teamSeq },
+					{ teamSeq: this.pTeamSeq },
 					{ pageNo: this.pagination.pageNo }
 				);
 				this.teamMembers = data.teamMembers;
 				this.pagination = data.pagination;
 			},
 			clickAddTeamMember() {
-				const teamSeq = this.teamSeq;
+				const teamSeq = this.pTeamSeq;
 				this.$router.push({
 					name: 'MyTeamMemberManagePage',
 					query: { teamSeq: teamSeq },
 				});
 			},
 			isManager() {
-				return AuthManager.isManager( this.teamSeq );
-			},
-			isLeader() {
-				return AuthManager.isLeader(this.teamSeq);
+				return AuthManager.isManager( this.pTeamSeq );
 			},
 			/**-----------------------------
 			 * Modal 제어

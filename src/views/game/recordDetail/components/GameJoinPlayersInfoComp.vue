@@ -4,7 +4,7 @@
 			<HomeTeamPlayersManageModal
 				pModalTitlePrefix="홈팀"
 				:pHomeAwayCode="this.homeTeamCode"
-				@register-complete="getRegisteredPlayers"
+				@register-complete="getAllGameJoinPlayers"
 			/>
 			<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
 		</v-col>
@@ -12,7 +12,7 @@
 			<AwayTeamPlayersManageModal
 				pModalTitlePrefix="어웨이팀"
 				:pHomeAwayCode="this.awayTeamCode"
-				@register-complete="getRegisteredPlayers"
+				@register-complete="getAllGameJoinPlayers"
 			/>
 			<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
 		</v-col>
@@ -58,21 +58,6 @@
 							     });
 				this.homeTeamPlayers = data.homePlayers;
 				this.awayTeamPlayers = data.awayPlayers;
-			},
-			/** 경기참가선수가 추가(서버에 1명씩 저장됨)되면 저장된 정보 재조회하는 구조 */
-			async getRegisteredPlayers(eventParams) {
-				const homeAwayCode = eventParams.homeAwayCode;
-				const { data } = await GameAPI.getGameJoinPlayers({
-					gameSeq			: this.pGameSeq,
-					homeAwayCode	: homeAwayCode,
-				});
-
-				switch( homeAwayCode ) {
-					case HomeAwayCode.HOME_TEAM : this.homeTeamPlayers = data.players; break;
-					case HomeAwayCode.AWAY_TEAM : this.awayTeamPlayers = data.players; break;
-					default : 
-						throw new Error( "유효하지 않은 HOME_AWAY_CODE값입니다." );
-				}
 			},
 		},
 	};

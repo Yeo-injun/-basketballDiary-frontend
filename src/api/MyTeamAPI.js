@@ -111,20 +111,6 @@ export default {
 			`/${messge.teamSeq}/members/${messge.teamMemberSeq}`
 		);
 	},
-	/* API052 : 소속팀 게임목록조회 */
-	searchMyTeamGames(path, query) {
-		return axiosService.get(`/${path.teamSeq}/games`, {
-			params: {
-				pageNo			: query.pageNo			,
-				gameBgngYmd		: query.gameBgngYmd		,
-				gameEndYmd		: query.gameEndYmd		,
-				sidoCode		: query.sidoCode		,
-				gamePlaceName	: query.gamePlaceName	,
-				gameTypeCode	: query.gameTypeCode	,
-				homeAwayCode	: query.homeAwayCode	,
-			},
-		});
-	},
 	/* API036 : 소속팀 전체 팀원 검색 */
 	searchAllTeamMembers(messge) {
 		return axiosService.get(`/${messge.teamSeq}/allTeamMembers`, {
