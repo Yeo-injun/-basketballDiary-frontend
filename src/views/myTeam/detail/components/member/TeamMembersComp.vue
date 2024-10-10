@@ -5,7 +5,6 @@
 		@click-page="onClickPage"
 	>
 		<template v-slot:itemSlot="data">
-			{{ test }}
 			<TeamMemberComp :pTeamMember="data.item" :pTeamSeq="pTeamSeq" />
 			<v-divider v-if="data.idx < pTeamMembers.length - 1"/>
 		</template>

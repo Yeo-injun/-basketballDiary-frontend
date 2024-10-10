@@ -32,6 +32,7 @@
 	/** CODE */
 	import { TeamAuth } from '@/const/code/TeamCode.js';
 	/** Utils */
+	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import DateUtil from '@/common/DateUtil.js';
 	/** Components */
 	import ProfileImage from '@/components/image/FrameImageComp.vue';
@@ -62,7 +63,7 @@
 		props: {
 			pProfileImageUrl	: { type : String, default() { return ""; } },
 			pUserName 			: { type : String, required : true },
-			pBirthYmd 			: { type : String, default() { return "99991231"; } },
+			pBirthYmd 			: { type : String, },
 			pHeight 			: { type : String, required : true },
 			pWeight 			: { type : String, required : true },
 			pPositionCodeName 	: { type : String, required : true },
@@ -79,17 +80,12 @@
 				return TEAM_AUTH_BADGE_CONFIG[ this.pTeamAuthCode ].color;
 			},
 			birthDayDashFormat() {
-				return DateUtil.Format.toYmd( this.pBirthYmd );
+				return DateUtil.Format.toYmd( ValidationUtil.isNull( this.pBirthYmd ) ? "99991231" : this.pBirthYmd );
 			},
 			joinYmdKorFormat() {
 				return DateUtil.Format.toKorYmd( this.pJoinYmd );
 			}
 		},
-		mounted() {
-			console.log( "프레임팀원정보");
-			console.log( this.pUserName );
-		}
-
 	};
 </script>
 
