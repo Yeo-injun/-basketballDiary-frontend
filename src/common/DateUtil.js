@@ -90,7 +90,15 @@ export default {
 			if (ValidationUtil.isNull(strYmd)) {
 				return '';
 			}
-			return Formatter.toYmd(strYmd);
+			return Formatter.toDashYmd( strYmd );
+		},
+		/** @return yyyy년 MM월 dd일 */
+		toKorYmd( strYmd ) {
+			if ( ValidationUtil.isNull( strYmd ) ) {
+				return '';
+			}
+			const parsedYmd = DateParser.parseYearMonthDay( strYmd );
+			return `${parsedYmd.year}년 ${parsedYmd.month}월 ${parsedYmd.day}일`;
 		},
 		/* @return yyyyMMdd */
 		toString(ymd) {
@@ -117,10 +125,7 @@ export default {
 	getCurrentYmd() {
 		const currentTimeStamp = new Date();
 		const currentYear = currentTimeStamp.getFullYear();
-		const currentMonth = String(currentTimeStamp.getMonth() + 1).padStart(
-			2,
-			'0'
-		);
+		const currentMonth = String(currentTimeStamp.getMonth() + 1).padStart( 2, '0' );
 		const currentDay = String(currentTimeStamp.getDate()).padStart(2, '0');
 		return `${currentYear}${currentMonth}${currentDay}`;
 	},
@@ -131,13 +136,30 @@ export default {
 	 * @param {String} toYmd	*yyyyMMdd 형태여야 함
 	 */
 	getDaysBetween( fromYmd, toYmd ) {
-		const fromDate 	= new Date( Formatter.toYmd( fromYmd ) );
-		const toDate	= new Date( Formatter.toYmd( toYmd ) );
+		const fromDate 	= new Date( Formatter.toDashYmd( fromYmd ) );
+		const toDate	= new Date( Formatter.toDashYmd( toYmd ) );
 		const betweenMilliSeconds	 	= toDate - fromDate;
 		const DAY_FOR_MILLISECONDS 		= 24 * 60 * 60 * 1000; // 24시간 * 60분 * 60초 * 1000밀리초
 		return betweenMilliSeconds / DAY_FOR_MILLISECONDS;
 	},
 }; //export
+
+const DateParser = {
+	parseYearMonthDay( str ) {
+		if ( str.length != 8 ) {
+			return {
+				year	: "",
+				month	: "",
+				day		: "",
+			}
+		}
+		return {
+			year	: str.substr(0, 4),
+			month	: str.substr(4, 2),
+			day		: str.substr(6, 2),	
+		}
+	},
+}
 
 const Formatter = {
 	toTimes(hour, minute) {
@@ -149,6 +171,18 @@ const Formatter = {
 		}
 		return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
 	},
+	toDashYmd( strYmd ) {
+		const parsedYmd = DateParser.parseYearMonthDay( strYmd );
+		return `${parsedYmd.year}-${parsedYmd.month}-${parsedYmd.day}`;
+	},
+	toString(ymd) {
+		if (typeof ymd != 'string') {
+			ymd = String(ymd);
+		}
+		const regExp = /[0-9]/g;
+		const strYmd = ymd.match(regExp).join('');
+		return strYmd;
+	},
 
 	// TODO 삭제 예정
 	toHHmm(hour, minute) {
@@ -159,23 +193,5 @@ const Formatter = {
 			minute = String(minute);
 		}
 		return `${hour.padStart(2, '0')}${minute.padStart(2, '0')}`;
-	},
-	toYmd(strYmd) {
-		if (strYmd.length != 8) {
-			throw new Error('날짜의 길이가 맞지 않습니다.');
-		}
-		const year = strYmd.substr(0, 4);
-		const month = strYmd.substr(4, 2);
-		const day = strYmd.substr(6, 2);
-		const seperator = '-';
-		return year + seperator + month + seperator + day;
-	},
-	toString(ymd) {
-		if (typeof ymd != 'string') {
-			ymd = String(ymd);
-		}
-		const regExp = /[0-9]/g;
-		const strYmd = ymd.match(regExp).join('');
-		return strYmd;
 	},
 };

@@ -36,8 +36,8 @@
 		</v-row>
 	
 		<v-container>
-			<MyProfileSubTitle pTitleName="개인프로필" />
-			<MyTeamProfileComp :pMyProfile="profile" />
+			<TeamProfileSubTitle class="pb-2" pTitleName="개인프로필" />
+			<TeamProfileComp :pTeamProfile="profile"/>
 		</v-container>
 
 
@@ -77,8 +77,8 @@
 
 	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
 
-	import MyProfileSubTitle from '@/components/title/FrameTabSubTitle.vue';
-	import MyTeamProfileComp from '@/views/myTeam/detail/components/MyTeamProfileComp.vue';
+	import TeamProfileSubTitle from '@/components/title/FrameTabSubTitle.vue';
+	import TeamProfileComp from '@/views/myTeam/detail/components/member/TeamProfileComp.vue';
 
 	import ManagerSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import Managers from '@/views/myTeam/detail/components/member/TeamManagersComp.vue';
@@ -98,8 +98,8 @@
 
 			TeamMemberAddBtn,
 
-			MyProfileSubTitle,
-			MyTeamProfileComp,
+			TeamProfileSubTitle,
+			TeamProfileComp,
 			
 			ManagerSubTitle,
 			Managers,
