@@ -14,7 +14,7 @@
 			<v-list-item-subtitle>
 				{{ `${pHeight}cm / ${pWeight}kg` }}						
 			</v-list-item-subtitle>
-			<span>{{ pPositionCodeName }} | {{ pBackNumber }}</span>
+			<span>{{ pPositionCodeName }} | {{ backNumberForamt }}</span>
 			<span>{{ joinYmdKorFormat }} 부터 총 {{ pTotalGameCount }} 번의 경기를 뛰었습니다.</span>
 			<!-- 구분선 (마지막 아이템에는 표시 안 함) -->
 		</v-list-item-content>
@@ -81,6 +81,10 @@
 			},
 			birthDayDashFormat() {
 				return DateUtil.Format.toYmd( ValidationUtil.isNull( this.pBirthYmd ) ? "99991231" : this.pBirthYmd );
+			},
+			backNumberForamt() {
+				const backNumber = ValidationUtil.isNull( this.pBackNumber ) ? "-" : this.pBackNumber;
+				return  `${backNumber}번`;
 			},
 			joinYmdKorFormat() {
 				return DateUtil.Format.toKorYmd( this.pJoinYmd );
