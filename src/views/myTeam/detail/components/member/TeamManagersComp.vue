@@ -11,7 +11,7 @@
 					:pPositionCodeName="item.positionCodeName"
 					:pBackNumber="item.backNumber"
 					:pJoinYmd="item.joinYmd"
-					:pTotalGameCount="item.totalCount"
+					:pTotalGameCount="item.totalGameCount"
 					:pTeamAuthCode="item.teamAuthCode"
 				>
 					<template v-slot:action-slot >

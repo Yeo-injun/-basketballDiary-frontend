@@ -2,17 +2,6 @@
 	<v-container class="px-15"  v-if="this.isAsyncComplete">
 		<v-row>
 			<v-col>
-				<ProfileUpdateBtn
-					@do-open="openProfileUpdateModal()"
-					pBtnName="프로필 수정"
-				/>
-				<ProfileUpdateModal
-					:pTeamSeq="this.pTeamSeq"
-					:pIsActivated="isActivatedProfileModal"
-					:pBackNumber="profile.backNumber"
-					:pImageUrl="profile.imageUrl"
-					@modal-close="closeProfileUpdateModal()"
-				/>
 			</v-col>
 			<v-col>
 				<MyTeamInfoUpdateBtn
@@ -69,9 +58,6 @@
 	/** CODE */
 	/** Utils */
 	/** Components */
-	import ProfileUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamProfileUpdateModal.vue';
-	import ProfileUpdateBtn from '@/components/button/FrameOpenBtn.vue';
-
 	import MyTeamInfoUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamInfoUpdateModal.vue';
 	import MyTeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
 
@@ -91,8 +77,6 @@
 
 	export default {
 		components: {
-			ProfileUpdateModal,
-			ProfileUpdateBtn,
 			MyTeamInfoUpdateModal,
 			MyTeamInfoUpdateBtn,
 
@@ -115,9 +99,9 @@
 		},
 		data() {
 			return {
+				/** 모달 제어 */
 				isActivatedTeamInfoModal: false,
-				isActivatedProfileModal: false,
-
+				/** 비동기 통신 후 컴포넌트 제어 */
 				isAsyncComplete: false,
 				profile: {},
 				managers: [],
@@ -156,18 +140,9 @@
 			isManager() {
 				return AuthManager.isManager( this.pTeamSeq );
 			},
-			/**-----------------------------
-			 * Modal 제어
-			 **-----------------------------*/
-			openProfileUpdateModal() {
-				this.isActivatedProfileModal = true;
-			},
-			closeProfileUpdateModal() {
-				this.isActivatedProfileModal = false;
-			},
 		},
 		async mounted() {
-			// TODO 순서를 바꾸면 화면 렌더링 제대로 안됨.
+			// 순서를 바꾸면 화면 렌더링 제대로 안됨.
 			await this.onLoad();
 			this.isAsyncComplete = true;
 		},

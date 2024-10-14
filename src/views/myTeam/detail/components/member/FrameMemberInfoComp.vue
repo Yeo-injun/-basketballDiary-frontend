@@ -15,7 +15,7 @@
 				{{ `${pHeight}cm / ${pWeight}kg` }}						
 			</v-list-item-subtitle>
 			<span>{{ pPositionCodeName }} | {{ backNumberForamt }}</span>
-			<span>{{ joinYmdKorFormat }} 부터 총 {{ pTotalGameCount }} 번의 경기를 뛰었습니다.</span>
+			<span>{{ joinYmdKorFormat }} 부터 총 {{ totalGameCountOrZero }} 번의 경기를 뛰었습니다.</span>
 			<!-- 구분선 (마지막 아이템에는 표시 안 함) -->
 		</v-list-item-content>
 
@@ -69,7 +69,7 @@
 			pPositionCodeName 	: { type : String, required : true },
 			pBackNumber 		: { type : String, default() { return "-"; } },
 			pJoinYmd 			: { type : String, required : true },
-			pTotalGameCount 	: { type : String, },
+			pTotalGameCount 	: { type : Number, },
 			pTeamAuthCode		: { type : String, required : true },
 		},
 		computed :{
@@ -88,6 +88,9 @@
 			},
 			joinYmdKorFormat() {
 				return DateUtil.Format.toKorYmd( this.pJoinYmd );
+			},
+			totalGameCountOrZero() {
+				return ValidationUtil.isNull( this.pTotalGameCount ) ? 0 : this.pTotalGameCount;
 			}
 		},
 	};

@@ -8,7 +8,7 @@
 		:pPositionCodeName="pTeamMember.positionCodeName"
 		:pBackNumber="pTeamMember.backNumber"
 		:pJoinYmd="pTeamMember.joinYmd"
-		:pTotalGameCount="new String( pTeamMember.totalCount )"
+		:pTotalGameCount="pTeamMember.totalGameCount"
 		:pTeamAuthCode="pTeamMember.teamAuthCode"
 	>
 		<template v-slot:action-slot >
