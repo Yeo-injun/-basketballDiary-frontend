@@ -1,34 +1,9 @@
 <template>
 	<v-container class="px-15"  v-if="this.isAsyncComplete">
-		<v-row>
-			<v-col>
-			</v-col>
-			<v-col>
-				<MyTeamInfoUpdateBtn
-					v-if="this.isManager()"
-					@do-open="isActivatedTeamInfoModal = true"
-					pBtnName="팀정보 수정"
-				/>
-				<MyTeamInfoUpdateModal
-					v-model="isActivatedTeamInfoModal"
-					@input="isActivatedTeamInfoModal = $event"
-					:pTeamSeq="this.pTeamSeq"
-				/>
-			</v-col>
-			<v-col>
-				<TeamMemberAddBtn
-					v-if="this.isManager()"
-					@do-add="clickAddTeamMember"
-					pBtnName="팀원 추가"
-				/>
-			</v-col>
-		</v-row>
-	
 		<v-container>
 			<TeamProfileSubTitle class="pb-2" pTitleName="개인프로필" />
 			<TeamProfileComp :pTeamProfile="profile"/>
 		</v-container>
-
 
 		<v-container>
 			<ManagerSubTitle pTitleName="운영진 목록" />
@@ -52,17 +27,11 @@
 </template>
 
 <script>
-	import AuthManager from '@/common/auth/AuthManager.js';
 	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI.js';
 	/** CODE */
 	/** Utils */
 	/** Components */
-	import MyTeamInfoUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamInfoUpdateModal.vue';
-	import MyTeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
-
-	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
-
 	import TeamProfileSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import TeamProfileComp from '@/views/myTeam/detail/components/member/TeamProfileComp.vue';
 
@@ -77,11 +46,6 @@
 
 	export default {
 		components: {
-			MyTeamInfoUpdateModal,
-			MyTeamInfoUpdateBtn,
-
-			TeamMemberAddBtn,
-
 			TeamProfileSubTitle,
 			TeamProfileComp,
 			
@@ -99,8 +63,6 @@
 		},
 		data() {
 			return {
-				/** 모달 제어 */
-				isActivatedTeamInfoModal: false,
 				/** 비동기 통신 후 컴포넌트 제어 */
 				isAsyncComplete: false,
 				profile: {},
@@ -129,16 +91,6 @@
 				);
 				this.teamMembers = data.teamMembers;
 				this.pagination = data.pagination;
-			},
-			clickAddTeamMember() {
-				const teamSeq = this.pTeamSeq;
-				this.$router.push({
-					name: 'MyTeamMemberManagePage',
-					query: { teamSeq: teamSeq },
-				});
-			},
-			isManager() {
-				return AuthManager.isManager( this.pTeamSeq );
 			},
 		},
 		async mounted() {

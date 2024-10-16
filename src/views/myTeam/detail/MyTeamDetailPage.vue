@@ -12,6 +12,27 @@
 					introduction 	: this.introduction,
 					totMember		: this.memberCount,
 				}"/>
+				<v-row v-if="this.isManager()" class="ma-0" >
+					<v-col>
+						<MyTeamInfoUpdateBtn
+							@do-open="isActivatedTeamInfoModal = true"
+							pBtnName="팀정보 수정"
+						/>
+						<MyTeamInfoUpdateModal
+							v-model="isActivatedTeamInfoModal"
+							@input="isActivatedTeamInfoModal = $event"
+							:pTeamSeq="this.teamSeq"
+						/>
+					</v-col>
+					<v-col>
+						<TeamMemberAddBtn
+							@do-add="clickAddTeamMember"
+							pBtnName="팀원 추가"
+						/>
+					</v-col>
+				</v-row>
+
+
 			</v-card>
 		</v-container>
 		<v-container>
@@ -25,6 +46,8 @@
 </template>
 
 <script>
+	import AuthManager from '@/common/auth/AuthManager.js';
+
 	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI';
 	
@@ -32,20 +55,34 @@
 	/** Utils */
 	/** Components */
 	import MyTeamMainInfo from '@/components/team/FrameTeamMainInfoComp.vue';
+	
+	import MyTeamInfoUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamInfoUpdateModal.vue';
+	import MyTeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
+
+	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
+
 	import MyTeamDetailTabs from '@/views/myTeam/detail/tab/MyTeamDetailTabs.vue';
 
 	/** Emit Event */
 
 	export default {
 		components: {
+			MyTeamInfoUpdateModal,
+			MyTeamInfoUpdateBtn,
+
+			TeamMemberAddBtn,
+
 			MyTeamMainInfo,
 			MyTeamDetailTabs,
 		},
 		data() {
 			const query = this.$route.query;
 			return {
+				/** 모달 제어 */
+				isActivatedTeamInfoModal: false,
+				/** 탭정보 */
 				tabName: query.tabName,
-				// 팀정보 세팅 
+				/** 팀정보 */
 				teamSeq			: query.teamSeq,
 				teamName		: "",
 				teamImagePath 	: "",
@@ -67,6 +104,16 @@
 				this.foundationYmd	= data.foundationYmd;
 				this.introduction	= data.introduction;
 				this.memberCount	= data.memberCount;
+			},
+			isManager() {
+				return AuthManager.isManager( this.teamSeq );
+			},
+			clickAddTeamMember() {
+				const teamSeq = this.teamSeq;
+				this.$router.push({
+					name: 'MyTeamMemberManagePage',
+					query: { teamSeq: teamSeq },
+				});
 			},
 		},
 		mounted() {
