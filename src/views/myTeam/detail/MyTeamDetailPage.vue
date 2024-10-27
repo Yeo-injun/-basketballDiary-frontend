@@ -31,8 +31,6 @@
 						/>
 					</v-col>
 				</v-row>
-
-
 			</v-card>
 		</v-container>
 		<v-container>
