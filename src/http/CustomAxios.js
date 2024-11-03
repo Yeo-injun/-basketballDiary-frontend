@@ -124,7 +124,7 @@ const ErrorPageHandler = {
 
 		// 서버에서 로그인이 필요하다는 에러가 발생했을 경우프론트엔드에서가지고 있는 인증값 초기화
 		// ( 로그인했지만 서버 세션 만료로 로그인 필요 에러가 발생했을 수도 있으므로 로그아웃 처리 )
-		if ( errorCodeName == 'LOGIN_REQUIRED' ) {
+		if ( errorCodeName == 'REQUIRED_LOGIN' ) {
 			AuthStateManager.mutations.processLogout();
 		}
 
