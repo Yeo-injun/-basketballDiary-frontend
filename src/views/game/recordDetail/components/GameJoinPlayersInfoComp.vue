@@ -2,6 +2,7 @@
 	<v-row dense>
 		<v-col cols="6">
 			<HomeTeamPlayersManageModal
+				v-if="this.pEditable"
 				pModalTitlePrefix="홈팀"
 				:pHomeAwayCode="this.homeTeamCode"
 				@register-complete="getAllGameJoinPlayers"
@@ -10,6 +11,7 @@
 		</v-col>
 		<v-col cols="6">
 			<AwayTeamPlayersManageModal
+				v-if="this.pEditable"
 				pModalTitlePrefix="어웨이팀"
 				:pHomeAwayCode="this.awayTeamCode"
 				@register-complete="getAllGameJoinPlayers"
@@ -42,6 +44,10 @@
 		},
 		props: {
 			pGameSeq: String,
+			pEditable : {
+				type 	: Boolean,
+				default : false,
+			}
 		},
 		data() {
 			return {

@@ -15,16 +15,22 @@
 		
 		<GameJoinPlayersInfoTitle pTitleName="경기참가선수" />
 		<v-container>
-			<GameJoinPlayersInfoComp :pGameSeq="this.qGameSeq" />
+			<GameJoinPlayersInfoComp 
+				:pGameSeq="this.qGameSeq"
+				:pEditable="this.editableGameRecord()"
+			/>
 		</v-container>
 		
 		<GameQuartersTitle pTitleName="경기기록" />
 		<v-container>
-			<GameQuartersComp :pGameSeq="this.qGameSeq" :pTeamSeq="this.qTeamSeq" />
+			<GameQuartersComp 
+				:pGameSeq="this.qGameSeq" 
+				:pTeamSeq="this.qTeamSeq" 
+				:pEditable="this.editableGameRecord()"
+			/>
 		</v-container>
-		
-		<!-- TODO 컴포넌트의 배치를 조절하여 간격 조절하기 -->
-		<v-container v-if="enableGameRecord()">
+x		
+		<v-container v-if="editableGameRecord()">
 			<v-row >
 				<v-col>
 					<GameConfirmBtn
@@ -47,6 +53,8 @@
 	/** Backend API */
 	/** Code */
 	/** Utils */
+	import AuthManager from '@/common/auth/AuthManager';
+
 	/** Components */
 	import GameInfoTitle from '@/components/title/FramePageSubTitle.vue';
 	import GameInfoComp from '@/views/game/recordDetail/components/GameInfoComp.vue';
@@ -92,14 +100,12 @@
 			};
 		},
 		methods: {
-			enableGameRecord() {
+			editableGameRecord() {
 				const isGameConfirmed = this.gameRecordState == GAME_CONFIRMATION_CODE;
-				if (isGameConfirmed) {
+				if ( isGameConfirmed ) {
 					return false;
 				}
-
-				// TODO 게임기록권한 테이블의 데이터를 조회해서 제어하기 (어느 API에서 가져올 것인지 )
-				return true;
+				return AuthManager.enableGameRecord( this.qGameSeq );
 			},
 			moveMyTeamPage() {
 				this.$router.push({
