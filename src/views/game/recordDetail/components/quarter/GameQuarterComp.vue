@@ -13,12 +13,17 @@
 		</div>
 		<!-- 쿼터 정보가 없을 경우에 보여지는 Components -->
 		<div v-else>
-			<v-card v-if="!isGameConfirmed()">
+			<v-card v-if="this.pEditable">
 				<div class="text-center">
 					<QuarterCreateBtn
 						pBtnName="쿼터 입력"
 						@do-save="createGameQuarterBasicInfo"
 					/>
+				</div>
+			</v-card>
+			<v-card v-else>
+				<div class="text-center">
+					쿼터 입력중
 				</div>
 			</v-card>
 		</div>
@@ -75,6 +80,10 @@
 						awayTeamRecords	: {},
 					}
 				}
+			},
+			pEditable: {
+				type 	: Boolean,
+				default : false,
 			},
 		},
 		methods: {

@@ -1,12 +1,13 @@
 <template >
 	<div>
-		<GameRecordAuthManageModal />
+		<GameRecordAuthManageModal v-if="this.pEditable"/>
 		<GameQuarterComp
 			:pGameSeq="pGameSeq"
 			:pTeamSeq="pTeamSeq"
 			:pGameRecordStateCode="this.gameRecordStateCode"
 			:pQuarterCode="this.quarter1st"
 			:pTeamsQuarterRecords="this.teamsRecords1stQuarter"
+			:pEditable="this.pEditable"
 		/>
 		<GameQuarterComp
 			:pGameSeq="pGameSeq"
@@ -14,6 +15,7 @@
 			:pGameRecordStateCode="this.gameRecordStateCode"
 			:pQuarterCode="this.quarter2nd"
 			:pTeamsQuarterRecords="this.teamsRecords2ndQuarter"
+			:pEditable="this.pEditable"
 		/>
 		<GameQuarterComp
 			:pGameSeq="pGameSeq"
@@ -21,6 +23,7 @@
 			:pGameRecordStateCode="this.gameRecordStateCode"
 			:pQuarterCode="this.quarter3rd"
 			:pTeamsQuarterRecords="this.teamsRecords3rdQuarter"
+			:pEditable="this.pEditable"
 		/>
 		<GameQuarterComp
 			:pGameSeq="pGameSeq"
@@ -28,6 +31,7 @@
 			:pGameRecordStateCode="this.gameRecordStateCode"
 			:pQuarterCode="this.quarter4th"
 			:pTeamsQuarterRecords="this.teamsRecords4thQuarter"
+			:pEditable="this.pEditable"
 		/>
 	</div>
 </template>
@@ -57,6 +61,10 @@
 				type 	: String,
 				default : "",
 			},
+			pEditable: {
+				type 	: Boolean,
+				default : false,
+			}
 		},
 		data() {
 			return {
