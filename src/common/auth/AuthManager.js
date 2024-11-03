@@ -8,6 +8,12 @@ const TEAM_MEMBER		= '1';
 const MANAGER			= '2';
 const LEADER			= '3';
 
+
+const GameAuthorization = {
+	NONE 		: "99",
+	CREATOR 	: "01",
+	RECORDER 	: "02", 
+}
 export default {
 	async init() {
 		setAuthInfo( await AuthAPI.getAuthInfo() );
@@ -21,12 +27,12 @@ export default {
 	getUserInfo() {
 		return AuthStateManager.getters.authUserInfo();
 	},
-	/**------------------------
-	 * 권한 상태 확인 메소드 
-	 **------------------------*/
 	isLogin() {
 		return AuthStateManager.getters.isLogin();
 	},
+	/**------------------------
+	 * 팀 권한 상태 확인 메소드 
+	 **------------------------*/
 	isTeamMemeber(targetTeamSeq) {
 		const targetTeamAuth = getTeamAuth(targetTeamSeq);
 		if (targetTeamAuth >= TEAM_MEMBER) {
@@ -47,6 +53,20 @@ export default {
 			return true;
 		}
 		return false;
+	},
+	/**------------------------
+	 * 경기 권한 상태 확인 메소드 
+	 **------------------------*/
+	enableGameRecord( targetGameSeq ) {
+		const targetGameAuth = getGameAuth( targetGameSeq );
+		switch ( targetGameAuth ) {
+			case GameAuthorization.CREATOR 	:
+			case GameAuthorization.RECORDER :
+				return true;
+			case GameAuthorization.NONE :
+			default : 
+				return false; 
+		}
 	},
 };
 
@@ -69,4 +89,16 @@ function getTeamAuth( teamSeq ) {
 		return teamAuths[teamSeq];
 	}
 	return NOT_TEAM_MEMBER;
+}
+
+function getGameAuth( gameSeq ) {
+	if ( !AuthStateManager.getters.isLogin() ) {
+		return UNAUTH_USER;
+	}
+	const gameAuths = AuthStateManager.getters.authUserInfo().authGames;
+	if ( Object.prototype.hasOwnProperty.call( gameAuths, gameSeq ) ) {
+		return gameAuths[ gameSeq ];
+	}
+	return GameAuthorization.NONE;
+
 }
