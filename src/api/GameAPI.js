@@ -168,12 +168,10 @@ export default {
 	/**
 	 * API056 : 경기기록 권한자 목록 저장
 	 */
-	saveGameRecorders( params ) {
+	saveGameRecorder( params ) {
 		return axiosService.post(
-			`/${params.gameSeq}/recorders`,
-			{
-				gameSeq			: params.gameSeq,
-				gameRecorders	: params.gameRecorders,
+			`/${params.gameSeq}/recorder`, {
+				gameRecorder	: params.gameRecorder,
 			}
 		);
 	},
