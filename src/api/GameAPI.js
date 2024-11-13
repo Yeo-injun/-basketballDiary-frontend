@@ -167,7 +167,7 @@ export default {
 	},
 	/**
 	 * API056 : 경기기록 권한 저장
-	 * TODO 경기기록 선수 정보 메세지 1단계로 구조화
+	 * TODO 경기기록 선수 파라미터 메세지 리팩토링 요망 -> 1단계로 구조화
 	 */
 	saveGameRecorder( params ) {
 		return axiosService.post(
