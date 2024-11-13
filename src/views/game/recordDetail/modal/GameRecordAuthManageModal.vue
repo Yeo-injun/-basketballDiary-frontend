@@ -52,9 +52,8 @@
 <script>
 	import GameAPI from '@/api/GameAPI.js';
 
-	import { HomeAwayCode, GameRecordAuthCode } from '@/const/code/GameCode.js';
+	import { HomeAwayCode } from '@/const/code/GameCode.js';
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
-	import ArrayUtil from '@/common/util/ArrayUtil.js';
 
 	import ModalSubTitle from '@/components/title/FrameTabSubTitle.vue';
 	import GameRecordersTable from '@/views/game/recordDetail/modal/GameRecordersTable.vue';
@@ -63,8 +62,6 @@
 	import GameRecorderCandidates from '@/components/game/table/PlayerDataTable.vue';
 
 	import GameRecordAuthManageBtn from '@/components/button/FrameOpenBtn.vue';
-
-	const CREATOR_CODE = GameRecordAuthCode.CREATOR.code;
 
 	export default {
 		components: {
@@ -102,8 +99,7 @@
 				const params = {
 					gameSeq: this.gameSeq,
 				};
-				const res = await GameAPI.getGameRecorders(params);
-
+				const res = await GameAPI.getGameRecorders( params );
 				this.gameRecorders = res.data.gameRecorders;
 				this.isGetGameRecordersLoadOk = true;
 			},
@@ -127,13 +123,6 @@
 				this.isGetGameRecorderCandidatesLoadOk = true;
 			},
 			async addGameRecorder( targetPlayer ) {
-				const identifierName = 'userSeq';
-				if (
-					ArrayUtil.hasItem(this.gameRecorders, targetPlayer, identifierName)
-				) {
-					alert('이미 경기 기록권한을 가진 사람입니다.');
-					return;
-				}
 				await GameAPI.saveGameRecorder({
 					gameSeq			: this.gameSeq,
 					gameRecorder	: targetPlayer,
@@ -141,31 +130,12 @@
 				alert( "경기기록원으로 추가됐습니다." );
 				await this.getGameRecorders();
 			},
-			deleteGameRecorder(targetPlayer) {
-				const identifierName = 'userSeq';
-				const deleteTarget = ArrayUtil.findItemById(
-					this.gameRecorders,
-					targetPlayer,
-					identifierName
-				);
-
-				const hasDeleteTarget = ValidationUtil.isNotNull(deleteTarget);
-				if (!hasDeleteTarget) {
-					return;
-				}
-
-				if (deleteTarget.gameRecordAuthCode === CREATOR_CODE) {
-					alert('경기생성자는 삭제할 수 없습니다.');
-					return;
-				}
-
-				// TODO 경기기록원 삭제API 구현 및 추가 요망
-
-				this.gameRecorders = ArrayUtil.deleteItemById(
-					this.gameRecorders,
-					targetPlayer,
-					identifierName
-				);
+			async deleteGameRecorder( targetPlayer ) {
+				await GameAPI.deleteGameRecorder({
+					gameSeq				: this.gameSeq						,
+					gameRecordAuthSeq	: targetPlayer.gameRecordAuthSeq	,
+				});
+				await this.getGameRecorders();
 			},
 		},
 	};

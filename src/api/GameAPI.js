@@ -180,7 +180,7 @@ export default {
 	 * API069 : 경기기록권한 삭제(단건)
 	 */
 	deleteGameRecorder( params ) {
-		// TODO 구현하기
+		return axiosService.delete( `/${params.gameSeq}/recorder/${params.gameRecordAuthSeq}` );
 	},
 	/**
 	 * API057 : 경기기록원 후보 조회
