@@ -53,7 +53,7 @@
 				}
 				await AuthAPI.logout();
 				AuthManager.logout();
-				this.$router.go();
+				this.$router.push('/');
 			},
 		},
 	};
