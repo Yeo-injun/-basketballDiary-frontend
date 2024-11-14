@@ -29,7 +29,6 @@
 				:pEditable="this.editableGameRecord()"
 			/>
 		</v-container>
-x		
 		<v-container v-if="editableGameRecord()">
 			<v-row >
 				<v-col>

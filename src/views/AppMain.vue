@@ -2,7 +2,6 @@
 	<v-container>
 		<div>
 			<h2>안녕하세요. 농구일기입니다. 우리팀의 경기를 기록해보세요.</h2>
-			<h2>[ 개발 배포 테스트 ]</h2>
 		</div>
 		<div v-if="isLogin">
 			<h1>환영합니다. {{ loginUserInfo.userId }}님</h1>
