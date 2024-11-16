@@ -166,7 +166,8 @@ export default {
 		return axiosService.get(`/${params.gameSeq}/recorders`, params);
 	},
 	/**
-	 * API056 : 경기기록 권한자 목록 저장
+	 * API056 : 경기기록 권한 저장
+	 * TODO 경기기록 선수 파라미터 메세지 리팩토링 요망 -> 1단계로 구조화
 	 */
 	saveGameRecorder( params ) {
 		return axiosService.post(
@@ -174,6 +175,12 @@ export default {
 				gameRecorder	: params.gameRecorder,
 			}
 		);
+	},
+	/**
+	 * API069 : 경기기록권한 삭제(단건)
+	 */
+	deleteGameRecorder( params ) {
+		return axiosService.delete( `/${params.gameSeq}/recorder/${params.gameRecordAuthSeq}` );
 	},
 	/**
 	 * API057 : 경기기록원 후보 조회
