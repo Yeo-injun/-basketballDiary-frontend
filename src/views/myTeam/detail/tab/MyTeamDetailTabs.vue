@@ -14,7 +14,6 @@
 					:pTeamSeq="pTeamSeq"
 					:pTeamName="pTeamName"
 				/>
-				<GameCreationPage v-if="idx == 2" :pTeamSeq="pTeamSeq" />
 			</v-tab-item>
 		</v-tabs-items>
 	</div>
@@ -23,21 +22,18 @@
 <script>
 	import MyTeamMembersTab from '@/views/myTeam/detail/tab/MyTeamMemberTab.vue';
 	import MyTeamGamesTab from '@/views/myTeam/detail/tab/MyTeamGameListTab.vue';
-	import GameCreationPage from '@/views/game/creation/GameCreationPage.vue';
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import ArrayUtil from '@/common/util/ArrayUtil';
 
 	// TODO Tabs컴포넌트 공통화하기 ( 재사용성을 위한 기본 동작 )
 	const Tabs = {
-		MyTeamMembersTab: { idx: 0, title: '팀원조회' },
-		MyTeamGamesTab: { idx: 1, title: '팀기록 조회' },
-		GameCreationPage: { idx: 2, title: '게임생성' },
+		MyTeamMembersTab: { idx: 0, title: '팀원' },
+		MyTeamGamesTab: { idx: 1, title: '팀경기' },
 	};
 	export default {
 		components: {
 			MyTeamMembersTab,
 			MyTeamGamesTab,
-			GameCreationPage,
 		},
 		props: {
 			pTabName: String,
