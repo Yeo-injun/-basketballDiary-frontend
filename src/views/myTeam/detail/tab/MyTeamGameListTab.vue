@@ -2,6 +2,13 @@
 
 <template>
 	<v-container>
+		<GameCreationBtn
+			pBtnName="경기생성"
+			pRoutePageName="GameCreationPage"
+			:pRouteParams="{
+				teamSeq : this.pTeamSeq,
+			}"
+		/>
 		<MyTeamGameRecordSearchComp @do-search="searchTeamGames"/>
 		<div>총 {{ pagination.totalCount }}개</div>
 		<MyTeamGameRecordList
@@ -9,7 +16,6 @@
 			:pPagination="pagination"
 			@click-page="searchTeamGames"
 		>
-		<!-- TODO 참가팀 선택단계에서 임시저장된 건 조회시 오류 발생 ( null객체가 전달되는 것으로 추정됨 )-->
 			<template v-slot:itemSlot="data">
 				<MyTeamGameRecordComp :pGame="data.item" :pTeamSeq="pTeamSeq" />
 			</template>
@@ -27,6 +33,7 @@
 	import ValidationUtil from '@/common/util/ValidationUtil';
 
 	/** Components */
+	import GameCreationBtn from '@/components/button/FramePageMoveBtn.vue';
 	import MyTeamGameRecordSearchComp from '@/views/myTeam/detail/components/MyTeamGameRecordSearchComp.vue';
 	import MyTeamGameRecordList from '@/components/list/FramePaginationList.vue';
 	import MyTeamGameRecordComp from '@/views/myTeam/detail/components/MyTeamGameRecordComp.vue';
@@ -34,6 +41,7 @@
 
 	export default {
 		components: {
+			GameCreationBtn,
 			MyTeamGameRecordSearchComp,
 			MyTeamGameRecordList,
 			MyTeamGameRecordComp,
