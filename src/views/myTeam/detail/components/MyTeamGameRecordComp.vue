@@ -1,11 +1,16 @@
 <template>
-	<v-card class="ma-6 pa-2">
-		<v-card-text>
-			<div>경기일자 : {{ this.pGame.gameYmd }}</div>
-			<div>
-				경기장주소 : {{ this.pGame.gamePlaceAddress }} / 경기장명 : {{ this.pGame.gamePlaceName }}
-			</div>
-		</v-card-text>
+	<v-card class="ma-6 pa-3">
+		<ul class="ma-2 pa-0" style="list-style-type: none;">
+			<li>
+				<strong>경기일자 | </strong>{{ formattedGameYmd }}
+			</li>
+			<li>
+				<strong>주소 |</strong>{{ this.pGame.gamePlaceAddress }}
+			</li>
+			<li>
+				<strong>경기장명 |</strong> {{ this.pGame.gamePlaceName }}
+			</li>
+		</ul>
 		<ScoreBoardComp 
 			:pGameTypeCode="this.pGame.gameTypeCode"
 			:pGameTypeCodeName="this.pGame.gameTypeCodeName"
@@ -30,6 +35,7 @@
 	import { GameRecordStateCode } from '@/const/code/GameCode.js';
 
 	/** Utils */
+	import DateUtil from '@/common/DateUtil';
 	/** Components */
 	import ScoreBoardComp from '@/components/game/ScoreBoardComp.vue';
 	import QuarterScoreBoardComp from '@/components/game/QuarterScoreBoardComp.vue';
@@ -54,6 +60,11 @@
 		props: {
 			pGame: Object,
 			pTeamSeq: Number,
+		},
+		computed : {
+			formattedGameYmd() {
+				return DateUtil.Format.toKorYmd( this.pGame.gameYmd );
+			},
 		},
 		methods: {
 			getPageMoveInfo() {
