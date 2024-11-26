@@ -8,16 +8,16 @@
 		</v-row>
 		<v-row>
 			<v-col cols="12" sm="3"
-				><v-row justify="center"> {{ this.pScore.quarterScore1st }} </v-row></v-col
+				><v-row justify="center"> {{ this.intlData.quarterScore1st }} </v-row></v-col
 			>
 			<v-col cols="12" sm="3"
-				><v-row justify="center"> {{ this.pScore.quarterScore2nd }} </v-row></v-col
+				><v-row justify="center"> {{ this.intlData.quarterScore2nd }} </v-row></v-col
 			>
 			<v-col cols="12" sm="3"
-				><v-row justify="center"> {{ this.pScore.quarterScore3rd }} </v-row></v-col
+				><v-row justify="center"> {{ this.intlData.quarterScore3rd }} </v-row></v-col
 			>
 			<v-col cols="12" sm="3"
-				><v-row justify="center"> {{ this.pScore.quarterScore4th }} </v-row></v-col
+				><v-row justify="center"> {{ this.intlData.quarterScore4th }} </v-row></v-col
 			>
 		</v-row>
 	</v-container>
@@ -28,6 +28,11 @@
 		props: {
 			pScore: Object,
 		},
+		computed: {
+			intlData() {
+				return this.pScore || {};
+			}
+		}
 	};
 </script>
 
