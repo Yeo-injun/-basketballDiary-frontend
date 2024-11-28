@@ -11,16 +11,18 @@
 				<strong>경기장명 |</strong> {{ this.pGame.gamePlaceName }}
 			</li>
 		</ul>
-		<ScoreBoardComp 
-			:pGameTypeCode="this.pGame.gameTypeCode"
-			:pGameTypeCodeName="this.pGame.gameTypeCodeName"
-			:pHomeTeamScoreInfo="this.pGame.homeTeam"
-			:pAwayTeamScoreInfo="this.pGame.awayTeam"
-		/>
-		<QuarterScoreBoardComp 
-			:pHomeTeamQuarterScores="this.pGame.homeTeam"
-			:pAwayTeamQuarterScores="this.pGame.awayTeam"
-		/>
+		<div v-if="!this.isGameCreationStatus()">
+			<ScoreBoardComp 
+				:pGameTypeCode="this.pGame.gameTypeCode"
+				:pGameTypeCodeName="this.pGame.gameTypeCodeName"
+				:pHomeTeamScoreInfo="this.pGame.homeTeam"
+				:pAwayTeamScoreInfo="this.pGame.awayTeam"
+			/>
+			<QuarterScoreBoardComp 
+				:pHomeTeamQuarterScores="this.pGame.homeTeam"
+				:pAwayTeamQuarterScores="this.pGame.awayTeam"
+			/>
+		</div>
 		<GameRecordPageMoveBtn
 			:pBtnName="this.getPageMoveInfo().btnName"
 			:pRoutePageName="this.getPageMoveInfo().routePageName"
@@ -67,6 +69,9 @@
 			},
 		},
 		methods: {
+			isGameCreationStatus() {
+				return CREATION_CODE == this.pGame.gameRecordStateCode;
+			},
 			getPageMoveInfo() {
 				const gameRecordStateCode = this.pGame.gameRecordStateCode;
 				switch( gameRecordStateCode ) {
