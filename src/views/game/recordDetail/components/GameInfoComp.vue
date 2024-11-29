@@ -1,24 +1,18 @@
 <template>
-	<v-card>
-		<v-row>
-			<v-col no-gutters>
-				<v-row no-gutters
-					>경기일자 : {{ this.gameYmd }}</v-row
-				>
-				<v-row no-gutters
-					>경기시간 : {{ this.gameTime }}</v-row
-				>
-			</v-col>
-			<v-col no-gutters>
-				<v-row no-gutters
-					>주소 : {{ this.gamePlaceAddress }}</v-row
-				>
-				<v-row no-gutters
-					>경기장명 : {{ this.gamePlaceName }}</v-row
-				>
-			</v-col>
-		</v-row>
-	</v-card>
+	<v-contianer>
+		<div>
+			<strong>경기일자 | </strong>{{ this.gameYmd }}
+		</div>
+		<div>
+			<strong>경기시간 | </strong>{{ this.gameTime }}
+		</div>
+		<div>
+			<strong>주소 | </strong>{{ this.gamePlaceAddress }}
+		</div>
+		<div>
+			<strong>경기장명 | </strong>{{ this.gamePlaceName }}
+		</div>
+	</v-contianer>
 </template>
 
 <script>
