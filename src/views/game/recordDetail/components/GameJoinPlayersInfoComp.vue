@@ -1,22 +1,28 @@
 <template>
-	<v-row dense>
-		<v-col cols="6">
+	<v-row>
+		<v-col>
 			<HomeTeamPlayersManageModal
 				v-if="this.pEditable"
 				pModalTitlePrefix="홈팀"
 				:pHomeAwayCode="this.homeTeamCode"
 				@register-complete="getAllGameJoinPlayers"
 			/>
-			<HomeTeamPlayerList :pGameJoinPlayers="this.homeTeamPlayers" />
+			<HomeTeamPlayerList 
+				class="table-main" 
+				:pGameJoinPlayers="this.homeTeamPlayers" 
+			/>
 		</v-col>
-		<v-col cols="6">
+		<v-col>
 			<AwayTeamPlayersManageModal
 				v-if="this.pEditable"
 				pModalTitlePrefix="어웨이팀"
 				:pHomeAwayCode="this.awayTeamCode"
 				@register-complete="getAllGameJoinPlayers"
 			/>
-			<AwayTeamPlayerList :pGameJoinPlayers="this.awayTeamPlayers" />
+			<AwayTeamPlayerList
+				class="table-main" 
+				:pGameJoinPlayers="this.awayTeamPlayers" 
+			/>
 		</v-col>
 	</v-row>
 </template>
@@ -69,4 +75,8 @@
 	};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.table-main {
+		margin-top: 12px;
+	}
+</style>

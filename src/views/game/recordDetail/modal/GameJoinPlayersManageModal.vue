@@ -4,9 +4,7 @@
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
 			<div class="text-right" v-bind="attrs" v-on="on">
-				<v-container>
-					<GameJoinPlayerManageBtn pBtnName="참가선수관리" />
-				</v-container>
+				<GameJoinPlayerManageBtn pBtnName="참가선수관리" />
 			</div>
 		</template>
 

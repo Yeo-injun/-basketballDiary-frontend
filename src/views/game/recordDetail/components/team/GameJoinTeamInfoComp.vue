@@ -1,5 +1,4 @@
 <template>
-	<v-col cols="6">
 		<v-card>
 			<v-card-title :class="this.titleColor">
 				<div class="font-weight-bold">
@@ -12,12 +11,11 @@
 					<TeamLogoImage :pImageUrl="pGameJoinTeamInfo.teamImagePath" />
 				</v-col>
 				<v-col cols="7">
-					<div>팀장이름 : {{ this.pGameJoinTeamInfo.leaderName }}</div>
-					<div>연고지 : {{ this.pGameJoinTeamInfo.hometown }}</div>
+					<div><strong>팀장이름 | </strong>{{ this.pGameJoinTeamInfo.leaderName }}</div>
+					<div><strong>연고지 | </strong>{{ this.pGameJoinTeamInfo.hometown }}</div>
 				</v-col>
 			</v-row>
 		</v-card>
-	</v-col>
 </template>
 
 <script>

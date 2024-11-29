@@ -1,11 +1,15 @@
 <template >
-	<v-row dense>
-		<HomeTeamInfoComp
-			:pGameJoinTeamInfo="this.homeTeamInfo"
-		/>
-		<AwayTeamInfoComp
-			:pGameJoinTeamInfo="this.awayTeamInfo"
-		/>
+	<v-row>
+		<v-col>
+			<HomeTeamInfoComp
+				:pGameJoinTeamInfo="this.homeTeamInfo"
+			/>
+		</v-col>
+		<v-col>
+			<AwayTeamInfoComp
+				:pGameJoinTeamInfo="this.awayTeamInfo"
+			/>
+		</v-col>
 	</v-row>
 </template>
 

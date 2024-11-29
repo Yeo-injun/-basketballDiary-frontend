@@ -4,17 +4,17 @@
 <template>
 	<v-container>
 		<GameInfoTitle pTitleName="경기정보" />
-		<v-container>
-			<GameInfoComp :pGameSeq="this.qGameSeq" />
+		<v-container class="cont-container">
+			<GameInfoComp :pGameSeq="this.qGameSeq"/>
 		</v-container>
 
 		<GameJoinTeamsInfoTitle pTitleName="팀 정보" />
-		<v-container>
+		<v-container class="cont-container">
 			<GameJoinTeamsInfoComp :pGameSeq="this.qGameSeq" />
 		</v-container>
 		
 		<GameJoinPlayersInfoTitle pTitleName="경기참가선수" />
-		<v-container>
+		<v-container class="cont-container">
 			<GameJoinPlayersInfoComp 
 				:pGameSeq="this.qGameSeq"
 				:pEditable="this.editableGameRecord()"
@@ -22,7 +22,7 @@
 		</v-container>
 		
 		<GameQuartersTitle pTitleName="경기기록" />
-		<v-container>
+		<v-container class="cont-container">
 			<GameQuartersComp 
 				:pGameSeq="this.qGameSeq" 
 				:pTeamSeq="this.qTeamSeq" 
@@ -120,4 +120,8 @@
 	};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.cont-container {
+		padding-top: 0px;
+	}
+</style>
