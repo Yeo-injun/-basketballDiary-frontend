@@ -4,9 +4,7 @@
 		<!-- v-slot:activator { on } : https://m.blog.naver.com/tkddlf4209/221732083022 -->
 		<template v-slot:activator="{ on, attrs }">
 			<div class="text-right" v-bind="attrs" v-on="on">
-				<v-container>
-					<GameJoinPlayerManageBtn pBtnName="참가선수관리" />
-				</v-container>
+				<GameJoinPlayerManageBtn pBtnName="참가선수관리" />
 			</div>
 		</template>
 
@@ -22,20 +20,20 @@
 			/>
 
 			<v-container>
-				<PlayerSubTitle pTitleName="참가선수 목록" />
-				<PlayerPaginationTable
-					v-if="isGetGameJoinPlayersLoadOk"
-					:pPlayers="playersItems"
-					:pTotalCount="pagination.totalCount"
-					:pPageCount="pagination.totalPageCount"
-					:pRowCount="pagination.rowCount"
-					pRowBtnName="삭제"
-					@fetch-paging-items="getGameJoinPlayersWithPaging"
-					@get-row-player-info="deleteGameJoinPlayer"
-				/>
 				<v-container>
-					<ModalCloseBtn pBtnName="닫기" @do-close="closeModal"/>
+					<PlayerSubTitle pTitleName="참가선수 목록" />
+					<PlayerPaginationTable
+						v-if="isGetGameJoinPlayersLoadOk"
+						:pPlayers="playersItems"
+						:pTotalCount="pagination.totalCount"
+						:pPageCount="pagination.totalPageCount"
+						:pRowCount="pagination.rowCount"
+						pRowBtnName="삭제"
+						@fetch-paging-items="getGameJoinPlayersWithPaging"
+						@get-row-player-info="deleteGameJoinPlayer"
+					/>
 				</v-container>
+				<ModalCloseBtn pBtnName="닫기" @do-close="closeModal"/>
 			</v-container>
 
 		</v-card>
