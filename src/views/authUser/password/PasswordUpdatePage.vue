@@ -1,5 +1,6 @@
 <template>
-  <v-container>
+	<v-container >
+		<MainTitle pTitleName="비밀번호변경" />
 		<v-form ref="passwordUpdateForm">
 			<PrevPasswordInput pLabel="현재 비밀번호"
 				ref="prevPasswordInput"
@@ -14,10 +15,9 @@
 				:pRequired=true
 			/>
 		</v-form>
-		<PasswordUpdateBtn pBtnName="비밀번호 변경" @do-update="updatePassword()" />
-		<PasswordUpdateCancelBtn pBtnName="취소" pRoutePageName="MyProfilePage" />
-    
-  </v-container>
+		<PasswordUpdateBtn class="button-bottom" pBtnName="비밀번호 변경" @do-update="updatePassword()" />
+		<PasswordUpdateCancelBtn class="button-bottom" pBtnName="취소" pRoutePageName="MyProfilePage" />
+	</v-container>
 </template>
 
 <script>
@@ -27,6 +27,7 @@
 	/** Code */
 	/** Utils */
 	/** Components */
+	import MainTitle from "@/components/title/FramePageMainTitle.vue";
 	import PrevPasswordInput from "@/components/input/FrameTextFieldInput.vue";
 	import NewPasswordInput from "@/components/input/FrameTextFieldInput.vue";
 	import NewPasswordCheckInput from "@/components/input/FrameTextFieldInput.vue";
@@ -37,6 +38,7 @@
 
 export default {
 	components : {
+		MainTitle,
 		PrevPasswordInput,
 		NewPasswordInput,
 		NewPasswordCheckInput,
@@ -69,4 +71,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+	.button-bottom {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+</style>
