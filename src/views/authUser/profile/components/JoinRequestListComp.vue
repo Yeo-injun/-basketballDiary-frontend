@@ -1,20 +1,16 @@
 <template>
-	<v-card>
-		<v-card-title>팀 가입요청 목록</v-card-title>
-		<v-card-text>
-			<v-data-table :headers="joinRequestTeamListHeader" :items="joinRequests">
-				<!-- row별 승인 버튼 -->
-				<template v-slot:[`item.cancel`]="{ item }">
-					<template v-if="isShowButton(item.joinRequestStateCode)">
-						<v-btn class="mr-2" small @click="cancelRequest(item)">
-							요청 취소
-						</v-btn>
-					</template>
+	<div>
+		<v-data-table :headers="joinRequestTeamListHeader" :items="joinRequests">
+			<!-- row별 승인 버튼 -->
+			<template v-slot:[`item.cancel`]="{ item }">
+				<template v-if="isShowButton(item.joinRequestStateCode)">
+					<v-btn class="mr-2" small @click="cancelRequest(item)">
+						요청 취소
+					</v-btn>
 				</template>
-			</v-data-table>
-		</v-card-text>
-	</v-card>
-	<!--// 팀 가입요청 목록 -->
+			</template>
+		</v-data-table>
+	</div>
 </template>
 
 <script>

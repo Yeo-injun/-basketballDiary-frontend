@@ -1,42 +1,25 @@
 <template>
-    <v-card>
-        <v-card-title>팀 초대 목록</v-card-title>
-        <v-card-text>
-            <v-data-table
+    <div>
+        <v-data-table
             :headers="invitationListHeader"
             :items="invitations"
-            >
-                <template v-slot:[`item.approval`]="{ item }">
-                    <template
-                    v-if="isShowButton(item.joinRequestStateCode)"
-                    >
-                        <v-btn
-                        class="mr-2" small
-                        @click="approveInvitation( item )"
-                        >
-                            승인
-                        </v-btn>
-                    </template>
+        >
+            <template v-slot:[`item.approval`]="{ item }">
+                <template v-if="isShowButton(item.joinRequestStateCode)" >
+                    <v-btn class="mr-2" small @click="approveInvitation( item )">승인</v-btn>
                 </template>
-                <template v-slot:[`item.rejection`]="{ item }">
-                    <template
-                    v-if="isShowButton(item.joinRequestStateCode)"
-                    >
-                        <v-btn
-                        class="mr-2" small
-                        @click="rejectInvitation(item)"
-                        >
-                            거절
-                        </v-btn>
-                    </template>
+            </template>
+            <template v-slot:[`item.rejection`]="{ item }">
+                <template v-if="isShowButton(item.joinRequestStateCode)">
+                    <v-btn class="mr-2" small @click="rejectInvitation(item)">거절</v-btn>
                 </template>
-            </v-data-table>
-        </v-card-text>
-    </v-card>   <!--// 초대선수목록 -->
+            </template>
+        </v-data-table>
+    </div>
 </template>
 
 <script>
-import authUserAPI from '@/api/AuthUserAPI.js';
+    import authUserAPI from '@/api/AuthUserAPI.js';
 
     export default {
         data() {
@@ -59,42 +42,32 @@ import authUserAPI from '@/api/AuthUserAPI.js';
                 const res = await authUserAPI.getJoinRequestsFrom(); 
                 this.invitations = res.data;
             },
-            async initLoad() {
-                await this.getInvitations();
-            },
-             async approveInvitation(item) {
+            async approveInvitation(item) {
                 if (!confirm("가입요청을 승낙하시겠습니까?")) {
                     return;
                 }
-
-                const params = {
+                await authUserAPI.approveInvitation({
                     teamJoinRequestSeq : item.teamJoinRequestSeq,
-                }
-
-                await authUserAPI.approveInvitation(params);
-                const res = await authUserAPI.getJoinRequestsFrom();
-                this.invitations = res.data;
+                });
                 
+                this.getInvitations();
             },
             async rejectInvitation(item) {
                 if (!confirm("가입요청을 거절하시겠습니까?")) {
                     return;
                 }
-                const params = {
+                await authUserAPI.rejectInvitation({
                     teamJoinRequestSeq : item.teamJoinRequestSeq,
-                }
-
-                await authUserAPI.rejectInvitation(params);
-                const res = await authUserAPI.getJoinRequestsFrom();
-                this.invitations = res.data;
+                });
+                this.getInvitations();
             },
             isShowButton(joinRequestStateCode) {
                 const WAITING = "01";
                 return joinRequestStateCode == WAITING;
             },
         },
-        mounted (){
-            this.initLoad();
+        mounted () {
+            this.getInvitations();
         } 
     }
 </script>
