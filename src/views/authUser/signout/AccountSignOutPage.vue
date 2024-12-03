@@ -1,5 +1,6 @@
 <template>
     <v-container>
+		<MainTitle pTitleName="회원탈퇴" />
         <PasswordInput 
             pLabel="비밀번호" 
             ref="passwordInput"
@@ -21,6 +22,7 @@
   import ValidationUtil from "@/common/util/ValidationUtil";
   import AuthStateManager from "@/common/state/AuthStateManager";
   /** Components */
+  import MainTitle from "@/components/title/FramePageMainTitle.vue";
   import PasswordInput from "@/components/input/FrameTextFieldInput.vue";
   import WithdrawalBtn from "@/components/button/FrameDeleteBtn.vue";
   import WithdrawalCancelBtn from "@/components/button/FramePageMoveBtn.vue";
@@ -29,6 +31,7 @@
 
 export default {
     components: {
+		MainTitle,
         PasswordInput,
         WithdrawalBtn,
         WithdrawalCancelBtn,

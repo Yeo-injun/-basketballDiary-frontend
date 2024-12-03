@@ -92,13 +92,13 @@ const router = new VueRouter({
 			'MyProfilePage'
 		),
 		createRoute(
-			'views/authUser/PasswordUpdatePage',
-			'/account/profile/passwordUpdate',
+			'views/authUser/password/PasswordUpdatePage',
+			'/account/password/update',
 			'PasswordUpdatePage'
 		),
 		createRoute(
-			'views/authUser/AccountSignOutPage',
-			'/account/profile/accountSignOut',
+			'views/authUser/signout/AccountSignOutPage',
+			'/account/signout',
 			'AccountSignOutPage'
 		),
 	],

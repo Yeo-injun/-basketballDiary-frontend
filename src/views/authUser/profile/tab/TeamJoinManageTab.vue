@@ -1,17 +1,25 @@
 <template>
 	<v-container>
+		<JoinRequestListSubTitile class="sub-title" pTitleName="팀 가입요청 목록"/>
 		<JoinRequestListComp />
+
+		<InvitationListSubTitile class="sub-title" pTitleName="팀 가입요청 목록"/>
 		<InvitationListComp />
 	</v-container>
 </template>
 
 <script>
-	import JoinRequestListComp from '@/components/authUser/JoinRequestListComp.vue';
-	import InvitationListComp from '@/components/authUser/InvitationListComp.vue';
+	import JoinRequestListSubTitile from '@/components/title/FrameTabSubTitle.vue';
+	import JoinRequestListComp from '@/views/authUser/profile/components/JoinRequestListComp.vue';
+
+	import InvitationListSubTitile from '@/components/title/FrameTabSubTitle.vue';
+	import InvitationListComp from '@/views/authUser/profile/components/InvitationListComp.vue';
 
 	export default {
 		components: {
+			JoinRequestListSubTitile,
 			JoinRequestListComp,
+			InvitationListSubTitile,
 			InvitationListComp,
 		},
 		data: () => {
@@ -20,4 +28,9 @@
 	};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.sub-title {
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
+</style>
