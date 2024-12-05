@@ -1,7 +1,5 @@
 <template>
-	<v-container>
-		<v-btn block @click="doClose">{{ this.pBtnName }}</v-btn>
-	</v-container>
+	<v-btn block @click="doClose">{{ this.pBtnName }}</v-btn>
 </template>
 
 <script>
