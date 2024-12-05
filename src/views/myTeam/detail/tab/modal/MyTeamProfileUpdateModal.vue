@@ -22,13 +22,16 @@
 						/>
 					</v-form>
 				</v-container>
+				<div class="modal-bottom">
+					<MyTeamProfileUpdateBtn	class="button" pBtnName="수정" 
+						@do-update="updateProfile" 
+					/>
+					<MyTeamProfileUpdateModalCloseBtn class="button" pBtnName="닫기"
+						@do-close="isActivated = false"
+					/>
+				</div>
+
 			</v-card-text>
-			<MyTeamProfileUpdateBtn	pBtnName="수정" 
-				@do-update="updateProfile" 
-			/>
-			<MyTeamProfileUpdateModalCloseBtn pBtnName="닫기"
-				@do-close="isActivated = false"
-			/>
 
 			<!-- <v-card-actions>
 				actions내부에서 컴포넌트를 선언하면 줄바꿈이 되지 않고 옆으로 이어서 보여진다.
@@ -136,4 +139,11 @@
 	};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.modal-bottom {
+		margin-inline: 5px;	
+	}
+	.modal-bottom .button {
+		margin-bottom: 15px;
+	}
+</style>
