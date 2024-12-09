@@ -3,6 +3,7 @@
 		<v-container>
 			<v-card class="mx-auto mt-6" max-width="1100" outlined >
 				<MyTeamMainInfo class="pt-2 pb-2"
+					v-if="this.isInitTeamInfo"
 					:pTeamInfo="{
 					teamName		: this.teamName,
 					teamImagePath 	: this.teamImagePath,
@@ -81,6 +82,7 @@
 				/** 탭정보 */
 				tabName: query.tabName,
 				/** 팀정보 */
+				isInitTeamInfo	: false,
 				teamSeq			: query.teamSeq,
 				teamName		: "",
 				teamImagePath 	: "",
@@ -102,6 +104,8 @@
 				this.foundationYmd	= data.foundationYmd;
 				this.introduction	= data.introduction;
 				this.memberCount	= data.memberCount;
+				// 초기화 완료
+				this.isInitTeamInfo = true;
 			},
 			isManager() {
 				return AuthManager.isManager( this.teamSeq );
