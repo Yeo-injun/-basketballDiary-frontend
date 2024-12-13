@@ -6,6 +6,7 @@
 		"__comments__": "npm run 명령에서 사용할 스크립트를 정의한다.",
 		"serve": "vue-cli-service serve --port 5500",
 		"local": "vue-cli-service serve --port 5500 --mode local",
+		"local80": "vue-cli-service serve --port 80 --mode local",
 		"aws": "vue-cli-service serve --port 5500 --mode production",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint"
