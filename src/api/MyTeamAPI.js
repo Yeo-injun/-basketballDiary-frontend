@@ -120,4 +120,8 @@ export default {
 			},
 		});
 	},
+	/* API013 : 소속팀 탈퇴하기 */
+	withdrawTeam( params ) {
+		return axiosService.patch( `/${params.teamSeq}/withdrawal` );
+	}
 };
