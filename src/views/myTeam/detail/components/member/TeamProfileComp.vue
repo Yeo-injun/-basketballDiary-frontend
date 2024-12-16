@@ -16,6 +16,7 @@
 			<!-- 필요한 제어 버튼 구현 영역 -->
 			<div class="button-container" >
 				<ProfileDeleteBtn
+					v-if="!isTeamLeaderAuth()"
 					pBtnName="팀탈퇴"
 					:pStyleBlock="false"
 					@do-delete="deleteTeamProfile()"
@@ -78,6 +79,9 @@
 				await MyTeamAPI.withdrawTeam({ teamSeq : this.pTeamSeq });
 				AuthManager.init();					// 사용자 세션의 팀권한 상태 동기화
 				this.$router.push( "/myTeams" );	// 소속팀 목록으로 이동
+			},
+			isTeamLeaderAuth() {
+				return AuthManager.isLeader( this.pTeamSeq );
 			},
 			/**-----------------------------
 			 * Modal 제어
