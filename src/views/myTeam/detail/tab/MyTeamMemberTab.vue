@@ -2,7 +2,10 @@
 	<v-container class="px-15"  v-if="this.isAsyncComplete">
 		<v-container>
 			<TeamProfileSubTitle class="pb-2" pTitleName="개인프로필" />
-			<TeamProfileComp :pTeamProfile="profile"/>
+			<TeamProfileComp 
+				:pTeamSeq="this.pTeamSeq"
+				:pTeamProfile="profile"
+			/>
 		</v-container>
 
 		<v-container>

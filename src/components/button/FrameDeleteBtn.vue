@@ -1,11 +1,16 @@
 <template>
-	<v-btn block color="error" @click="doDelete">{{ this.pBtnName }}</v-btn>
+	<v-btn :block="pStyleBlock" color="error" @click="doDelete">{{ this.pBtnName }}</v-btn>
 </template>
 
 <script>
 	export default {
 		props: {
 			pBtnName: String,
+			pStyleBlock : {
+				default() {
+					return true;
+				}
+			}
 		},
 		data() {
 			return {
