@@ -42,7 +42,43 @@
 
 	import BytesUtil from '@/common/util/BytesUtil';
 
+	/**
+	 * 부모-자식 컴포넌트간 LifeCycle 정리
+	 * 1. <script> 초기화하여 VueInstance생성
+	 * 		- 자식 => 부모 순으로 <script>태그가 실행됨
+	 * 		- 이를 비춰볼때 자식 => 부모 순으로 VueInstance생성 추정 
+	 * 2. LifeCycle Hook 호출 순서
+	 * 		- 부모 컴포넌트의 template 컴파일까지 실행( beforeCreated - Created - beforeMounted )
+	 * 		- 자식 컴포넌트의 DOM생성까지 진행( beforeCreated - Created - beforeMounted - Mounted )
+	 * 		- 부모 컴포넌트의 DOM생성 ( Mounted )
+	 */
+	console.log( "LifeCyle테스트 :: <script>");
+	console.log( this );
+	console.log( "===================================" );
 	export default {
+		/**
+		 * Vue Life Cycle 테스트 : Hook 호출 테스트
+		 */
+		beforeCreate() {
+			console.log( "LifeCyle테스트 :: beforeCreate()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
+		created() {
+			console.log( "LifeCyle테스트 :: created()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
+		beforeMount() {
+			console.log( "LifeCyle테스트 :: beforeMount()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
+		mounted() {
+			console.log( "LifeCyle테스트 :: mounted()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
 		components: {
 			GameTimeSelectbox,
 			EventTestComp,
@@ -52,6 +88,9 @@
 			RadioInput,
 		},
 		data() {
+			console.log( "LifeCyle테스트 :: VueInstance.data()" );
+			console.log( this );
+			console.log( "===================================" );
 			const userAgentType = navigator.userAgent;
 			return {
 				// 실행 환경 확인

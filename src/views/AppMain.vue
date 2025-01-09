@@ -15,7 +15,33 @@
 	import ComponentTest from '@/views/test/ComponentTestPage.vue';
 	import AuthManager from '@/common/auth/AuthManager.js';
 
+	console.log( "[AppMain.vue] LifeCyle테스트 :: <script>" );
+	console.log( this );
+	console.log( "===================================" );
 	export default {
+		/**
+		 * Vue Life Cycle 테스트 : Hook 호출 테스트
+		 */
+		 beforeCreate() {
+			console.log( "[AppMain.vue] LifeCyle테스트 :: beforeCreate()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
+		created() {
+			console.log( "[AppMain.vue] LifeCyle테스트 :: created()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
+		beforeMount() {
+			console.log( "[AppMain.vue] LifeCyle테스트 :: beforeMount()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
+		mounted() {
+			console.log( "[AppMain.vue] LifeCyle테스트 :: mounted()" );
+			console.log( this );
+			console.log( "===================================" );
+		},
 		components: {
 			ComponentTest,
 		},
