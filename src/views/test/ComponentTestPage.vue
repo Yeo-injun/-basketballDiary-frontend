@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="this.env == 'local'">
+		<div v-if="['local', 'development'].includes(this.env)">
 			{{ loginUserInfo() }}
 			<GameTimeSelectbox @select-value="onSelectValue" pInitVal="0311"/>
 			사용자 브라우저 : {{ this.agentType }}
@@ -24,6 +24,9 @@
 			</TestSlot>
 			<StatInput pType="freeThrow" :pCount=3 />
 			<RadioInput pLabel="테스트라디오버튼" :pButtons="radioList" pArrangeType="row"/>
+		</div>
+		<div v-if="this.env == 'production'">
+			테스트 컴포넌트 :: 운영 서버입니다.
 		</div>
 	</div>
 </template>
