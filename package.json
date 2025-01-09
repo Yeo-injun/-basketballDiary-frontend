@@ -9,6 +9,7 @@
 		"local80": "vue-cli-service serve --port 80 --mode local",
 		"aws": "vue-cli-service serve --port 5500 --mode production",
 		"build": "vue-cli-service build",
+		"build-dev": "vue-cli-service build --mode development",
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
