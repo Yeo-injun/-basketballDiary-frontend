@@ -14,6 +14,10 @@
 					:pTeamSeq="pTeamSeq"
 					:pTeamName="pTeamName"
 				/>
+				<MyTeamFundTab v-if="idx == 2"
+					:pTeamSeq="pTeamSeq"
+					:pTeamName="pTeamName"
+				/>
 			</v-tab-item>
 		</v-tabs-items>
 	</div>
@@ -22,18 +26,21 @@
 <script>
 	import MyTeamMembersTab from '@/views/myTeam/detail/tab/MyTeamMemberTab.vue';
 	import MyTeamGamesTab from '@/views/myTeam/detail/tab/MyTeamGameListTab.vue';
+	import MyTeamFundTab from '@/views/myTeam/detail/tab/MyTeamFundTab.vue';
 	import ValidationUtil from '@/common/util/ValidationUtil.js';
 	import ArrayUtil from '@/common/util/ArrayUtil';
 
 	// TODO Tabs컴포넌트 공통화하기 ( 재사용성을 위한 기본 동작 )
 	const Tabs = {
-		MyTeamMembersTab: { idx: 0, title: '팀원' },
-		MyTeamGamesTab: { idx: 1, title: '팀경기' },
+		MyTeamMembersTab	: { idx: 0, title: '팀원' },
+		MyTeamGamesTab		: { idx: 1, title: '팀경기' },
+		MyTeamFundTab		: { idx: 2, title: '회비' },
 	};
 	export default {
 		components: {
 			MyTeamMembersTab,
 			MyTeamGamesTab,
+			MyTeamFundTab,
 		},
 		props: {
 			pTabName: String,
