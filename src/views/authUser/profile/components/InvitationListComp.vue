@@ -43,7 +43,7 @@
                 this.invitations = res.data;
             },
             async approveInvitation(item) {
-                if (!confirm("가입요청을 승낙하시겠습니까?")) {
+                if (!confirm("초대를 수락하시겠습니까?")) {
                     return;
                 }
                 await authUserAPI.approveInvitation({
@@ -53,7 +53,7 @@
                 this.getInvitations();
             },
             async rejectInvitation(item) {
-                if (!confirm("가입요청을 거절하시겠습니까?")) {
+                if (!confirm("초대를 거절하시겠습니까?")) {
                     return;
                 }
                 await authUserAPI.rejectInvitation({

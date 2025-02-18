@@ -1,9 +1,9 @@
 <template>
 	<v-container>
-		<JoinRequestListSubTitile class="sub-title" pTitleName="팀 가입요청 목록"/>
+		<JoinRequestListSubTitile class="sub-title" pTitleName="가입요청 목록"/>
 		<JoinRequestListComp />
 
-		<InvitationListSubTitile class="sub-title" pTitleName="팀 가입요청 목록"/>
+		<InvitationListSubTitile class="sub-title" pTitleName="초대 목록"/>
 		<InvitationListComp />
 	</v-container>
 </template>
