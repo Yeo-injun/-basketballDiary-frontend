@@ -1,39 +1,24 @@
 <template>
-	<div>
-		<v-tabs centered v-model="tab">
-			<v-tab v-for="title in tabTitles" :key="title">
-				{{ title }}
-			</v-tab>
-		</v-tabs>
-		<v-tabs-items v-model="tab">
-			<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
-				<TeamJoinManageTab v-if="idx == 0" />
-				<MyProfileUpdateTab v-if="idx == 1" />
-			</v-tab-item>
-		</v-tabs-items>
-	</div>
+	<ProfileTabLayout :pTabComponents="this.tabComponents" />
 </template>
 
 <script>
+	import ProfileTabLayout from '@/components/tab/FrameDefaultTabLayout.vue';
 	import TeamJoinManageTab from '@/views/authUser/profile/tab/TeamJoinManageTab.vue';
 	import MyProfileUpdateTab from '@/views/authUser/profile/tab/MyProfileUpdateTab.vue';
 
 	export default {
 		components: {
-			TeamJoinManageTab,
-			MyProfileUpdateTab,
+			ProfileTabLayout,
 		},
-		data: () => {
+		data() {
 			return {
-				tab: null,
-				tabTitles: ['팀가입관리', '내정보수정'],
+				/** 탭 정보 */
+				tabComponents: [
+					{ component: TeamJoinManageTab	, label: '팀가입',  },
+					{ component: MyProfileUpdateTab	, label: 'MY 프로필',  },
+				],
 			};
-		},
-		methods: {
-			init() {},
-		},
-		mounted() {
-			this.init();
 		},
 	};
 </script>
