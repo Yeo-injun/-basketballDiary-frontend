@@ -22,7 +22,7 @@
 						<MyTeamInfoUpdateModal
 							v-model="isActivatedTeamInfoModal"
 							@input="isActivatedTeamInfoModal = $event"
-							:pTeamSeq="this.teamSeq"
+							:pTeamSeq="Number( this.teamSeq )"
 						/>
 					</v-col>
 					<v-col>
@@ -35,10 +35,12 @@
 			</v-card>
 		</v-container>
 		<v-container>
-			<MyTeamDetailTabs
-				:pTabName="tabName"
-				:pTeamSeq="Number( teamSeq )"
-				:pTeamName="teamName"
+			<MyTeamTabLayout
+				:pTabComponents="tabComponents"
+				:pTabParams="{
+					teamSeq 	: Number( teamSeq ),
+					teamName 	: teamName,
+				}"
 			/>
 		</v-container>
 	</div>
@@ -60,7 +62,14 @@
 
 	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
 
-	import MyTeamDetailTabs from '@/views/myTeam/detail/tab/MyTeamDetailTabs.vue';
+	/**
+	 * Tab Components
+	 */
+	import MyTeamTabLayout from '@/components/tab/FrameDefaultTabLayout.vue';
+	import MyTeamMembersTab from '@/views/myTeam/detail/tab/MyTeamMemberTab.vue';
+	import MyTeamGamesTab from '@/views/myTeam/detail/tab/MyTeamGameListTab.vue';
+	import MyTeamFundTab from '@/views/myTeam/detail/tab/MyTeamFundTab.vue';
+
 
 	/** Emit Event */
 
@@ -72,7 +81,7 @@
 			TeamMemberAddBtn,
 
 			MyTeamMainInfo,
-			MyTeamDetailTabs,
+			MyTeamTabLayout,
 		},
 		data() {
 			const query = this.$route.query;
@@ -91,6 +100,12 @@
 				foundationYmd 	: "",
 				introduction 	: "",
 				memberCount		: 0,
+				/** 탭 정보 */
+				tabComponents: [
+					{ component: MyTeamMembersTab	, label: '팀원',  },
+					{ component: MyTeamGamesTab		, label: '팀경기',  },
+					{ component: MyTeamFundTab		, label: '회비',  },
+				],
 			};
 		},
 		methods : {

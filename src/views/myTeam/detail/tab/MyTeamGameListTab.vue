@@ -6,7 +6,7 @@
 			pBtnName="경기생성"
 			pRoutePageName="GameCreationPage"
 			:pRouteParams="{
-				teamSeq : this.pTeamSeq,
+				teamSeq : this.pTabParams.teamSeq,
 			}"
 		/>
 		<MyTeamGameRecordSearchComp @do-search="searchTeamGames"/>
@@ -58,13 +58,15 @@
 			};
 		},
 		props: {
-			pTeamSeq: Number,
-			pTeamName: String,
+			pTabParams: {
+				type: Object,
+				required : true,
+			},
 		},
 		methods: {
 			async searchTeamGames( searchCond ) {
 				const { data } = await TeamAPI.searchTeamGames(
-					{ teamSeq: this.pTeamSeq },
+					{ teamSeq: this.pTabParams.teamSeq },
 					this.toQueryParams( searchCond ),
 				);
 				this.games = data.games;

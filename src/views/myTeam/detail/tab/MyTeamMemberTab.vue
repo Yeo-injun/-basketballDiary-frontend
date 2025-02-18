@@ -3,7 +3,7 @@
 		<v-container>
 			<TeamProfileSubTitle class="pb-2" pTitleName="개인프로필" />
 			<TeamProfileComp 
-				:pTeamSeq="this.pTeamSeq"
+				:pTeamSeq="this.pTabParams.teamSeq"
 				:pTeamProfile="profile"
 			/>
 		</v-container>
@@ -11,7 +11,7 @@
 		<v-container>
 			<ManagerSubTitle pTitleName="운영진 목록" />
 			<Managers 
-				:pTeamSeq="this.pTeamSeq"
+				:pTeamSeq="this.pTabParams.teamSeq"
 				:pTeamManagers="managers"
 			/>
 		</v-container>
@@ -19,7 +19,7 @@
 		<v-container>
 			<TeamMemberSubTitle pTitleName="팀원 목록" />
 			<TeamMembersComp
-				:pTeamSeq="this.pTeamSeq"
+				:pTeamSeq="this.pTabParams.teamSeq"
 				:pTeamMembers="teamMembers"
 				:pPagination="pagination"
 				@click-page="getTeamMembers"
@@ -59,8 +59,8 @@
 			TeamMembersComp,
 		},
 		props: {
-			pTeamSeq : {
-				type : Number,
+			pTabParams: {
+				type: Object,
 				required : true,
 			},
 		},
@@ -81,15 +81,15 @@
 				await this.getManagers();
 			},
 			async getProflie() {
-				this.profile = await MyTeamAPI.getProfile(this.pTeamSeq);
+				this.profile = await MyTeamAPI.getProfile(this.pTabParams.teamSeq);
 			},
 			async getManagers() {
-				const response = await MyTeamAPI.getManagers(this.pTeamSeq);
+				const response = await MyTeamAPI.getManagers(this.pTabParams.teamSeq);
 				this.managers = response.data.managers;
 			},
 			async getTeamMembers() {
 				const { data } = await MyTeamAPI.getTeamMembers(
-					{ teamSeq: this.pTeamSeq },
+					{ teamSeq: this.pTabParams.teamSeq },
 					{ pageNo: this.pagination.pageNo }
 				);
 				this.teamMembers = data.teamMembers;
