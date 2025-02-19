@@ -101,9 +101,7 @@
 			RemoveUserPageMoveBtn,
 		},
 		mounted() {
-			console.log( "mounted Start!");
 			this.load();
-			console.log( "mounted End!");
 		},
 		data() {
 			return {
@@ -117,7 +115,7 @@
 					{ label : "슈팅가드"		, value : "12" },
 					{ label : "스몰포워드"		, value : "21" },
 					{ label : "파워포워드"		, value : "22" },
-					{ label : "센터"		, value : "30" },
+					{ label : "센터"			, value : "30" },
 				],
 				userName		: '',
 				email			: '',
@@ -135,13 +133,12 @@
 			async load() {
 
 				const profile = await UserAPI.getMyProfile();
-				console.log( "data load Done" );
 				this.userName		= profile.userName;
 				this.email			= profile.email;
 				this.gender			= profile.gender;
 				this.positionCode	= profile.positionCode;
-				this.height			= profile.height;
-				this.weight			= profile.weight;
+				this.height			= String( profile.height );
+				this.weight			= String( profile.weight );
 				this.roadAddress	= profile.roadAddress;
 				this.sidoCode		= profile.sidoCode;
 				this.sigunguCode	= profile.sigunguCode;

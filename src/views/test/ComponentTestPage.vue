@@ -2,6 +2,7 @@
 	<div>
 		<div v-if="['local', 'development'].includes(this.env)">
 			{{ loginUserInfo() }}
+			<TestTabLayout :pTabComponents="TabComponents" />
 			<GameTimeSelectbox @select-value="onSelectValue" pInitVal="0311"/>
 			사용자 브라우저 : {{ this.agentType }}
 			<div v-if="$platform.isWeb">
@@ -32,6 +33,8 @@
 </template>
 
 <script>
+	import TestTabLayout from '@/components/tab/FrameDefaultTabLayout.vue';
+
 	import AuthManager from '@/common/auth/AuthManager.js';
 	
 	import GameTimeSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue';
@@ -55,9 +58,7 @@
 	 * 		- 자식 컴포넌트의 DOM생성까지 진행( beforeCreated - Created - beforeMounted - Mounted )
 	 * 		- 부모 컴포넌트의 DOM생성 ( Mounted )
 	 */
-	console.log( "LifeCyle테스트 :: <script>");
-	console.log( this );
-	console.log( "===================================" );
+
 	export default {
 		/**
 		 * Vue Life Cycle 테스트 : Hook 호출 테스트
@@ -83,6 +84,7 @@
 			console.log( "===================================" );
 		},
 		components: {
+			TestTabLayout,
 			GameTimeSelectbox,
 			EventTestComp,
 			TestSlot,
@@ -103,6 +105,11 @@
 				dataSize : "",
 				agentType : userAgentType,
 				radioList : [{ value : "1", label : "테스트" }, { value : "2", label : "테스트ㅇ" }],
+				TabComponents : [
+					{ component: TestBtn , label: '팀원'     , },
+					{ component: StatInput   , label: '팀경기'   , },
+					{ component: StatInput    , label: '회비'     , },
+				],
 			};
 		},
 		methods: {
