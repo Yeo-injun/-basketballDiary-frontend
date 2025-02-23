@@ -35,7 +35,7 @@
 			</v-card>
 		</v-container>
 		<v-container>
-			<TabContainer
+		<TabContainer
 				:pTabComponents="tabComponents"
 				:pTabParams="{
 					teamSeq 	: Number( teamSeq ),

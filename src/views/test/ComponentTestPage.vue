@@ -33,8 +33,8 @@
 </template>
 
 <script>
-	import TestTabLayout from '@/components/tab/FrameDefaultTabContainer.vue';
 
+	import TestTabLayout from '@/components/tab/FrameDefaultTabContainer.vue';
 	import AuthManager from '@/common/auth/AuthManager.js';
 	
 	import GameTimeSelectbox from '@/components/selectbox/game/GameTimeSelectbox.vue';
