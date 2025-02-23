@@ -1,39 +1,33 @@
 <template>
 	<v-container>
-		<v-card>
-			<!-- 탭 목록 -->
-			<v-tabs v-model="tab" centered>
-				<v-tab v-for="title in tabTitles" :key="title">
-					{{ title }}
-				</v-tab>
-			</v-tabs>
-
-			<!-- 탭 영역 -->
-			<v-tabs-items v-model="tab">
-				<v-tab-item v-for="(title, idx) in tabTitles" :key="title">
-					<InvitePlayerListTab :pTeamSeq="teamSeq" v-if="idx == 0" />
-					<JoinRequestPlayerListTab :pTeamSeq="teamSeq" v-if="idx == 1" />
-				</v-tab-item>
-			</v-tabs-items>
-		</v-card>
+		<TabContainer
+			:pTabComponents="tabComponents"
+			:pTabParams="{
+				teamSeq : teamSeq,
+			}"
+		/>
 	</v-container>
 </template>
 
 <script>
+	import TabContainer from '@/components/tab/FrameDefaultTabContainer.vue';
 	import JoinRequestPlayerListTab from '@/views/myTeam/memberManage/tab/JoinRequestPlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
 	import InvitePlayerListTab from '@/views/myTeam/memberManage/tab/InvitePlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
 
 	export default {
 		components: {
-			InvitePlayerListTab,
-			JoinRequestPlayerListTab,
+			TabContainer,
 		},
 		data() {
 			const teamSeq = this.$route.query.teamSeq;
 			return {
-				tab: null, // TODO 왜 필요한지 확인... (22.06.06 월. 인준 적용한 코드인데 추가 학습 필요)
-				tabTitles: ['선수초대 목록', '받은 팀가입요청'],
 				teamSeq: Number(teamSeq),
+				/** 탭 정보 */
+				tabComponents: [
+					{ component: InvitePlayerListTab		, label: '선수초대 목록',  },
+					{ component: JoinRequestPlayerListTab	, label: '받은 팀가입요청',  },
+				],
+
 			};
 		},
 	};

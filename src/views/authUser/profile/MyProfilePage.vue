@@ -1,15 +1,15 @@
 <template>
-	<ProfileTabLayout :pTabComponents="this.tabComponents" />
+	<TabContainer :pTabComponents="this.tabComponents" />
 </template>
 
 <script>
-	import ProfileTabLayout from '@/components/tab/FrameDefaultTabLayout.vue';
+	import TabContainer from '@/components/tab/FrameDefaultTabContainer.vue';
 	import TeamJoinManageTab from '@/views/authUser/profile/tab/TeamJoinManageTab.vue';
 	import MyProfileUpdateTab from '@/views/authUser/profile/tab/MyProfileUpdateTab.vue';
 
 	export default {
 		components: {
-			ProfileTabLayout,
+			TabContainer,
 		},
 		data() {
 			return {

@@ -35,7 +35,7 @@
 			</v-card>
 		</v-container>
 		<v-container>
-			<MyTeamTabLayout
+		<TabContainer
 				:pTabComponents="tabComponents"
 				:pTabParams="{
 					teamSeq 	: Number( teamSeq ),
@@ -65,7 +65,7 @@
 	/**
 	 * Tab Components
 	 */
-	import MyTeamTabLayout from '@/components/tab/FrameDefaultTabLayout.vue';
+	import TabContainer from '@/components/tab/FrameDefaultTabContainer.vue';
 	import MyTeamMembersTab from '@/views/myTeam/detail/tab/MyTeamMemberTab.vue';
 	import MyTeamGamesTab from '@/views/myTeam/detail/tab/MyTeamGameListTab.vue';
 	import MyTeamFundTab from '@/views/myTeam/detail/tab/MyTeamFundTab.vue';
@@ -81,7 +81,7 @@
 			TeamMemberAddBtn,
 
 			MyTeamMainInfo,
-			MyTeamTabLayout,
+			TabContainer,
 		},
 		data() {
 			const query = this.$route.query;
