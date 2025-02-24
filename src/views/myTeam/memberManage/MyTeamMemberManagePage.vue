@@ -1,18 +1,13 @@
 <template>
 	<v-container>
-		<TabContainer
-			:pTabComponents="tabComponents"
-			:pTabParams="{
-				teamSeq : teamSeq,
-			}"
-		/>
+		<TabContainer :pTabComponents="tabComponents" />
 	</v-container>
 </template>
 
 <script>
 	import TabContainer from '@/components/tab/FrameDefaultTabContainer.vue';
-	import JoinRequestPlayerListTab from '@/views/myTeam/memberManage/tab/JoinRequestPlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
-	import InvitePlayerListTab from '@/views/myTeam/memberManage/tab/InvitePlayerListTab.vue'; // TODO 파일 디렉토리 옮기기 >> myTeam - tab 으로
+	import JoinRequestPlayerListTab from '@/views/myTeam/memberManage/tab/JoinRequestPlayerListTab.vue';
+	import InvitePlayerListTab from '@/views/myTeam/memberManage/tab/InvitePlayerListTab.vue';
 
 	export default {
 		components: {
@@ -21,11 +16,22 @@
 		data() {
 			const teamSeq = this.$route.query.teamSeq;
 			return {
-				teamSeq: Number(teamSeq),
 				/** 탭 정보 */
 				tabComponents: [
-					{ component: InvitePlayerListTab		, label: '선수초대 목록',  },
-					{ component: JoinRequestPlayerListTab	, label: '받은 팀가입요청',  },
+					{
+						component	: InvitePlayerListTab	, 
+						label		: '선수초대 목록'		 , 
+						params 		: { 
+							teamSeq : teamSeq,
+						},
+					},
+					{ 
+						component	: JoinRequestPlayerListTab	, 
+						label		: '받은 팀가입요청'			 , 
+						params 		: { 
+							teamSeq : teamSeq,
+						},
+					},
 				],
 
 			};

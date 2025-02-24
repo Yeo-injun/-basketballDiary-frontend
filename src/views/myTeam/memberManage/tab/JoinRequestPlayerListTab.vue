@@ -47,7 +47,12 @@
 
 	export default {
 		props: {
-			pTeamSeq: Number,
+			pTabParams: {
+				type	: Object,
+				default	: () => ({
+					teamSeq: null,
+				}),
+			},
 		},
 		data() {
 			return {
@@ -117,7 +122,7 @@
 				}
 			},
 			getPropTeamSeq() {
-				return this.pTeamSeq;
+				return this.pTabParams.teamSeq;
 			},
 			createParamsForProcessingJoinRequest(item) {
 				const teamSeq = this.getPropTeamSeq();

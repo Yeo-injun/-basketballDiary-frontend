@@ -7,7 +7,7 @@
 					<v-col>
 						<PlayerInviteModal
 							@close="searchInvitedPlayer"
-							:pTeamSeq="pTeamSeq"
+							:pTeamSeq="pTabParams.teamSeq"
 						/>
 					</v-col>
 				</v-row>
@@ -39,7 +39,12 @@
 			PlayerInviteModal,
 		},
 		props: {
-			pTeamSeq: Number,
+			pTabParams: {
+				type	: Object,
+				default	: () => ({
+					teamSeq: null,
+				}),
+			},
 		},
 		data() {
 			return {
@@ -68,7 +73,7 @@
 		methods: {
 			async searchInvitedPlayer() {
 				const { data } = await MyTeamAPI.getInvitations(
-					this.pTeamSeq,
+					this.pTabParams.teamSeq,
 					this.filterCond
 				);
 				this.invitedPlayers = data.invitations;
