@@ -10,7 +10,7 @@
                 <v-tab-item v-for="tab in this.pTabComponents" :key="tab.label">
                     <component 
                         :is="tab.component"
-                        :pTabParams="pTabParams"
+                        :pTabParams="tab.params"
                     />
                 </v-tab-item>
             </v-tabs-items>
@@ -24,10 +24,6 @@
             pTabComponents: {
                 type: Array,
                 default: () => []
-            },
-            pTabParams: {
-                type: Object,
-                default: () => {}
             },
         },
 		data() {
