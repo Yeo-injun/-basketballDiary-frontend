@@ -35,13 +35,7 @@
 			</v-card>
 		</v-container>
 		<v-container>
-		<TabContainer
-				:pTabComponents="tabComponents"
-				:pTabParams="{
-					teamSeq 	: Number( teamSeq ),
-					teamName 	: teamName,
-				}"
-			/>
+			<TabContainer :pTabComponents="this.tabComponents"/>
 		</v-container>
 	</div>
 </template>
@@ -102,9 +96,30 @@
 				memberCount		: 0,
 				/** 탭 정보 */
 				tabComponents: [
-					{ component: MyTeamMembersTab	, label: '팀원',  },
-					{ component: MyTeamGamesTab		, label: '팀경기',  },
-					{ component: MyTeamFundTab		, label: '회비',  },
+					{ 
+						component	: MyTeamMembersTab	, 
+						label		: '팀원'			,  
+						params		: {
+							teamSeq 	: Number( query.teamSeq ),
+							teamName 	: query.teamName,
+						},
+					},
+					{ 
+						component	: MyTeamGamesTab	, 
+						label		: '팀경기'			,  
+						params		: {
+							teamSeq 	: Number( query.teamSeq ),
+							teamName 	: query.teamName,
+						},
+					},
+					{ 
+						component	: MyTeamFundTab		, 
+						label		: '회비'			,  
+						params		: {
+							teamSeq 	: Number( query.teamSeq ),
+							teamName 	: query.teamName,
+						},
+					},
 				],
 			};
 		},
