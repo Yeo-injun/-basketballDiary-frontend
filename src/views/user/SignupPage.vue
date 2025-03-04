@@ -98,7 +98,6 @@
 		},
 		data: () => {
 			return {
-				isModalOpen: '',
 				isNotDuplicateUserId: false,
 				passwordCheck: '',
 				userRegInfo: {
