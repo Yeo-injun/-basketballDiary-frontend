@@ -67,7 +67,7 @@
             UserSearchBtn,
         },
 		props: {
-			pTeamSeq	: Number,
+			pTeamSeq	: String,
             pRowBtnName : String,
 		},
         mounted() {
