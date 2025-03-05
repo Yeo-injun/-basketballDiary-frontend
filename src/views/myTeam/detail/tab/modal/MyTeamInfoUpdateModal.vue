@@ -1,65 +1,70 @@
 <template>
-	<v-dialog v-model="isActivate" width="1200">
-		<v-card>
-			<v-card-title class="text-h5 grey lighten-2"> 팀정보 </v-card-title>
+	<ModalFrame ref="modal" 
+		:pSize="{
+			maxWidth: '1100px',
+		}"
+		:onOpen="this.getTeamInfo"
+	>
+		<template v-slot:modal-activator>
+			<ModalActivateBtn pBtnName="팀정보 수정"
+				@do-open="openModal()"
+			/>
+		</template>
 
-			<v-card-text>
+		<template v-slot:title>
+			<v-card-title class="text-h5 grey lighten-2"> 팀정보 </v-card-title>
+		</template>
+
+		<template v-slot:contents>
+			<v-container>
 				<TeamInfoFormComp
 					ref="teamInfoUpdateForm"
-					v-if="this.dataInit"
 					:pTeamInfo="teamInfo"
 					:pTeamLogoImagePath="teamLogoImagePath"
 					:pTeamRegularExercises="teamRegularExercises"
 				/>
-			</v-card-text>
+			</v-container>
+		</template>
 
-			<TeamInfoUpdateBtn @do-update="modifyTeamInfo" pBtnName="수정" />
-			<TeamInfoUpdateModalCloseBtn
-				@do-close="isActivate = false"
-				pBtnName="닫기"
-			/>
-		</v-card>
-	</v-dialog>
+		<template v-slot:actions>
+			<TeamInfoUpdateBtn pBtnName="수정" @do-update="modifyTeamInfo()" />
+		</template>
+
+	</ModalFrame>
+
 </template>
 
 <script>
-	import TeamInfoFormComp from '@/components/team/TeamInfoFormComp.vue';
-	import TeamInfoUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
-	import TeamInfoUpdateModalCloseBtn from '@/components/button/FrameCloseBtn.vue';
+	/** Backend API */
 	import MyTeamAPI from '@/api/MyTeamAPI';
 
+	/** Code */
+
+	/** Utils */
+	
+	/** Components */
+	import ModalFrame from '@/components/frame/DefaultModalFrame.vue';
+
+	import ModalActivateBtn from '@/components/button/FrameOpenBtn.vue';
+
+	import TeamInfoFormComp from '@/components/team/TeamInfoFormComp.vue';
+	import TeamInfoUpdateBtn from '@/components/button/FrameUpdateBtn.vue';
+	
 	export default {
 		components: {
+			ModalFrame,
+			ModalActivateBtn,
 			TeamInfoFormComp,
 			TeamInfoUpdateBtn,
-			TeamInfoUpdateModalCloseBtn,
 		},
 		props: {
-			value: {
-				type: Boolean,
-				required: true,
-			},
 			pTeamSeq: {
-				type: Number,
+				type	: String,
 				required: true,
-			},
-		},
-		computed: {
-			isActivate: {
-				get() {
-					return this.value;
-				},
-				set(value) {
-					this.$emit('input', value);
-				},
 			},
 		},
 		data() {
 			return {
-				/*-----------------------
-				 * 데이터 초기화 완료여부
-				 *-----------------------*/
-				dataInit: false,
 				/*-----------------------
 				 * teamInfoForm 초기화 데이터
 				 *-----------------------*/
@@ -70,56 +75,46 @@
 			};
 		},
 		methods: {
+			openModal() {
+				this.$refs.modal.open();
+			},
+			closeModal() {
+				this.$refs.modal.close();
+			},
 			async getTeamInfo() {
 				const data = await MyTeamAPI.getTeamInfo(this.pTeamSeq);
 				this.teamInfo = {
-					teamSeq: data.teamSeq,
-					teamName: data.teamName,
-					foundationYmd: data.foundationYmd,
-					hometown: data.hometown,
-					sidoCode: data.sidoCode,
-					sigunguCode: data.sigunguCode,
-					introduction: data.introduction,
+					teamSeq			: data.teamSeq			,
+					teamName		: data.teamName			,
+					foundationYmd	: data.foundationYmd	,
+					hometown		: data.hometown			,
+					sidoCode		: data.sidoCode			,
+					sigunguCode		: data.sigunguCode		,
+					introduction	: data.introduction		,
 				};
-				this.teamLogoImagePath = data.teamLogoImagePath;
-				this.teamRegularExercises = data.regularExercises;
+				this.teamLogoImagePath 		= data.teamLogoImagePath;
+				this.teamRegularExercises 	= data.regularExercises;
 			},
 			async modifyTeamInfo() {
 				if ( !this.$refs.teamInfoUpdateForm.validate() ) {
 					return;
 				}
 
-				const teamInfoForm = this.$refs.teamInfoUpdateForm.getForm();
+				const form = this.$refs.teamInfoUpdateForm.getForm();
 				await MyTeamAPI.modifyMyTeamInfo(
 					this.pTeamSeq,
 					{
-						teamName: teamInfoForm.teamInfo.teamName,
-						hometown: teamInfoForm.teamInfo.hometown,
-						introduction: teamInfoForm.teamInfo.introduction,
-						foundationYmd: teamInfoForm.teamInfo.foundationYmd,
-						sidoCode: teamInfoForm.teamInfo.sidoCode,
-						sigunguCode: teamInfoForm.teamInfo.sigunguCode,
-						teamRegularExercises: teamInfoForm.teamRegularExercises,
+						teamName				: form.teamInfo.teamName,
+						hometown				: form.teamInfo.hometown,
+						introduction			: form.teamInfo.introduction,
+						foundationYmd			: form.teamInfo.foundationYmd,
+						sidoCode				: form.teamInfo.sidoCode,
+						sigunguCode				: form.teamInfo.sigunguCode,
+						teamRegularExercises	: form.teamRegularExercises,
 					},
-					teamInfoForm.teamLogoImageFile
+					form.teamLogoImageFile
 				);
-				this.isActivate = false;
-			},
-		},
-		watch: {
-			/**
-			 * Modal 활성화시 API를 동기처리하여 dataInit 상태를 제어
-			 * 이를 통해 하위 컴포넌트가 create되지 않도록 제어
-			 * cf. 해당 컴포넌트가 다른 컴포넌트의 자식컴포넌트가 되면 mounted는 한번만 호출됨.
-			 *      Modal을 활성화할때마다 데이터를 새로 받아오기 위해서는 mounted가 아니라 Modal의 활성화상태를 감지하여 API통신해야 함.
-			 **/
-			isActivate: async function (isDialogOpend) {
-				if (isDialogOpend) {
-					await this.getTeamInfo();
-					this.dataInit = true;
-					return;
-				}
-				this.dataInit = false;
+				this.closeModal();
 			},
 		},
 	};
