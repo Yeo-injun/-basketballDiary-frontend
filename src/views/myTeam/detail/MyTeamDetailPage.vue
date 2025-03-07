@@ -15,14 +15,8 @@
 				}"/>
 				<v-row v-if="this.isManager()" class="ma-0" >
 					<v-col>
-						<MyTeamInfoUpdateBtn
-							@do-open="isActivatedTeamInfoModal = true"
-							pBtnName="팀정보 수정"
-						/>
 						<MyTeamInfoUpdateModal
-							v-model="isActivatedTeamInfoModal"
-							@input="isActivatedTeamInfoModal = $event"
-							:pTeamSeq="Number( this.teamSeq )"
+							:pTeamSeq="this.teamSeq"
 						/>
 					</v-col>
 					<v-col>
@@ -52,7 +46,6 @@
 	import MyTeamMainInfo from '@/components/team/FrameTeamMainInfoComp.vue';
 	
 	import MyTeamInfoUpdateModal from '@/views/myTeam/detail/tab/modal/MyTeamInfoUpdateModal.vue';
-	import MyTeamInfoUpdateBtn from '@/components/button/FrameOpenBtn.vue';
 
 	import TeamMemberAddBtn from '@/components/button/FrameAddBtn.vue';
 
@@ -70,8 +63,6 @@
 	export default {
 		components: {
 			MyTeamInfoUpdateModal,
-			MyTeamInfoUpdateBtn,
-
 			TeamMemberAddBtn,
 
 			MyTeamMainInfo,
@@ -80,8 +71,6 @@
 		data() {
 			const query = this.$route.query;
 			return {
-				/** 모달 제어 */
-				isActivatedTeamInfoModal: false,
 				/** 탭정보 */
 				tabName: query.tabName,
 				/** 팀정보 */
@@ -127,7 +116,6 @@
 			async intlTeamInfo() {
 				const query = this.$route.query;
 				const data 	= await MyTeamAPI.getTeamInfo( query.teamSeq );
-				this.teamSeq		= data.teamSeq;
 				this.teamName		= data.teamName;
 				this.teamImagePath 	= data.teamLogoImagePath;
 				this.hometown		= data.hometown;
