@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div v-if="['local', 'development'].includes(this.env)">
+			<v-btn @click="googleLogin">구글로그인 테스트</v-btn>
 			{{ loginUserInfo() }}
 			<TestTabLayout :pTabComponents="TabComponents" />
 			<GameTimeSelectbox @select-value="onSelectValue" pInitVal="0311"/>
@@ -47,6 +48,7 @@
 	import RadioInput from '@/components/input/FrameRadioInput.vue';
 
 	import BytesUtil from '@/common/util/BytesUtil';
+	import { googleLogin } from '@/common/auth/firebase-auth';
 
 	/**
 	 * 부모-자식 컴포넌트간 LifeCycle 정리
@@ -113,6 +115,15 @@
 			};
 		},
 		methods: {
+			googleLogin() {
+				googleLogin()
+					.then( ( result ) => {
+						console.log( result );
+					})
+					.catch( ( error ) => {
+						console.error( error );
+					});
+			},
 			loginUserInfo() {
 				return AuthManager.getUserInfo();
 			},
